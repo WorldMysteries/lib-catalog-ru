@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог австралийской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 35 писателей · 37 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог австралийской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Маркуса Кларка, баллад Патерсона и Генри Лоусона до прозы Генри Хандель Ричардсон, нобелевского эпоса Патрика Уайта, Леса Маррея, Питера Кэри, Алексис Райт и Ричарда Флэнагана.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#au-colonial-bush-poetry">Раздел I: Колониальная проза, каторжный эпос и ранняя поэзия буша</a>
+        <a href="#au-bulletin-lawson-paterson">Раздел II: Эпоха «Бюллетеня», Генри Лоусон и национальный миф буша</a>
+        <a href="#au-interwar-realism-poetry">Раздел III: Классический реализм, трилогии и поэзия между войнами</a>
+        <a href="#au-white-postwar">Раздел IV: Нобелевский масштаб Патрика Уайта и послевоенная классика</a>
+        <a href="#au-postmodern-murray-carey">Раздел V: Поэзия Леса Маррея, Питер Кэри и расцвет прозы 1980–2000-х</a>
+        <a href="#au-first-nations-contemporary">Раздел VI: Голоса коренных народов и мировая проза XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="au-colonial-bush-poetry">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIX век</p>
+          <h2 class="section-title">Колониальная проза, каторжный эпос и ранняя поэзия буша</h2>
+          <p class="section-desc">От первых пасторалей Генри Кингсли и трагической каторжной хроники Маркуса Кларка к роману о бушрейнджерах Рольфа Болдревуда и лирике лесов Адама Линдсея Гордона и Генри Кендалла.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-henry-kingsley">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генри Кингсли</h3>
+                  <p class="author-role">Создатель первого классического романа колониальной Австралии · <span class="tabular">1830–1876</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Младший брат Чарльза Кингсли, проведший пять лет в Виктории на золотых приисках и пастбищах и запечатлевший героику первых скваттеров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-geoffry-hamlyn">
+                  <div class="work-row">
+                    <span class="work-code">АВ-01.01</span>
+                    <a class="work-link" href="./works/kingsli-vospominaniya-dzheffri-hemlina.html">Воспоминания Джеффри Хэмлина («The Recollections of Geoffry Hamlyn»)</a>
+                    <span class="work-meta">1859 · Колониально-пасторальный роман</span>
+                  </div>
+                  <p class="work-summary">Семейная сага английских переселенцев в Новом Южном Уэльсе и Виктории: освоение новых земель, лесные пожары и столкновение с бушрейнджерами.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-marcus-clarke">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Маркус Кларк</h3>
+                  <p class="author-role">Автор величайшего романа колониальной эпохи о каторжной Австралии · <span class="tabular">1846–1881</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и библиотекарь Мельбурна, поднявший архивы каторжных поселений Тасмании и острова Норфолк ради сурового обвинения против колониальной системы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-for-the-term-of-his-natural-life">
+                  <div class="work-row">
+                    <span class="work-code">АВ-01.02</span>
+                    <a class="work-link" href="./works/klark-nakazanie-pozhiznenno.html">Наказание пожизненно («For the Term of His Natural Life»)</a>
+                    <span class="work-meta">1874 · Историко-социальный роман</span>
+                  </div>
+                  <p class="work-summary">Трагическая одиссея безвинно осуждённого аристократа Ричарда Дивайна, взявшего имя Руфуса Доуса на каторжных галерах и в мрачных казематах Порт-Артура и острова Макуори.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rolf-boldrewood">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рольф Болдревуд</h3>
+                  <p class="author-role">Классик приключенческого романа о бушрейнджерах · <span class="tabular">1826–1915</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Настоящее имя — Томас Александр Браун; бывший скотовод и мировой судья, создавший легендарный образ благородного разбойника австралийского буша.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-robbery-under-arms">
+                  <div class="work-row">
+                    <span class="work-code">АВ-01.03</span>
+                    <a class="work-link" href="./works/boldrevud-vooruzhennoe-ograblenie.html">Вооружённое ограбление («Robbery Under Arms»)</a>
+                    <span class="work-meta">1888 · Приключенческий роман</span>
+                  </div>
+                  <p class="work-summary">Исповедь Дика Марстона из камеры смертников о его отце, брате Джиме и харизматичном капитане Старлайте, угонявших стада и грабивших золотые обозы на приисках.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-adam-lindsay-gordon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Адам Линдсей Гордон</h3>
+                  <p class="author-role">Романтический поэт скачек и баллад австралийского аутбэка · <span class="tabular">1833–1870</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Конный полицейский и знаменитый наездник Южной Австралии, единственный австралийский поэт, увековеченный в Уголке поэтов Вестминстерского аббатства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bush-ballads-and-galloping-rhymes">
+                  <div class="work-row">
+                    <span class="work-code">АВ-01.04</span>
+                    <a class="work-link" href="./works/gordon-ballady-busha.html">Баллады буша и скачущие рифмы («Bush Ballads and Galloping Rhymes»)</a>
+                    <span class="work-meta">1870 · Лиро-эпическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Стремительные баллады о всадниках, безбрежных равнинах, товариществе и стоицизме перед лицом непредсказуемой судьбы («Больной гуртовщик»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-henry-kendall">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генри Кендалл</h3>
+                  <p class="author-role">Первый поэт, услышавший подлинную музыку австралийского пейзажа · <span class="tabular">1839–1882</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Нового Южного Уэльса, воспевший влажные ущелья, ручьи, птиц-колокольчиков и серебристые кроны эвкалиптов без чужих европейских мерок.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-leaves-from-australian-forests">
+                  <div class="work-row">
+                    <span class="work-code">АВ-01.05</span>
+                    <a class="work-link" href="./works/kendall-listya-avstralijskih-lesov.html">Листья австралийских лесов («Leaves from Australian Forests»)</a>
+                    <span class="work-meta">1869 · Пейзажная лирика</span>
+                  </div>
+                  <p class="work-summary">Книга лирических стихов о лесных долинах у океана, где голоса ручьёв и птиц-колокольчиков сменяются нежной меланхолией.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="au-bulletin-lawson-paterson">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1890–1925</p>
+          <h2 class="section-title">Эпоха «Бюллетеня», Генри Лоусон и национальный миф буша</h2>
+          <p class="section-desc">Рождение самобытной национальной традиции вокруг сиднейского журнала «The Bulletin»: баллады «Банджо» Патерсона, суровые новеллы Генри Лоусона, полифония Джозефа Фёрфи и прорыв женского голоса Майлз Франклин и Барбары Бейнтон.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-henry-lawson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генри Лоусон</h3>
+                  <p class="author-role">Крупнейший новеллист классической Австралии, певец «мейтшипа» (товарищества) · <span class="tabular">1867–1922</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Оглохший в детстве сын норвежского моряка-золотоискателя, поднявший короткий рассказ о скитальцах аутбэка до вершин мировой прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-while-the-billy-boils">
+                  <div class="work-row">
+                    <span class="work-code">АВ-02.01</span>
+                    <a class="work-link" href="./works/louson-poka-kipit-kotelok.html">Пока кипит котелок («While the Billy Boils»)</a>
+                    <span class="work-meta">1896 · Сборник рассказов и очерков</span>
+                  </div>
+                  <p class="work-summary">Бессмертные новеллы — «Жена гуртовщика», «Загруженный пёс», «Мич на тропах» — о тихом мужестве женщин и солидарности рабочих на бескрайних дорогах буша.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-banjo-paterson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эндрю Бартон «Банджо» Патерсон</h3>
+                  <p class="author-role">Народный бард Австралии, автор «Человека со Снежной реки» и «Вальсируя с Матильдой» · <span class="tabular">1864–1941</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист, военный корреспондент и журналист, подаривший австралийской культуре её самый узнаваемый романтический эпос и неофициальный гимн.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-man-from-snowy-river">
+                  <div class="work-row">
+                    <span class="work-code">АВ-02.02</span>
+                    <a class="work-link" href="./works/paterson-chelovek-so-snezhnoj-reki.html">Человек со Снежной реки («The Man from Snowy River») и «Вальсируя с Матильдой»</a>
+                    <span class="work-meta">1895 · Балладная поэзия</span>
+                  </div>
+                  <p class="work-summary">Захватывающая погоня всадника на горном коньке за диким табуном по крутым скалам Австралийских Альп и баллада о бродяге-свагмене у биллабонга.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-joseph-furphy">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джозеф Фёрфи</h3>
+                  <p class="author-role">Создатель монументального экспериментального романа о Риверине («Том Коллинз») · <span class="tabular">1843–1912</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Самоучка, бывший погонщик волов и литейщик, вплетший Шекспира, философию и народный юмор в многослойную хронику степных дорог.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-such-is-life">
+                  <div class="work-row">
+                    <span class="work-code">АВ-02.03</span>
+                    <a class="work-link" href="./works/ferfi-takova-zhizn.html">Такова жизнь («Such is Life»)</a>
+                    <span class="work-meta">1903 · Философско-комический роман</span>
+                  </div>
+                  <p class="work-summary">Семь месяцев из дневника правительственного чиновника Тома Коллинза среди погонщиков волов Риверины — ироничная энциклопедия характеров и скрытых переплетений судьбы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-miles-franklin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Майлз Франклин</h3>
+                  <p class="author-role">Классик женской эмансипации, учредительница главной литературной премии Австралии · <span class="tabular">1879–1954</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Стелла Мария Сара Майлз Франклин в двадцать один год потрясла критиков романом о юной фермерской дочери, мечтающей об искусстве и независимости.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-my-brilliant-career">
+                  <div class="work-row">
+                    <span class="work-code">АВ-02.04</span>
+                    <a class="work-link" href="./works/franklin-moya-blestyashchaya-karera.html">Моя блестящая карьера («My Brilliant Career»)</a>
+                    <span class="work-meta">1901 · Роман взросления</span>
+                  </div>
+                  <p class="work-summary">Дерзкая Сибилла Мелвин отвергает замужество с богатым землевладельцем Гарри Бичемом, отказываясь пожертвовать страстью к слову и свободе ради тихой усадьбы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-barbara-baynton">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Барбара Бейнтон</h3>
+                  <p class="author-role">Мастер сурового психологизма, развенчавший романтику буша · <span class="tabular">1857–1929</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Женщина с необычной судьбой, описавшая ужас одиночества, страх и хрупкость женщины на забытых скотоводческих заимках глубинки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bush-studies">
+                  <div class="work-row">
+                    <span class="work-code">АВ-02.05</span>
+                    <a class="work-link" href="./works/bejnton-ocherki-busha.html">Очерки буша («Bush Studies»)</a>
+                    <span class="work-meta">1902 · Сборник психологических новелл</span>
+                  </div>
+                  <p class="work-summary">Шесть беспощадных новелл («Избранная», «Скрипучий домик»), показывающих тёмную, пугающую изнанку мифа о братстве и гостеприимстве глухого буша.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="au-interwar-realism-poetry">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1917–1955</p>
+          <h2 class="section-title">Классический реализм, трилогии и поэзия между войнами</h2>
+          <p class="section-desc">Трагедия колониальной души у Генри Хандель Ричардсон, «Человек, который любил детей» Кристины Стед, социальные эпопеи Причард и Герберта, модернистская поэзия Слессора и ранняя лирика Джудит Райт.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-henry-handel-richardson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генри Хандель Ричардсон</h3>
+                  <p class="author-role">Крупнейшая австралийская романистка начала XX века, мастер трагедии характера · <span class="tabular">1870–1946</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Этель Флоренс Линдсей Ричардсон, получившая образование в Германии и воссоздавшая в грандиозной трилогии драму золотой лихорадки в Виктории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fortunes-of-richard-mahony">
+                  <div class="work-row">
+                    <span class="work-code">АВ-03.01</span>
+                    <a class="work-link" href="./works/richardson-udacha-richarda-mahoni.html">Удача Ричарда Махони («The Fortunes of Richard Mahony»)</a>
+                    <span class="work-meta">1917–1929 · Психологическая романная трилогия</span>
+                  </div>
+                  <p class="work-summary">Врач-идеалист Ричард Махони мечется между приисками Балларата и чопорной Англией, нигде не обретая покоя и постепенно погружаясь во мрак духовного распада.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-katharine-susannah-prichard">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Катарина Сусанна Причард</h3>
+                  <p class="author-role">Мастер социального эпоса о тружениках, рудокопах и первых встречах с аборигенами · <span class="tabular">1883–1969</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Соосновательница Союза писателей и романистка из Западной Австралии, одной из первых сделавшая женщину-аборигенку центральной героиней трагического романа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-coonardoo">
+                  <div class="work-row">
+                    <span class="work-code">АВ-03.02</span>
+                    <a class="work-link" href="./works/prichard-kunardu.html">Кунарду («Coonardoo»)</a>
+                    <span class="work-meta">1929 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Трагическая история любви женщины-аборигенки Кунарду и владельца отдалённой фермы в Пилбаре Хью Уотта, разрушенной колониальными предрассудками.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-christina-stead">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристина Стед</h3>
+                  <p class="author-role">Гений психологического гротеска и одна из лучших стилисток XX века · <span class="tabular">1902–1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Сиднея, проведшая годы в Европе и США и вернувшаяся в мировую классику романом «Человек, который любил детей».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-man-who-loved-children">
+                  <div class="work-row">
+                    <span class="work-code">АВ-03.03</span>
+                    <a class="work-link" href="./works/sted-chelovek-kotoryj-lyubil-detej.html">Человек, который любил детей («The Man Who Loved Children»)</a>
+                    <span class="work-meta">1940 · Семейно-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Уничтожающий, оглушительно живой портрет семьи Поллитов: тиранический фантазёр Сэм и яростная Хенни превращают дом в поле битвы, из которого спасается юная Луиза.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-xavier-herbert">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ксавье Герберт</h3>
+                  <p class="author-role">Неистовый летописец Северной территории и расовой несправедливости · <span class="tabular">1901–1984</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Фармацевт, лётчик и защитник прав коренных народов Севера, создавший яростную сагу о Тропическом Севере.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-capricornia">
+                  <div class="work-row">
+                    <span class="work-code">АВ-03.04</span>
+                    <a class="work-link" href="./works/gerbert-kozerogiya.html">Козерогия («Capricornia»)</a>
+                    <span class="work-meta">1938 · Сатирический эпический роман</span>
+                  </div>
+                  <p class="work-summary">Жизнь метиса Нормана Шоки на диком и коррумпированном севере Австралии: беспощадный смех, трагедия отчуждения и неистовая природа тропиков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kenneth-slessor">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кеннет Слессор</h3>
+                  <p class="author-role">Первый великий поэт-модернист Австралии, певец Сиднейской гавани · <span class="tabular">1901–1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и военный корреспондент, привнесший в австралийскую лирику урбанистическую образность, музыкальную изощрённость и тему ускользающего времени.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-five-bells">
+                  <div class="work-row">
+                    <span class="work-code">АВ-03.05</span>
+                    <a class="work-link" href="./works/slessor-pyat-kolokolov.html">Пять колоколов («Five Bells»)</a>
+                    <span class="work-meta">1939 · Элегическая поэма</span>
+                  </div>
+                  <p class="work-summary">Светлая и горькая элегия памяти утонувшего в Сиднейском заливе друга-художника Джо Линча, отсчитываемая пятью ударами корабельного колокола.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-judith-wright">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джудит Райт</h3>
+                  <p class="author-role">Величайшая поэтесса Австралии XX века, защитница природы и прав аборигенов · <span class="tabular">1915–2000</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лирик, критик и эколог из Новой Англии (Новый Южный Уэльс), соединившая глубокое переживание родной земли с нравственным осмыслением колониальной вины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-moving-image">
+                  <div class="work-row">
+                    <span class="work-code">АВ-03.06</span>
+                    <a class="work-link" href="./works/rajt-podvizhnyj-obraz.html">Подвижный образ («The Moving Image»)</a>
+                    <span class="work-meta">1946 · Лирический сборник</span>
+                  </div>
+                  <p class="work-summary">Дебютная книга, в которой классические образы земли — «Погонщик волов», «Южные земли», «Бродяга» — превращаются в пронзительную поэзию памяти и света.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="au-white-postwar">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1955–1985</p>
+          <h2 class="section-title">Нобелевский масштаб Патрика Уайта и послевоенная классика</h2>
+          <p class="section-desc">Всемирный авторитет Нобелевского лауреата Патрика Уайта, интеллектуальная поэзия А. Д. Хоупа и Гвен Харвуд, пустынные притчи Рэндольфа Стоу, проза Ширли Хаззард, Томаса Кенилли и Колин Маккалоу.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-patrick-white">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Патрик Уайт</h3>
+                  <p class="author-role">Единственный австралийский лауреат Нобелевской премии по литературе (1973) · <span class="tabular">1912–1990</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель-провидец, создавший грандиозную модернистскую мифологию континента и показавший величие духа в самых обыденных и крайних испытаниях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-tree-of-man">
+                  <div class="work-row">
+                    <span class="work-code">АВ-04.01</span>
+                    <a class="work-link" href="./works/uajt-drevo-chelovecheskoe.html">Древо человеческое («The Tree of Man»)</a>
+                    <span class="work-meta">1955 · Философский роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Жизнь скромных первопоселенцев Стэна и Эми Паркеров, шаг за шагом расчищающих кустарник под Сиднеем и переживающих наводнения, пожары, войну и приход города.</p>
+                </li>
+                <li class="work-item" id="work-voss">
+                  <div class="work-row">
+                    <span class="work-code">АВ-04.02</span>
+                    <a class="work-link" href="./works/uajt-voss.html">Восс («Voss»)</a>
+                    <span class="work-meta">1957 · Метафизический роман</span>
+                  </div>
+                  <p class="work-summary">Немецкий исследователь Иоганн Ульрих Восс в 1845 году отправляется пересечь мёртвое сердце Австралии, ведя телепатический духовный диалог с сиднейской затворницей Лорой Тревельян.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-a-d-hope">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">А. Д. Хоуп</h3>
+                  <p class="author-role">Крупнейший мастер классической формы и сатиры в австралийской поэзии · <span class="tabular">1907–2000</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный и поэт из Канберры, отстаивавший строгость классического стиха, иронию и мифологическую мощь против плоского провинциализма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-wandering-islands">
+                  <div class="work-row">
+                    <span class="work-code">АВ-04.03</span>
+                    <a class="work-link" href="./works/houp-stranstvuyushchie-ostrova.html">Странствующие острова («The Wandering Islands»)</a>
+                    <span class="work-meta">1955 · Философско-сатирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Знаменитый сборник, открывший читателю «Австралию» — жёсткий, но пронзительно любящий портрет древнего континента, где «из пустынь всё ещё выходят пророки».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-randolph-stow">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рэндольф Стоу</h3>
+                  <p class="author-role">Поэт и романист Западной Австралии, мастер мистического паломничества · <span class="tabular">1935–2010</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из Джералдтона, в двадцать три года создавший поэтическую притчу о поиске искупления в красных землях Кимберли.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-to-the-islands">
+                  <div class="work-row">
+                    <span class="work-code">АВ-04.04</span>
+                    <a class="work-link" href="./works/stou-navstrechu-ostrovam.html">Навстречу островам («To the Islands»)</a>
+                    <span class="work-meta">1958 · Поэтико-философский роман</span>
+                  </div>
+                  <p class="work-summary">Старый миссионер Стивен Хериот после конфликта в миссии уходит в пустынную глубь Кимберли на поиски легендарных островов смерти аборигенов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-shirley-hazzard">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ширли Хаззард</h3>
+                  <p class="author-role">Выдающийся стилист международной прозы, лауреат Национальной книжной премии США · <span class="tabular">1931–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Сиднея, работавшая в ООН и жившая между Италией и Нью-Йорком, впитавшая австралийское детство в тончайшую прозу о судьбе и любви.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-transit-of-venus">
+                  <div class="work-row">
+                    <span class="work-code">АВ-04.05</span>
+                    <a class="work-link" href="./works/hazzard-tranzit-venery.html">Транзит Венеры («The Transit of Venus»)</a>
+                    <span class="work-meta">1980 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">История двух сестёр-сирот из Сиднея, Кэролайн и Грейс Белл, чьи судьбы разворачиваются в послевоенной Англии на фоне любовных испытаний и трагических совпадений.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-thomas-keneally">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Кенилли</h3>
+                  <p class="author-role">Один из самых плодовитых и знаменитых романистов Австралии, букеровский лауреат · <span class="tabular">род. 1935</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Изучавший в юности теологию сиднейский прозаик, соединивший австралийскую историческую драму с всемирно известным романом-хроникой о Холокосте.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-schindlers-ark">
+                  <div class="work-row">
+                    <span class="work-code">АВ-04.06</span>
+                    <a class="work-link" href="./works/kenilli-kovcheg-shindlera.html">Ковчег Шиндлера («Schindler’s Ark») и «Песнь Джимми Блэксмита»</a>
+                    <span class="work-meta">1982 / 1972 · Документальный и исторический роман</span>
+                  </div>
+                  <p class="work-summary">Книга, принёсшая Кенилли Букеровскую премию за подвиг спасения узников Кракова, и более ранний мощный роман о трагическом бунте метиса Джимми Блэксмита в 1900 году.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-colleen-mccullough">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Колин Маккалоу</h3>
+                  <p class="author-role">Автор самой знаменитой в мире австралийской семейной саги «Поющие в терновнике» · <span class="tabular">1937–2015</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Нейрофизиолог по профессии, подарившая мировой читательской аудитории образ суровой и чарующей Дрохеды в глубине Нового Южного Уэльса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-thorn-birds">
+                  <div class="work-row">
+                    <span class="work-code">АВ-04.07</span>
+                    <a class="work-link" href="./works/makkalou-poyushchie-v-ternovnike.html">Поющие в терновнике («The Thorn Birds»)</a>
+                    <span class="work-meta">1977 · Семейная роман-сага</span>
+                  </div>
+                  <p class="work-summary">Трёхпоколенная история семьи Клири на огромной овцеводческой станции Дрохеда и запретной любви Мэгги к честолюбивому священнику Ральфу де Брикассару.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="au-postmodern-murray-carey">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1975–2005</p>
+          <h2 class="section-title">Поэзия Леса Маррея, Питер Кэри и расцвет прозы 1980–2000-х</h2>
+          <p class="section-desc">Поэтический масштаб Леса Маррея, букеровский блеск Питера Кэри, лирическая проза Дэвида Малуфа и Тима Уинтона, созерцательная загадка Джеральда Мёрнейна и исповедальный стиль Хелен Гарнер.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-les-murray">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лес Маррей</h3>
+                  <p class="author-role">Величайший австралийский поэт конца XX века, автор «Фреди Нептуна» · <span class="tabular">1938–2019</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын молочного фермера из Банья, создавший самобытный, полнокровный язык австралийской глубинки, мифа и эпоса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fredy-neptune">
+                  <div class="work-row">
+                    <span class="work-code">АВ-05.01</span>
+                    <a class="work-link" href="./works/marrej-fredi-neptun.html">Фреди Нептун («Fredy Neptune») и «Избранные стихи»</a>
+                    <span class="work-meta">1998 · Роман в стихах и лирика</span>
+                  </div>
+                  <p class="work-summary">Эпический роман в стихах о немецко-австралийском моряке Фридрихе Бёттхере, утратившем физическую чувствительность кожи от ужаса Первой мировой войны и странствующем по миру XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-peter-carey">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Питер Кэри</h3>
+                  <p class="author-role">Двукратный лауреат Букеровской премии, мастер исторической фантасмагории · <span class="tabular">род. 1943</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Виртуозный рассказчик из Баккус-Марша, пересочинивший колониальное прошлое Австралии с невероятной энергией вымысла и языка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-oscar-and-lucinda">
+                  <div class="work-row">
+                    <span class="work-code">АВ-05.02</span>
+                    <a class="work-link" href="./works/keri-oskar-i-lyusinda.html">Оскар и Люсинда («Oscar and Lucinda»)</a>
+                    <span class="work-meta">1988 · Историко-притчевый роман</span>
+                  </div>
+                  <p class="work-summary">Эксцентричное пари между застенчивым английским священником-игроком Оскаром и австралийской владелицей стекольного завода Люсиндой приводит к постройке стеклянной церкви в сердце буша.</p>
+                </li>
+                <li class="work-item" id="work-true-history-of-the-kelly-gang">
+                  <div class="work-row">
+                    <span class="work-code">АВ-05.03</span>
+                    <a class="work-link" href="./works/keri-podlinnaya-istoriya-shajki-kelli.html">Подлинная история шайки Келли («True History of the Kelly Gang»)</a>
+                    <span class="work-meta">2000 · Исторический роман-исповедь</span>
+                  </div>
+                  <p class="work-summary">Исповедь знаменитого бушрейнджера Неда Келли, адресованная его нерождённой дочери — написанная на сыром, бурлящем народном языке Виктории XIX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-david-malouf">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дэвид Малуф</h3>
+                  <p class="author-role">Мастер поэтической прозы, автор «Воспоминаний о Вавилоне» · <span class="tabular">род. 1934</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Брисбена ливанско-британского происхождения, исследующий столкновение европейского сознания с древним духом австралийской земли.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-remembering-babylon">
+                  <div class="work-row">
+                    <span class="work-code">АВ-05.04</span>
+                    <a class="work-link" href="./works/maluf-vospominaniya-o-vavilone.html">Воспоминания о Вавилоне («Remembering Babylon»)</a>
+                    <span class="work-meta">1993 · Философско-исторический роман</span>
+                  </div>
+                  <p class="work-summary">В шотландском поселении Квинсленда середины XIX века появляется Джемми Фэрли — белый юноша, шестнадцать лет проживший среди аборигенов и разрушающий покой колонистов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gerald-murnane">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джеральд Мёрнейн</h3>
+                  <p class="author-role">Культовый затворник австралийской словесности, мастер метафизической прозы · <span class="tabular">род. 1939</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Мельбурна и глубинки Виктории, почти не покидавший родного штата и создавший гипнотический мир воображаемых равнин и памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-plains">
+                  <div class="work-row">
+                    <span class="work-code">АВ-05.05</span>
+                    <a class="work-link" href="./works/mernejn-ravniny.html">Равнины («The Plains»)</a>
+                    <span class="work-meta">1982 · Метафизический роман</span>
+                  </div>
+                  <p class="work-summary">Безымянный кинематографист отправляется во внутренние «равнины» Австралии, чтобы снять фильм о загадочной касте землевладельцев, одержимых искусством и горизонтом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-helen-garner">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хелен Гарнер</h3>
+                  <p class="author-role">Лидер современной городской прозы и документальной эссеистики Мельбурна · <span class="tabular">род. 1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка и журналистка, прославившаяся беспощадно откровенным, музыкальным языком о повседневной жизни, любви и нравственном выборе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-monkey-grip">
+                  <div class="work-row">
+                    <span class="work-code">АВ-05.06</span>
+                    <a class="work-link" href="./works/garner-obezyanya-hvatka.html">Обезьянья хватка («Monkey Grip»)</a>
+                    <span class="work-meta">1977 · Городской автофикшн-роман</span>
+                  </div>
+                  <p class="work-summary">Жизнь богемных общин Мельбурна 1970-х годов: мать-одиночка Нора ищет опору в любви к музыканту и наркозависимому Джейво, оставаясь верной жизни и письму.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tim-winton">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тим Уинтон</h3>
+                  <p class="author-role">Самый любимый читателями романист Западной Австралии, четырёхкратный лауреат премии Майлз Франклин · <span class="tabular">род. 1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Певец побережья Индийского океана, рабочих кварталов Перта и упрямой человеческой нежности перед лицом житейских бурь.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cloudstreet">
+                  <div class="work-row">
+                    <span class="work-code">АВ-05.07</span>
+                    <a class="work-link" href="./works/uinton-ulica-oblakov.html">Улица Облаков («Cloudstreet»)</a>
+                    <span class="work-meta">1991 · Народный роман-хроника</span>
+                  </div>
+                  <p class="work-summary">Две непохожие рабочие семьи — набожные Пиклсы и суматошные Лэмбы — двадцать лет делят один огромный, полный призраков дом на улице Облаков в Перте.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="au-first-nations-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1964–XXI век</p>
+          <h2 class="section-title">Голоса коренных народов и мировая проза XXI века</h2>
+          <p class="section-desc">От первой поэтической книги Уджерун Нунуккал и семейной памяти «Моего места» к великому эпосу Алексис Райт «Карпентария», Букеровской премии Ричарда Флэнагана, романам Кейт Гренвилл, Кристоса Циолкаса и Тары Джун Уинч.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-oodgeroo-noonuccal">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уджерун Нунуккал</h3>
+                  <p class="author-role">Первая аборигенная поэтесса Австралии, издавшая книгу стихов · <span class="tabular">1920–1993</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Кэт Уокер из народа нунуккал с острова Минжерриба (Норт-Страдброк), правозащитница и голос коренных народов континента.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-we-are-going">
+                  <div class="work-row">
+                    <span class="work-code">АВ-06.01</span>
+                    <a class="work-link" href="./works/nunukkal-my-uhodim.html">Мы уходим («We Are Going»)</a>
+                    <span class="work-meta">1964 · Гражданская и лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Историческая книга, открывшая белой Австралии боль утраченных священных мест, гордость древней культуры и призыв к равноправию.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sally-morgan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Салли Морган</h3>
+                  <p class="author-role">Автор поворотной книги о «украденных поколениях» и возвращении памяти · <span class="tabular">род. 1951</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Художница и писательница из Перта (народ пальку), открывшая целой стране скрытую семейную историю коренных австралийцев.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-my-place">
+                  <div class="work-row">
+                    <span class="work-code">АВ-06.02</span>
+                    <a class="work-link" href="./works/morgan-moe-mesto.html">Моё место («My Place»)</a>
+                    <span class="work-meta">1987 · Автобиографическая хроника трёх поколений</span>
+                  </div>
+                  <p class="work-summary">Расследование молодой женщины, открывающей, что её семья скрывала своё аборигенное происхождение из-за страха изъятия детей властями.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alexis-wright">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алексис Райт</h3>
+                  <p class="author-role">Выдающийся голос аборигенного эпоса XXI века, лауреат премии Майлз Франклин · <span class="tabular">род. 1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из народа вааньи с залива Карпентария, создавшая грандиозный полифонический роман, сопоставимый с лучшими эпосами мировой прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-carpentaria">
+                  <div class="work-row">
+                    <span class="work-code">АВ-06.03</span>
+                    <a class="work-link" href="./works/rajt-karpentariya.html">Карпентария («Carpentaria»)</a>
+                    <span class="work-meta">2006 · Мифопоэтический роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Вихрь юмора, ярости и древнего мифа о змее-радуге вокруг прибрежного городка Десперанс, мудреца Норма Фантома, бунтаря Уилла и борьбы с горнодобывающей корпорацией.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kate-grenville">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кейт Гренвилл</h3>
+                  <p class="author-role">Мастер современного исторического романа о колониальной встрече · <span class="tabular">род. 1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка из Сиднея, переосмыслившая судьбу собственного предка-каторжника на берегах реки Хоксбери в одном из самых обсуждаемых романов Австралии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-secret-river">
+                  <div class="work-row">
+                    <span class="work-code">АВ-06.04</span>
+                    <a class="work-link" href="./works/grenvill-tajnaya-reka.html">Тайная река («The Secret River»)</a>
+                    <span class="work-meta">2005 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Бывший лондонский лодочник Уильям Торнхилл, сосланный в Новый Южный Уэльс, строит ферму на реке Хоксбери и оказывается втянут в кровавый конфликт с коренными жителями.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-richard-flanagan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ричард Флэнаган</h3>
+                  <p class="author-role">Лауреат Букеровской премии 2014 года, тасманийский прозаик мирового масштаба · <span class="tabular">род. 1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Тасмании, чьи романы («Книга рыб Гоулда», «Узкая дорога на дальний север») исследуют глубины истории, любви и выживания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-narrow-road-to-the-deep-north">
+                  <div class="work-row">
+                    <span class="work-code">АВ-06.05</span>
+                    <a class="work-link" href="./works/flanagan-uzkaya-doroga.html">Узкая дорога на дальний север («The Narrow Road to the Deep North»)</a>
+                    <span class="work-meta">2013 · Военно-философский роман</span>
+                  </div>
+                  <p class="work-summary">Судьба военного хирурга Дорриго Эванса — от тайной страсти перед войной и ада строительства Тайско-Бирманской железной дороги смерти до поздней тасманийской славы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-christos-tsiolkas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристос Циолкас</h3>
+                  <p class="author-role">Ведущий бытописатель многокультурного современного Мельбурна · <span class="tabular">род. 1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель греческого происхождения, чья жесткая социальная проза вскрыла классовые, поколенческие и культурные трещины Австралии XXI века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-slap">
+                  <div class="work-row">
+                    <span class="work-code">АВ-06.06</span>
+                    <a class="work-link" href="./works/ciolkas-poshchechina.html">Пощёчина («The Slap»)</a>
+                    <span class="work-meta">2008 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Один резкий шлепок чужому непослушному ребёнку на воскресном барбекю в Мельбурне запускает цепную реакцию судов и раскола среди восьми разных рассказчиков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tara-june-winch">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тара Джун Уинч</h3>
+                  <p class="author-role">Звезда новейшей прозы коренных народов, лауреат премии Майлз Франклин (2020) · <span class="tabular">род. 1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из народа вираджури, посвятившая свой главный роман возрождению утраченного языка предков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-yield">
+                  <div class="work-row">
+                    <span class="work-code">АВ-06.07</span>
+                    <a class="work-link" href="./works/uinch-ustupka.html">Уступка («The Yield»)</a>
+                    <span class="work-meta">2019 · Роман о языке и возвращении домой</span>
+                  </div>
+                  <p class="work-summary">Огаст Гондинди возвращается из Европы на похороны деда в Новый Южный Уэльс и находит словарь исчезающего языка вираджури, помогающий отстоять землю предков от рудника.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание австралийской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

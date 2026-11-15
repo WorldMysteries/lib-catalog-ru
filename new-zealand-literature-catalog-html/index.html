@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог новозеландской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 35 писателей · 38 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог новозеландской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от «Едгина» Батлера и новелл Кэтрин Мэнсфилд до поэзии Аллена Кернау и Хоне Тувхаре, прозы Джанет Фрейм, ренессанса маори Вити Ихимаэры и «Светил» Элеанор Каттон.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#nz-colonial-beginnings">Раздел I: Эпоха поселенцев, колониальные хроники и рождение национальной прозы</a>
+        <a href="#nz-mansfield-realism">Раздел II: Модернизм Кэтрин Мэнсфилд и критический реализм 1930–1940-х</a>
+        <a href="#nz-island-poetry">Раздел III: Поэзия островов: от Мейсона и Кернау до Бакстера и Тувхаре</a>
+        <a href="#nz-frame-psychological">Раздел IV: Психологическая проза середины века и Джанет Фрейм</a>
+        <a href="#nz-maori-renaissance">Раздел V: Ренессанс маори, голос Пасифики и мировой успех 1970–1990-х</a>
+        <a href="#nz-contemporary">Раздел VI: Новая Аотеароа и мировая проза XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="nz-colonial-beginnings">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIX — начало XX века</p>
+          <h2 class="section-title">Эпоха поселенцев, колониальные хроники и рождение национальной прозы</h2>
+          <p class="section-desc">От мемуаров Фредерика Мэнинга и сатирической антиутопии Сэмюэла Батлера в Кентербери к первым национальным романам Уильяма Сатчелла, Джесси Маккей и Джейн Мандер.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-frederick-edward-maning">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фредерик Эдвард Мэнинг</h3>
+                  <p class="author-role">Ранняя звезда колониальной прозы («пакеха-маори») · <span class="tabular">1811–1883</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ирландский поселенец в Хокианге, живший среди племени нгапухи до подписания Договора Вайтанги и оставивший остроумнейшую хронику ранней Аотеароа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-old-new-zealand">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-01.01</span>
+                    <a class="work-link" href="./works/mening-staraya-novaya-zelandiya.html">Старая Новая Зеландия («Old New Zealand»)</a>
+                    <span class="work-meta">1863 · Мемуарно-этнографическая проза</span>
+                  </div>
+                  <p class="work-summary">Яркий и ироничный рассказ о жизни европейца среди вождей маори 1830-х годов, обычаях тапу, межплеменных стычках и первых встречах двух миров.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-samuel-butler">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сэмюэл Батлер</h3>
+                  <p class="author-role">Классик викторианской сатиры, вдохновлённый Южными Альпами Новой Зеландии · <span class="tabular">1835–1902</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прожив пять лет овцеводом в верховьях реки Рангитата, он перенёс грандиозные пейзажи Новой Зеландии в один из самых знаменитых философских романов XIX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-erewhon">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-01.02</span>
+                    <a class="work-link" href="./works/batler-edgin.html">Едгин («Erewhon»)</a>
+                    <span class="work-meta">1872 · Философская сатира и антиутопия</span>
+                  </div>
+                  <p class="work-summary">Переплыв ущелье и перейдя снежные перевалы Южных Альп, молодой колонист открывает страну Едгин, где болезни считаются преступлением, а машины запрещены страхом перед их разумом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jessie-mackay">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джесси Маккей</h3>
+                  <p class="author-role">Первая крупная поэтесса и общественная деятельница Новой Зеландии · <span class="tabular">1864–1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Кентербери шотландского происхождения, соединившая в лирике пейзажи Южного острова с борьбой за женское избирательное право.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-land-of-the-morning">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-01.03</span>
+                    <a class="work-link" href="./works/makkej-zemlya-utra.html">Земля утра («Land of the Morning»)</a>
+                    <span class="work-meta">1909 · Поэтический сборник</span>
+                  </div>
+                  <p class="work-summary">Лирика и баллады о ветрах Южного острова, памяти далёкой Шотландии и рождении самобытного чувства новой родины у берегов Тихого океана.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-william-satchell">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уильям Сатчелл</h3>
+                  <p class="author-role">Зачинатель новозеландского реалистического и исторического романа · <span class="tabular">1860–1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, запечатлевший суровую жизнь добытчиков смолы каури на севере острова и драму Новозеландских войн.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-greenstone-door">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-01.04</span>
+                    <a class="work-link" href="./works/satchell-nefritovaya-dver.html">Нефритовая дверь («The Greenstone Door»)</a>
+                    <span class="work-meta">1914 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">История юного англичанина Седрика Трегеллы, воспитанного вождём маори в долине Уаикато и разрывающегося между двумя народами накануне войн 1860-х годов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jane-mander">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джейн Мандер</h3>
+                  <p class="author-role">Первопроходец психологического реализма о жизни в новозеландском буше · <span class="tabular">1877–1949</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналистка из Нортленда, смело показавшая внутренний бунт женщины против удушливого пуританства лесозаготовительных посёлков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-story-of-a-new-zealand-river">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-01.05</span>
+                    <a class="work-link" href="./works/mander-istoriya-novozelandskoj-reki.html">История новозеландской реки («The Story of a New Zealand River»)</a>
+                    <span class="work-meta">1920 · Реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Утончённая англичанка Элис Роланд переезжает с дочерью в глухой лесосплавный лагерь у реки Отаматеа, где в борьбе с суровой природой обретает собственную правду.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nz-mansfield-realism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1918–1948</p>
+          <h2 class="section-title">Модернизм Кэтрин Мэнсфилд и критический реализм 1930–1940-х</h2>
+          <p class="section-desc">Мировой прорыв короткого рассказа Кэтрин Мэнсфилд, автобиографическая проза Джона Э. Ли и Робин Хайд, лаконичный голос Фрэнка Сарджесона и культовый роман Джона Малгэна.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-katherine-mansfield">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кэтрин Мэнсфилд</h3>
+                  <p class="author-role">Мировой классик модернистской новеллы, родившаяся в Веллингтоне · <span class="tabular">1888–1923</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Настоящее имя — Кэтлин Мэнсфилд Бошан; преобразила жанр короткого рассказа XX века тонкостью психологического мгновения, вобрав память детства в бухте Веллингтона.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bliss-and-prelude">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-02.01</span>
+                    <a class="work-link" href="./works/mensfild-blazhenstvo-prelyudiya.html">Блаженство («Bliss») и «Прелюдия» («Prelude»)</a>
+                    <span class="work-meta">1918 / 1920 · Модернистские новеллы</span>
+                  </div>
+                  <p class="work-summary">Тончайшие исследования мгновенных озарений души и семейной памяти: переезд семьи Бернеллов за город в Веллингтоне и хрупкое очарование цветущего грушевого дерева.</p>
+                </li>
+                <li class="work-item" id="work-the-garden-party">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-02.02</span>
+                    <a class="work-link" href="./works/mensfild-prazdnik-v-sadu.html">Праздник в саду («The Garden Party»)</a>
+                    <span class="work-meta">1922 · Сборник рассказов</span>
+                  </div>
+                  <p class="work-summary">Юная Лора Шеридан посреди блестящего приёма в богатом саду сталкивается со смертью бедного возчика за калиткой, открывая тайну сострадания и взросления.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-john-a-lee">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джон Э. Ли</h3>
+                  <p class="author-role">Мастер сурового социального романа о городской бедноте Данидина · <span class="tabular">1891–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ветеран Первой мировой войны, потерявший руку во Франции, и будущий политик, с беспощадной честностью описавший нищету колониальных окраин.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-children-of-the-poor">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-02.03</span>
+                    <a class="work-link" href="./works/li-deti-bednyakov.html">Дети бедняков («Children of the Poor»)</a>
+                    <span class="work-meta">1934 · Социальный автобиографический роман</span>
+                  </div>
+                  <p class="work-summary">Суровая история детства Олбани Порелло в трущобах Данидина рубежа веков — протест против ханжества и бессердечия благотворительных приютов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-robin-hyde">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Робин Хайд</h3>
+                  <p class="author-role">Поэтесса, военная корреспондентка и крупнейшая романистка 1930-х годов · <span class="tabular">1906–1939</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Айрис Уилкинсон, оставившая блестящие романы о женском взрослении в Веллингтоне и военные репортажи из Китая накануне Второй мировой войны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-godwits-fly">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-02.04</span>
+                    <a class="work-link" href="./works/hajd-letyat-veretenniki.html">Летят веретенники («The Godwits Fly»)</a>
+                    <span class="work-meta">1938 · Психологический роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Элиза Ханней взрослеет в Веллингтоне между Первой мировой войной и Депрессией, разрываемая тягой к далёкой метрополии и любовью к родным берегам.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-frank-sargeson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фрэнк Сарджесон</h3>
+                  <p class="author-role">Архитектор новозеландской живой разговорной прозы · <span class="tabular">1903–1982</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Отшельник из Такапуны, воспитавший целую плеяду писателей (включая Джанет Фрейм) и освободивший рассказ от чопорных британских штампов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-conversation-with-my-uncle">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-02.05</span>
+                    <a class="work-link" href="./works/sardzheson-razgovor-s-dyadej.html">Разговор с дядей («Conversation with My Uncle») и «Человек и его жена»</a>
+                    <span class="work-meta">1936 / 1940 · Сборники рассказов</span>
+                  </div>
+                  <p class="work-summary">Краткие, отточенные монологи простых рабочих, бродяг и фермеров эпохи Великой депрессии, полные скрытой поэзии и мягкой иронии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-john-mulgan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джон Малгэн</h3>
+                  <p class="author-role">Создатель культового архетипа «одинокого человека» новозеландской литературы · <span class="tabular">1911–1945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и офицер, сражавшийся с греческими партизанами в годы Второй мировой войны; его единственный роман стал краеугольным камнем национального мифа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-man-alone">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-02.06</span>
+                    <a class="work-link" href="./works/malgen-chelovek-odin.html">Человек один («Man Alone»)</a>
+                    <span class="work-meta">1939 · Социально-приключенческий роман</span>
+                  </div>
+                  <p class="work-summary">Скиталец Джонсон проходит сквозь годы Великой депрессии, забастовку в Окленде и бегство по лесным хребтам Кайманава к полям гражданской войны в Испании.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nz-island-poetry">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1924–1980</p>
+          <h2 class="section-title">Поэзия островов: от Мейсона и Кернау до Бакстера и Тувхаре</h2>
+          <p class="section-desc">Формирование национальной поэтической школы вокруг журналов «Феникс» и «Лэндфолл»: суровый лаконизм Мейсона, философская точность Аллена Кернау, баллады Гловера и прорыв поэзии Хоне Тувхаре.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-rak-mason">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Р. А. К. Мейсон</h3>
+                  <p class="author-role">Первый подлинно современный поэт Новой Зеландии · <span class="tabular">1905–1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-классицист и социалист из Окленда, соединивший латинскую строгость формы с трагическим чувством одиночества молодого поколения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-no-new-thing">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-03.01</span>
+                    <a class="work-link" href="./works/mejson-nichego-novogo.html">Ничего нового («No New Thing») и «Нищий» («The Beggar»)</a>
+                    <span class="work-meta">1924 / 1934 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Скупые, чеканные стихотворения о хрупкости плоти, бренности мира и твёрдости человеческого духа перед лицом безразличного неба.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-allen-curnow">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аллен Кернау</h3>
+                  <p class="author-role">Патриарх и главный архитектор новозеландской поэзии XX века · <span class="tabular">1911–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, критик и составитель канонических антологий, на протяжении семи десятилетий осмыслявший судьбу острова, историю и природу поэтического зрения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-island-and-time-trees">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-03.02</span>
+                    <a class="work-link" href="./works/kernau-ostrov-i-vremya.html">Остров и время («Island and Time») и «Деревья, чучела, поющие рыбы»</a>
+                    <span class="work-meta">1941 / 1979 · Философско-пейзажная поэзия</span>
+                  </div>
+                  <p class="work-summary">От знаменитых строф о скелете моа в музее Кентербери и одиночестве поселенцев к поздней, предельно точной медитации о море, памяти и языке.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-denis-glover">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Денис Гловер</h3>
+                  <p class="author-role">Поэт моря, гор и основатель знаменитого издательства «Caxton Press» · <span class="tabular">1912–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участник арктических конвоев и типограф в Крайстчерче, подаривший стране музыку стихотворения о сороках и цикл о золотоискателе-отшельнике.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-arawata-bill">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-03.03</span>
+                    <a class="work-link" href="./works/glover-aravata-bill.html">Аравата Билл («Arawata Bill») и стихи о сороках</a>
+                    <span class="work-meta">1953 · Поэтический цикл</span>
+                  </div>
+                  <p class="work-summary">Балладный цикл о реальном золотоискателе-одиночке в суровых горах Западного побережья, ищущем не столько золото, сколько упрямую свободу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-charles-brasch">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чарльз Браш</h3>
+                  <p class="author-role">Поэт, меценат и основатель легендарного журнала «Landfall» · <span class="tabular">1909–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Данидина, создавший в 1947 году главное литературное издание страны и воспевший молчаливую строгость озёр и плоскогорий Отаго.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-disputed-ground">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-03.04</span>
+                    <a class="work-link" href="./works/brash-spornaya-zemlya.html">Спорная земля («Disputed Ground»)</a>
+                    <span class="work-meta">1948 · Поэтический сборник</span>
+                  </div>
+                  <p class="work-summary">Размышления о хрупкой укоренённости человека среди ледниковых озёр, скал Центрального Отаго и дыхания Южного океана.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-james-k-baxter">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джеймс К. Бакстер</h3>
+                  <p class="author-role">Легендарный поэт-бунтарь, соединивший античный миф, христианство и мир маори · <span class="tabular">1926–1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых ярких лириков Океании, ушедший в конце жизни в коммуну в селении Хирухарама («Иерусалим») на реке Уонгануи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jerusalem-sonnets">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-03.05</span>
+                    <a class="work-link" href="./works/bakster-sonety-ierusalima.html">Сонеты Иерусалима («Jerusalem Sonnets»)</a>
+                    <span class="work-meta">1970 · Цикл сонетов</span>
+                  </div>
+                  <p class="work-summary">Тридцать девять нерифмованных сонетов о бедности, реке Уонгануи, молитве, бездомных и примирении с землёй Аотеароа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hone-tuwhare">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хоне Тувхаре</h3>
+                  <p class="author-role">Первый маорийский поэт, получивший общенациональное признание на английском языке · <span class="tabular">1922–2008</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец племени нгапухи, котельщик по профессии и поэт-лауреат Новой Зеландии, чьи стихи («Обычного солнца нет») звучат голосом рек, камней и тепла.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-no-ordinary-sun">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-03.06</span>
+                    <a class="work-link" href="./works/tuvhare-obychnogo-solnca-net.html">Обычного солнца нет («No Ordinary Sun»)</a>
+                    <span class="work-meta">1964 · Лирический сборник</span>
+                  </div>
+                  <p class="work-summary">Пророческое обращение к дереву под угрозой атомной эры и тёплая, живая поэзия о дожде, хлебе, древних предках и повседневном братстве.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nz-frame-psychological">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1950–1986</p>
+          <h2 class="section-title">Психологическая проза середины века и Джанет Фрейм</h2>
+          <p class="section-desc">Провидческая проза Джанет Фрейм, изысканная новеллистика Мориса Даггана, «Шпинат» Сильвии Эштон-Уорнер, семейная сага Мориса Джи и исторические хроники Шэдболта.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-janet-frame">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джанет Фрейм</h3>
+                  <p class="author-role">Величайшая романистка Новой Зеландии XX века, мастер поэтики воображения · <span class="tabular">1924–2004</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Вырвавшись из психиатрической клиники благодаря премии за дебютную книгу, она создала глубочайшие романы и автобиографическую трилогию о языке и внутренней свободе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-owls-do-cry">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-04.01</span>
+                    <a class="work-link" href="./works/frejm-sovy-krichat.html">Совы кричат («Owls Do Cry»)</a>
+                    <span class="work-meta">1957 · Поэтико-психологический роман</span>
+                  </div>
+                  <p class="work-summary">История детей семьи Уизерс в городке Уаймару, ищущих «настоящее сокровище» среди нищеты, свалки и суровости мира взрослых.</p>
+                </li>
+                <li class="work-item" id="work-an-angel-at-my-table">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-04.02</span>
+                    <a class="work-link" href="./works/frejm-angel-za-moim-stolom.html">Ангел за моим столом («An Angel at My Table»)</a>
+                    <span class="work-meta">1984 · Автобиографическая трилогия</span>
+                  </div>
+                  <p class="work-summary">Пронзительная исповедь о детстве в Оамару, ошибочном диагнозе и восьми годах лечебниц, от лоботомии в которых её спасла публикация первой книги.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sylvia-ashton-warner">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сильвия Эштон-Уорнер</h3>
+                  <p class="author-role">Писательница и новатор педагогики, прославившаяся романом о сельской школе · <span class="tabular">1908–1984</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учительница в школах маори, соединившая страстную личную исповедь с идеей «органического чтения» из живых слов детства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-spinster">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-04.03</span>
+                    <a class="work-link" href="./works/eshton-uorner-uchitelnica.html">Учительница («Spinster»)</a>
+                    <span class="work-meta">1958 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Необычная учительница Анна Воронцофф в сельском классе Северного острова борется с равнодушием инспекторов и открывает детям мир через музыку и страсть к жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maurice-duggan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Морис Дагган</h3>
+                  <p class="author-role">Стилист-виртуоз новозеландской новеллы 1950–1960-х годов · <span class="tabular">1922–1974</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ученик Фрэнка Сарджесона, придавший новозеландскому рассказу изощрённую словесную оркестровку и психологическую глубину.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-summer-in-the-gravel-pit">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-04.04</span>
+                    <a class="work-link" href="./works/daggan-leto-v-gravijnom-karere.html">Лето в гравийном карьере («Summer in the Gravel Pit»)</a>
+                    <span class="work-meta">1965 · Сборник рассказов</span>
+                  </div>
+                  <p class="work-summary">Ювелирные по языку новеллы — включая знаменитую «Одольфину» и «Райли» — о семейных надломах, памяти и тоске по невысказанному.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maurice-gee">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Морис Джи</h3>
+                  <p class="author-role">Классик реалистического романа и автор знаменитой трилогии «Пламб» · <span class="tabular">1931–2025</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Отобразил почти целое столетие нравственной, религиозной и общественной жизни Новой Зеландии с шекспировской ясностью характеров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-plumb">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-04.05</span>
+                    <a class="work-link" href="./works/dzhi-plamb.html">Пламб («Plumb»)</a>
+                    <span class="work-meta">1978 · Семейно-исторический роман</span>
+                  </div>
+                  <p class="work-summary">Восьмидесятипятилетний бывший пресвитерианский священник Джордж Пламб вспоминает всю свою жизнь — борьбу за правду совести, суд за пацифизм и судьбы двенадцати детей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maurice-shadbolt">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Морис Шэдболт</h3>
+                  <p class="author-role">Мастер историко-эпического романа и пьесы о Галлиполи «Некогда на холме» · <span class="tabular">1932–2004</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и драматург, посвятивший масштабную трилогию событиям Новозеландских войн XIX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-season-of-the-jew">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-04.06</span>
+                    <a class="work-link" href="./works/shedbolt-sezon-chuzhezemca.html">Сезон чужеземца («Season of the Jew»)</a>
+                    <span class="work-meta">1986 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Художник и офицер колониальных войск Джордж Фэйруэзер вступает в противостояние с вождём и пророком Те Кооти, открывая жестокую правду колониальной войны 1868 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-c-k-stead">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">К. К. Стед</h3>
+                  <p class="author-role">Романист, поэт и ведущий литературный критик Новой Зеландии · <span class="tabular">род. 1932</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор Оклендского университета, объединивший поэтическую точность, мемуар о друзьях-писателях и острую интеллектуальную игру.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-all-visitors-ashore">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-04.07</span>
+                    <a class="work-link" href="./works/sted-vse-gosti-na-beregu.html">Все гости на берегу («All Visitors Ashore»)</a>
+                    <span class="work-meta">1984 · Литературно-мемуарный роман</span>
+                  </div>
+                  <p class="work-summary">Светлый и ироничный портрет оклендской богемы 1951 года, где в образах героев угадываются сам автор, Фрэнк Сарджесон и юная Джанет Фрейм.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nz-maori-renaissance">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1973–2000</p>
+          <h2 class="section-title">Ренессанс маори, голос Пасифики и мировой успех 1970–1990-х</h2>
+          <p class="section-desc">Выход на мировую сцену литературы маори и народов Тихого океана: первые романы Вити Ихимаэры и Патрисии Грейс, Букеровская премия Кери Хьюм, проза Альберта Вендта и «Когда-то были воинами» Алана Даффа.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-witi-ihimaera">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вити Ихимаэра</h3>
+                  <p class="author-role">Основоположник современной маорийской романистики на английском языке · <span class="tabular">род. 1944</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец племени те айтанга-а-махаки из Гисборна, дипломат и писатель, давший голосу мараэ, легендам и семейной общине маори всемирное звучание.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tangi">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-05.01</span>
+                    <a class="work-link" href="./works/ihimaera-tangi.html">Танги («Tangi»)</a>
+                    <span class="work-meta">1973 · Лирический роман</span>
+                  </div>
+                  <p class="work-summary">Первый опубликованный роман писателя-маори: молодой Тама Махана возвращается из Веллингтона на похороны отца, соединяя в памяти боль утраты с древним ритуалом прощания.</p>
+                </li>
+                <li class="work-item" id="work-the-whale-rider">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-05.02</span>
+                    <a class="work-link" href="./works/ihimaera-osedlavshij-kita.html">Оседлавший кита («The Whale Rider»)</a>
+                    <span class="work-meta">1987 · Мифопоэтический роман</span>
+                  </div>
+                  <p class="work-summary">Девочка Каху в прибрежном селении Фангара доказывает старому вождю Коро, что именно ей суждено вернуть связь людей с великим древним китом-предком.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-patricia-grace">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Патрисия Грейс</h3>
+                  <p class="author-role">Классик маорийской прозы, лауреат Нойштадтской премии · <span class="tabular">род. 1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из рода нгати то, чьи романы и рассказы передают устную ритмику речи маори, солидарность общины и борьбу за землю предков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-potiki">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-05.03</span>
+                    <a class="work-link" href="./works/grejs-potiki.html">Потики («Potiki»)</a>
+                    <span class="work-meta">1986 · Политико-мифологический роман</span>
+                  </div>
+                  <p class="work-summary">Прибрежная община маори отстаивает свой дом резчиков, кладбище и берег от застройщиков, а приёмный мальчик Токо хранит пророческий дар «маленького» Потики.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-keri-hulme">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кери Хьюм</h3>
+                  <p class="author-role">Первый новозеландский лауреат Букеровской премии (1985) · <span class="tabular">1947–2021</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница шотландского и нгаи таху происхождения, жившая в уединении в Окарито на Западном побережье Южного острова.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-bone-people">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-05.04</span>
+                    <a class="work-link" href="./works/hyum-lyudi-skelety.html">Люди-скелеты («The Bone People»)</a>
+                    <span class="work-meta">1984 · Модернистский роман</span>
+                  </div>
+                  <p class="work-summary">Сложный, гипнотический роман о художнице-затворнице Керевин Холмс, немом мальчике Саймоне и его приёмном отце Джо, ищущих исцеление среди волн и мифов маори.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alan-duff">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алан Дафф</h3>
+                  <p class="author-role">Автор самого резонансного социального романа о городской диаспоре маори · <span class="tabular">род. 1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и колумнист из Роторуа, с предельной жёсткостью показавший кризис оторванной от корней рабочей окраины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-once-were-warriors">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-05.05</span>
+                    <a class="work-link" href="./works/daff-kogda-to-byli-voinami.html">Когда-то были воинами («Once Were Warriors»)</a>
+                    <span class="work-meta">1990 · Остросоциальный роман</span>
+                  </div>
+                  <p class="work-summary">Трагедия семьи Хеке в неблагополучном пригороде Пайн-Блок: насилие и отчаяние Джейка сталкиваются с пробуждающимся достоинством матери Бет и памятью древней гордости.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-albert-wendt">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альберт Вендт</h3>
+                  <p class="author-role">Патриарх тихоокеанской литературы, соединивший Самоа и Новую Зеландию · <span class="tabular">род. 1939</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и профессор Оклендского университета, открывший в новозеландской и мировой прозе голос полинезийской диаспоры и постколониальной Океании.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sons-for-the-return-home">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-05.06</span>
+                    <a class="work-link" href="./works/vendt-synovya-dlya-vozvrashcheniya.html">Сыновья для возвращения домой («Sons for the Return Home»)</a>
+                    <span class="work-meta">1973 · Постколониальный роман</span>
+                  </div>
+                  <p class="work-summary">Юный самоанец влюбляется в белую новозеландку в Веллингтоне, сталкиваясь с предрассудками обоих миров и трудным выбором пути между островом предков и мегаполисом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-owen-marshall">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Оуэн Маршалл</h3>
+                  <p class="author-role">Непревзойдённый мастер провинциального рассказа конца XX века · <span class="tabular">род. 1941</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и новеллист с Южного острова, продолживший традицию Сарджесона и Даггана с тончайшей наблюдательностью к жизни малых городков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-harlequin-rex">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-05.07</span>
+                    <a class="work-link" href="./works/marshall-korol-arlekin.html">Король Арлекин («Harlequin Rex») и «Завтра мы заберём её домой»</a>
+                    <span class="work-meta">1985 / 1999 · Роман и новеллистика</span>
+                  </div>
+                  <p class="work-summary">Трагикомическая панорама маленького городка на Южном острове и блестящие рассказы о тонкой грани между будничным покоем и человеческой драмой.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nz-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1998–XXI век</p>
+          <h2 class="section-title">Новая Аотеароа и мировая проза XXI века</h2>
+          <p class="section-desc">Международный триумф XXI века: от «Мистера Пипа» Ллойда Джонса и «Светил» Элеанор Каттон до «Ауэ» Бекки Манавату, экспериментальной прозы Пип Адам и романов Кэтрин Чиджей.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-elizabeth-knox">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Элизабет Нокс</h3>
+                  <p class="author-role">Визионер новозеландской прозы и фэнтези, автор «Удачи винодела» · <span class="tabular">род. 1959</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Веллингтона, свободно перемещающая действие от виноградников Бургундии XIX века до мистических горизонтов Тихого океана.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-vintners-luck">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-06.01</span>
+                    <a class="work-link" href="./works/noks-udacha-vinodela.html">Удача винодела («The Vintner’s Luck»)</a>
+                    <span class="work-meta">1998 · Историко-фантастический роман</span>
+                  </div>
+                  <p class="work-summary">Бургундский крестьянин Собран Жодуа каждый год в одну и ту же ночь встречает на винограднике падшего ангела Ксаса, и их дружба охватывает всю его жизнь.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lloyd-jones">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ллойд Джонс</h3>
+                  <p class="author-role">Лауреат Премии Содружества, финалист Букеровской премии · <span class="tabular">род. 1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик из Лоуэр-Хатта, исследующий силу вымысла и литературы перед лицом исторической катастрофы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mister-pip">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-06.02</span>
+                    <a class="work-link" href="./works/dzhons-mister-pip.html">Мистер Пип («Mister Pip»)</a>
+                    <span class="work-meta">2006 · Драматический роман</span>
+                  </div>
+                  <p class="work-summary">На охваченном блокадой и гражданской войной тропическом острове Бугенвиль последний оставшийся европеец мистер Уоттс читает детям «Большие надежды» Диккенса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-charlotte-grimshaw">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шарлотта Гримшоу</h3>
+                  <p class="author-role">Мастер остросюжетной новеллы и психологического романа о современном Окленде · <span class="tabular">род. 1966</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь К. К. Стеда, юрист по образованию, создавшая цикл взаимосвязанных рассказов и романов о нравственных противоречиях современного мегаполиса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-opportunity">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-06.03</span>
+                    <a class="work-link" href="./works/grimshou-vozmozhnost.html">Возможность («Opportunity»)</a>
+                    <span class="work-meta">2007 · Цикл взаимосвязанных новелл</span>
+                  </div>
+                  <p class="work-summary">Переплетённые истории врачей, беженцев, политиков и родителей в Окленде начала XXI века, вскрывающие хрупкость благополучия за фасадами дорогих домов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eleanor-catton">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Элеанор Каттон</h3>
+                  <p class="author-role">Самый молодой лауреат Букеровской премии за роман «Светила» (2013) · <span class="tabular">род. 1985</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий архитектор постмодернистского романа, соединивший викторианский детектив эпохи золотой лихорадки с астрологической композицией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-luminaries">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-06.04</span>
+                    <a class="work-link" href="./works/katton-svetila.html">Светила («The Luminaries»)</a>
+                    <span class="work-meta">2013 · Историко-детективный роман</span>
+                  </div>
+                  <p class="work-summary">Дождливым вечером 1866 года в золотоискательском городке Хокитика двенадцать человек тайно собираются в курилке гостиницы «Корона», чтобы распутать цепь загадочных исчезновений, смерти и контрабанды золота.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pip-adam">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пип Адам</h3>
+                  <p class="author-role">Лидер экспериментальной и спекулятивной прозы Новой Зеландии · <span class="tabular">род. 1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат премии Окам и премии Урсулы Ле Гуин («Audition»), трансформирующая социальный реализм через абсурд, тело и научную фантастику.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-new-animals">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-06.05</span>
+                    <a class="work-link" href="./works/adam-novye-zhivotnye.html">Новые животные («The New Animals»)</a>
+                    <span class="work-meta">2017 · Авангардный роман</span>
+                  </div>
+                  <p class="work-summary">На показе мод в Окленде закулисный мир парикмахеров, моделей и швей неожиданно сдвигается к таинственному пляжу и биологическому преображению человека.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-becky-manawatu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бекки Манавату</h3>
+                  <p class="author-role">Маорийская романистка (нгаи таху), лауреат главной премии Окам за «Ауэ» · <span class="tabular">род. 1982</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Репортёр из городка Уэстпорт на Западном побережье, создавшая один из самых пронзительных дебютов современной Аотеароа о братстве и исцелении.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-aue">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-06.06</span>
+                    <a class="work-link" href="./works/manavatu-aue.html">Ауэ («Auē»)</a>
+                    <span class="work-meta">2019 · Современная семейная драма</span>
+                  </div>
+                  <p class="work-summary">Восьмилетнего Араму оставляют на пустынной ферме в Кайкоуре, пока его старший брат Тауки пытается вырваться из круга насилия и отыскать любовь, способную исцелить рану прошлого.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-catherine-chidgey">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кэтрин Чиджей</h3>
+                  <p class="author-role">Многократный лауреат премии Окам, мастер голосовой многозначности · <span class="tabular">род. 1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор творческого письма из Уаикато, автор романов «Wish Child», «Remote Sympathy» и триумфальной притчи с рассказчиком-сорокой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-axemans-carnival">
+                  <div class="work-row">
+                    <span class="work-code">НЗ-06.07</span>
+                    <a class="work-link" href="./works/chidzhej-karnaval-drovoseka.html">Карнавал дровосека («The Axeman’s Carnival»)</a>
+                    <span class="work-meta">2022 · Сатирико-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Рассказанная говорящей сорокой Тама история овцеводческой фермы на Южном острове, где вирусная слава в соцсетях и подготовка к турниру лесорубов скрывают семейную угрозу.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание новозеландской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
