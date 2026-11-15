@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог хорватской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 37 писателей · 38 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог хорватской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Башчанской плиты, «Юдифи» Марулича, комедий Држича и «Османа» Гундулича до поэмы Мажуранича, реализма Шеноа и Ковачича, сказок Брлич-Мажуранич, прозы Мирослава Крлежи, Дубравки Угрешич, Ерговича и Кристиана Новака.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#hr-glagolitic-renaissance-baroque">Раздел I: Глаголическое Средневековье, Ренессанс Далмации и Дубровника</a>
+        <a href="#hr-enlightenment-illyrism-romanticism">Раздел II: Просвещение, иллирийское возрождение и эпоха романтизма</a>
+        <a href="#hr-realism-senoa-kovacic">Раздел III: Хорватский реализм: Август Шеноа, Ковачич и поэзия конца XIX века</a>
+        <a href="#hr-moderna-matos-kamov">Раздел IV: Хорватский модерн: Матош, Войнович, Брлич-Мажуранич и Камов</a>
+        <a href="#hr-krleza-ujevic-midcentury">Раздел V: Мирослав Крлежа, Тин Уевич, авангард и классика середины XX века</a>
+        <a href="#hr-postmodernism-contemporary">Раздел VI: Постмодернизм, память XX века и современная хорватская проза</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="hr-glagolitic-renaissance-baroque">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XII–XVII века</p>
+          <h2 class="section-title">Глаголическое Средневековье, Ренессанс Далмации и Дубровника</h2>
+          <p class="section-desc">От древнейшего памятника хорватской глаголицы — Башчанской плиты — к ренессансному эпосу Марко Марулича, комедиям Марина Држича, пасторалям Петара Зоранича и барочной поэме Ивана Гундулича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hr-bascanska-ploca">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Древние глаголические памятники (Башчанская плита)</h3>
+                  <p class="author-role">Древнейший эпиграфический и книжный памятник хорватской письменности · <span class="tabular">ок. 1100</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Высеченная глаголицей на острове Крк каменная надпись аббата Држихи о даре короля Звонимира и средневековые правовые и литургические кодексы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-bascanska-ploca-vinodol">
+                  <div class="work-row">
+                    <span class="work-code">ХР-01.01</span>
+                    <a class="work-link" href="./works/horv-baschanskaya-plita.html">Башчанская плита и «Винодольский законник»</a>
+                    <span class="work-meta">ок. 1100 / 1288 · Глаголический эпиграфический и правовой памятник</span>
+                  </div>
+                  <p class="work-summary">Первое каменное свидетельство хорватского народного языка в глаголической графике и древнейший свод обычного права Адриатического побережья.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-marko-marulic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марко Марулич</h3>
+                  <p class="author-role">«Отец хорватской литературы», сплитский гуманист и поэт Возрождения · <span class="tabular">1450–1524</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Патриций из Сплита, писавший как на латыни, так и на родном чакавском наречии, создатель первого крупного авторского эпоса на хорватском языке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-judita-marulic">
+                  <div class="work-row">
+                    <span class="work-code">ХР-01.02</span>
+                    <a class="work-link" href="./works/horv-marulich-yudif.html">Юдифь («Judita»)</a>
+                    <span class="work-meta">1501 (изд. 1521) · Ренессансная эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Шестипесенная поэма в двойных двенадцатисложниках на библейский сюжет о смелой вдове Юдифи, спасающей родной город от осады Олоферна — аллегория защиты Далмации.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-hanibal-lucic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ханибал Луцич</h3>
+                  <p class="author-role">Хварский поэт и драматург, мастер петраркистской лирики · <span class="tabular">ок. 1485–1553</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Судья и дворянин с острова Хвар, соединивший ренессансное воспевание красоты с первой светской хорватской драмой о любви и неволе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-robinja-lucic">
+                  <div class="work-row">
+                    <span class="work-code">ХР-01.03</span>
+                    <a class="work-link" href="./works/horv-lucich-rabynya.html">Рабыня («Robinja») и хварские песни</a>
+                    <span class="work-meta">ок. 1530 · Ренессансная светская драма и лирика</span>
+                  </div>
+                  <p class="work-summary">Драма о похищенной корсарами красавице из знатного хорватского рода, выкупленной верным влюблённым на площади Дубровника, и знаменитая ода «Ни единая красавица…».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-petar-hektorovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Петар Гекторович</h3>
+                  <p class="author-role">Хварский гуманист, строитель крепости Тврдаль и автор первой реалистической эклоги · <span class="tabular">1487–1572</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дворянин из Стари-Града на Хваре, записавший подлинные народные бугарштицы (эпические песни) из уст простых рыбаков во время трёхдневного морского плавания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-ribanje-i-ribarsko-prigovaranje">
+                  <div class="work-row">
+                    <span class="work-code">ХР-01.04</span>
+                    <a class="work-link" href="./works/horv-gektorovich-rybnaya-lovlya.html">Рыбная ловля и рыбацкие присловья («Ribanje i ribarsko prigovaranje»)</a>
+                    <span class="work-meta">1556 (изд. 1568) · Стихотворная путевая эклога</span>
+                  </div>
+                  <p class="work-summary">Поэтическое письмо о трёхдневном выходе в море на лодке с рыбаками Паскоем Дебелей и Николой Зетом, где беседы о море и труде переплетаются с древними песнями о Марко Кралевиче.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-petar-zoranic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Петар Зоранич</h3>
+                  <p class="author-role">Задарский писатель, автор первого хорватского пасторального романа · <span class="tabular">1508 – ок. 1569</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист и нотариус из Задара, обратившийся к аллегории духовного странствия по горным тропам Далмации ради защиты родного языка и отечества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-planine-zoranic">
+                  <div class="work-row">
+                    <span class="work-code">ХР-01.05</span>
+                    <a class="work-link" href="./works/horv-zoranich-gory.html">Горы («Planine»)</a>
+                    <span class="work-meta">1536 (изд. 1569) · Пасторально-аллегорический роман в прозе и стихах</span>
+                  </div>
+                  <p class="work-summary">Странствие пастуха Зорана от берегов Нина через Велебит и Динарские вершины в поисках исцеления от любовной тоски и горький упрёк соотечественникам, забывающим родное слово.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-marin-drzic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марин Држич</h3>
+                  <p class="author-role">Величайший драматург Дубровницкого Возрождения и европейской ренессансной комедии · <span class="tabular">1508–1567</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дубровницкий священник, музыкант и остроумный сатирик, высмеявший скупость, лицемерие аристократии и человеческую жадность («люди-назбиль» против «людей-нахуао»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-dundo-maroje">
+                  <div class="work-row">
+                    <span class="work-code">ХР-01.06</span>
+                    <a class="work-link" href="./works/horv-drzhich-dyadya-maroe.html">Дядя Марое («Dundo Maroje») и «Скупой» («Skup»)</a>
+                    <span class="work-meta">1551 / 1555 · Ренессансная комедия</span>
+                  </div>
+                  <p class="work-summary">Искромётная римская авантюра о скупом дубровницком купце, его моте-сыне Маро и хитроумном слуге Помете, который ловкостью и здравым смыслом управляет фортуной.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-ivan-gundulic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Гундулич</h3>
+                  <p class="author-role">Вершина хорватского барокко, великий эпический и лирический поэт Дубровника · <span class="tabular">1589–1638</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сенатор Дубровницкой республики, превративший борьбу славянского мира и Хотинскую битву 1621 года в масштабную барочную поэму о свободе и тщете власти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-osman-dubravka-gundulic">
+                  <div class="work-row">
+                    <span class="work-code">ХР-01.07</span>
+                    <a class="work-link" href="./works/horv-gundulich-osman.html">Осман («Osman») и пастораль «Дубравка»</a>
+                    <span class="work-meta">1628 / 1638 · Барочный героический эпос и драма</span>
+                  </div>
+                  <p class="work-summary">Двадцать песен о падении султана Османа II после Хотинского похода и знаменитый гимн Дубровника «О прекрасная, о дорогая, о сладкая свобода» из пасторали «Дубравка».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="hr-enlightenment-illyrism-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · XVIII – середина XIX века</p>
+          <h2 class="section-title">Просвещение, иллирийское возрождение и эпоха романтизма</h2>
+          <p class="section-desc">Народная летопись Андрии Качича-Миошича, языковая реформа Людевита Гая, романтические поэмы Станко Враза и Петара Прерадовича и суровая эпическая поэма Ивана Мажуранича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hr-andrija-kacic-miosic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Андрия Качич-Миошич</h3>
+                  <p class="author-role">Францисканский монах из Макарской, автор самой читаемой народной книги XVIII века · <span class="tabular">1704–1760</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Просветитель, соединивший народный десятерцовый стих с историческими хрониками ради простых читателей Далмации и всей Славонии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-razgovor-ugodni">
+                  <div class="work-row">
+                    <span class="work-code">ХР-02.01</span>
+                    <a class="work-link" href="./works/horv-kachich-priyatnaya-beseda.html">Приятная беседа славянского народа («Razgovor ugodni naroda slovinskoga»)</a>
+                    <span class="work-meta">1756 · Историко-эпический свод в стихах и прозе</span>
+                  </div>
+                  <p class="work-summary">Цикл песен о правителях, воинах и героях от античности до битв при Сигете и Сине, ставший на столетие «народной книгой» в хорватских домах.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-ljudevit-gaj">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Людевит Гай</h3>
+                  <p class="author-role">Вождь Хорватского национального возрождения (иллиризма) и реформатор алфавита · <span class="tabular">1809–1872</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Издатель газеты «Новине хорватске» и литературного приложения «Даница», заложивший единую латинскую орфографию (гаевицу) и литературную норму.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-kratka-osnova-horvatstva">
+                  <div class="work-row">
+                    <span class="work-code">ХР-02.02</span>
+                    <a class="work-link" href="./works/horv-gaj-kratkaya-osnova.html">Краткая основа хорватско-славянского правописания и «Ещё Хорватия не погибла»</a>
+                    <span class="work-meta">1830 / 1833 · Программный трактат и патриотическая лирика</span>
+                  </div>
+                  <p class="work-summary">Орфографическая реформа, объединившая разобщённые диалекты в единый литературный язык, и знаменитая ода пробуждения «Horvatov sloga i zjedinjenje».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-stanko-vraz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Станко Враз</h3>
+                  <p class="author-role">Поэт-романтик, критик и первый профессиональный хорватский литератор · <span class="tabular">1810–1851</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Словенец по рождению, сознательно избравший хорватский язык эпохи иллиризма и поднявший хорватскую критику и любовную лирику на европейский уровень.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-djulabije-vraz">
+                  <div class="work-row">
+                    <span class="work-code">ХР-02.03</span>
+                    <a class="work-link" href="./works/horv-vraz-dzhulabiya.html">Джулабия («Đulabije»)</a>
+                    <span class="work-meta">1840 · Романтический лирический цикл</span>
+                  </div>
+                  <p class="work-summary">Сто пятьдесят лирических миниатюр, вдохновлённых неразделённой любовью к самоборской красавице Юлиане Цантилли и перерастающих в песнь о судьбе отчизны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-ivan-mazuranic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Мажуранич</h3>
+                  <p class="author-role">Поэт-классик, бан Хорватии и создатель величайшей романтической поэмы XIX века · <span class="tabular">1814–1890</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Нови-Винодолски, завершивший недостающие песни «Османа» Гундулича и поднявший хорватскую литературу на европейскую вершину.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-smrt-smail-age-cengica">
+                  <div class="work-row">
+                    <span class="work-code">ХР-02.04</span>
+                    <a class="work-link" href="./works/horv-mazhuranich-smert-smail-agi.html">Смерть Смаил-аги Ченгича («Smrt Smail-age Čengića»)</a>
+                    <span class="work-meta">1846 · Лиро-эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Пять лаконичных и драматически насыщенных песен о гордом тиране, страданиях беззащитного народа, роковой ночи на Гацковом поле и нравственном возмездии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-petar-preradovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Петар Прерадович</h3>
+                  <p class="author-role">Генерал и великий поэт-романтик хорватского Возрождения · <span class="tabular">1818–1872</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Воспитанный в австрийских военных школах офицер, заново открывший родной язык в Задаре и выразивший драму раздвоенного между мирами человека.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-prvenci-putnik">
+                  <div class="work-row">
+                    <span class="work-code">ХР-02.05</span>
+                    <a class="work-link" href="./works/horv-preradovich-pervency.html">Первенцы («Prvenci») и поэма «Путешественник» («Putnik»)</a>
+                    <span class="work-meta">1846 · Романтическая лирика</span>
+                  </div>
+                  <p class="work-summary">Проникновенные стихи о возвращении к родному языку («Рассвет встаёт, день грядёт») и аллегорическое скитание человека, потерявшего дом и ищущего вечную отчизну.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="hr-realism-senoa-kovacic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1860–1900-е годы</p>
+          <h2 class="section-title">Хорватский реализм: Август Шеноа, Ковачич и поэзия конца XIX века</h2>
+          <p class="section-desc">«Эпоха Шеноа» с историческими романами о Загребе и восстании Матии Губца, горькая правда жизни в «Регистратуре» Анте Ковачича, усадьбах Гяльского, упадке Сеньских патрициев Новака и трагическом стихе Краньчевича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hr-august-senoa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Август Шеноа</h3>
+                  <p class="author-role">Центральная фигура хорватской прозы XIX века, загребский романист и редактор «Венца» · <span class="tabular">1838–1881</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер исторического и социального романа, воспитавший целое поколение читателей и превративший старый Загреб и Хорватское Загорье в живое литературное пространство.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-zlatarovo-zlato-seljacka-buna">
+                  <div class="work-row">
+                    <span class="work-code">ХР-03.01</span>
+                    <a class="work-link" href="./works/horv-shenoa-zoloto-yuvelira.html">Золото ювелира («Zlatarovo zlato») и «Крестьянское восстание»</a>
+                    <span class="work-meta">1871 / 1877 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">История любви дочери загребского мастера Доры Крупичевой и дворянина Павла Грегорианца на фоне борьбы города с магнатом и эпопея восстания 1573 года под предводительством Матии Губца.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-ante-kovacic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анте Ковачич</h3>
+                  <p class="author-role">Острый сатирик и автор величайшего романа хорватского реализма · <span class="tabular">1854–1889</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из бедной крестьянской семьи Хорватского Загорья, ставший адвокатом и запечатлевший драму растоптанной провинциальной интеллигенции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-u-registraturi">
+                  <div class="work-row">
+                    <span class="work-code">ХР-03.02</span>
+                    <a class="work-link" href="./works/horv-kovachich-v-registrature.html">В регистратуре («U registraturi»)</a>
+                    <span class="work-meta">1888 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Трагическая биография одарённого крестьянского юноши Ивицы Кичмановича, которого столичный мир «господ», демоническая Лаура и мёртвая канцелярия доводят до гибели среди архивных бумаг.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-ksaver-sandor-gjalski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ксавер Шандор Гяльский (Любомир Бабич)</h3>
+                  <p class="author-role">Летописец старого загорского дворянства и переходного времени · <span class="tabular">1854–1935</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Представитель угасающего помещичьего уклада, с чеховской мягкостью и грустью описавший мелкопоместные усадьбы Загорья.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-pod-starim-krovovima">
+                  <div class="work-row">
+                    <span class="work-code">ХР-03.03</span>
+                    <a class="work-link" href="./works/horv-gyalskij-pod-starymi-kryshami.html">Под старыми крышами («Pod starim krovovima»)</a>
+                    <span class="work-meta">1886 · Цикл новелл о загорских куриях</span>
+                  </div>
+                  <p class="work-summary">Элегические рассказы («Иллюстриссимус Баторич», «Почтенный человек») о чудаках-помещиках, верных латыни и старым обычаям посреди безжалостного наступления новой эпохи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-josip-kozarac">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йосип Козарац</h3>
+                  <p class="author-role">Славонский лесничий и мастер психологической прозы о земле и лесе · <span class="tabular">1858–1906</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Винковцев и главный лесничий славонских дубрав, соединивший точность социолога с поэзией природы и женского характера.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-mrtvi-kapitali-tena">
+                  <div class="work-row">
+                    <span class="work-code">ХР-03.04</span>
+                    <a class="work-link" href="./works/horv-kozarac-mertvye-kapitaly.html">Мёртвые капиталы («Mrtvi kapitali») и повесть «Тена»</a>
+                    <span class="work-meta">1889 / 1894 · Реалистический роман и новелла</span>
+                  </div>
+                  <p class="work-summary">Критика запустения плодородной Славонии и портрет своенравной славонской красавицы Тены, проходящей через гордыню, падение и нравственное прозрение.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-vjenceslav-novak">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вьенцеслав Новак</h3>
+                  <p class="author-role">«Хорватский Бальзак», певец города Сень и социальных низов · <span class="tabular">1859–1905</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Музыковед, органист и прозаик из приморского города Сень, создавший образец строгой социально-семейной драмы реализма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-posljednji-stipancici">
+                  <div class="work-row">
+                    <span class="work-code">ХР-03.05</span>
+                    <a class="work-link" href="./works/horv-novak-poslednie-stipanchichi.html">Последние Стипанчичи («Posljednji Stipančići»)</a>
+                    <span class="work-meta">1899 · Семейно-социальный роман</span>
+                  </div>
+                  <p class="work-summary">Разрушение гордого патрицианского дома в Сене из-за тиранической воли отца Анте, слепой ставки на сына-неудачника и жертвенности дочери Луции.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-silvije-strahimir-kranjcevic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сильвие Страхимир Краньчевич</h3>
+                  <p class="author-role">Крупнейший хорватский поэт рубежа XIX–XX веков, трибун и философ · <span class="tabular">1865–1908</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учитель из Сеня, вынужденный работать в Боснии, поднявший хорватскую поэзию от камерной лирики к космическим и библейским образам человеческой свободы и страдания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-izabrane-pjesme-kranjcevic">
+                  <div class="work-row">
+                    <span class="work-code">ХР-03.06</span>
+                    <a class="work-link" href="./works/horv-kranchevich-izbrannye-stihi.html">Избранные стихотворения («Bugarkinje», «Trzaji»)</a>
+                    <span class="work-meta">1885–1902 · Философская и гражданская лирика</span>
+                  </div>
+                  <p class="work-summary">Знаменитые поэмы «Моисей», «Господу Христу», «Рабочий» и «Последний Адам» — страстный спор человека со смертью, несправедливостью и звёздным небом.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="hr-moderna-matos-kamov">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1895–1920-е годы</p>
+          <h2 class="section-title">Хорватский модерн: Матош, Войнович, Брлич-Мажуранич и Камов</h2>
+          <p class="section-desc">Европейское обновление рубежа веков: парижский импрессионизм и новеллы Антуна Густава Матоша, элегия о закате Дубровника Иво Войновича, сказки Иваны Брлич-Мажуранич и бунтарский протоавангард Янко Полича Камова.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hr-ivo-vojnovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иво Войнович</h3>
+                  <p class="author-role">Граф и драматург заката старого Дубровника · <span class="tabular">1857–1929</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Представитель древней дубровницкой знати, воспевший с чеховской ностальгией крушение аристократической республики под напором нового времени.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-dubrovacka-trilogija">
+                  <div class="work-row">
+                    <span class="work-code">ХР-04.01</span>
+                    <a class="work-link" href="./works/horv-vojnovich-dubrovnickaya-trilogiya.html">Дубровницкая трилогия («Dubrovačka trilogija»)</a>
+                    <span class="work-meta">1902 · Драматическая трилогия</span>
+                  </div>
+                  <p class="work-summary">Три акта гибели старинной республики — от вступления французских войск в 1806 году («Allons enfants!») и «Сумерек» до «На террасе» 1900 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-antun-gustav-matos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антун Густав Матош</h3>
+                  <p class="author-role">Вождь хорватского модерна, эссеист, мастер сонета и причудливой новеллы · <span class="tabular">1873–1914</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дезертир австрийской армии, скиталец в Белграде, Женеве и Париже, принесший в хорватскую литературу музыку Бодлера, иронию, культ искусства и отточенный сонет.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-umorne-price-pjesme-matos">
+                  <div class="work-row">
+                    <span class="work-code">ХР-04.02</span>
+                    <a class="work-link" href="./works/horv-matosh-ustalye-rasskazy.html">Усталые рассказы («Umorne priče») и книга «Стихотворения»</a>
+                    <span class="work-meta">1909 / 1923 · Импрессионистские новеллы и лирика</span>
+                  </div>
+                  <p class="work-summary">Фантастические и символические рассказы («Цвет с перекрёстка», «Балкон», «Камао») в духе Эдгара По и хрестоматийные сонеты «Утешение волос» и «1909».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-ivana-brlic-mazuranic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ивана Брлич-Мажуранич</h3>
+                  <p class="author-role">«Хорватский Андерсен», классик мировой сказочной прозы · <span class="tabular">1874–1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Внучка бана Ивана Мажуранича, четырежды номинировавшаяся на Нобелевскую премию и создавшая на основе славянской мифологии волшебный мир любви и верности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-price-iz-davnine">
+                  <div class="work-row">
+                    <span class="work-code">ХР-04.03</span>
+                    <a class="work-link" href="./works/horv-brlich-skazki-davnih-vremen.html">Сказки давних времён («Priče iz davnine»)</a>
+                    <span class="work-meta">1916 · Литературные сказки на славянской мифологии</span>
+                  </div>
+                  <p class="work-summary">Восемь бессмертных сказок («Лес Стриборов», «Регоч», «Рыбак Палунко», «Солнце и Светомир»), в которых духи, лешие и простые люди испытывают цену верного сердца.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-vladimir-nazor">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Владимир Назор</h3>
+                  <p class="author-role">Уроженец Брача, поэт-пантеист, автор истрийских легенд и партизанских записок · <span class="tabular">1876–1949</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Средиземноморский лирик и сказочник, воспевший Далмацию, истрийского великана Вели Йожу и ушедший в 1942 году вместе с молодым поэтом И. Г. Ковачичем к партизанам.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-veli-joze-istarske-price">
+                  <div class="work-row">
+                    <span class="work-code">ХР-04.04</span>
+                    <a class="work-link" href="./works/horv-nazor-veli-jozhe.html">Вели Йоже («Veli Jože») и «Истрийские рассказы»</a>
+                    <span class="work-meta">1908 / 1913 · Аллегорическая повесть-легенда и лирика</span>
+                  </div>
+                  <p class="work-summary">История истрийского великана из Мотовуна, осознающего свою силу и достоинство перед венецианской знатью, и солнечная поэзия островов Адриатики.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-janko-polic-kamov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Янко Полич Камов</h3>
+                  <p class="author-role">Риекский бунтарь, поэт «Проклятия» и пионер европейского авангарда · <span class="tabular">1886–1910</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Умерший в двадцать четыре года в барселонской больнице гений-провокатор, предвосхитивший поток сознания, экспрессионизм и антибуржуазный роман XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-isusena-kaljuza-psovka">
+                  <div class="work-row">
+                    <span class="work-code">ХР-04.05</span>
+                    <a class="work-link" href="./works/horv-kamov-vysohshaya-luzha.html">Высохшая лужа («Isušena kaljuža») и книга стихов «Проклятие»</a>
+                    <span class="work-meta">1906–1909 (изд. 1957) · Авангардный психологический роман и поэзия</span>
+                  </div>
+                  <p class="work-summary">Радикальная внутренняя исповедь туберкулёзного литератора Арсена Топлока — первый модернистский антироман хорватской словесности, опередивший своё время на десятилетия.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="hr-krleza-ujevic-midcentury">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1920–1970-е годы</p>
+          <h2 class="section-title">Мирослав Крлежа, Тин Уевич, авангард и классика середины XX века</h2>
+          <p class="section-desc">Монументальный мир Мирослава Крлежи, богемная и метафизическая лирика Тина Уевича, экспрессионизм Антуна Бранко Шимича, хрустальная музыка стиха Цесарича и Весны Парун, интеллектуальный роман Маринковича и Слободана Новака.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hr-tin-ujevic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тин Уевич</h3>
+                  <p class="author-role">Крупнейший хорватский поэт XX века, скиталец, эссеист и философ слова · <span class="tabular">1891–1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Вргорца, проживший жизнь между Парижем, Белградом, Сплитом, Сараево и Загребом, соединивший средневековое созвучие и авангардный надлом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-lelek-sebra-kolajna">
+                  <div class="work-row">
+                    <span class="work-code">ХР-05.01</span>
+                    <a class="work-link" href="./works/horv-uevich-ozherele.html">Вопль раба («Lelek sebra»), «Ожерелье» и «Жажда воды из родника»</a>
+                    <span class="work-meta">1920 / 1926 / 1954 · Метафизическая и исповедальная лирика</span>
+                  </div>
+                  <p class="work-summary">От отчаяния «Стихов о бедной радости» и «Повседневной жалобы» до сияющей примиренности зрелой поэзии о братстве людей во вселенной.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-miroslav-krleza">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мирослав Крлежа</h3>
+                  <p class="author-role">Титан хорватской литературы XX века, романист, драматург, поэт и энциклопедист · <span class="tabular">1893–1981</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Автор более пятидесяти томов, запечатлевший распад Австро-Венгрии, гниение загребского патрициата, кризис художника и восстание средневекового слова в кайкавском говоре.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-povratak-filipa-latinovicza">
+                  <div class="work-row">
+                    <span class="work-code">ХР-05.02</span>
+                    <a class="work-link" href="./works/horv-krlezha-filip-latinovich.html">Возвращение Филипа Латиновича («Povratak Filipa Latinovicza»)</a>
+                    <span class="work-meta">1932 · Модернистский роман</span>
+                  </div>
+                  <p class="work-summary">Художник возвращается через двадцать три года в паннонский Костоньевец в поисках утраченного детского взгляда на краски и сталкивается с грязью, призраками и гибелью иллюзий.</p>
+                </li>
+                <li class="work-item" id="work-hr-balade-petrice-kerempuha">
+                  <div class="work-row">
+                    <span class="work-code">ХР-05.03</span>
+                    <a class="work-link" href="./works/horv-krlezha-glembaevy.html">Баллады Петрицы Керемпуха и «Господа Глембаевы»</a>
+                    <span class="work-meta">1929 / 1936 · Психологическая драма и сатирический эпос</span>
+                  </div>
+                  <p class="work-summary">Семейная трагедия загребского банкирского клана («в основе всякого состояния — убийство») и гениальный цикл баллад на старинном кайкавском наречии о вечном бунтаре Петрице.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-antun-branko-simic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антун Бранко Шимич</h3>
+                  <p class="author-role">Мастер хорватского экспрессионизма, обновитель свободного стиха · <span class="tabular">1898–1925</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Герцеговины и загребский поэт, умерший в двадцать шесть лет и оставивший одну из самых чистых и пронзительных книг XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-preobrazenja-simic">
+                  <div class="work-row">
+                    <span class="work-code">ХР-05.04</span>
+                    <a class="work-link" href="./works/horv-shimich-preobrazheniya.html">Преображения («Preobraženja»)</a>
+                    <span class="work-meta">1920 · Экспрессионистская лирика</span>
+                  </div>
+                  <p class="work-summary">Книга предельно сжатых стихов без знаков препинания («Поэты», «Смерть и я», «Предупреждение»), в которых звёзды, бедняки, любовь и смерть светятся голым нервом бытия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-dobrisa-cesaric">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Добриша Цесарич</h3>
+                  <p class="author-role">Классик мелодичной, доступной и глубокой лирики XX века · <span class="tabular">1902–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Славонской Пожеги, создавший миниатюры удивительной ясности («Утешение», «Фруктовое дерево после дождя», «Водопад») о надежде в простом мгновении.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-lirika-cesaric">
+                  <div class="work-row">
+                    <span class="work-code">ХР-05.05</span>
+                    <a class="work-link" href="./works/horv-cesarich-lirika.html">Лирика («Lirika») и «Фруктовое дерево после дождя»</a>
+                    <span class="work-meta">1931–1943 · Классическая лирика</span>
+                  </div>
+                  <p class="work-summary">Небольшие по объёму, но выверенные до слога стихотворения о городских сумерках, любви, скромности и сверкающей радости обновлённой природы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-ranko-marinkovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ранко Маринкович</h3>
+                  <p class="author-role">Уроженец острова Вис, мастер средиземноморской новеллы и интеллектуального романа · <span class="tabular">1913–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург, профессор Загребской академии и тонкий иронист, показавший страх и абсурд интеллигенции накануне Второй мировой войны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-kiklop-ruke-marinkovic">
+                  <div class="work-row">
+                    <span class="work-code">ХР-05.06</span>
+                    <a class="work-link" href="./works/horv-marinkovich-kiklop.html">Киклоп («Kiklop») и книга новелл «Руки»</a>
+                    <span class="work-meta">1953 / 1965 · Модернистский роман и новеллы</span>
+                  </div>
+                  <p class="work-summary">Театральный критик Мельхиор Тресич блуждает по загребским кафейням в 1941 году, спасаясь голодом и мифами от пасти надвигающегося военного Циклопа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-vesna-parun">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Весна Парун</h3>
+                  <p class="author-role">Крупнейшая хорватская поэтесса XX века, уроженка острова Зларин · <span class="tabular">1922–2010</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Независимая от литературных кружков поэтесса, объединившая буйство далматинской природы, антивоенный крик и редкую женскую искренность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-crna-maslina-zore-i-vihori">
+                  <div class="work-row">
+                    <span class="work-code">ХР-05.07</span>
+                    <a class="work-link" href="./works/horv-parun-chernaya-maslina.html">Рассветы и вихри и «Чёрная маслина» («Crna maslina»)</a>
+                    <span class="work-meta">1947 / 1955 · Любовная и философская лирика</span>
+                  </div>
+                  <p class="work-summary">Книга с прославленной поэмой «Ты, чьи руки невиннее моих» — голос страсти, самоотречения и нерушимой верности жизни среди морских ветров.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-slobodan-novak">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Слободан Новак</h3>
+                  <p class="author-role">Автор одного из лучших экзистенциальных романов послевоенной Адриатики · <span class="tabular">1924–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Сплита, проведший детство на острове Раб и создавший язвительно-горькую притчу о порабощении ума догмами и долгом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-mirisi-zlato-i-tamjan">
+                  <div class="work-row">
+                    <span class="work-code">ХР-05.08</span>
+                    <a class="work-link" href="./works/horv-novak-zapahi-zoloto-i-ladan.html">Запахи, золото и ладан («Mirisi, zlato i tamjan»)</a>
+                    <span class="work-meta">1968 · Экзистенциально-сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Бывший партизан, разочаровавшийся в идеологии, ухаживает вместе с женой на унылом острове за столетней дворянкой Мадонной и ведёт ядовитый внутренний монолог.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="hr-postmodernism-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1980-е – XXI век</p>
+          <h2 class="section-title">Постмодернизм, память XX века и современная хорватская проза</h2>
+          <p class="section-desc">Интеллектуальные детективы Павао Павличича, европейское письмо Дубравки Угрешич и Славенки Дракулич, островная сказка Ренато Баретича, большой балканский эпос Мильенко Ерговича и проза Дамира Каракаша и Кристиана Новака.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hr-pavao-pavlicic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Павао Павличич</h3>
+                  <p class="author-role">Уроженец Вуковара, мастер фантастического детектива и теории барокко · <span class="tabular">род. 1946</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Академик и профессор сравнительного литературоведения, соединивший увлекательную детективную интригу с духом Дуная и старинной дубровницкой литературы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-vecernji-akt-koraljna-vrata">
+                  <div class="work-row">
+                    <span class="work-code">ХР-06.01</span>
+                    <a class="work-link" href="./works/horv-pavlichich-vechernij-akt.html">Вечерний акт («Večernji akt») и «Кораловые ворота»</a>
+                    <span class="work-meta">1981 / 1990 · Постмодернистский детектив и роман-загадка</span>
+                  </div>
+                  <p class="work-summary">Загадка гениального фальсификатора, чьи подделки вызывают таинственные происшествия в Загребе, и поиски утраченных двух песен «Османа» Гундулича на острове Ластово.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-dubravka-ugresic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дубравка Угрешич</h3>
+                  <p class="author-role">Международно признанная романистка и эссеист, исследователь памяти и изгнания · <span class="tabular">1949–2023</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Кутины и филолог-русист, покинувшая страну в 1990-е годы и превратившая постмодернистскую иронию и «музейный» взгляд эмигранта в высокую литературу Европы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-ministarstvo-boli-forsiranje">
+                  <div class="work-row">
+                    <span class="work-code">ХР-06.02</span>
+                    <a class="work-link" href="./works/horv-ugreshich-ministerstvo-boli.html">Форсирование романа-реки и «Министерство боли» («Ministarstvo boli»)</a>
+                    <span class="work-meta">1988 / 2004 · Постмодернистский роман и роман об изгнании</span>
+                  </div>
+                  <p class="work-summary">Ироничная игра с литературным миром в Загребе 1980-х и горько-светлая история учительницы Тани Лучич и её студентов-беженцев из бывшей Югославии в Амстердаме.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-slavenka-drakulic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Славенка Дракулич</h3>
+                  <p class="author-role">Уроженка Риеки, романистка, эссеист и хроникёр европейской женской судьбы · <span class="tabular">1949–2026</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница и публицист, чьи переведённые на десятки языков книги соединили документальную точность репортажа с глубоким анализом тела, боли, диктатуры и искусства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-kako-smo-prezivjeli-frida">
+                  <div class="work-row">
+                    <span class="work-code">ХР-06.03</span>
+                    <a class="work-link" href="./works/horv-drakulich-kak-my-perezhili.html">Как мы пережили коммунизм и роман «Фрида, или О боли»</a>
+                    <span class="work-meta">1991 / 2007 · Художественная эссеистика и биографический роман</span>
+                  </div>
+                  <p class="work-summary">Взгляд на историю Восточной Европы через быт, кухонные разговоры и дефицит и проникновенный роман о физической боли и творчестве мексиканской художницы Фриды Кало.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-renato-baretic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ренато Баретич</h3>
+                  <p class="author-role">Сплитский поэт, журналист и автор самого светлого романа 2000-х годов · <span class="tabular">1963–2025</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Загреба, переехавший в Сплит и ставший голосом живой, остроумной и человечной адриатической прозы нового века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-osmi-povjerenik">
+                  <div class="work-row">
+                    <span class="work-code">ХР-06.04</span>
+                    <a class="work-link" href="./works/horv-baretich-vosmoj-upolnomochennyj.html">Восьмой уполномоченный («Osmi povjerenik»)</a>
+                    <span class="work-meta">2003 · Сатирическая трагикомедия</span>
+                  </div>
+                  <p class="work-summary">Опального загребского политика ссылают на отдалённый вымышленный остров Тречич организовать местные выборы, но среди чудаков-стариков, австралийского диалекта и боснийского священника он находит настоящую человечность.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-miljenko-jergovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мильенко Ергович</h3>
+                  <p class="author-role">Один из главных прозаиков современного балканского пространства, лауреат европейских премий · <span class="tabular">род. 1966</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Сараева, живущий под Загребом, создавший грандиозную сагу о ХХ веке на стыке хорватской, боснийской и среднеевропейской культур.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-sarajevski-marlboro-dvori-od-oraha">
+                  <div class="work-row">
+                    <span class="work-code">ХР-06.05</span>
+                    <a class="work-link" href="./works/horv-ergovich-orehovyj-zamok.html">Сараевские «Мальборо» и «Ореховый замок» («Dvori od oraha»)</a>
+                    <span class="work-meta">1994 / 2003 · Сборник новелл и семейный роман-сага</span>
+                  </div>
+                  <p class="work-summary">Хрупкие зарисовки осаждённого города и обратная во времени история семьи Регины Делавале — от смерти столетней бабушки до конца XIX века через войны и переломы в Дубровнике и Сараево.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-damir-karakas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дамир Каракаш</h3>
+                  <p class="author-role">Певец суровой Лики, мастер предельно сжатой и поэтичной прозы · <span class="tabular">род. 1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец ликского села Плашчаница, карикатурист, аккордеонист и прозаик, оттачивающий каждое предложение до кристаллической простоты и внутренней музыки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-sjecanje-sume">
+                  <div class="work-row">
+                    <span class="work-code">ХР-06.06</span>
+                    <a class="work-link" href="./works/horv-karakash-vospominaniya-o-lese.html">Воспоминания о лесе («Sjećanje šume») и «Поток»</a>
+                    <span class="work-meta">2016 / 2021 · Лирический роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Короткие, как удары топора или стук сердца, главы о детстве мальчика в суровых горных лесах Лики, суровости отца, болезни и жажде другой, книжной жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hr-kristian-novak">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристиан Новак</h3>
+                  <p class="author-role">Ведущий хорватский романист нового поколения, мастер многоголосой социальной драмы · <span class="tabular">род. 1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лингвист и академик из Меджимурья, принесший в современную прозу диалектную полифонию севера Хорватии, психологическую глубину и острую тему границ «своего» и «чужого».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hr-ciganin-ali-najljepsi">
+                  <div class="work-row">
+                    <span class="work-code">ХР-06.07</span>
+                    <a class="work-link" href="./works/horv-novak-cygan-no-samyj-krasivyj.html">Цыган, но самый красивый («Ciganin, ali najljepši») и «Тёмная матерь земля»</a>
+                    <span class="work-meta">2013 / 2016 · Полифонический социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Четыре исповеди на стыке хорватской деревни, цыганского табора, беженца из Мосула и полицейского следствия на реке Муре, сплетающиеся в трагедию любви и страха.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание хорватской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

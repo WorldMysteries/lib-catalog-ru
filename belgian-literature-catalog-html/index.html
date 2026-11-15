@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог бельгийской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 37 писателей · 39 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог бельгийской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от мистики Хадевейх и Рёйсбрука до «Уленшпигеля» Шарля де Костера, символизма Метерлинка, Верхарна и Роденбаха, бельгийского сюрреализма, Сименона, Юрсенар, Хьюго Клауса и Амели Нотомб.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#be-medieval-mystics-enlightenment">Раздел I: Средневековые истоки, мистика и век Просвещения</a>
+        <a href="#be-national-awakening-realism">Раздел II: Рождение национальной литературы: от Консианса до Шарля де Костера</a>
+        <a href="#be-jeune-belgique-symbolism">Раздел III: «Молодая Бельгия» и триумф символизма: Метерлинк, Верхарн, Роденбах</a>
+        <a href="#be-avant-garde-fantastic-interwar">Раздел IV: Авангард, «бельгийская школа странного» и межвоенный модерн</a>
+        <a href="#be-postwar-simenon-masters">Раздел V: Послевоенная проза: Сименон, Юрсенар, Боон и мастера стиля</a>
+        <a href="#be-claus-postmodernism-contemporary">Раздел VI: Хьюго Клаус, постмодернизм и современная литература Бельгии</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="be-medieval-mystics-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIII–XVIII века</p>
+          <h2 class="section-title">Средневековые истоки, мистика и век Просвещения</h2>
+          <p class="section-desc">Многоязычное наследие южнонидерландских и валлонских земель: от визионерской мистики Хадевейх и Яна ван Рёйсбрука и хроник Жана Фруассара до изысканной галантной прозы принца Шарля-Жозефа де Линя.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-be-hadewijch">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хадевейх Антверпенская</h3>
+                  <p class="author-role">Первая крупная поэтесса бельгийского Средневековья, мастер духовной лирики · <span class="tabular">XIII век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Брабантская бегинка XIII столетия, соединившая рыцарскую традицию куртуазной песни с огненным мистическим переживанием божественной Любви (Minne).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-hadewijch-visioenen">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-01.01</span>
+                    <a class="work-link" href="./works/belg-hadevejh-videniya.html">Видения и строфические песни («Visioenen»)</a>
+                    <span class="work-meta">ок. 1240 · Средневековая мистическая поэзия и проза</span>
+                  </div>
+                  <p class="work-summary">Четырнадцать визионерских откровений, сорок пять строфических песен и письма к духовным сёстрам, открывшие в нидерландской речи глубину символического переживания.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-jan-van-ruusbroec">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ян ван Рёйсбрук</h3>
+                  <p class="author-role">Брабантский мистик из Грунендала под Брюсселем, мастер духовной прозы · <span class="tabular">1293–1381</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Священник и отшельник Суаньского леса, прозванный «Дивным учителем» (Doctor Admirabilis) и оказавший огромное влияние на европейскую культуру — вплоть до Мориса Метерлинка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-chierheit-gheesteliker-brulocht">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-01.02</span>
+                    <a class="work-link" href="./works/belg-reysbruk-odeyanie-braka.html">Одеяние духовного брака («Die chierheit der gheesteliker brulocht»)</a>
+                    <span class="work-meta">ок. 1340 · Духовно-философский трактат</span>
+                  </div>
+                  <p class="work-summary">Трёхступенчатое восхождение человека от деятельной добродетели и внутреннего созерцания к созерцательному единению с божественным светом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-jean-froissart">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жан Фруассар</h3>
+                  <p class="author-role">Хронист графства Эно и выдающийся летописец Столетней войны · <span class="tabular">ок. 1337 – ок. 1405</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Валансьена в Эно и каноник в бельгийском Шиме, исколесивший Англию, Фландрию, Брабант и Францию ради живых устных свидетельств о рыцарской эпохе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-froissart-chroniques">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-01.03</span>
+                    <a class="work-link" href="./works/belg-fruassar-hroniki.html">Хроники («Chroniques»)</a>
+                    <span class="work-meta">1369–1400 · Рыцарская хроника</span>
+                  </div>
+                  <p class="work-summary">Блестящая панорама Европы XIV века: битвы при Креси и Пуатье, восстания фландрских ткачей во главе с Якобом ван Артевелде, турниры и придворные интриги.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-jean-lemaire-de-belges">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жан Лемер де Бельж</h3>
+                  <p class="author-role">Уроженец Эно, ренессансный поэт и предшественник «Плеяды» · <span class="tabular">1473 – ок. 1525</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Историограф при дворе Маргариты Австрийской в Мехелене, соединивший бургундскую традицию «великих риториков» с идеалами итальянского Возрождения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-epitres-amant-vert">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-01.04</span>
+                    <a class="work-link" href="./works/belg-lemer-poslaniya-zelenogo-lyubovnika.html">Послания Зелёного любовника и «Иллюстрации Галлии»</a>
+                    <span class="work-meta">1505–1513 · Ренессансная поэма и мифологическая проза</span>
+                  </div>
+                  <p class="work-summary">Изящные шутливо-элегические послания от лица любимого попугая эрцгерцогини Маргариты и масштабная историко-мифологическая хроника Европы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-charles-joseph-de-ligne">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шарль-Жозеф де Линь</h3>
+                  <p class="author-role">Уроженец Брюсселя, европейский эссеист, мемуарист и блестящий стилист Просвещения · <span class="tabular">1735–1814</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец аристократического рода из Эно (замок Белёй), собеседник Вольтера, Руссо, Екатерины II и Казановы, оставивший сорок томов остроумных записок и афоризмов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-lettres-et-pensees-ligne">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-01.05</span>
+                    <a class="work-link" href="./works/belg-de-lin-pisma-i-mysli.html">Письма, мысли и «Мемуары» («Lettres et pensées»)</a>
+                    <span class="work-meta">1795–1809 · Эссеистика, афоризмы и мемуары</span>
+                  </div>
+                  <p class="work-summary">Непринуждённый портрет «галантного века» в письмах о садах Белёя, путешествиях в Крым, беседах с философами и закате старой Европы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="be-national-awakening-realism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1830–1880-е годы</p>
+          <h2 class="section-title">Рождение национальной литературы: от Консианса до Шарля де Костера</h2>
+          <p class="section-desc">Становление бельгийской словесности после обретения независимости в 1830 году: романтический эпос Хендрика Консианса, бессмертный «Тиль Уленшпигель» Шарля де Костера, лирика Гвидо Гезелле и натурализм Камиля Лемонье.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-be-hendrik-conscience">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хендрик Консианс</h3>
+                  <p class="author-role">Основоположник современной прозы Фландрии («человек, научивший свой народ читать») · <span class="tabular">1812–1883</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Антверпенский романист, пробудивший интерес к родному нидерландскому языку и героической истории фламандских городов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-de-leeuw-van-vlaenderen">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-02.01</span>
+                    <a class="work-link" href="./works/belg-konsians-lev-flandrii.html">Лев Фландрии («De Leeuw van Vlaenderen»)</a>
+                    <span class="work-meta">1838 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Эпический рассказ о восстании брюггских ткачей и победе ополчения Фландрии в Битве золотых шпор 1302 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-charles-de-coster">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шарль де Костер</h3>
+                  <p class="author-role">Создатель бельгийского национального эпоса на французском языке · <span class="tabular">1827–1879</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын ипранского и мюнхенского происхождения, выросший в Брюсселе и превративший народную историю XVI века о проделках шута Уленшпигеля в великую книгу бельгийского духа и свободы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-legende-ulenspiegel">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-02.02</span>
+                    <a class="work-link" href="./works/belg-de-koster-ulenshpigel.html">Легенда об Уленшпигеле и Ламме Гудзаке («La Légende d’Ulenspiegel»)</a>
+                    <span class="work-meta">1867 · Героико-сатирический роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Сын угольщика Клааса из Дамме становится сердцем нидерландского сопротивления инквизиции и тирании Филиппа II; книга, соединившая сочный раблезианский юмор с трагическим пафосом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-guido-gezelle">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гвидо Гезелле</h3>
+                  <p class="author-role">Классик фламандской лирики, поэт западнофламандской природы и слова · <span class="tabular">1830–1899</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Священник, филолог и учитель из Брюгге и Кортрейка, возродивший музыкальную, диалектную пластику нидерландского стиха.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-tijdkrans-rijmsnoer">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-02.03</span>
+                    <a class="work-link" href="./works/belg-gezelle-venok-vremen.html">Венок времён и «Звукоряд рифм» («Tijdkrans», «Rijmsnoer»)</a>
+                    <span class="work-meta">1893 / 1897 · Природная и духовная лирика</span>
+                  </div>
+                  <p class="work-summary">Утончённые стихотворения о тростниках на реке Лейе, птицах, дожде, тишине пасеки и тончайшем переплетении звуков родного говора.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-octave-pirmez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Октав Пирмез</h3>
+                  <p class="author-role">Валлонский философ-лирик и предтеча бельгийского символизма · <span class="tabular">1832–1883</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Отшельник из замка Энье под Шарлеруа, автор созерцательной прозы о природе Валлонии, одиночестве, романтизме и меланхолии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-jours-de-solitude">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-02.04</span>
+                    <a class="work-link" href="./works/belg-pirmez-dni-odinochestva.html">Дни одиночества («Jours de solitude») и «Часы философии»</a>
+                    <span class="work-meta">1869 / 1873 · Философская лирическая проза</span>
+                  </div>
+                  <p class="work-summary">Записи созерцателя о туманах над Арденнами, старинных аллеях, утрате брата и тихом голосе совести в век индустриальной спешки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-camille-lemonnier">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Камиль Лемонье</h3>
+                  <p class="author-role">«Маршал бельгийской литературы», глава национального натурализма · <span class="tabular">1844–1913</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Брюссельский романист и художественный критик, открывший суровую поэзию фламандских полей, валлонских шахт и стихии плоти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-un-male-happe-chair">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-02.05</span>
+                    <a class="work-link" href="./works/belg-lemone-samec.html">Самец («Un mâle») и «Одержимый»</a>
+                    <span class="work-meta">1881 / 1886 · Натуралистический роман</span>
+                  </div>
+                  <p class="work-summary">Язычески-мощный роман о браконьере Кашапри и фермерской дочери Жермене в брабантском лесу и индустриальный эпос о шахтёрском Боринаже.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="be-jeune-belgique-symbolism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1880–1910-е годы</p>
+          <h2 class="section-title">«Молодая Бельгия» и триумф символизма: Метерлинк, Верхарн, Роденбах</h2>
+          <p class="section-desc">Золотой век бельгийской поэзии и драмы, покоривший всю Европу: туманный Брюгге Жоржа Роденбаха, урбанистический пафос Эмиля Верхарна, театр тишины и «Синяя птица» нобелевского лауреата Мориса Метерлинка.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-be-georges-eekhoud">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жорж Экхауд</h3>
+                  <p class="author-role">Антверпенский романист, певец обездоленных и бунтарь «Молодой Бельгии» · <span class="tabular">1854–1927</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Франкоязычный писатель из Антверпена, с редкой страстью изображавший портовые кварталы Шельды, вересковые пустоши Кемпена и изгоев буржуазного порядка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-la-nouvelle-carthage">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-03.01</span>
+                    <a class="work-link" href="./works/belg-ekhaud-novyj-karfagen.html">Новый Карфаген («La Nouvelle Carthage»)</a>
+                    <span class="work-meta">1888 · Социальный роман о портовом Антверпене</span>
+                  </div>
+                  <p class="work-summary">Контрастная фреска бурно богатеющего Антверпена — с его купеческой роскошью, матросскими кабаками, бастующими докерами и трагической судьбой юноши Лорана.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-georges-rodenbach">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жорж Роденбах</h3>
+                  <p class="author-role">Классик бельгийского символизма, создатель мифа о «мёртвом городе» Брюгге · <span class="tabular">1855–1898</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и прозаик, выросший в Генте и сделавший тишину старинных бегинажей, каналов и колоколов Брюгге зеркалом человеческой тоски.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-bruges-la-morte">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-03.02</span>
+                    <a class="work-link" href="./works/belg-rodenbah-mertvyj-bryugge.html">Мёртвый Брюгге («Bruges-la-Morte»)</a>
+                    <span class="work-meta">1892 · Символистский роман</span>
+                  </div>
+                  <p class="work-summary">Овдовевший Гюг Виан переселяется в молчаливый Брюгге, где сам город становится двойником его умершей жены, и встречает танцовщицу Жанну, разрушающую хрупкую иллюзию.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-emile-verhaeren">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмиль Верхарн</h3>
+                  <p class="author-role">Главный поэт бельгийского символизма и провозвестник новой эпохи · <span class="tabular">1855–1916</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Сент-Амандса на Шельде, прошедший путь от кризиса в «Чёрных факелах» к могучему гимну труда, машин и человеческой солидарности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-villes-tentaculaires">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-03.03</span>
+                    <a class="work-link" href="./works/belg-verharn-goroda-spruty.html">Призрачные деревни и «Города-спруты» («Les Villes tentaculaires»)</a>
+                    <span class="work-meta">1895 · Символистско-урбанистический поэтический цикл</span>
+                  </div>
+                  <p class="work-summary">Поэтическое полотно гигантских промышленных мегаполисов, бирж, вокзалов и заводов, высасывающих жизнь из старых фламандских деревень и рождающих ритм XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-charles-van-lerberghe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шарль Ван Лерберг</h3>
+                  <p class="author-role">Гентский поэт-символист, мастер воздушного, светлого стиха · <span class="tabular">1861–1907</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Друг Метерлинка со школьной скамьи в Генте, создавший светлую, почти музыкальную мифологию пробуждения души среди райского сада.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-chanson-deve">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-03.04</span>
+                    <a class="work-link" href="./works/belg-van-lerberg-pesn-o-eve.html">Песнь о Еве («La Chanson d’Ève»)</a>
+                    <span class="work-meta">1904 · Лирическая поэма-сюита</span>
+                  </div>
+                  <p class="work-summary">Поэтический цикл о первой женщине, впервые называющей вещи именами, открывающей радость чувств, тайну познания и кроткое примирение со смертью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-maurice-maeterlinck">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Морис Метерлинк</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1911), реформатор символистской драмы · <span class="tabular">1862–1949</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Гента и юрист по образованию, создавший «театр ожидания и тишины», поэтические эссе о природе и одну из самых любимых пьес-феерий XX столетия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-pelleas-et-melisande">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-03.05</span>
+                    <a class="work-link" href="./works/belg-meterlink-pelleas-i-melizanda.html">Слепые и «Пеллеас и Мелизанда» («Pelléas et Mélisande»)</a>
+                    <span class="work-meta">1890 / 1892 · Символистская драма</span>
+                  </div>
+                  <p class="work-summary">Трагедия хрупкой любви среди сумрачных лесов и подземных гротов королевства Аллемонда, вдохновившая оперу Дебюсси, и притча о слепых в ожидании проводника.</p>
+                </li>
+                <li class="work-item" id="work-be-loiseau-bleu">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-03.06</span>
+                    <a class="work-link" href="./works/belg-meterlink-sinyaya-ptica.html">Синяя птица («L’Oiseau bleu»)</a>
+                    <span class="work-meta">1908 · Философская пьеса-феерия</span>
+                  </div>
+                  <p class="work-summary">Рождественское путешествие Тильтиля и Митиль в Страну Воспоминаний, Царство Ночи и Сады Блаженств в поисках Синей птицы, которая оказывается в собственной клетке дома.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-max-elskang-elsk">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Макс Эльскамп</h3>
+                  <p class="author-role">Антверпенский поэт-символист, гравёр и собиратель фламандского фольклора · <span class="tabular">1862–1931</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Близкий друг Верхарна, соединивший в своих иллюстрированных книгах простодушную народную песенку, гравюру на дереве и утончённый символизм.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-la-louange-de-la-vie">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-03.07</span>
+                    <a class="work-link" href="./works/belg-elskamp-hvala-zhizni.html">Хвала жизни («La Louange de la vie»)</a>
+                    <span class="work-meta">1898 · Лирический цикл</span>
+                  </div>
+                  <p class="work-summary">Трогательные и напевные стихи о воскресении души, простых днях недели, бедных моряках на Шельде и чистом свете фламандских праздников.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="be-avant-garde-fantastic-interwar">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1910–1950-е годы</p>
+          <h2 class="section-title">Авангард, «бельгийская школа странного» и межвоенный модерн</h2>
+          <p class="section-desc">От едкой прозы Виллема Элсхота и экспрессионизма Паула ван Остайена до всемирно известной бельгийской фантастики Жана Рэ и Франца Элленса, яростного театра Мишеля де Гельдерода, сюрреализма Поля Нуже и одинокого гения Анри Мишо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-be-franz-hellens">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франц Элленс (Фредерик ван Эрмэнжем)</h3>
+                  <p class="author-role">Первооткрыватель «магического реализма» в бельгийской прозе · <span class="tabular">1881–1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Брюсселя и главный теоретик «фантастического в повседневности», предвосхитивший поиски латиноамериканского магического реализма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-melusine-realites-fantastiques">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-04.01</span>
+                    <a class="work-link" href="./works/belg-ellens-melyuzina.html">Мелюзина («Mélusine») и «Фантастические реальности»</a>
+                    <span class="work-meta">1920 / 1923 · Авангардный роман и новеллы</span>
+                  </div>
+                  <p class="work-summary">Сновидческое путешествие героя сквозь лабиринты башен, песков и зеркал за таинственной Мелюзиной и рассказы о чуде, скрытом в обычных предметах.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-willem-elsschot">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виллем Элсхот (Альфонс де Риддер)</h3>
+                  <p class="author-role">Классик фламандско-бельгийской сатирической и психологической прозы · <span class="tabular">1882–1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Владелец рекламного агентства в Антверпене, создавший лаконичные, сухие и горько-смешные повести о маленьком человеке в мире коммерческих иллюзий.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-kaas-villa-des-roses">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-04.02</span>
+                    <a class="work-link" href="./works/belg-elshot-syr.html">Сыр («Kaas») и «Вилла де Розес»</a>
+                    <span class="work-meta">1913 / 1933 · Сатирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Трагикомическая история скромного клерка Франса Ларманса, вообразившего себя великим коммерсантом после получения двадцати тонн голландского эдама.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-jean-ray">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жан Рэ (Раймон Жан Мари де Кремер)</h3>
+                  <p class="author-role">«Бельгийский Эдгар По», мастер литературы странного из Гента · <span class="tabular">1887–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Плодовитый двуязычный автор, живший то среди моряков, то в нищете гентских кварталов и создавший мрачную классику европейской мистики XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-malpertuis">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-04.03</span>
+                    <a class="work-link" href="./works/belg-re-malpertyui.html">Мальпертюи («Malpertuis»)</a>
+                    <span class="work-meta">1943 · Готический и мистический роман</span>
+                  </div>
+                  <p class="work-summary">Зловещее поместье старого таксидермиста Кассава, где в плену у человеческих страстей умирают низвергнутые олимпийские боги.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-paul-nouge">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Поль Нуже</h3>
+                  <p class="author-role">Теоретик, поэт и духовный центр бельгийского сюрреализма · <span class="tabular">1895–1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Брюссельский биохимик и соратник Рене Магритта, разработавший в отличие от парижского «автоматизма» строгий бельгийский метод интеллектуальной игры со смыслами и образами.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-lexperience-continue">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-04.04</span>
+                    <a class="work-link" href="./works/belg-nuzhe-nepreryvnyj-opyt.html">Непрерывный опыт («L’Expérience continue») и «Дневник Клариссы Жюранвиль»</a>
+                    <span class="work-meta">1927 / 1966 · Сюрреалистическая поэзия и манифесты</span>
+                  </div>
+                  <p class="work-summary">Изысканные языковые эксперименты, афоризмы и провокационные тексты, перевернувшие привычные связи между предметом, картиной и словом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-paul-van-ostaijen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Паул ван Остайен</h3>
+                  <p class="author-role">Лидер авангарда, дадаизма и экспрессионизма в бельгийской поэзии · <span class="tabular">1896–1928</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Антверпенский поэт и теоретик «чистой поэзии», соединивший типографическую партитуру стиха с ритмами джаза, кинематографа и военной тревоги.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-bezette-stad">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-04.05</span>
+                    <a class="work-link" href="./works/belg-ostajen-okkupirovannyj-gorod.html">Оккупированный город («Bezette Stad»)</a>
+                    <span class="work-meta">1921 · Авангардная поэма-монтаж</span>
+                  </div>
+                  <p class="work-summary">Визуальная симфония Антверпена эпохи Первой мировой войны, где шрифты разной величины передают вой сирен, марши солдат, афиши кабаре и крушение иллюзий.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-michel-de-ghelderode">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мишель де Гельдерод</h3>
+                  <p class="author-role">Уроженец Брюсселя, великий визионер и экспрессионист театра · <span class="tabular">1898–1962</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Архивариус из Икселя и создатель полусотни пьес, в которых дух картин Брейгеля, Босха и Энсора оживает в гротескных маскарадах смерти, веры и бунта.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-escurial-ecole-des-bouffons">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-04.06</span>
+                    <a class="work-link" href="./works/belg-gelderod-eskoriyal.html">Эскориал («Escurial») и «Школа шутов»</a>
+                    <span class="work-meta">1927 / 1942 · Гротескно-экспрессионистская драма</span>
+                  </div>
+                  <p class="work-summary">Безумный король и его шут Фолиаль меняются ролями под звон погребальных колоколов; квинтэссенция театра жестокости и фламандского карнавала.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-henri-michaux">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анри Мишо</h3>
+                  <p class="author-role">Уроженец Намюра, поэт-визионер воображаемых стран и внутренней тревоги · <span class="tabular">1899–1984</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бельгийский моряк, художник и поэт, открывший в прозаических стихотворениях и гротескных притчах неистощимую свободу абсурда и самоиронии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-un-certain-plume">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-04.07</span>
+                    <a class="work-link" href="./works/belg-misho-nekij-plyum.html">Некий Плюм («Un certain Plume») и «Варвар в Азии»</a>
+                    <span class="work-meta">1930 / 1933 · Поэтическая проза и притча-гротеск</span>
+                  </div>
+                  <p class="work-summary">Трагикомические злоключения кроткого господина Плюма, которого все вокруг обвиняют и толкают, но он спасается внутренней невесомостью и фантазией.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="be-postwar-simenon-masters">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1940–1980-е годы</p>
+          <h2 class="section-title">Послевоенная проза: Сименон, Юрсенар, Боон и мастера стиля</h2>
+          <p class="section-desc">Психологическая глубина «твёрдых романов» Жоржа Сименона, историко-философская проза первой женщины-академика Маргерит Юрсенар, тонкие исповеди Сюзанн Лилар, мифы Генри Бошо и социальный эпос Луиса Паула Боона.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-be-suzanne-lilar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сюзанн Лилар</h3>
+                  <p class="author-role">Гентская романистка, драматург и эссеист (мать Франсуазы Малле-Жорис) · <span class="tabular">1901–1992</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первая женщина-адвокат в Генте и академик Королевской академии Бельгии, прославившаяся утончёнными исследованиями любви, мифа и андрогинности духа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-la-confession-anonyme">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-05.01</span>
+                    <a class="work-link" href="./works/belg-lilar-anonimnaya-ispoved.html">Анонимная исповедь («La Confession anonyme»)</a>
+                    <span class="work-meta">1960 · Психологический роман-исповедь</span>
+                  </div>
+                  <p class="work-summary">Интеллектуальная и страстная история любви женщины к бывшему бенедиктинскому монаху, где эротическое притяжение перерастает в духовный диалог.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-georges-simenon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жорж Сименон</h3>
+                  <p class="author-role">Уроженец Льежа, один из самых читаемых мастеров психологического романа XX века · <span class="tabular">1903–1989</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Прошедший школу льежской криминальной хроники писатель, создавший не только всемирно известный цикл о комиссаре Мегрэ, но и серию беспощадных «твёрдых романов» (romans durs).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-pietr-le-letton-maigret">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-05.02</span>
+                    <a class="work-link" href="./works/belg-simenon-petr-latysh.html">Пётр Латыш («Pietr-le-Letton») и романы о комиссаре Мегрэ</a>
+                    <span class="work-meta">1931 · Психологический детектив</span>
+                  </div>
+                  <p class="work-summary">Дебютное большое дело комиссара Жюля Мегрэ, в котором расследование преступления уступает место глубокому сопереживанию и пониманию человеческой слабости.</p>
+                </li>
+                <li class="work-item" id="work-be-la-neige-etait-sale">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-05.03</span>
+                    <a class="work-link" href="./works/belg-simenon-sneg-byl-gryaznym.html">Снег был грязным («La Neige était sale»)</a>
+                    <span class="work-meta">1948 · Психологический роман («твёрдый роман»)</span>
+                  </div>
+                  <p class="work-summary">Беспощадное исследование морального падения и позднего пробуждения совести юного Франа в оккупированном безымянном северном городе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-marguerite-yourcenar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Маргерит Юрсенар (де Крейанкур)</h3>
+                  <p class="author-role">Уроженка Брюсселя, первая женщина в Французской академии, автор шедевров XX века · <span class="tabular">1903–1987</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Происходившая из старинного франко-бельгийского рода, Юрсенар посвятила главные книги античности, Северному Возрождению Фландрии и диалогу цивилизаций.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-memoires-dhadrien-loeuvre-au-noir">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-05.04</span>
+                    <a class="work-link" href="./works/belg-yursenar-vospominaniya-adriana.html">Воспоминания Адриана и «Философский камень» («L’Œuvre au noir»)</a>
+                    <span class="work-meta">1951 / 1968 · Историко-философский роман</span>
+                  </div>
+                  <p class="work-summary">Итоговое письмо римского императора Адриана и жизнеописание брюггского врача и алхимика Зенона XVI века, бросившего вызов фанатизму эпохи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-thomas-owen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Оуэн (Жеральд Берто)</h3>
+                  <p class="author-role">Мастер таинственной и тревожной новеллы бельгийской школы · <span class="tabular">1910–2002</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Лувена и юрист, друг Жана Рэ и Мишеля де Гельдерода, умевший впустить призрачную жуть в уютные буржуазные виллы и поезда.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-la-cave-aux-crabs">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-05.05</span>
+                    <a class="work-link" href="./works/belg-ouen-peschera-krabov.html">Пещера крабов и «Ночные игры» («La Cave aux crabes»)</a>
+                    <span class="work-meta">1945 / 1961 · Фантастическая новеллистика</span>
+                  </div>
+                  <p class="work-summary">Отточенные рассказы о проклятых домах на бельгийском побережье, двойниках и странных женщинах, за улыбкой которых таится древнее зло.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-louis-paul-boon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луис Паул Боон</h3>
+                  <p class="author-role">Уроженец Алста, реформатор нидерландоязычного социального романа · <span class="tabular">1912–1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Маляр, журналист и радикальный летописец жизни фламандских рабочих, сломавший традиционную форму романа ради живой полифонии голосов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-de-kapellekensbaan">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-05.06</span>
+                    <a class="work-link" href="./works/belg-boon-doroga-k-chasovne.html">Дорога к часовне («De Kapellekensbaan»)</a>
+                    <span class="work-meta">1953 · Модернистский роман-коллаж</span>
+                  </div>
+                  <p class="work-summary">История фабричной девочки Ондины и её бедного предместья, перебиваемая сатирическими главами о Лисе Рейнарте и язвительными спорами самого автора с друзьями.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-henry-bauchau">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генри Бошо</h3>
+                  <p class="author-role">Уроженец Мехелена, поэт, психоаналитик и автор «Эдипова» цикла · <span class="tabular">1913–2012</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участник бельгийского Сопротивления и ученик Пьера Жана Жува, пришедший к главным своим романам в зрелом возрасте и соединивший античный миф с современным самопознанием.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-oedipe-sur-la-route-antigone">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-05.07</span>
+                    <a class="work-link" href="./works/belg-bosho-edip-na-doroge.html">Эдип на дороге («Œdipe sur la route») и «Антигона»</a>
+                    <span class="work-meta">1990 / 1997 · Философский роман-миф</span>
+                  </div>
+                  <p class="work-summary">Странствия слепого Эдипа и верной Антигоны от Фив к Колону как глубокая притча о прощении, искусстве и внутреннем преодолении рока.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-francoise-mallet-joris">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франсуаза Малле-Жорис</h3>
+                  <p class="author-role">Уроженка Антверпена, лауреат премии «Фемина» и член Гонкуровской академии · <span class="tabular">1930–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь Сюзанн Лилар, покорившая Париж уже в двадцать лет смелой психологической прозой и тонкими семейными романами.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-le-rempart-des-beguines">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-05.08</span>
+                    <a class="work-link" href="./works/belg-malle-zhoris-krepost.html">Крепость бегинок («Le Rempart des Béguines») и «Бумажный домик»</a>
+                    <span class="work-meta">1951 / 1970 · Психологический и автобиографический роман</span>
+                  </div>
+                  <p class="work-summary">История взросления в провинциальном Антверпене и остроумное повествование о шумной многодетной семье, творчестве и вере.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="be-claus-postmodernism-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1980-е – XXI век</p>
+          <h2 class="section-title">Хьюго Клаус, постмодернизм и современная литература Бельгии</h2>
+          <p class="section-desc">Грандиозный эпос Хьюго Клауса «Скорбь Бельгии», философские антиутопии Жаклин Арпман, историческая память Стефана Хертманса и Пьера Мертенса, минимализм Жана-Филиппа Туссена, проза Каролин Ламарш и мировой успех Амели Нотомб.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-be-hugo-claus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хьюго Клаус</h3>
+                  <p class="author-role">Уроженец Брюгге, классик и величайший прозаик, поэт и драматург современной Бельгии · <span class="tabular">1929–2008</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участник художественной группы «Кобра» и автор более ста книг во всех жанрах, создавший вершинный роман о фламандском обществе XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-het-verdriet-van-belgie">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-06.01</span>
+                    <a class="work-link" href="./works/belg-klaus-skorb-belgii.html">Скорбь Бельгии («Het verdriet van België»)</a>
+                    <span class="work-meta">1983 · Эпический роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Взросление юного Луи Сенаса в интернате и семье западной Фландрии накануне, во время и после Второй мировой войны — безжалостный и комический портрет расколотой страны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-jacqueline-harpman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жаклин Арпман</h3>
+                  <p class="author-role">Уроженка Эттербека (Брюссель), романист и психоаналитик · <span class="tabular">1929–2012</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выросшая в Марокко в годы войны бельгийская писательница, автор психологических притч и одной из самых сильных философских антиутопий конца XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-moi-qui-nai-pas-connu-les-hommes">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-06.02</span>
+                    <a class="work-link" href="./works/belg-arpman-ya-ne-znavshaya-muzhchin.html">Я, которая не знала мужчин («Moi qui n’ai pas connu les hommes»)</a>
+                    <span class="work-meta">1995 · Философская антиутопия</span>
+                  </div>
+                  <p class="work-summary">Сорок женщин в подземном бункере и самая младшая из них, никогда не видевшая внешнего мира, обретают пустую землю без единого ответа на тайну произошедшего.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-pierre-mertens">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пьер Мертенс</h3>
+                  <p class="author-role">Брюссельский романист, юрист-международник и лауреат премии Медичи · <span class="tabular">1939–2025</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из ключевых франкоязычных писателей Бельгии конца XX века, исследовавший ответственность интеллектуала, историю Европы и судьбу художника перед властью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-les-eblouissements">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-06.03</span>
+                    <a class="work-link" href="./works/belg-mertens-oslepleniya.html">Ослепления («Les Éblouissements»)</a>
+                    <span class="work-meta">1987 · Историко-биографический роман</span>
+                  </div>
+                  <p class="work-summary">Захватывающее исследование жизни поэта и врача Готфрида Бенна в Брюсселе Первой мировой войны и в Берлине XX столетия, удостоенное премии Медичи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-stefan-hertmans">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стефан Хертманс</h3>
+                  <p class="author-role">Уроженец Гента, поэт, эссеист и автор европейских бестселлеров · <span class="tabular">род. 1951</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и философ, соединяющий личный семейный архив, историю Фландрии и изящный документальный роман.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-oorlog-en-terpentijn">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-06.04</span>
+                    <a class="work-link" href="./works/belg-hertmans-vojna-i-skipidar.html">Война и скипидар («Oorlog en terpentijn»)</a>
+                    <span class="work-meta">2013 · Документально-художественный роман</span>
+                  </div>
+                  <p class="work-summary">Расшифровка старых тетрадей деда-художника о бедном детстве в Генте, окопах реки Изер 1914–1918 годов и тихом служении живописи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-caroline-lamarche">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Каролин Ламарш</h3>
+                  <p class="author-role">Уроженка Льежа, лауреат премии Гонкура за новеллу и финалист Гонкуровской премии (2025) · <span class="tabular">род. 1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер чуткой, телесной и музыкальной прозы о хрупкости живого мира, любви и семейной памяти современной Бельгии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-le-jour-du-chien">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-06.05</span>
+                    <a class="work-link" href="./works/belg-lamarsh-den-sobaki.html">День собаки («Le Jour du chien») и «Мы на краю» («Nous sommes à la lisière»)</a>
+                    <span class="work-meta">1996 / 2019 · Роман и сборник новелл</span>
+                  </div>
+                  <p class="work-summary">История одинокого бездомного пса на бельгийской трассе и тонкие рассказы о сострадании к животным, природе и ранимому человеку.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-jean-philippe-toussaint">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жан-Филипп Туссен</h3>
+                  <p class="author-role">Уроженец Брюсселя, лидер минимализма и «нового бельгийского романа» · <span class="tabular">род. 1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, кинематографист и лауреат премии Медичи, превративший абсурдную паузу, тишину и бытовую геометрию в утончённое искусство иронии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-la-salle-de-bain">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-06.06</span>
+                    <a class="work-link" href="./works/belg-tussen-vannaya-komnata.html">Ванная комната («La Salle de bain») и тетралогия о Мари</a>
+                    <span class="work-meta">1985 / 2002–2013 · Минималистский роман</span>
+                  </div>
+                  <p class="work-summary">Молодой человек решает провести жизнь в ванной комнате, созерцая мир с дистанции, и роман «Бежать» из прославленного цикла о Мари.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-be-amelie-nothomb">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Амели Нотомб</h3>
+                  <p class="author-role">Уроженка Эттербека (Брюссель), самая известная современная писательница Бельгии · <span class="tabular">род. 1966</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь бельгийского дипломата, проведшая детство в Японии и Китае и с 1992 года ежегодно публикуемая со своим блестящим сплавом автобиографии, гротеска и диалога.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-be-stupeur-et-tremblements">
+                  <div class="work-row">
+                    <span class="work-code">БЕ-06.07</span>
+                    <a class="work-link" href="./works/belg-notomb-strah-i-trepet.html">Страх и трепет («Stupeur et tremblements») и «Гигиена убийцы»</a>
+                    <span class="work-meta">1992 / 1999 · Иронический автобиографический роман</span>
+                  </div>
+                  <p class="work-summary">Удостоенная Большой премии Французской академии сатирическая повесть о годе стажировки юной бельгийки в гигантской токийской корпорации.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание бельгийской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
