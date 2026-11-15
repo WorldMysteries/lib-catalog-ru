@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог эстонской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 34 писателей · 38 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог эстонской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от эпоса «Калевипоэг» и «Весны» Оскара Лутса до «Правды и справедливости» Таммсааре, лирики Марии Ундер, Бетти Альвер и Каплинского, прозы Яана Кросса, Тыну Ыннепалу и Андруса Кивиряхка.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#ee-kalevipoeg-awakening">Раздел I: Эпос «Калевипоэг», национальное пробуждение и лирика XIX века</a>
+        <a href="#ee-vilde-noor-eesti-siuru">Раздел II: Критический реализм, «Молодая Эстония» и «Сиуру»</a>
+        <a href="#ee-tammsaare-first-republic">Раздел III: Эпос Антона Таммсааре и классика Первой республики</a>
+        <a href="#ee-kross-sixties-prose">Раздел IV: Яан Кросс, поколение 1960-х и психологический роман</a>
+        <a href="#ee-poetry-cassette">Раздел V: Поэзия кассетного поколения, Яан Каплинский и Вийви Луйк</a>
+        <a href="#ee-contemporary">Раздел VI: Пограничный край и новейшая эстонская литература XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="ee-kalevipoeg-awakening">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIX век</p>
+          <h2 class="section-title">Эпос «Калевипоэг», национальное пробуждение и лирика XIX века</h2>
+          <p class="section-desc">От дерзких од юного Кристьяна Яака Петерсона и великого национального эпоса «Калевипоэг» Фридриха Рейнхольда Крейцвальда к лирике Лидии Койдулы, исторической повести Борнхёэ и трагической поэзии Юхана Лийва.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-kristjan-jaak-peterson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристьян Яак Петерсон</h3>
+                  <p class="author-role">Зачинатель современной эстонской поэзии, «первый поэт Эстонии» · <span class="tabular">1801–1822</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Риги и студент Дерптского университета, умерший в двадцать один год и оставивший пророческие оды в защиту права эстонского языка на высокую словесность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kuu-peterson">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-01.01</span>
+                    <a class="work-link" href="./works/peterson-luna.html">Луна («Kuu») и дневниковые оды</a>
+                    <span class="work-meta">1818–1821 · Философско-романтическая лирика</span>
+                  </div>
+                  <p class="work-summary">Знаменитый гимн эстонскому слову («Разве язык этой земли в вихре пения не может вознестись до неба?..»), положивший начало национальной поэзии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-friedrich-robert-faehlmann">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фридрих Роберт Фельман</h3>
+                  <p class="author-role">Врач, филолог и инициатор создания национального эпоса · <span class="tabular">1798–1850</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сооснователь Учёного эстонского общества в Тарту, собравший древние предания о Ванемуйне, Койте и Хямарике и наметивший замысел «Калевипоэга».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-koit-ja-hamarik">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-01.02</span>
+                    <a class="work-link" href="./works/felman-kojt-i-hyamarik.html">Мифические сказания эстов («Койт и Хямарик»)</a>
+                    <span class="work-meta">1840–1850 · Фольклорно-мифологические предания</span>
+                  </div>
+                  <p class="work-summary">Поэтические сказания о боге музыки Ванемуйне, сотворении языков у Эмайыги и вечной любви Утренней и Вечерней зари — Койта и Хямарика.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-friedrich-reinhold-kreutzwald">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фридрих Рейнхольд Крейцвальд</h3>
+                  <p class="author-role">Создатель эстонского народного эпоса «Калевипоэг» · <span class="tabular">1803–1882</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Городской врач в Выру на протяжении сорока четырёх лет, объединивший народные песни и сказания в двадцатипесенную героическую поэму, ставшую краеугольным камнем эстонской культуры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kalevipoeg">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-01.03</span>
+                    <a class="work-link" href="./works/krejcvald-kalevipoeg.html">Калевипоэг («Kalevipoeg»)</a>
+                    <span class="work-meta">1857–1861 · Национальный героический эпос</span>
+                  </div>
+                  <p class="work-summary">Двадцать песен о могучем сыне Калева — от похищения матери Линды и странствий в страну искр и к Вратам Подземного мира до битвы со злым Сарвиком и пророчества о возвращении героя.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lydia-koidula">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лидия Койдула</h3>
+                  <p class="author-role">Первая крупная поэтесса и драматург Эстонии, «Соловей с Эмайыги» · <span class="tabular">1843–1886</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лидия Яннсен, соратница отца Йоханна Вольдемара Яннсена в газете «Ээсти Постимеэс» и создательница первого эстонского национального театра «Ванемуйне».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-emajoe-oobik">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-01.04</span>
+                    <a class="work-link" href="./works/kojdula-solovej-s-emajygi.html">Соловей с Эмайыги («Emajõe ööbik»)</a>
+                    <span class="work-meta">1867 · Патриотическая и романтическая лирика</span>
+                  </div>
+                  <p class="work-summary">Знаменитый сборник, подаривший стране стихотворение «Моё отечество — моя любовь» («Mu isamaa on minu arm») — духовный гимн всех эстонских певческих праздников.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eduard-bornhohe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдуард Борнхёэ</h3>
+                  <p class="author-role">Родоначальник эстонского исторического романа · <span class="tabular">1862–1923</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель Эдуард Брунберг, в восемнадцать лет создавший самую популярную историческую повесть XIX века о восстании Юрьевой ночи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tasuja">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-01.05</span>
+                    <a class="work-link" href="./works/bornhee-mstitel.html">Мститель («Tasuja»)</a>
+                    <span class="work-meta">1880 · Историческая повесть</span>
+                  </div>
+                  <p class="work-summary">Сын свободного эстонского хуторянина Яанус в 1343 году поднимает меч под именем Мстителя в великом восстании крестьян Юрьевой ночи против ливонских рыцарей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juhan-liiv">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юхан Лийв</h3>
+                  <p class="author-role">Трагический гений эстонской лирики рубежа веков · <span class="tabular">1864–1913</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец с берегов Чудского озера из бедной семьи, переживший тяжёлую душевную болезнь и поднявший короткий лирический стих до пророческой простоты.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vari-luuletused">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-01.06</span>
+                    <a class="work-link" href="./works/lijv-ten-i-stihotvoreniya.html">Тень («Vari») и «Стихотворения»</a>
+                    <span class="work-meta">1894 / 1909 · Психологическая повесть и лирика</span>
+                  </div>
+                  <p class="work-summary">Трагическая повесть о юноше-сироте Виллу, загубленном мызной неволей, и потрясающие стихи о снежных лесах, родине и сострадании.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ee-vilde-noor-eesti-siuru">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1896–1925</p>
+          <h2 class="section-title">Критический реализм, «Молодая Эстония» и «Сиуру»</h2>
+          <p class="section-desc">Широкие социальные эпопеи Эдуарда Вильде, символистская драма Аугуста Кицберга, бессмертная повесть «Весна» Оскара Лутса, новеллы Фридеберта Тугласа и страстная поэзия Марии Ундер и Густава Суйтса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-eduard-vilde">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдуард Вильде</h3>
+                  <p class="author-role">Классик эстонского критического реализма, автор исторических трилогий и комедии «Домовой» · <span class="tabular">1865–1933</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Журналист, дипломат и первый профессиональный романист-реалист Эстонии, соединивший народный быт с широтой европейского социального романа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mahtra-soda">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-02.01</span>
+                    <a class="work-link" href="./works/vilde-vojna-v-mahtra.html">Война в Махтра («Mahtra sõda»)</a>
+                    <span class="work-meta">1902 · Исторический социальный роман</span>
+                  </div>
+                  <p class="work-summary">Эпическая хроника крестьянских волнений 1858 года в Махтра против баронской барщины и телесных наказаний, опирающаяся на архивы и живые свидетельства очевидцев.</p>
+                </li>
+                <li class="work-item" id="work-pisuhand">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-02.02</span>
+                    <a class="work-link" href="./works/vilde-domovoj.html">Домовой («Pisuhänd»)</a>
+                    <span class="work-meta">1913 · Сатирическая комедия</span>
+                  </div>
+                  <p class="work-summary">Искромётная таллиннская комедия о строительном дельце Вестманне, хитроумном Сандере и бедном поэте Пийбелехте, который перехитрил всех с помощью мнимого романа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-august-kitzberg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аугуст Кицберг</h3>
+                  <p class="author-role">Основоположник национальной эстонской психологической драматургии · <span class="tabular">1855–1927</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший приходской писарь из Мульгимаа, превративший народное предание и деревенский быт в высокую трагедию о свободе духа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-libahunt">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-02.03</span>
+                    <a class="work-link" href="./works/kicberg-oboroten.html">Оборотень («Libahunt»)</a>
+                    <span class="work-meta">1911 · Символистско-реалистическая трагедия</span>
+                  </div>
+                  <p class="work-summary">Гордую и вольную Тийну, выросшую после казни матери-ведьмы на хуторе Таммару, суеверная толпа и соперница Мари травят обвинением в оборотничестве.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-oskar-luts">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Оскар Лутс</h3>
+                  <p class="author-role">Самый любимый в народе прозаик, автор повести о школьном детстве «Весна» · <span class="tabular">1887–1953</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Аптекарь из Тарту и Паламусе, создавший светлый, тёплый и искрящийся юмором образ приходской школы — энциклопедию эстонского характера.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kevade">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-02.04</span>
+                    <a class="work-link" href="./works/luts-vesna.html">Весна («Kevade»)</a>
+                    <span class="work-meta">1912–1913 · Лирико-юмористическая повесть</span>
+                  </div>
+                  <p class="work-summary">Когда Арно со своим отцом пришёл в школу, занятия уже начались: незабываемая зима и весна мечтателя Арно, озорника Тоотса, богатыря Тыниссона, Кййра и рыжей Теэле.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-friedebert-tuglas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фридеберт Туглас</h3>
+                  <p class="author-role">Теоретик «Молодой Эстонии», непревзойдённый мастер символистской новеллы · <span class="tabular">1886–1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выдающийся стилист, эссеист и критик из Ахия, прошедший политическую тюрьму и эмиграцию и отточивший эстонскую художественную прозу до ювелирного совершенства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-popi-ja-huhuu-vaike-illimar">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-02.05</span>
+                    <a class="work-link" href="./works/tuglas-popi-i-huhuu.html">Попи и Хуху («Popi ja Huhuu») и «Маленький Иллимар»</a>
+                    <span class="work-meta">1914 / 1937 · Новелла-притча и роман о детстве</span>
+                  </div>
+                  <p class="work-summary">Тревожная символистская притча о старом псе Попи и обезьяне Хуху, оставшихся вдвоём после исчезновения хозяина, а также светлый роман о пятилетнем мальчике в усадьбе Ахия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gustav-suits">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Густав Суйтс</h3>
+                  <p class="author-role">Вождь движения «Молодая Эстония» («Noor-Eesti»), поэт-модернист и учёный · <span class="tabular">1883–1956</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор литературы Тартуского университета, провозгласивший знаменитый лозунг «Останемся эстонцами, но станем и европейцами!».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-elu-tuli">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-02.06</span>
+                    <a class="work-link" href="./works/sujts-ogon-zhizni.html">Огонь жизни («Elu tuli»)</a>
+                    <span class="work-meta">1905 · Гражданская и символистская лирика</span>
+                  </div>
+                  <p class="work-summary">Юношеский манифест обновления эстонской поэзии и культуры в ритме бурь 1905 года, сменяющийся позднее трагическими стихами «Страны ветров».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-marie-under">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мария Ундер</h3>
+                  <p class="author-role">«Принцесса эстонской поэзии», душа группы «Сиуру» и восьмикратный номинант на Нобелевскую премию · <span class="tabular">1883–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лирик необычайной чувственной мощи и трагического достоинства, создавшая от смелых сонетов молодости до скорбных баллад в изгнании в Швеции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sonetid-under">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-02.07</span>
+                    <a class="work-link" href="./works/under-sonety.html">Сонеты («Sonetid») и «Голос из тени»</a>
+                    <span class="work-meta">1917 / 1927 · Лирика и баллады</span>
+                  </div>
+                  <p class="work-summary">Книга, совершившая революцию в эстонской поэзии 1917 года гимном весне, страсти и телесной радости, а в зрелом творчестве — глубокими раздумьями о боли и милосердии.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ee-tammsaare-first-republic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1920–1944</p>
+          <h2 class="section-title">Эпос Антона Таммсааре и классика Первой республики</h2>
+          <p class="section-desc">Вершина эстонского романа — пенталогия «Правда и справедливость» А. Х. Таммсааре, высокая поэзия Бетти Альвер и Хейти Тальвика из круга «Волхвов» («Arbujad»), скиталец Нипернаади Гайлита и модернизм Карла Ристикиви.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-anton-hansen-tammsaare">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антон Хансен Таммсааре</h3>
+                  <p class="author-role">Крупнейший эстонский прозаик всех времён, автор эпопеи «Правда и справедливость» · <span class="tabular">1878–1940</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и романист с хутора Варгамяэ в Ярвамаа, соединивший суровую правду крестьянской земли с глубокими вопросами Достоевского, Гёте и Бергсона о Боге, труде и душе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tode-ja-oigus">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-03.01</span>
+                    <a class="work-link" href="./works/tammsaare-pravda-i-spravedlivost.html">Правда и справедливость («Tõde ja õigus»)</a>
+                    <span class="work-meta">1926–1933 · Философско-эпическая пенталогия</span>
+                  </div>
+                  <p class="work-summary">Грандиозная пятитомная эпопея о хуторе Варгамяэ, упрямом Андресе Паасе, его соседе Пеару, поисках смысла жизни Индреком в школе и революционном Таллинне: «Работай и трудись — тогда придёт и любовь».</p>
+                </li>
+                <li class="work-item" id="work-porgupohja-uus-vanapagan">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-03.02</span>
+                    <a class="work-link" href="./works/tammsaare-novyj-nechistyj.html">Новый Нечистый из Пыргупыхья («Põrgupõhja uus Vanapagan»)</a>
+                    <span class="work-meta">1939 · Сатирико-философский роман-притча</span>
+                  </div>
+                  <p class="work-summary">Сам Чёрт Юрка приходит на землю крестьянином, чтобы честно заработать блаженство трудом, но оказывается обманут и разорён хитрым кулаком Антсом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-august-gailit">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аугуст Гайлит</h3>
+                  <p class="author-role">Мастер неоромантического и гротескного романа, создатель Тоомаса Нипернаади · <span class="tabular">1891–1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Валгамаа, участник группы «Сиуру», создавший самый светлый образ эстонского странника-фантазёра на летних просёлочных дорогах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-toomas-nipernaadi">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-03.03</span>
+                    <a class="work-link" href="./works/gajlit-toomas-nipernaadi.html">Тоомас Нипернаади («Toomas Nipernaadi»)</a>
+                    <span class="work-meta">1928 · Роман в семи новеллах</span>
+                  </div>
+                  <p class="work-summary">Писатель в старом дорожном пиджаке всё лето странствует по хуторам и рыбацким деревням Эстонии, очаровывая одиноких женщин сказками о новой жизни и исчезая с первым снегом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-betti-alver">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бетти Альвер</h3>
+                  <p class="author-role">Величайшая поэтесса Эстонии XX века, голос нравственной стойкости · <span class="tabular">1906–1989</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участница тартуского поэтического содружества «Волхвы» («Arbujad»), хранившая классическую чеканность стиха и духовную независимость через десятилетия утрат.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tolm-ja-tuli">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-03.04</span>
+                    <a class="work-link" href="./works/alver-pyl-i-ogon.html">Пыль и огонь («Tolm ja tuli») и «Звёздный час»</a>
+                    <span class="work-meta">1936 / 1966 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Блестяще отточенные строфы о высокой миссии искусства, человеческой стойкости перед тиранией судьбы и неистребимом огне духа среди праха истории.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-heiti-talvik">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хейти Тальвик</h3>
+                  <p class="author-role">Трагический поэт круга «Arbujad», мастер сурового гротеска и библейской лаконичности · <span class="tabular">1904–1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Супруг Бетти Альвер, погибший в сибирской ссылке в Тюменской области; его две небольшие книги стихов стали эталоном интеллектуального мужества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kohtupaev">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-03.05</span>
+                    <a class="work-link" href="./works/talvik-sudnyj-den.html">Лихорадка («Palavik») и «Судный день» («Kohtupäev»)</a>
+                    <span class="work-meta">1934 / 1937 · Сборники философской лирики</span>
+                  </div>
+                  <p class="work-summary">Горестные и чеканные стихи-предостережения о надвигающемся мраке тоталитарного века и достоинстве поэта перед судом совести.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-karl-ristikivi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карл Ристикиви</h3>
+                  <p class="author-role">Крупнейший романист эстонской эмиграции, автор «Ночи душ» · <span class="tabular">1912–1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из Ляэнемаа, эмигрировавший в Швецию в 1944 году и создавший первый крупный эстонский экзистенциально-сюрреалистический роман о доме изгнанника.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hingede-oo">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-03.06</span>
+                    <a class="work-link" href="./works/ristikivi-noch-dush.html">Ночь душ («Hingede öö»)</a>
+                    <span class="work-meta">1953 · Экзистенциально-модернистский роман</span>
+                  </div>
+                  <p class="work-summary">В канун Нового года в Стокгольме одинокий изгнанник заходит в загадочный «Дом мёртвых», где блуждает по бесконечным комнатам памяти, вины и европейского абсурда.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ee-kross-sixties-prose">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1958–1988</p>
+          <h2 class="section-title">Яан Кросс, поколение 1960-х и психологический роман</h2>
+          <p class="section-desc">Мировая вершина исторической прозы Яана Кросса, «Осенний бал» Мати Унта, пророческие новеллы Арво Валтона, ирония Энна Ветемаа и северные путешествия Юхана Смуула.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-jaan-kross">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Яан Кросс</h3>
+                  <p class="author-role">Великий мастер европейского исторического романа XX века · <span class="tabular">1920–2007</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Прошедший нацистскую тюрьму и сталинские лагеря в Сибири таллиннский юрист, превративший реальных деятелей Прибалтики в героев сложных романов о компромиссе, чести и сопротивлении.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-keisri-hull">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-04.01</span>
+                    <a class="work-link" href="./works/kross-imperatorskij-bezumec.html">Императорский безумец («Keisri hull»)</a>
+                    <span class="work-meta">1978 · Историко-философский роман</span>
+                  </div>
+                  <p class="work-summary">Лифляндский барон Тимотеус фон Бок в начале XIX века женится на крестьянке Ээве и посылает императору Александру I проект правдивой конституции, за что девять лет томится в Шлиссельбурге как «безумец».</p>
+                </li>
+                <li class="work-item" id="work-kolme-katku-vahel">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-04.02</span>
+                    <a class="work-link" href="./works/kross-mezhdu-tremya-povetriyami.html">Между тремя поветриями («Kolme katku vahel»)</a>
+                    <span class="work-meta">1970–1980 · Исторический роман-тетралогия</span>
+                  </div>
+                  <p class="work-summary">Жизнь ревельского хрониста XVI века Бальтазара Руссова на фоне Ливонской войны, чумы и сословных барьеров — эпическое исследование того, как выстоять маленькому народу в жерновах истории.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juhan-smuul">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юхан Смуул</h3>
+                  <p class="author-role">Автор знаменитой «Ледовой книги», певец моряков и острова Муху · <span class="tabular">1922–1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец деревни Когува на острове Муху, участник антарктической экспедиции, покоривший читателей тёплым юмором и уважением к людям труда.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jaine-raamat">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-04.03</span>
+                    <a class="work-link" href="./works/smuul-ledovaya-kniga.html">Ледовая книга («Jäine raamat»)</a>
+                    <span class="work-meta">1959 · Антарктический дневник и путевая проза</span>
+                  </div>
+                  <p class="work-summary">Живой, остроумный и лиричный путевой дневник рейса к берегам Антарктиды на борту дизель-электрохода «Кооперация» и зимовки на станции «Мирный».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-enn-vetemaa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Энн Ветемаа</h3>
+                  <p class="author-role">Мастер остроумного психологического гротеска и «маленьких романов» · <span class="tabular">1936–2017</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Музыкант, драматург и романист из Таллинна, разоблачивший моральную мимикрию карьеристов и конформистов эпохи «оттепели» и застоя.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-monument-vetemaa">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-04.04</span>
+                    <a class="work-link" href="./works/vetemaa-monument.html">Монумент («Monument») и «Маленькие романы»</a>
+                    <span class="work-meta">1965–1972 · Сатирико-психологические повести</span>
+                  </div>
+                  <p class="work-summary">Циничный скульптор Свен Вооре с помощью интриг оттесняет честного мастера от создания памятника, но остаётся наедине со своей духовной пустотой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mati-unt">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мати Унт</h3>
+                  <p class="author-role">Ведущий городской прозаик и театральный режиссёр-новатор 1960–1990-х · <span class="tabular">1944–2005</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист, ворвавшийся в литературу в девятнадцать лет и ставший главным летописцем одиночества в панельных кварталах нового Таллинна.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sugisball">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-04.05</span>
+                    <a class="work-link" href="./works/unt-osennij-bal.html">Осенний бал («Sügisball»)</a>
+                    <span class="work-meta">1979 · Городской полифонический роман</span>
+                  </div>
+                  <p class="work-summary">Шесть одиноких жителей нового панельного района Мустамяэ — архитектор, поэт, портной, официантка и швейцар — пересекаются в осеннем городе, так и не услышав друг друга.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-arvo-valton">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арво Валтон</h3>
+                  <p class="author-role">Мастер философской притчи, гротескной новеллы и исторического эпоса · <span class="tabular">1935–2024</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Мярьямаа, переживший в детстве сибирскую ссылку; автор абсурдистских новелл («Восемь японцев», «Ловушка») и масштабного романа «Путь на тот край бесконечности».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-teekond-lopmatuse-teise-otsa">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-04.06</span>
+                    <a class="work-link" href="./works/valton-put-na-tot-kraj-beskonechnosti.html">Путь на тот край бесконечности («Teekond lõpmatuse teise otsa») и «Новеллы»</a>
+                    <span class="work-meta">1968 / 1978 · Философский роман и притчевые новеллы</span>
+                  </div>
+                  <p class="work-summary">История даосского мудреца Чан Чуня, вызванного Чингисханом в поход за тайной бессмертия, и цикл блестящих новелл об абсурде власти и бюрократии.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ee-poetry-cassette">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1962–1995</p>
+          <h2 class="section-title">Поэзия кассетного поколения, Яан Каплинский и Вийви Луйк</h2>
+          <p class="section-desc">Обновление поэтического языка в 1960–1980-е годы: Пауль-Ээрик Руммо, философская ясность Яана Каплинского, народный голос Хандо Руннеля, ирония Юхана Вийдинга, лирика Дорис Каревой и роман памяти Вийви Луйк.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-paul-eerik-rummo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пауль-Ээрик Руммо</h3>
+                  <p class="author-role">Лидер «кассетного поколения» 1960-х, обновитель эстонского стиха и драмы · <span class="tabular">род. 1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, драматург («Игра в Золушку») и переводчик Т. С. Элиота и Дилана Томаса, задавший новую интонацию свободы в 1960-е годы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lumevalgus-lumepimedus">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-05.01</span>
+                    <a class="work-link" href="./works/rummo-snezhnyj-svet.html">Снежный свет… снежная слепота («Lumevalgus… lumepimedus») и «Игра в Золушку»</a>
+                    <span class="work-meta">1966 / 1969 · Модернистская лирика и философская драма</span>
+                  </div>
+                  <p class="work-summary">Чистая, сдержанная поэзия о хрупкости мира и совести, а также культовая экзистенциальная пьеса-переосмысление сказки о Золушке.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jaan-kaplinski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Яан Каплинский</h3>
+                  <p class="author-role">Эстонский поэт и мыслитель мирового уровня, диалог Востока, природы и Запада · <span class="tabular">1941–2021</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Тартуский поэт, эссеист, переводчик китайской лирики и соратник тартуско-московской школы; в зрелые годы писал стихи и на эстонском, и на русском, и на английском языках.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tolmust-ja-varvidest">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-05.02</span>
+                    <a class="work-link" href="./works/kaplinskij-iz-pyli-i-krasok.html">Из пыли и красок («Tolmust ja värvidest»)</a>
+                    <span class="work-meta">1967 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Прозрачный, дыхательный верлибр о родстве человеческой истории, исчезающих языков, лесов, камней и звёздного неба над озером.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hando-runnel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хандо Руннель</h3>
+                  <p class="author-role">Голос народной совести и песенной традиции эстонской поэзии · <span class="tabular">род. 1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и издатель из Ярвамаа, чьи прозрачные и ироничные строфы («Пурпур красных вечеров») звучали в годы сопротивления как народные песни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-punaste-ohtute-purpur">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-05.03</span>
+                    <a class="work-link" href="./works/runnel-purpur-krasnyh-vecherov.html">Пурпур красных вечеров («Punaste õhtute purpur»)</a>
+                    <span class="work-meta">1982 · Народно-гражданская лирика</span>
+                  </div>
+                  <p class="work-summary">Сборник, ставший культовым событием 1980-х годов: за внешней простотой песенной формы и горечи скрывается несгибаемая вера в сохранение родного дома и языка.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juhan-viiding">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юхан Вийдинг</h3>
+                  <p class="author-role">Актёр и поэт («Юри Юди»), мастер трагической иронии и городского гротеска · <span class="tabular">1948–1995</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий таллиннский актёр и поэт, с редким артистизмом соединявший клоунский парадокс, богемную грусть и экзистенциальную тревогу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nerviline-tramm-ma-olin-juri-udi">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-05.04</span>
+                    <a class="work-link" href="./works/vijding-ya-byl-yuri-yudi.html">Я был Юри Юди («Ma olin Jüri Üdi»)</a>
+                    <span class="work-meta">1978 · Иронико-философская лирика</span>
+                  </div>
+                  <p class="work-summary">Итоговый сборник стихов периода псевдонима Юри Юди — игра масок, отточенная музыка абсурда и горькое сочувствие хрупкому человеку большого города.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-viivi-luik">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вийви Луйк</h3>
+                  <p class="author-role">Выдающаяся поэтесса и романистка, автор «Седьмой мирной весны» · <span class="tabular">род. 1946</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Вильяндимаа, совершившая сенсацию в 1985 году романом о послевоенной эстонской деревне глазами пятилетней девочки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-seitsmes-rahukevad">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-05.05</span>
+                    <a class="work-link" href="./works/luik-sedmaya-mirnaya-vesna.html">Седьмая мирная весна («Seitsmes rahukevad»)</a>
+                    <span class="work-meta">1985 · Поэтико-автобиографический роман</span>
+                  </div>
+                  <p class="work-summary">Эстония 1951 года глазами острой и бесстрашной пятилетней девочки на хуторе: нищета, «лесные братья», страх и волшебная поэзия весенней природы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-doris-kareva">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дорис Карева</h3>
+                  <p class="author-role">Мастер хрустальной интимной и философской лирики · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтесса и переводчица из Таллинна, чья сдержанная, музыкально безупречная речь стала голосом духовной тишины и надежды.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-aja-kuju">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-05.06</span>
+                    <a class="work-link" href="./works/kareva-forma-vremeni.html">Форма времени («Aja kuju»)</a>
+                    <span class="work-meta">2005 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Сборник пронзительных, афористически точных стихов о природе любви, безмолвии, времени и свете, преодолевающем утраты.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ee-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1993–XXI век</p>
+          <h2 class="section-title">Пограничный край и новейшая эстонская литература XXI века</h2>
+          <p class="section-desc">Постмодернистский перелом «Пограничного штата» Тыну Ыннепалу, феноменальная мифосатира Андруса Кивиряхка, память Эне Михкельсон, исторические детективы Индрека Харглы и проза XXI века.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-tonu-onnepalu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тыну Ыннепалу</h3>
+                  <p class="author-role">Главный стилист эстонского постмодернизма (Эмиль Тоде), лауреат Балтийской ассамблеи · <span class="tabular">род. 1962</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, эссеист и романист, открывший новую страницу постсоветской эстонской прозы тончайшим монологом о границе между Востоком и Западом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-piiririik">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-06.01</span>
+                    <a class="work-link" href="./works/ynnepalu-pogranichnyj-shtat.html">Пограничный штат («Piiririik»)</a>
+                    <span class="work-meta">1993 · Исповедально-лирический роман</span>
+                  </div>
+                  <p class="work-summary">Письма молодого восточноевропейского переводчика из Парижа к таинственному Анджело: хрупкое размышление об одиночестве, отчуждении и притягательной пустоте западной столицы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-andrus-kivirahk">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Андрус Кивиряхк</h3>
+                  <p class="author-role">Самый популярный современный эстонский писатель, мастер мифологической сатиры · <span class="tabular">род. 1970</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист, драматург и фельетонист из Таллинна, соединивший народный фольклор о кратах и чертях с горько-смешным портретом национального характера.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rehepapp">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-06.02</span>
+                    <a class="work-link" href="./works/kiviryahk-noyabr-gumenshchik.html">Ноябрь, или Гуменщик («Rehepapp ehk November»)</a>
+                    <span class="work-meta">2000 · Фантасмагорический роман-сатира</span>
+                  </div>
+                  <p class="work-summary">В мрачной эстонской деревне XIX века в ноябре крестьяне оживляют соломенных чудовищ-кратов, обманывают самого Нечистого и баронов, пока старый гуменщик Сандер ищет крупицу благородства.</p>
+                </li>
+                <li class="work-item" id="work-mees-kes-teadis-ussisõnu">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-06.03</span>
+                    <a class="work-link" href="./works/kiviryahk-poslednij-kto-znal-zmeinuyu-molv.html">Последний, кто знал змеиную молвь («Mees, kes teadis ussisõnu»)</a>
+                    <span class="work-meta">2007 · Мифологический роман-притча</span>
+                  </div>
+                  <p class="work-summary">История последнего жителя древних эстонских лесов Леэмета, видящего, как сородичи переселяются в деревни ради хлеба и чужой веры, забывая тайный язык зверей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ene-mihkelson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эне Михкельсон</h3>
+                  <p class="author-role">Крупнейшая романистка исторической памяти и травмы послевоенной Эстонии · <span class="tabular">1944–2017</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Тарту, исследовавшая в интеллектуально-напряжённой прозе архивы, предательство и судьбу семей «лесных братьев».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ahasveeruse-uni">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-06.04</span>
+                    <a class="work-link" href="./works/mihkelson-son-ahasfera.html">Сон Ахасфера («Ahasveeruse uni»)</a>
+                    <span class="work-meta">2001 · Интеллектуальный роман памяти</span>
+                  </div>
+                  <p class="work-summary">Героиня в архивах 1990-х годов расследует гибель своего отца-«лесного брата» в 1953 году, открывая болезненную правду о соседях, родственниках и цене выживания.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-indrek-hargla">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Индрек Харгла</h3>
+                  <p class="author-role">Создатель всемирно популярного цикла средневековых детективов о Таллинне · <span class="tabular">род. 1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и сценарист, ожививший ревельские улочки, цехи, аптеки и готические шпили начала XV века в семи романах об аптекаре Мельхиоре.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-apteeker-melchior">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-06.05</span>
+                    <a class="work-link" href="./works/hargla-aptekar-melhior.html">Аптекарь Мельхиор и тайна собора Олевисте («Apteeker Melchior ja Oleviste mõistatus»)</a>
+                    <span class="work-meta">2010 · Исторический детективный роман</span>
+                  </div>
+                  <p class="work-summary">В ганзейском Ревеле 1409 года проницательный аптекарь Мельхиор Вакенстеде расследует убийство комтура Тевтонского ордена и тайну золотого слитка в стенах города.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rein-raud">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рейн Рауд</h3>
+                  <p class="author-role">Романист, японист, поэт и философ современной эстонской культуры · <span class="tabular">род. 1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный и писатель из Таллинна, соединяющий лаконизм притчи, спагетти-вестерна и интеллектуальной игры в романах «Брат» и «Реконструкция».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vend-raud">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-06.06</span>
+                    <a class="work-link" href="./works/raud-brat.html">Брат («Vend»)</a>
+                    <span class="work-meta">2008 · Роман-притча</span>
+                  </div>
+                  <p class="work-summary">Таинственный странник в плаще с револьвером приезжает в безымянный приморский городок, чтобы восстановить справедливость для сестры — стилистическая жемчужина новейшей прозы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-meelis-friedenthal">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Меэлис Фриденталь</h3>
+                  <p class="author-role">Лауреат Литературной премии Европейского союза, мастер исторической фантасмагории · <span class="tabular">род. 1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Теолог и историк идей из Тарту, воссоздавший меланхоличную и таинственную атмосферу Тарту конца XVII века во времена Великого голода.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mesilased">
+                  <div class="work-row">
+                    <span class="work-code">ЭС-06.07</span>
+                    <a class="work-link" href="./works/fridental-pchely.html">Пчёлы («Mesilased»)</a>
+                    <span class="work-meta">2012 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Осенью 1696 года голландский студент Лаурентиус Гилас прибывает в голодный, промокший от бесконечных дождей университетский Тарту в поисках лекарства от чёрной меланхолии.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание эстонской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

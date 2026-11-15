@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог финской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 35 писателей · 37 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог финской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от эпоса «Калевала» и «Семерых братьев» Алексиса Киви до Эйно Лейно, нобелевской прозы Силланпяя, Мики Валтари, Вяйнё Линна, Туве Янссон, Арто Паасилинны, Софи Оксанен и Росы Ликсом.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#fi-kalevala-awakening">Раздел I: «Калевала», истоки письменности и пробуждение XIX века</a>
+        <a href="#fi-realism-leino">Раздел II: Реализм, неоромантизм рубежа веков и поэзия Эйно Лейно</a>
+        <a href="#fi-sillanpaa-tulenkantajat">Раздел III: Эпоха независимости, нобелевская проза Силланпяя и «Факелоносцы»</a>
+        <a href="#fi-waltari-linna-jansson">Раздел IV: Эпос Мики Валтари, Вяйнё Линна и вселенная Туве Янссон</a>
+        <a href="#fi-modernism-paasilinna">Раздел V: Поэтический модернизм, Лапландия и юмор Арто Паасилинны</a>
+        <a href="#fi-contemporary">Раздел VI: Память истории и новейшая финская проза XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="fi-kalevala-awakening">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVI–XIX века</p>
+          <h2 class="section-title">«Калевала», истоки письменности и пробуждение XIX века</h2>
+          <p class="section-desc">От первых печатных книг Микаэля Агриколы и великого рунического эпоса «Калевала» Элиаса Лённрота к поэзии Рунеберга, сказкам Топелиуса, первому финскому роману Алексиса Киви и драмам Минны Кант.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mikael-agricola">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Микаэль Агрикола</h3>
+                  <p class="author-role">«Отец финской письменности», гуманист и реформатор · <span class="tabular">ок. 1510–1557</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Епископ Турку и ученик Эразма Роттердамского и Лютера, создавший орфографию финского литературного языка и переведший Новый Завет.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-abckiria">
+                  <div class="work-row">
+                    <span class="work-code">ФН-01.01</span>
+                    <a class="work-link" href="./works/agrikola-azbuka.html">Азбука («Abckiria»)</a>
+                    <span class="work-meta">1543 · Первая печатная книга на финском языке</span>
+                  </div>
+                  <p class="work-summary">Букварь и катехизис, открывшийся знаменитым двустишием: «Учись же, добрый отрок, усердно началу премудрости» — точка отсчёта финской книжной культуры.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-elias-lonnrot">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Элиас Лённрот</h3>
+                  <p class="author-role">Собиратель и составитель национального эпоса «Калевала» · <span class="tabular">1802–1884</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уездный врач в Каяани, совершивший одиннадцать фольклорных экспедиций по Карелии и Ингерманландии, чтобы свести древние руны в единый эпос.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kalevala">
+                  <div class="work-row">
+                    <span class="work-code">ФН-01.02</span>
+                    <a class="work-link" href="./works/lennrot-kalevala.html">Калевала («Kalevala»)</a>
+                    <span class="work-meta">1835 / 1849 · Карело-финский рунический эпос</span>
+                  </div>
+                  <p class="work-summary">Пятьдесят песен о вещем песнопевце Вяйнямёйнене, кузнеце Ильмаринене, озорном Лемминкяйнене, трагическом Куллерво и битве за чудесную мельницу Сампо с хозяйкой Похъёлы Лоухи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-johan-ludvig-runeberg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йохан Людвиг Рунеберг</h3>
+                  <p class="author-role">Национальный поэт Финляндии XIX века, автор гимна «Наш край» · <span class="tabular">1804–1877</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Шведоязычный поэт и педагог из Порвоо, создавший в балладах о войне 1808–1809 годов высокий этический образ стойкости и верности родной земле.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fanrik-stals-sagner">
+                  <div class="work-row">
+                    <span class="work-code">ФН-01.03</span>
+                    <a class="work-link" href="./works/runeberg-rasskazy-praporshchika-stolya.html">Рассказы прапорщика Столя («Fänrik Ståls sägner»)</a>
+                    <span class="work-meta">1848–1860 · Цикл исторических баллад</span>
+                  </div>
+                  <p class="work-summary">Тридцать пять поэтических баллад — от гимнического «Нашего края» («Maamme») до историй Свена Дувы и генерала Дёбельна — сформировавших гражданское самосознание Финляндии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-zachris-topelius">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сакариас Топелиус</h3>
+                  <p class="author-role">Мастер исторического романа и любимый сказочник Северной Европы · <span class="tabular">1818–1898</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор истории и ректор Хельсинкского университета, очаровавший несколько поколений читателей циклами «Рассказы фельдшера» и «Сказки» («Сампо-Лопарёнок»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-faltskarns-berattelser">
+                  <div class="work-row">
+                    <span class="work-code">ФН-01.04</span>
+                    <a class="work-link" href="./works/topelius-rasskazy-feldshera.html">Рассказы фельдшера («Fältskärns berättelser») и «Сказки»</a>
+                    <span class="work-meta">1853–1867 · Исторический цикл и волшебные сказки</span>
+                  </div>
+                  <p class="work-summary">История заговорённого медного колечка и поколений рода Бертельшёльдов от Тридцатилетней войны до Густава III, а также светлые северные сказки для детей и взрослых.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-aleksis-kivi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алексис Киви</h3>
+                  <p class="author-role">Основоположник современной финноязычной прозы и драматургии · <span class="tabular">1834–1872</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын сельского портного из Нурмиярви, создавший в бедности и неприятии современников первый и величайший классический роман на финском языке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-seitseman-veljesta">
+                  <div class="work-row">
+                    <span class="work-code">ФН-01.05</span>
+                    <a class="work-link" href="./works/kivi-semero-bratev.html">Семеро братьев («Seitsemän veljestä»)</a>
+                    <span class="work-meta">1870 · Национальный роман-эпос</span>
+                  </div>
+                  <p class="work-summary">Семеро буйных, но добродушных братьев Юкола бегут от ученья и церковных правил в лесную глушь Импиваары, где через суровые испытания, пожар и труд обретают мудрость.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-minna-canth">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Минна Кант</h3>
+                  <p class="author-role">Первая крупная финская писательница-реалистка и борец за права женщин · <span class="tabular">1844–1897</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Владелица мануфактурной лавки в Куопио и мать семерых детей, смело поднявшая в драме и прозе темы социальной несправедливости и женского бесправия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tyomiehen-vaimo-anna-liisa">
+                  <div class="work-row">
+                    <span class="work-code">ФН-01.06</span>
+                    <a class="work-link" href="./works/kant-zhena-rabochego.html">Жена рабочего («Työmiehen vaimo») и «Анна Лииса»</a>
+                    <span class="work-meta">1885 / 1895 · Социальные и психологические драмы</span>
+                  </div>
+                  <p class="work-summary">Бесстрашное разоблачение законов, отдававших заработок жены на пропой мужу («Жена рабочего»), и глубокая нравственная трагедия искупления «Анна Лииса».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fi-realism-leino">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1884–1928</p>
+          <h2 class="section-title">Реализм, неоромантизм рубежа веков и поэзия Эйно Лейно</h2>
+          <p class="section-desc">Психологическая тонкость Юхани Ахо, мифологическая лирика Эйно Лейно, страстная проза Линнанкоски, бескомпромиссный взгляд Марии Йотуни и балтийско-эстонские баллады Айно Каллас.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-juhani-aho">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юхани Ахо</h3>
+                  <p class="author-role">Первый профессиональный финноязычный прозаик, мастер импрессионистской стружки и романа · <span class="tabular">1861–1921</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Многократный номинант на Нобелевскую премию, утончивший финский литературный слог от тихой иронии до глубокой трагедии любви.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rautatien-juha">
+                  <div class="work-row">
+                    <span class="work-code">ФН-02.01</span>
+                    <a class="work-link" href="./works/aho-zheleznaya-doroga-yuha.html">Железная дорога («Rautatie») и «Юха» («Juha»)</a>
+                    <span class="work-meta">1884 / 1911 · Реалистическая повесть и роман-трагедия</span>
+                  </div>
+                  <p class="work-summary">Трогательное паломничество стариков Матти и Лиисы поглядеть на невиданный «железный чугунок» и суровая карельская драма любви Марии, старого Юхи и соблазнителя Шемейкки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eino-leino">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эйно Лейно</h3>
+                  <p class="author-role">Крупнейший национальный лирик Финляндии, создатель финского неоромантизма · <span class="tabular">1878–1926</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец берегов озера Оулуярви, обновивший калевальский метр и соединивший в «Священных песнях» народный миф с философией Ницше и мировой поэзией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-helkavirsia">
+                  <div class="work-row">
+                    <span class="work-code">ФН-02.02</span>
+                    <a class="work-link" href="./works/lejno-svyashchennye-pesni.html">Священные песни («Helkavirsiä»)</a>
+                    <span class="work-meta">1903 / 1916 · Лиро-эпические баллады</span>
+                  </div>
+                  <p class="work-summary">Бессмертный цикл драматических баллад («Юлина песня», «Тёмный», «Лебедь Туонелы», «Киммо») о столкновении гордой человеческой судьбы с силами рока и природы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-johannes-linnankoski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йоханнес Линнанкоски</h3>
+                  <p class="author-role">Автор самого страстного неоромантического романа финской классики · <span class="tabular">1869–1913</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и просветитель из Асколы, воспевший свободу плотогонов, огонь молодости и нравственное возвращение к земле.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-laulu-tulipunaisesta-kukasta">
+                  <div class="work-row">
+                    <span class="work-code">ФН-02.03</span>
+                    <a class="work-link" href="./works/linnankoski-pesn-ob-ognenno-krasnom-cvetke.html">Песнь об огненно-красном цветке («Laulu tulipunaisesta kukasta»)</a>
+                    <span class="work-meta">1905 · Неоромантический роман</span>
+                  </div>
+                  <p class="work-summary">Дерзкий красавец-плотогон Олави странствует от порога к порогу и от одной возлюбленной к другой в поисках редкого «огненного цветка», пока не обретает покой рядом с Кюлликки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maria-jotuni">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мария Йотуни</h3>
+                  <p class="author-role">Мастер лаконичной психологической новеллы и антипатриархальной прозы · <span class="tabular">1880–1943</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Куопио, вскрывавшая за внешним спокойствием финской усадьбы и буржуазного брака жестокую власть денег и тиранию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-huojuva-talo">
+                  <div class="work-row">
+                    <span class="work-code">ФН-02.04</span>
+                    <a class="work-link" href="./works/jotuni-kachayushchijsya-dom.html">Качающийся дом («Huojuva talo»)</a>
+                    <span class="work-meta">1936 (изд. 1963) · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Исповедальный роман о многолетнем психологическом насилии и страхе в браке Леи с неуравновешенным мужем Ээрой — произведение, прозвучавшее далеко опередив время.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-aino-kallas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Айно Каллас</h3>
+                  <p class="author-role">Мастер балладной исторической прозы на финском и эстонском материале · <span class="tabular">1878–1956</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь фольклориста Юлиуса Крона и супруга эстонского дипломата Оскара Калласа, создавшая неповторимую «хронику страсти и судьбы» Балтии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sudenmorsian">
+                  <div class="work-row">
+                    <span class="work-code">ФН-02.05</span>
+                    <a class="work-link" href="./works/kallas-nevesta-volka.html">Невеста волка («Sudenmorsian»)</a>
+                    <span class="work-meta">1928 · Балладная историческая повесть</span>
+                  </div>
+                  <p class="work-summary">На острове Хийумаа XVII века жена лесничего Аало отвечает на ночной зов леса и превращается в волчицу, платя костром за запретную свободу страсти.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fi-sillanpaa-tulenkantajat">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1918–1946</p>
+          <h2 class="section-title">Эпоха независимости, нобелевская проза Силланпяя и «Факелоносцы»</h2>
+          <p class="section-desc">Нобелевский гуманизм Франса Эмиля Силланпяя, трагическая сатира Йоэля Лехтонена, стихи Катри Валы и Ууно Кайласа, суровые солдатские новеллы Пентти Хаанпяя и драмы Хеллы Вуолийоки.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-frans-emil-sillanpaa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франс Эмиль Силланпяя</h3>
+                  <p class="author-role">Единственный финский лауреат Нобелевской премии по литературе (1939) · <span class="tabular">1888–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын бедного арендатора-торпаря из Хямеэнкюрё, показавший неразрывную биологическую и поэтическую связь простого человека с дыханием северной природы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hurskas-kurjuus-nuorena-nukkunut">
+                  <div class="work-row">
+                    <span class="work-code">ФН-03.01</span>
+                    <a class="work-link" href="./works/sillanpyaya-pravednaya-bednost.html">Праведная бедность («Hurskas kurjuus») и «Рано усопшая»</a>
+                    <span class="work-meta">1919 / 1931 · Социально-философские романы</span>
+                  </div>
+                  <p class="work-summary">Горькая судьба нескладного крестьянина Юхи Тойволы в вихре гражданской войны 1918 года и светлая повесть о короткой, чистой жизни девушки Сильи, умершей от туберкулёза.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-joel-lehtonen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йоэль Лехтонен</h3>
+                  <p class="author-role">Мастер горькой сатиры и портрета сельской глубинки Саво · <span class="tabular">1881–1934</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из самой бедной среды Сяэминги, противопоставивший романтическим иллюзиям о народе сочный, гротескный и сострадательный реализм.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-putkinotko">
+                  <div class="work-row">
+                    <span class="work-code">ФН-03.02</span>
+                    <a class="work-link" href="./works/lehtonen-putkinotko.html">Путкинотко («Putkinotko»)</a>
+                    <span class="work-meta">1919–1920 · Сатирико-реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Один знойный июльский день на заброшенном хуторе в Саво: хитрый бездельник-самогонщик Юутас Кякрияйнен, его огромная семья и тщетные мечты его образованного землевладельца Аапо.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-katri-vala">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Катри Вала</h3>
+                  <p class="author-role">Центральная поэтесса группы «Факелоносцы» («Tulenkantajat») · <span class="tabular">1901–1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учительница и антифашистская публицистка, принесшая в финскую поэзию свободный верлибр, экстатические краски и гражданскую боль.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kaukainen-puutarha">
+                  <div class="work-row">
+                    <span class="work-code">ФН-03.03</span>
+                    <a class="work-link" href="./works/vala-dalekij-sad.html">Далёкий сад («Kaukainen puutarha»)</a>
+                    <span class="work-meta">1924 · Лирический верлибр</span>
+                  </div>
+                  <p class="work-summary">Ослепительно свежая дебютная книга о «цветочном сердце» земли, солнце, молодости и предчувствии надвигающейся социальной бури.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uuno-kailas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ууно Кайлас</h3>
+                  <p class="author-role">Поэт трагической ясности, чеканной формы и совести поколения 1920-х · <span class="tabular">1901–1933</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Переводчик шведско-финской лирики (в том числе Эдит Сёдергран), умерший от туберкулёза в Ницце в тридцать два года и оставивший эталонную книгу «Сон и смерть».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uni-ja-kuolema">
+                  <div class="work-row">
+                    <span class="work-code">ФН-03.04</span>
+                    <a class="work-link" href="./works/kajlas-son-i-smert.html">Сон и смерть («Uni ja kuolema»)</a>
+                    <span class="work-meta">1931 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Стихотворения предельной моральной честности о болезни, страхе темноты, одиночестве, границе на востоке и строгом свете приближающейся смерти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pentti-haanpaa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пентти Хаанпяя</h3>
+                  <p class="author-role">Мастер сурового северного рассказа и антивоенной прозы · <span class="tabular">1905–1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лесоруб и писатель из Пийпполы, подвергавшийся травле за правду о казарме 1920-х годов («Поле и казарма») и создавший блестящие новеллы о войне и природе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-yhdeksan-miehen-saappaat">
+                  <div class="work-row">
+                    <span class="work-code">ФН-03.05</span>
+                    <a class="work-link" href="./works/haanpyaya-sapogi-devyati-soldat.html">Сапоги девяти солдат («Yhdeksän miehen saappaat»)</a>
+                    <span class="work-meta">1945 · Антивоенный роман-хроника</span>
+                  </div>
+                  <p class="work-summary">История одной пары армейских сапог № 43, переходящей от солдата к солдату на фронтах Второй мировой войны и в тылу — горькая панорама абсурда войны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hella-wuolijoki">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хелла Вуолийоки</h3>
+                  <p class="author-role">Классик финской драматургии, автор саги о женщинах усадьбы Нискавуори · <span class="tabular">1886–1954</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница эстонского происхождения, хозяйка салона в Марлебаке и подруга Бертольта Брехта (вместе с ним задумавшая пьесу «Господин Пунтила»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-niskavuoren-naiset">
+                  <div class="work-row">
+                    <span class="work-code">ФН-03.06</span>
+                    <a class="work-link" href="./works/vuolijoki-zhenshchiny-niskavuori.html">Женщины Нискавуори («Niskavuoren naiset»)</a>
+                    <span class="work-meta">1936 · Драматическая пьеса-сага</span>
+                  </div>
+                  <p class="work-summary">Столкновение суровой старой хозяйки богатого хутора Ловийсы с приезжей учительницей Илоной и борьба за душу наследника Арне между землёй и личным счастьем.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fi-waltari-linna-jansson">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1945–1975</p>
+          <h2 class="section-title">Эпос Мики Валтари, Вяйнё Линна и вселенная Туве Янссон</h2>
+          <p class="section-desc">Послевоенный триумф финской прозы: мировой исторический эпос «Синухе, египтянин» Мики Валтари, национальная трилогия и окопная правда Вяйнё Линна, философские сказки Туве Янссон и сатира Мартти Ларни.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mika-waltari">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мика Валтари</h3>
+                  <p class="author-role">Крупнейший финский исторический романист с мировым именем · <span class="tabular">1908–1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Универсальный мастер пера из Хельсинки, в разгар 1945 года создавший бессмертный роман о Древнем Египте, заговоривший о крахе идеализма и войнах XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sinuhe-egyptilainen">
+                  <div class="work-row">
+                    <span class="work-code">ФН-04.01</span>
+                    <a class="work-link" href="./works/valtari-sinuhe-egiptyanin.html">Синухе, египтянин («Sinuhe egyptiläinen»)</a>
+                    <span class="work-meta">1945 · Философско-исторический роман</span>
+                  </div>
+                  <p class="work-summary">Лекарь-изгнанник Синухе рассказывает историю своей жизни при дворе фараона-реформатора Эхнатона, Нефертити и военачальника Хоремхеба, понимая, что власть и фанатизм не меняются сквозь тысячелетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vaino-linna">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вяйнё Линна</h3>
+                  <p class="author-role">Главный народный летописец Финляндии XX века · <span class="tabular">1920–1992</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Бывший рабочий текстильной фабрики в Тампере и фронтовик-пулемётчик, переписавший национальный миф без казённого пафоса и ненависти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tuntematon-sotilas">
+                  <div class="work-row">
+                    <span class="work-code">ФН-04.02</span>
+                    <a class="work-link" href="./works/linna-neizvestnyj-soldat.html">Неизвестный солдат («Tuntematon sotilas»)</a>
+                    <span class="work-meta">1954 · Антивоенный роман</span>
+                  </div>
+                  <p class="work-summary">Путь пулемётного взвода (Рокки, Хиетанена, Коскелы, Ламмио) через Советско-финскую войну 1941–1944 годов — живые диалекты, горький юмор, окопное братство и бессмысленность гибели.</p>
+                </li>
+                <li class="work-item" id="work-taalla-pohjantahden-alla">
+                  <div class="work-row">
+                    <span class="work-code">ФН-04.03</span>
+                    <a class="work-link" href="./works/linna-pod-polyarnoj-zvezdoj.html">Здесь, под Полярной звездой («Täällä Pohjantähden alla»)</a>
+                    <span class="work-meta">1959–1962 · Историческая романная трилогия</span>
+                  </div>
+                  <p class="work-summary">История трёх поколений семьи Коскела в деревне Пенттинкулма с 1880-х по 1950-е годы, давшая впервые равноправный голос «красным» проигравшим в Гражданской войне 1918 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tove-jansson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Туве Янссон</h3>
+                  <p class="author-role">Создательница муми-троллей и тонкий мастер шведоязычной взрослой прозы · <span class="tabular">1914–2001</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Художница и писательница из Хельсинки, вобравшая в сказки и в прозу об острове в Финском заливе любовь к морю, свободе и тихому пониманию инаковости.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-trollvinter">
+                  <div class="work-row">
+                    <span class="work-code">ФН-04.04</span>
+                    <a class="work-link" href="./works/yansson-volshebnaya-zima.html">Волшебная зима («Trollvinter») и цикл о муми-троллях</a>
+                    <span class="work-meta">1945–1970 · Философская сказочная проза</span>
+                  </div>
+                  <p class="work-summary">Муми-тролль просыпается один посреди глубокой зимы, когда вся семья спит до весны, и учится принимать суровый, но полный чудес и одиночества зимний мир.</p>
+                </li>
+                <li class="work-item" id="work-sommarboken">
+                  <div class="work-row">
+                    <span class="work-code">ФН-04.05</span>
+                    <a class="work-link" href="./works/yansson-letnyaya-kniga.html">Летняя книга («Sommarboken»)</a>
+                    <span class="work-meta">1972 · Лирический роман</span>
+                  </div>
+                  <p class="work-summary">Короткое лето шестилетней Софии и её мудрой старой бабушки на маленьком гранитном островке в Финском заливе — поэма о старости, детстве и близости моря.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-martti-larni">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мартти Ларни</h3>
+                  <p class="author-role">Крупнейший мастер финской сатирической прозы середины XX века · <span class="tabular">1909–1993</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и журналист, работавший в Америке и создавший один из самых остроумных сатирических романов об обществе потребления и рекламных иллюзиях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-neljas-nikama">
+                  <div class="work-row">
+                    <span class="work-code">ФН-04.06</span>
+                    <a class="work-link" href="./works/larni-chetvertyj-pozvonok.html">Четвёртый позвонок («Neljäs nikama»)</a>
+                    <span class="work-meta">1957 · Сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Финский журналист Еремия Суомалайнен без гроша в Америке превращается в модного «хиропрактика профессора Риверса», высмеивая шарлатанство, прессу и культ успеха.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-veijo-meri">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вейо Мери</h3>
+                  <p class="author-role">Мастер гротескной, абсурдистской антивоенной прозы · <span class="tabular">1928–2015</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын унтер-офицера из Выборга, выросший в гарнизоне Хямеэнлинны и показавший войну как трагикомический театр случайностей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-manillakoysi">
+                  <div class="work-row">
+                    <span class="work-code">ФН-04.07</span>
+                    <a class="work-link" href="./works/meri-manilskij-kanat.html">Манильский канат («Manillaköysi»)</a>
+                    <span class="work-meta">1957 · Абсурдистский антивоенный роман</span>
+                  </div>
+                  <p class="work-summary">Отпускник Йоосе Кеппиля обматывает вокруг тела длинный манильский канат, найденный на фронте, чтобы привезти домой бельевую верёвку — и чуть не задыхается в абсурдном путешествии.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fi-modernism-paasilinna">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1955–2000</p>
+          <h2 class="section-title">Поэтический модернизм, Лапландия и юмор Арто Паасилинны</h2>
+          <p class="section-desc">Интеллектуальная поэзия Пааво Хаавикко и Пентти Саарикоски, лирическая проза Ээвы Кильпи и Бо Карпелана, страстный голос Лапландии у Тимо К. Мукки, притча «Год зайца» Арто Паасилинны и сказки Ханну Мякеля.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-paavo-haavikko">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пааво Хаавикко</h3>
+                  <p class="author-role">Главный архитектор финского поэтического модернизма 1950-х, лауреат Нойштадтской премии · <span class="tabular">1931–2008</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, драматург и успешный издатель-бизнесмен из Хельсинки, соединивший холодную иронию истории, миф и блестящую образность «Зимнего дворца».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-talvipalatsi">
+                  <div class="work-row">
+                    <span class="work-code">ФН-05.01</span>
+                    <a class="work-link" href="./works/haavikko-zimnij-dvorec.html">Зимний дворец («Talvipalatsi»)</a>
+                    <span class="work-meta">1959 · Модернистская поэма в девяти песнях</span>
+                  </div>
+                  <p class="work-summary">Сложная и музыкальная поэтическая симфония о природе искусства, власти, памяти и невозможности удержать ускользающую реальность в слове.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pentti-saarikoski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пентти Саарикоски</h3>
+                  <p class="author-role">Культовый поэт-бунтарь 1960-х, блестящий переводчик «Улисса» и «Одиссеи» · <span class="tabular">1937–1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Полиглот и богемный летописец хельсинкских улиц, внёсший в финскую лирику полифонию городской речи, газетных заголовков и античного мифа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mita-tapahtuu-todella">
+                  <div class="work-row">
+                    <span class="work-code">ФН-05.02</span>
+                    <a class="work-link" href="./works/saarikoski-chto-proishodit-na-samom-dele.html">Что происходит на самом деле? («Mitä tapahtuu todella?»)</a>
+                    <span class="work-meta">1962 · Модернистский сборник стихов</span>
+                  </div>
+                  <p class="work-summary">Открытая, разговорная поэзия, где политика холодной войны, трамваи Хельсинки, Гераклит и личная нежность сталкиваются в едином потоке настоящего времени.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-timo-k-mukka">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тимо К. Мукка</h3>
+                  <p class="author-role">Метеорит финской прозы 1960-х, певец страсти и полярной ночи Лапландии · <span class="tabular">1944–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">В девятнадцать лет потрясший страну романом о лапландской деревне и умерший в двадцать восемь лет; его проза пульсирует экстатической библейской силой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-maa-on-syntinen-laulu">
+                  <div class="work-row">
+                    <span class="work-code">ФН-05.03</span>
+                    <a class="work-link" href="./works/mukka-zemlya-greshnaya-pesn.html">Земля — грешная песнь («Maa on syntinen laulu»)</a>
+                    <span class="work-meta">1964 · Экспрессивный роман-баллада</span>
+                  </div>
+                  <p class="work-summary">Жизнь и трагическая любовь девятнадцатилетней Мартты Мякеля в отдалённой лапландской деревне на границе тьмы полярной зимы, религиозного исступления и пробуждения плоти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-arto-paasilinna">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арто Паасилинна</h3>
+                  <p class="author-role">Самый переводимый в мире финский юморист, автор «Года зайца» · <span class="tabular">1942–2018</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Лапландии, журналист и бывший лесоруб, создавший серию светлых, абсурдно-лирических романов-притч о бегстве от цивилизации в природу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-janiksen-vuosi">
+                  <div class="work-row">
+                    <span class="work-code">ФН-05.04</span>
+                    <a class="work-link" href="./works/paasilinna-god-zajca.html">Год зайца («Jäniksen vuosi»)</a>
+                    <span class="work-meta">1975 · Сатирико-философский роман</span>
+                  </div>
+                  <p class="work-summary">Уставший от суеты хельсинкский журналист Каарло Ватанен подбирает на обочине раненого зайчонка, бросает работу, город и жену и уходит с ним странствовать по лесам Финляндии и Лапландии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bo-carpelan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бо Карпелан</h3>
+                  <p class="author-role">Двукратный лауреат премии «Финляндия», поэт тишины, памяти и музыки · <span class="tabular">1926–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Шведоязычный поэт и романист из Хельсинки, создавший тончайшую прозу о мире культуры и времени — романы «Аксель» и «Берг».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-axel">
+                  <div class="work-row">
+                    <span class="work-code">ФН-05.05</span>
+                    <a class="work-link" href="./works/karpelan-aksel.html">Аксель («Axel»)</a>
+                    <span class="work-meta">1986 · Историко-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Трогательный портрет друга Яна Сибелиуса — скромного барона Акселя Карпелана, жившего в тени великого композитора и вдохновлявшего его на создание Второй симфонии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hannu-makela">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ханну Мякеля</h3>
+                  <p class="author-role">Поэт, биограф и создатель знаменитого сказочного героя Дядюшки Ау · <span class="tabular">род. 1943</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и лауреат премии «Финляндия» за роман о поэте Эйно Лейно; его добрый ворчун Дядюшка Ау стал любимым персонажем детской классики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-herra-huu">
+                  <div class="work-row">
+                    <span class="work-code">ФН-05.06</span>
+                    <a class="work-link" href="./works/myakelya-dyadyushka-au.html">Господин Ау («Herra Huu») и «Мастер»</a>
+                    <span class="work-meta">1973 / 1995 · Философская сказка и роман-биография</span>
+                  </div>
+                  <p class="work-summary">Обаятельный лесной пугатель Дядюшка Ау, пытающийся жить по заветам старого дедушки, но сдружившийся с детьми, а также глубокий роман о последних днях Эйно Лейно.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fi-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 2000–XXI век</p>
+          <h2 class="section-title">Память истории и новейшая финская проза XXI века</h2>
+          <p class="section-desc">Международный успех современной Финляндии: от городского фольклора Йоханны Синисало и сатиры Кари Хотакайнена до шведоязычных романов Челля Вестё, исторических бестселлеров Софи Оксанен и Кати Кетту и «Купе № 6» Росы Ликсом.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-johanna-sinisalo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йоханна Синисало</h3>
+                  <p class="author-role">Первооткрывательница «финского странного» («Finnish Weird»), лауреат премии «Финляндия» · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Тампере, соединившая городской реализм, фольклор и экологическую мистику в романе «Не перед заходом солнца» («Тролль»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ennen-paivanlaskua-ei-voi">
+                  <div class="work-row">
+                    <span class="work-code">ФН-06.01</span>
+                    <a class="work-link" href="./works/sinisalo-troll.html">Тролль, или Не перед заходом солнца («Ennen päivänlaskua ei voi»)</a>
+                    <span class="work-meta">2000 · Городское фэнтези-притча</span>
+                  </div>
+                  <p class="work-summary">Фотограф Микаэль в Тампере находит во дворе многоэтажки раненого дикого тролля-подростка Песси и прячет его в квартире, пробуждая древние инстинкты природы и города.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kari-hotakainen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кари Хотакайнен</h3>
+                  <p class="author-role">Мастер ироничного бытового эпоса, лауреат премии Северного совета · <span class="tabular">род. 1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и драматург из Хельсинки, показавший с горьким юмором мечту современного финна о собственном доме и семье.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-juoksuhaudantie">
+                  <div class="work-row">
+                    <span class="work-code">ФН-06.02</span>
+                    <a class="work-link" href="./works/hotakajnen-ulica-okopnaya.html">Улица Окопная («Juoksuhaudantie»)</a>
+                    <span class="work-meta">2002 · Трагикомический роман</span>
+                  </div>
+                  <p class="work-summary">Матти Виртанен пытается вернуть ушедшую жену Хелену, решив во что бы то ни стало купить настоящий деревянный дом на улице Окопной — превращая обычную сделку в абсурдный крестовый поход.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kjell-westo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Челль Вестё</h3>
+                  <p class="author-role">Главный шведоязычный романист современного Хельсинки, лауреат премии «Финляндия» · <span class="tabular">род. 1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и музыкант, создавший масштабные городские хроники Хельсинки XX века — от раскола 1918 года до тревожной осени 1938-го.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hagring-38">
+                  <div class="work-row">
+                    <span class="work-code">ФН-06.03</span>
+                    <a class="work-link" href="./works/veste-mirazh-38.html">Мираж 38 («Hägring 38») и «Где мы когда-то шли»</a>
+                    <span class="work-meta">2006 / 2013 · Историко-психологический роман</span>
+                  </div>
+                  <p class="work-summary">В Хельсинки 1938 года адвокат Клас Туне и его секретарша Матильда Виик сталкиваются с тенью лагерей гражданской войны 1918 года и надвигающимся фашизмом Европы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sofi-oksanen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Софи Оксанен</h3>
+                  <p class="author-role">Самая известная в мире современная финская романистка, лауреат премии Северного совета · <span class="tabular">род. 1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Финско-эстонская писательница, прославившаяся «эстонским циклом» («Коровьи болячки», «Очищение», «Собачий парк») о памяти, насилии и выживании в XX веке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-puhdistus">
+                  <div class="work-row">
+                    <span class="work-code">ФН-06.04</span>
+                    <a class="work-link" href="./works/oksanen-ochishchenie.html">Очищение («Puhdistus»)</a>
+                    <span class="work-meta">2008 · Историко-драматический роман</span>
+                  </div>
+                  <p class="work-summary">На эстонском хуторе 1992 года пожилая Алийде Труу находит в саду избитую молодую Зару, бежавшую от торговцев людьми — их встреча раскрывает мрачную тайну 1940-х годов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-katja-kettu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Катя Кетту</h3>
+                  <p class="author-role">Звезда экспрессивной исторической прозы нового поколения · <span class="tabular">род. 1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Рованиеми, создавшая яростный, поэтический роман о любви и войне на берегах Петсамо и Лапландского фьорда.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-katilo">
+                  <div class="work-row">
+                    <span class="work-code">ФН-06.05</span>
+                    <a class="work-link" href="./works/kettu-akusherka.html">Акушерка («Kätilö»)</a>
+                    <span class="work-meta">2011 · Историко-драматический роман</span>
+                  </div>
+                  <p class="work-summary">В 1944 году на севере Лапландии лапландская акушерка Дикий Глаз влюбляется в немецкого фотографа СС Йоханнеса и следует за ним в лагерь военнопленных «Титовка» накануне Лапландской войны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rosa-liksom">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Роса Ликсом</h3>
+                  <p class="author-role">Художница и писательница, лауреат премии «Финляндия» за роман «Купе № 6» · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Анни Юляваара из Юлиторнио в Лапландии, прославившаяся гротескными новеллами и международным успехом истории поездки по Транссибу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hytti-nro-6">
+                  <div class="work-row">
+                    <span class="work-code">ФН-06.06</span>
+                    <a class="work-link" href="./works/liksom-kupe-6.html">Купе № 6 («Hytti nro 6»)</a>
+                    <span class="work-meta">2011 · Психологический роман-путешествие</span>
+                  </div>
+                  <p class="work-summary">Финская студентка-археолог в 1986 году едет в одном купе поезда Москва — Улан-Батор с грубоватым русским рабочим Вадимом, постепенно открывая в пути теплоту и правду человеческой близости.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-emmi-itaranta">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмми Итяранта</h3>
+                  <p class="author-role">Мастер экологической антиутопии XXI века на финском и английском языках · <span class="tabular">род. 1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница и журналистка из Тампере, перенёсшая созерцательную поэтику воды и чайного обряда в суровое будущее Лапландии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-teemestarin-kirja">
+                  <div class="work-row">
+                    <span class="work-code">ФН-06.07</span>
+                    <a class="work-link" href="./works/ityaranta-dnevnik-vody.html">Дневник воды, или Книга мастера чая («Teemestarin kirja»)</a>
+                    <span class="work-meta">2012 · Экологическая антиутопия</span>
+                  </div>
+                  <p class="work-summary">В мире будущего после климатической катастрофы семнадцатилетняя Нориа в заснеженной Лапландии наследует тайну скрытого горного источника, за который грозит смертная казнь.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание финской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
