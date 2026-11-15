@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог литовской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 37 писателей · 37 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог литовской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от «Времён года» Донелайтиса и «Аникщяйского бора» до Жемайте, Саломеи Нерис, «Леса богов» Балиса Сруоги, «Белого савана» Шкемы, Томаса Венцловы, «Вильнюсского покера» и «Silva rerum» Кристины Сабаляускайте.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#lt-mazvydas-donelaitis-awakening">Раздел I: От первой книги Мажвидаса и «Времён года» к романтизму XIX века</a>
+        <a href="#lt-realism-turn-century">Раздел II: Реализм рубежа веков: Жемайте, Билюнас и Креве</a>
+        <a href="#lt-interwar-neris-sruoga">Раздел III: Авангард, лирика Саломеи Нерис и проза Первой республики</a>
+        <a href="#lt-diaspora-postwar">Раздел IV: Модернизм диаспоры (Шкема, Радаускас) и послевоенный эпос</a>
+        <a href="#lt-poetry-marcinkevicius-venclova">Раздел V: Поэзия и драма 1960–1990-х: Марцинкявичюс, Мартинайтис и Венцлова</a>
+        <a href="#lt-contemporary">Раздел VI: Постсоветский перелом и новейшая литовская проза XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="lt-mazvydas-donelaitis-awakening">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVI–XIX века</p>
+          <h2 class="section-title">От первой книги Мажвидаса и «Времён года» к романтизму XIX века</h2>
+          <p class="section-desc">От первой печатной книги на литовском языке Мартинаса Мажвидаса и великой гекзаметрической поэмы Кристионаса Донелайтиса к «Аникщяйскому бору» Баранаускаса, прозе Валанчюса и лирике Майрониса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-martynas-mazvydas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мартинас Мажвидас</h3>
+                  <p class="author-role">Первопечатник Литвы, автор первой книги на литовском языке · <span class="tabular">ок. 1510–1563</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Жемайтийский гуманист и протестантский пастор в Рагните (Немане), издавший в 1547 году в Кёнигсберге первую печатную книгу на литовском языке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-catechismusa-prasty-szadei">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-01.01</span>
+                    <a class="work-link" href="./works/mazhvidas-katehizis.html">Катехизис («Catechismusa prasty szadei»)</a>
+                    <span class="work-meta">1547 · Первая печатная книга и стихотворное предисловие</span>
+                  </div>
+                  <p class="work-summary">Историческое издание 1547 года со знаменитым стихотворным предисловием («Братья, сёстры, придите и читайте!»), положившее начало литовской письменной культуре.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kristijonas-donelaitis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристионас Донелайтис</h3>
+                  <p class="author-role">Основоположник литовской художественной литературы, автор поэмы «Времена года» · <span class="tabular">1714–1780</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Пастор в Толминкемисе (Чистые Пруды), создавший первую великую поэму на литовском языке, включённую ЮНЕСКО в сокровищницу европейской словесности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-metai">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-01.02</span>
+                    <a class="work-link" href="./works/donelajtis-vremena-goda.html">Времена года («Metai»)</a>
+                    <span class="work-meta">ок. 1765–1775 (изд. 1818) · Эпическая гекзаметрическая поэма</span>
+                  </div>
+                  <p class="work-summary">Четыре песни («Радости весны», «Труды лета», «Дары осени», «Заботы зимы») о повседневной жизни, труде, природе и нравственном достоинстве литовских крестьян-бурасов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dionizas-poska">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дионизас Пошка</h3>
+                  <p class="author-role">Поэт Просвещения и первый создатель литовского музея под открытым дубом («Баублис») · <span class="tabular">ок. 1764–1830</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Жемайтийский шляхтич и антиквар, воспевший простого земледельца в эпоху наполеоновских перемен.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-muzikas-zemaiciu-ir-lietuvos">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-01.03</span>
+                    <a class="work-link" href="./works/poshka-muzhik-zhemajtii-i-litvy.html">Мужик Жемайтии и Литвы («Mužikas Žemaičių ir Lietuvos»)</a>
+                    <span class="work-meta">ок. 1815–1825 · Дидактико-патриотическая поэма</span>
+                  </div>
+                  <p class="work-summary">Вдохновенная защита честного труда крестьянина, кормящего страну своим хлебом, против барского пренебрежения.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-antanas-baranauskas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антанас Баранаускас</h3>
+                  <p class="author-role">Великий литовский поэт-романтик, автор поэмы «Аникщяйский бор» · <span class="tabular">1835–1902</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Аникщяя, диалектолог и епископ Сейнайский, создавший непревзойдённый музыкальный памятник любви к литовской природе и утраченной воле.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-anyksciu-silelis">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-01.04</span>
+                    <a class="work-link" href="./works/baranauskas-anikshchyajskij-bor.html">Аникщяйский бор («Anykščių šilelis»)</a>
+                    <span class="work-meta">1858–1859 · Лирико-романтическая поэма</span>
+                  </div>
+                  <p class="work-summary">Одухотворённая песнь о вековом сосновом боре над рекой Швянтойи, вырубленном чужой рукой — аллегория красоты, святости и судьбы самой Литвы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-motiejus-valancius">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мотеюс Валанчюс</h3>
+                  <p class="author-role">Просветитель, историк и родоначальник литовской реалистической прозы · <span class="tabular">1801–1875</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Жемайтийский епископ, организатор движения «книгонош» в годы запрета литовской печати и создатель яркого народного повествования.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-palangos-juze">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-01.05</span>
+                    <a class="work-link" href="./works/valanchyus-yuze-iz-palangi.html">Юзе из Паланги («Palangos Juzė»)</a>
+                    <span class="work-meta">1869 · Народно-бытовая повесть</span>
+                  </div>
+                  <p class="work-summary">Странствующий портной Юзе обходит все края Литвы — от Балтийского побережья до Дзукии — собирая пословицы, песни, обычаи и острые бытовые зарисовки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maironis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Майронис</h3>
+                  <p class="author-role">Национальный бард литовского возрождения, классик романтической лирики · <span class="tabular">1862–1932</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Йонас Мачюлис, ректор Каунасской духовной семинарии, чьи «Голоса весны» стали песней пробудившейся Литвы на пороге XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pavasario-balsai">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-01.06</span>
+                    <a class="work-link" href="./works/majronis-golosa-vesny.html">Голоса весны («Pavasario balsai»)</a>
+                    <span class="work-meta">1895 · Гражданская и романтическая лирика</span>
+                  </div>
+                  <p class="work-summary">Вдохновенные стихи о Тракайском замке, реках Дубисе и Немане, древней славе великих князей и призыве к духовному подъёму народа.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="lt-realism-turn-century">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1890–1925</p>
+          <h2 class="section-title">Реализм рубежа веков: Жемайте, Билюнас и Креве</h2>
+          <p class="section-desc">Гражданская сатира Винцаса Кудирки, суровая правда деревенской жизни у Жемайте, психологические новеллы Йонаса Билюнаса, усадебная лирика Шатрийос Раганы и героические предания Винцаса Креве.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-vincas-kudirka">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Винцас Кудирка</h3>
+                  <p class="author-role">Врач, издатель «Варпаса» («Колокола»), сатирик и автор национального гимна Литвы · <span class="tabular">1858–1899</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Идеолог литовского национального движения периода запрета печати, чья «Национальная песнь» стала государственным гимном страны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tautiska-giesme-satyros">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-02.01</span>
+                    <a class="work-link" href="./works/kudirka-nacionalnaya-pesn.html">Национальная песнь («Tautiška giesmė») и «Сатиры»</a>
+                    <span class="work-meta">1898 · Гимн и сатирическая проза</span>
+                  </div>
+                  <p class="work-summary">Призыв черпать силу в прошлом и свете («Литва, отчизна наша...») рядом с острыми сатирическими очерками против царской цензуры и взяточничества («Наместники»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-zemaite">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жемайте</h3>
+                  <p class="author-role">Классик литовского деревенского реализма · <span class="tabular">1845–1921</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юлия Бенюшявичюте-Жимантене взялась за перо почти в пятьдесят лет, создав предельно правдивые, сочные и живые картины жемайтийской деревни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-marti">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-02.02</span>
+                    <a class="work-link" href="./works/zhemajte-snoha.html">Сноха («Marti»)</a>
+                    <span class="work-meta">1896 · Социально-бытовая новелла</span>
+                  </div>
+                  <p class="work-summary">Трагическая история молодой крестьянки Катре, выданной расчётливыми родителями в тёмный, невежественный дом жадных Вингисов, где её ждёт медленное угасание.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jonas-biliunas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йонас Билюнас</h3>
+                  <p class="author-role">Мастер тонкой психологической и лирической новеллы начала XX века · <span class="tabular">1879–1907</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Нюрониса, учившийся в Тарту, Лейпциге и Цюрихе; за короткую жизнь ввёл в литовский рассказ сострадание, внутренний монолог и светлую грусть.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-laimes-ziburys-kliudziau">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-02.03</span>
+                    <a class="work-link" href="./works/bilyunas-svetoch-schastya.html">Светоч счастья («Laimės žiburys») и «Я попал» («Kliudžiau»)</a>
+                    <span class="work-meta">1905–1906 · Лирические и психологические новеллы</span>
+                  </div>
+                  <p class="work-summary">Легенда о высокой ледяной горе, на вершине которой горит светоч всеобщего счастья, и потрясающие миниатюры о совести, любви к животным («Конец Брисюса») и боли.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-satrijos-ragana">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шатрийос Рагана</h3>
+                  <p class="author-role">Поэтесса усадебной памяти и христианского гуманизма (Мария Пячкаускайте) · <span class="tabular">1877–1930</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница, педагог и благотворительница из Жемайтии, создавшая утончённую импрессионистскую повесть о материнской доброте и уходящем мире старой усадьбы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sename-dvare">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-02.04</span>
+                    <a class="work-link" href="./works/shatrijos-ragana-v-staroj-usadbe.html">В старой усадьбе («Sename dvare»)</a>
+                    <span class="work-meta">1922 · Импрессионистская лирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Хрупкая поэзия детства маленькой Ируте и её светлой, самоотверженной Маматте среди цветников, музыки Шопена и тревоги за судьбу разоряющейся усадьбы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vincas-kreve-mickevicius">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Винцас Креве-Мицкявичюс</h3>
+                  <p class="author-role">Классик неоромантической прозы и исторической драмы, мастер дзукийского сказа · <span class="tabular">1882–1954</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Дзукии, профессор и ректор филологии, преобразивший народные предания и восточные притчи в монументальную прозу и трагедию «Скиргайла».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dainavos-salies-padavimai-skirgaila">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-02.05</span>
+                    <a class="work-link" href="./works/kreve-predaniya-dajnavskoj-stariny.html">Предания Дайнавской старины и «Скиргайла» («Skirgaila»)</a>
+                    <span class="work-meta">1912 / 1925 · Легендарный эпос и историческая трагедия</span>
+                  </div>
+                  <p class="work-summary">Поэтические легенды о гордых курганах и лесах Дзукии и шекспировская драма о князе Скиргайле на рубеже язычества и христианства в Великом княжестве Литовском.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juozas-tumas-vaizgantas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юозас Тумас-Вайжгантас</h3>
+                  <p class="author-role">Классик народной повести, историк литературы и «носитель литовского бриллианта» · <span class="tabular">1869–1933</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Священник, публицист и тонкий психолог, воспевший красоту трудолюбивой души простого крестьянина в повести «Дяди и тётки».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dedes-ir-dedienes">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-02.06</span>
+                    <a class="work-link" href="./works/vajzhgantas-dyadi-i-tetki.html">Дяди и тётки («Dėdės ir dėdienės»)</a>
+                    <span class="work-meta">1921 · Поэтико-реалистическая повесть</span>
+                  </div>
+                  <p class="work-summary">Трогательная история тихого, безответного батрака Миколиуса, отдавшего всю молодость хозяйству брата и сохранившего нежную любовь к Северите, ставшей «тёткой» в чужой семье.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="lt-interwar-neris-sruoga">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1922–1947</p>
+          <h2 class="section-title">Авангард, лирика Саломеи Нерис и проза Первой республики</h2>
+          <p class="section-desc">Поэтический бунт «Четырёх ветров» Казиса Бинкиса, музыкальный нерв лирики Саломеи Нерис и Йонаса Айстиса, панорамная проза Пятраса Цвирки и Иевы Симонайтите и трагический шедевр Балиса Сруоги.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-kazys-binkis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Казис Бинкис</h3>
+                  <p class="author-role">Лидер литовского авангарда «Четыре ветра» («Keturi vėjai») · <span class="tabular">1893–1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, драматург и праведник народов мира, взорвавший в 1920-е годы поэтические каноны футуристическим озорством и живым ритмом улицы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-100-pavasariu">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-03.01</span>
+                    <a class="work-link" href="./works/binkis-sto-vesen.html">Сто вёсен («100 pavasarių»)</a>
+                    <span class="work-meta">1923 · Авангардный поэтический сборник</span>
+                  </div>
+                  <p class="work-summary">Дерзкий футуристический манифест обновления формы: бурный поток метафор, разговорной речи, смеха и энергии весенней стихии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-salomeja-neris">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Саломея Нерис</h3>
+                  <p class="author-role">Крупнейшая лирическая поэтесса Литвы XX века · <span class="tabular">1904–1945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Сувалкии, чья интимная и фольклорно-песенная поэзия поражает кристальной музыкальностью, драматизмом и глубокой женской искренностью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-per-luztanti-leda-egle">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-03.02</span>
+                    <a class="work-link" href="./works/neris-po-tonkomu-ldu.html">По тонкому льду («Per lūžtantį ledą») и «Эгле, королева ужей»</a>
+                    <span class="work-meta">1935 / 1940 · Лирика и фольклорная поэма</span>
+                  </div>
+                  <p class="work-summary">Неповторимая песенная лирика боли, любви и тревоги («Зацвету я белой яблоней в садах...») и волшебная переработка древней сказки об Эгле и морском царе Жильвинасе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jonas-aistis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йонас Айстис</h3>
+                  <p class="author-role">Мастер неоромантической элегии и чистоты поэтического чувства · <span class="tabular">1904–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Йонас Александравичус, учившийся во Франции и живший в США; создал хрупкую, глубоко музыкальную поэзию тоски, памяти и красоты.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uzgese-chimeros-akys">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-03.03</span>
+                    <a class="work-link" href="./works/ajstis-ugasshie-glaza-himery.html">Угасшие глаза химеры («Užgesę chimeros akys»)</a>
+                    <span class="work-meta">1937 · Неоромантическая лирика</span>
+                  </div>
+                  <p class="work-summary">Отточенные сонеты и элегии о неверности мечты, светлой печали и неразрывной связи сердца с скромным пейзажем отчего края.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-petras-cvirka">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пятрас Цвирка</h3>
+                  <p class="author-role">Виртуозный мастер сатирического и социально-психологического романа 1930-х · <span class="tabular">1909–1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Клангяя, учившийся в Париже и написавший два шедевра межвоенной прозы — острую сатиру «Франк Крук» и лирическую драму «Земля-кормилица».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zeme-maitintoja">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-03.04</span>
+                    <a class="work-link" href="./works/cvirka-zemlya-kormilica.html">Земля-кормилица («Žemė maitintoja») и «Франк Крук»</a>
+                    <span class="work-meta">1934 / 1935 · Социальный и сатирический романы</span>
+                  </div>
+                  <p class="work-summary">История бедного крестьянина Юраса Тарутиса, потерявшего землю в годы кризиса 1930-х, рядом с гротескной историей предприимчивого жулика Пранаса Крукаускаса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ieva-simonaityte">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иева Симонайтите</h3>
+                  <p class="author-role">Классик литературы Малой Литвы (Клайпедского края) · <span class="tabular">1897–1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Самоучка-швея из бедной деревни Ванагай, создавшая монументальную семейную хронику прусских литовцев («летувиннинков»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-aukstuju-simoniu-likimas">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-03.05</span>
+                    <a class="work-link" href="./works/simonajtite-sudba-shimonisov.html">Судьба Шимонисов («Aukštujų Šimonių likimas»)</a>
+                    <span class="work-meta">1935 · Историческая семейная сага</span>
+                  </div>
+                  <p class="work-summary">Двухвековая сага древнего рода Шимонисов в Аукштуяй под Клайпедой — от чумы начала XVIII века до трагической утраты родного дома, языка и имени в Пруссии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-balys-sruoga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Балис Сруога</h3>
+                  <p class="author-role">Драматург, поэт, профессор и автор великой антитоталитарной книги «Лес богов» · <span class="tabular">1896–1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из зачинателей литовского символизма и исторической драмы; в 1943 году был арестован нацистами и прошёл концентрационный лагерь Штуттгоф.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dievu-miskas">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-03.06</span>
+                    <a class="work-link" href="./works/sruoga-les-bogov.html">Лес богов («Dievų miškas»)</a>
+                    <span class="work-meta">1945 (изд. 1957) · Лагерные мемуары и чёрная сатира</span>
+                  </div>
+                  <p class="work-summary">Потрясающее свидетельство об аде нацистского концлагеря Штуттгоф, написанное с горькой, леденящей иронией как единственным щитом разума перед тотальным расчеловечиванием.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="lt-diaspora-postwar">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1945–1986</p>
+          <h2 class="section-title">Модернизм диаспоры (Шкема, Радаускас) и послевоенный эпос</h2>
+          <p class="section-desc">Экзистенциальный шедевр эмиграции «Белый саван» Антанаса Шкемы, элитарная поэзия Генрикаса Радаускаса и послевоенная литовская проза от Йонаса Авижюса до новелл Юозаса Апутиса и Ромуальдаса Гранаускаса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-antanas-skema">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антанас Шкема</h3>
+                  <p class="author-role">Реформатор литовского модернистского романа, автор «Белого савана» · <span class="tabular">1910–1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Актёр и режиссёр Каунасского театра, эмигрировавший в США и работавший лифтёром в нью-йоркском отеле; ввёл в литовскую прозу поток сознания XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-balta-drobule">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-04.01</span>
+                    <a class="work-link" href="./works/shkema-belyj-savan.html">Белый саван («Balta drobulė»)</a>
+                    <span class="work-meta">1958 · Модернистский психологический роман</span>
+                  </div>
+                  <p class="work-summary">Литовский поэт Антанас Гаршва поднимает и опускает лифт № 87 в огромном отеле Нью-Йорка, переживая в калейдоскопе памяти межвоенный Каунас, ужас войны, любовь к Элене и надвигающееся безумие.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-henrikas-radauskas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генрикас Радаускас</h3>
+                  <p class="author-role">Крупнейший литовский поэт-эстет и мастер отточенной модернистской формы · <span class="tabular">1910–1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Кракова, живший в Каунасе и эмигрировавший в США; создал поэзию чистого искусства, иронии, мифа и блестящей метафоры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-strele-danguje">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-04.02</span>
+                    <a class="work-link" href="./works/radauskas-strela-v-nebe.html">Стрела в небе («Strėlė danguje») и «Зимняя песня»</a>
+                    <span class="work-meta">1950 / 1955 · Модернистская лирика</span>
+                  </div>
+                  <p class="work-summary">Стихи о преображении хаоса истории в кристальную музыку искусства, где «я не верю миру, я верю в сказку» становится формулой внутренней свободы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alfonsas-nyka-niliunas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альфонсас Ника-Нилюнас</h3>
+                  <p class="author-role">Патриарх философской лирики диаспоры и лауреат Национальной премии · <span class="tabular">1919–2015</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Литовский поэт, переводчик Шекспира, Т. С. Элиота и Бодлера, автор глубоко интеллектуальных дневников и поэтических симфоний изгнания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-prarastosios-simfonijos">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-04.03</span>
+                    <a class="work-link" href="./works/nika-nilyunas-proshchalnye-simfonii.html">Прощальные симфонии («Prarastosios simfonijos») и «Дневники»</a>
+                    <span class="work-meta">1946–1996 · Философская лирика и эссеистика</span>
+                  </div>
+                  <p class="work-summary">Медитация о времени, доме детства в Немекщяй, европейской культуре и одиночестве человека перед лицом истории.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jonas-avizius">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йонас Авижюс</h3>
+                  <p class="author-role">Мастер трагического исторического романа XX века, автор «Потерянного крова» · <span class="tabular">1922–1999</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист из Йонишкского края, впервые в советской печати с огромной нравственной силой показавший трагедию литовской интеллигенции и крестьянства в годы войны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sodybu-tustejimo-metas">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-04.04</span>
+                    <a class="work-link" href="./works/avizhyus-poteryannyj-krov.html">Потерянный кров («Sodybų tuštėjimo metas»)</a>
+                    <span class="work-meta">1970 · Историко-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Учитель Гедиминас Джюгас в оккупированной Литве 1941–1944 годов пытается остаться в стороне от кровавой схватки, но история разрушает нейтралитет и опустошает родные усадьбы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juozas-aputis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юозас Апутис</h3>
+                  <p class="author-role">Непревзойдённый мастер литовской психологической новеллы 1960–1980-х · <span class="tabular">1936–2010</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из Жемайтии, обновивший литовский рассказ через внутреннюю поэзию, притчу и боль за уходящий нравственный строй деревни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-horizonte-bega-sernai">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-04.05</span>
+                    <a class="work-link" href="./works/aputis-na-gorizonte-begut-kabany.html">На горизонте бегут кабаны («Horizonte bėga šernai»)</a>
+                    <span class="work-meta">1970 · Сборник психологических новелл</span>
+                  </div>
+                  <p class="work-summary">Изящные, полные тревоги и нежности рассказы о встрече старой сельской земли с жёстким бездушием современного города и историческим насилием.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-romualdas-granauskas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ромуальдас Гранаускас</h3>
+                  <p class="author-role">Классик поздней экзистенциальной прозы, певец жемайтийской души · <span class="tabular">1939–2014</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, чьи повести «Жизнь под клёном» и «Жертвоприношение тельца» стали реквиемом по многовековой земледельческой культуре Литвы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gyvenimas-po-klevu">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-04.06</span>
+                    <a class="work-link" href="./works/granauskas-zhizn-pod-klenom.html">Жизнь под клёном («Gyvenimas po klevu»)</a>
+                    <span class="work-meta">1986 · Философская повесть</span>
+                  </div>
+                  <p class="work-summary">Одинокая старая крестьянка Казимера доживает свой век на последнем уцелевшем хуторе под сенью старого клёна среди распаханной до горизонта пустоты.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="lt-poetry-marcinkevicius-venclova">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1960–2000</p>
+          <h2 class="section-title">Поэзия и драма 1960–1990-х: Марцинкявичюс, Мартинайтис и Венцлова</h2>
+          <p class="section-desc">Исторические драмы Юстинаса Марцинкявичюса, мифологический народный мир Марцелиюса Мартинайтиса и Сигитаса Гяды, поэтическая школа Томаса Венцловы и культовая проза Юргиса Кунчинаса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-justinas-marcinkevicius">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юстинас Марцинкявичюс</h3>
+                  <p class="author-role">Национальный поэт и драматург, автор драматической трилогии о Литве · <span class="tabular">1930–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Важаткиемяй в Пренайском крае, чья трилогия «Миндаугас — Мажвидас — Собор» стала духовным фундаментом национального самосознания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mindaugas-mazvydas-katedra">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-05.01</span>
+                    <a class="work-link" href="./works/marcinkyavichyus-mindaugas-sobor.html">Миндаугас («Mindaugas») и «Собор» («Katedra»)</a>
+                    <span class="work-meta">1968 / 1971 · Историко-философская драма в стихах</span>
+                  </div>
+                  <p class="work-summary">Драма первого литовского короля Миндаугаса, мучительно объединяющего разрозненные земли кровью и государственным законом, и образ архитектора Лауринаса Гуцявичюса, возводящего Вильнюсский собор.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eduardas-miezelaitis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдуардас Межелайтис</h3>
+                  <p class="author-role">Поэт-новатор верлибра и эссеистики 1960-х годов · <span class="tabular">1919–1997</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Карейвишкяй, соединивший в знаменитом цикле «Человек» и в путевых книгах космические метафоры с традициями литовской народной графики и музыки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zmogus">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-05.02</span>
+                    <a class="work-link" href="./works/mezhelajtis-chelovek.html">Человек («Žmogus»)</a>
+                    <span class="work-meta">1961 · Цикл философских верлибров</span>
+                  </div>
+                  <p class="work-summary">Поэтическая антропология XX века — размышления о руках, глазах, сердце и разуме человека, стоящего между земной почвой и бесконечной вселенной.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-marcelijus-martinaitis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марцелиюс Мартинайтис</h3>
+                  <p class="author-role">Создатель бессмертного народного философа Кукутиса, поэт-хранитель речи · <span class="tabular">1936–2013</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из Пасербентиса в Расейняйском районе, соединивший древние балладные формы и фольклорный гротеск в любимейшем поэтическом цикле современной Литвы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kukučio-balades">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-05.03</span>
+                    <a class="work-link" href="./works/martinajtis-ballady-kukutisa.html">Баллады Кукутиса («Kukučio baladės»)</a>
+                    <span class="work-meta">1977 · Иронико-философская поэзия</span>
+                  </div>
+                  <p class="work-summary">Чудаковатый, мудрый и неуязвимый жемайтиец Кукутис путешествует сквозь века, абсурдную бюрократию и сны, сохраняя лукавую крестьянскую свободу духа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sigitas-geda">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сигитас Гяда</h3>
+                  <p class="author-role">Поэт-демиург и визионер, обновивший образный строй литовского стиха · <span class="tabular">1943–2008</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Дзукии (Патяряй), переводчик Данте и автор необычайной по силе мифопоэтической лирики, вбирающей архаику, природу и мировую культуру.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-strazdas">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-05.04</span>
+                    <a class="work-link" href="./works/gyada-strazdas.html">Страздас («Strazdas») и «Семь лет, опадая»</a>
+                    <span class="work-meta">1967 · Мифопоэтическая поэма</span>
+                  </div>
+                  <p class="work-summary">Магическая поэма о литовском поэте XIX века Антанасе Страздасе, превращающемся в лесного дрозда («страздаса»), поющего над озёрами и реками Литвы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tomas-venclova">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Венцлова</h3>
+                  <p class="author-role">Выдающийся поэт, эссеист, профессор Йельского университета и голос Вильнюса · <span class="tabular">род. 1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын поэта Антанаса Венцловы, один из основателей Литовской Хельсинкской группы, близкий друг Иосифа Бродского и Чеслава Милоша, мастер классической формы и точного смысла.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kalbos-zenklas-pasnekesys-ziema">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-05.05</span>
+                    <a class="work-link" href="./works/venclova-znak-rechi.html">Знак речи («Kalbos ženklas») и «Разговор зимой»</a>
+                    <span class="work-meta">1972 / 1991 · Философская и интеллектуальная лирика</span>
+                  </div>
+                  <p class="work-summary">Стихотворения о Вильнюсе и Неринге, тоталитаризме, изгнании и культурной памяти Европы, в которых строгий классический стих звучит как опора против хаоса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jurgis-kuncinas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юргис Кунчинас</h3>
+                  <p class="author-role">Культовый романист переходной эпохи и поэт вильнюсского Ужуписа · <span class="tabular">1947–2002</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, поэт и переводчик немецкой литературы, запечатлевший горькую свободу вильнюсской богемы 1970–1990-х годов в пронзительном романе «Тула».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tula">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-05.06</span>
+                    <a class="work-link" href="./works/kunchinas-tula.html">Тула («Tūla»)</a>
+                    <span class="work-meta">1993 · Роман о любви и богеме Вильнюса</span>
+                  </div>
+                  <p class="work-summary">Исповедь непутёвого поэта, превращающегося в летучую мышь над крышами Ужуписа и старого Вильнюса, о недолгой, но незабываемой любви к художнице Туле.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="lt-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1989–XXI век</p>
+          <h2 class="section-title">Постсоветский перелом и новейшая литовская проза XXI века</h2>
+          <p class="section-desc">Гротескный прорыв «Вильнюсского покера» Ричардаса Гавялиса, романы Юрги Иванаускайте, масштабная историческая тетралогия «Silva rerum» Кристины Сабаляускайте, драматургия и проза Шляпикаса, Радзявичюте и Кмиты.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ricardas-gavelis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ричардас Гавялис</h3>
+                  <p class="author-role">Революционер литовского постмодернизма, автор «Вильнюсского покера» · <span class="tabular">1950–2002</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Физик-теоретик и прозаик, взорвавший советскую цензуру 1989 года фантасмагорическим, интеллектуальным и безжалостным портретом Вильнюса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vilniaus-pokeris">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-06.01</span>
+                    <a class="work-link" href="./works/gavyalis-vilnyusskij-poker.html">Вильнюсский покер («Vilniaus pokeris»)</a>
+                    <span class="work-meta">1989 · Постмодернистский интеллектуальный роман</span>
+                  </div>
+                  <p class="work-summary">Четыре голоса — библиограф Витаутас Варгалис, его друг Мартинас, любимая Лолита и бездомный пёс — с разных сторон вскрывают лабиринт Вильнюса, страха, тоталитарного распада и тайны «Нихто».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jurga-ivanauskaite">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юрга Иванаускайте</h3>
+                  <p class="author-role">Самая яркая писательница рубежа 1990-х, бунтарка и исследовательница Тибета · <span class="tabular">1961–2007</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Художница и романистка из Вильнюса, соединившая в прозе женскую страсть, мистический вызов, рок-культуру и глубокое паломничество в Гималаи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ragana-ir-lietus">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-06.02</span>
+                    <a class="work-link" href="./works/ivanauskajte-vedma-i-dozhd.html">Ведьма и дождь («Ragana ir lietus»)</a>
+                    <span class="work-meta">1993 · Мистико-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Три женских лика любви, запрета и преследования сплетаются сквозь века: современная художница Викторья, средневековая ведьма и евангельская Мария Магдалина.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sigitas-parulskis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сигитас Парульскис</h3>
+                  <p class="author-role">Ведущий поэт, эссеист, драматург и ироничный прозаик современности · <span class="tabular">род. 1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат Национальной премии Литвы, с беспощадной откровенностью и чёрным юмором осмысливший опыт советской армии и исторической травмы («Тьма и партнёры»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-trys-sekundes-dangaus">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-06.03</span>
+                    <a class="work-link" href="./works/parulskis-tri-sekundy-neba.html">Три секунды неба («Trys sekundės dangaus»)</a>
+                    <span class="work-meta">2002 · Автобиографический роман</span>
+                  </div>
+                  <p class="work-summary">Десантник из Литвы в конце 1980-х годов проходит суровую школу советской воздушно-десантной дивизии, обретая в трёх секундах свободного падения под куполом горькую свободу мысли.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kristina-sabaliauskaite">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристина Сабаляускайте</h3>
+                  <p class="author-role">Автор исторического мегабестселлера «Silva rerum», искусствовед · <span class="tabular">род. 1974</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Доктор искусствоведения и романистка, подарившая Литве и Европе блистательную барочную фреску истории рода Нарвойшей в Речи Посполитой XVII–XVIII веков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-silva-rerum">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-06.04</span>
+                    <a class="work-link" href="./works/sabalyauskajte-silva-rerum.html">Silva rerum («Лес вещей»)</a>
+                    <span class="work-meta">2008–2016 · Историческая романная тетралогия</span>
+                  </div>
+                  <p class="work-summary">Четыре поколения шляхетской семьи Нарвойшей в Вильнюсе и Жемайтии — от разрухи Потопа и чумы 1710 года до закатного блеска эпохи Просвещения на страницах домашней летописи «silva rerum».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alvydas-slepikas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альвидас Шляпикас</h3>
+                  <p class="author-role">Поэт и прозаик, автор самого читаемого литовского романа XXI века о «волчьих детях» · <span class="tabular">род. 1966</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Режиссёр, поэт и сценарист, открывший миру забытую трагедию немецких сирот Восточной Пруссии, искавших спасение и хлеб на литовских хуторах после 1945 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mano-vardas-maryte">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-06.05</span>
+                    <a class="work-link" href="./works/shlyapikas-moe-imya-marite.html">Моё имя — Марите («Mano vardas – Marytė»)</a>
+                    <span class="work-meta">2012 · Историко-документальный роман</span>
+                  </div>
+                  <p class="work-summary">Голодные немецкие дети из разоренного Кёнигсберга перебираются через Неман в Литву, скрывая имена и находя сострадание или опасность в суровые послевоенные годы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-undine-radzeviciute">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ундине Радзявичюте</h3>
+                  <p class="author-role">Мастер интеллектуального минимализма и лауреат Литературной премии Евросоюза · <span class="tabular">род. 1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка из Вильнюса с афористичным, сухим и блестяще ироничным стилем, соединяющим Европу, Китай и семейные легенды.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zuvys-ir-drakonai">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-06.06</span>
+                    <a class="work-link" href="./works/radzyavichyute-ryby-i-drakony.html">Рыбы и драконы («Žuvys ir drakonai»)</a>
+                    <span class="work-meta">2013 · Интеллектуальный историко-семейный роман</span>
+                  </div>
+                  <p class="work-summary">Две переплетённые линии: итальянский иезуит-художник Джузеппе Кастильоне при дворе китайского императора в Пекине XVIII века и эксцентричные женщины одной современной семьи в Вильнюсе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rimantas-kmita">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Римантас Кмита</h3>
+                  <p class="author-role">Яркий голос нового поколения, возродивший живой шяуляйский диалект в прозе · <span class="tabular">род. 1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Литературовед, поэт и романист из Шяуляя, превративший язык провинциальных окраин 1990-х годов в искромётный роман взросления.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pietinia-kronikas">
+                  <div class="work-row">
+                    <span class="work-code">ЛТ-06.07</span>
+                    <a class="work-link" href="./works/kmita-hroniki-yuzhnogo.html">Хроники Южного («Pietinia kronikas»)</a>
+                    <span class="work-meta">2016 · Юмористический роман взросления</span>
+                  </div>
+                  <p class="work-summary">Остроумная и нежная история подростка Римаса из панельного Южного микрорайона Шяуляя середины 1990-х — регби, рынки, первая любовь и открытие поэзии на местном говоре.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание литовской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

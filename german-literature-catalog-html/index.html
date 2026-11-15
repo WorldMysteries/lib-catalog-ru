@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог немецкой литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 37 писателей · 41 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог немецкой литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от «Песни о Нибелунгах» и «Симплициссимуса» до Гёте, Шиллера, Гофмана, Гейне и Бюхнера, романов Томаса Манна и Германа Гессе, Бёлля, Грасса, В. Г. Зебальда, Герты Мюллер и Дженни Эрпенбек.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#de-medieval-baroque-enlightenment">Раздел I: Рыцарский эпос, барокко и эпоха Просвещения</a>
+        <a href="#de-classicism-romanticism">Раздел II: «Буря и натиск», Веймарский классицизм и романтизм</a>
+        <a href="#de-heine-realism-xix">Раздел III: Генрих Гейне, Георг Бюхнер и реализм XIX века</a>
+        <a href="#de-mann-hesse-weimar">Раздел IV: Томас Манн, Герман Гессе и Веймарский модернизм</a>
+        <a href="#de-gruppe47-boll-grass">Раздел V: «Литература руин», Генрих Бёлль, Гюнтер Грасс и эпоха двух Германий</a>
+        <a href="#de-sebald-contemporary">Раздел VI: Объединённая Германия, В. Г. Зебальд и литература XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="de-medieval-baroque-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XII–XVIII века</p>
+          <h2 class="section-title">Рыцарский эпос, барокко и эпоха Просвещения</h2>
+          <p class="section-desc">От великой героической «Песни о Нибелунгах» и «Парцифаля» Вольфрама фон Эшенбаха к барочной прозе Тридцатилетней войны Гриммельсгаузена и драмам Просвещения Готхольда Эфраима Лессинга.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-nibelungenlied-anonymous">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Неизвестный поэт Средневековья</h3>
+                  <p class="author-role">Создатель главного немецкого героического эпоса · <span class="tabular">ок. 1200</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Анонимный австрийско-баварский поэт рубежа XII–XIII веков, соединивший древние германские предания о Зигфриде и гибели бургундов в тридцать девять авентюр.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-das-nibelungenlied">
+                  <div class="work-row">
+                    <span class="work-code">НМ-01.01</span>
+                    <a class="work-link" href="./works/pesn-o-nibelungah.html">Песнь о Нибелунгах («Das Nibelungenlied»)</a>
+                    <span class="work-meta">ок. 1200 · Средневековый героический эпос</span>
+                  </div>
+                  <p class="work-summary">Трагическая история победоносного Зигфрида, прекрасной Кримхильды, воинственной Брюнхильды, мрачного Хагена и кровавой расправы при дворе Этцеля над бургундами.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-wolfram-von-eschenbach">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вольфрам фон Эшенбах</h3>
+                  <p class="author-role">Величайший поэт рыцарского романа высокого Средневековья · <span class="tabular">ок. 1170 – ок. 1220</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Франконский рыцарь и поэт, превративший кельтский сюжет о Граале в глубокий путь духовного созревания, сострадания и верности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-parzival">
+                  <div class="work-row">
+                    <span class="work-code">НМ-01.02</span>
+                    <a class="work-link" href="./works/eshenbah-parcifal.html">Парцифаль («Parzival»)</a>
+                    <span class="work-meta">ок. 1200–1210 · Рыцарский роман в стихах</span>
+                  </div>
+                  <p class="work-summary">Простодушный юноша Парцифаль уходит из глухого леса Сольтане к двору короля Артура и через сомнения, стыд и милосердие достигает тайны Святого Грааля в Мунсальвеше.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-grimmelshausen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ганс Якоб Кристоффель фон Гриммельсгаузен</h3>
+                  <p class="author-role">Главный романист немецкого барокко, летописец Тридцатилетней войны · <span class="tabular">1621–1676</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший солдат и управляющий в Шварцвальде, создавший беспрецедентную по сочности, сатире и боли хронику «перевёрнутого мира» XVII столетия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-simplicissimus">
+                  <div class="work-row">
+                    <span class="work-code">НМ-01.03</span>
+                    <a class="work-link" href="./works/grimmelsgauzen-simplicissimus.html">Симплициссимус («Der abenteuerliche Simplicissimus Teutsch»)</a>
+                    <span class="work-meta">1668 · Барочный плутовской роман</span>
+                  </div>
+                  <p class="work-summary">Одиссея простодушного пастушка-сироты Симплиция сквозь пожары, грабежи, шутовство и жестокости Тридцатилетней войны к отречению от суеты мира в лесной пустыни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gotthold-ephraim-lessing">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Готхольд Эфраим Лессинг</h3>
+                  <p class="author-role">Вождь немецкого Просвещения, создатель национальной драмы и эстетики · <span class="tabular">1729–1781</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Критик, драматург и библиотекарь в Вольфенбюттеле, освободивший немецкий театр от подражания французскому классицизму («Гамбургская драматургия», «Лаокоон»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nathan-der-weise">
+                  <div class="work-row">
+                    <span class="work-code">НМ-01.04</span>
+                    <a class="work-link" href="./works/lessing-natan-mudryj.html">Натан Мудрый («Nathan der Weise») и «Эмилия Галотти»</a>
+                    <span class="work-meta">1772 / 1779 · Философская драма и трагедия</span>
+                  </div>
+                  <p class="work-summary">Иерусалим времён крестовых походов и знаменитая притча о трёх кольцах, уравнивающая христианство, ислам и иудаизм в общем служении добру, разуму и терпимости.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-christoph-martin-wieland">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристоф Мартин Виланд</h3>
+                  <p class="author-role">Классик эпохи Просвещения и рококо, учитель веймарских гениев · <span class="tabular">1733–1813</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первый переводчик Шекспира на немецкий язык, издатель «Немецкого Меркурия» и мастер ироничного, изящного романа и сказочной поэмы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-oberon-wieland">
+                  <div class="work-row">
+                    <span class="work-code">НМ-01.05</span>
+                    <a class="work-link" href="./works/viland-oberon.html">Оберон («Oberon») и «История Агатона»</a>
+                    <span class="work-meta">1766 / 1780 · Рыцарская поэма и роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Волшебные приключения рыцаря Гюона и Реции под покровительством царя эльфов Оберона и первый классический немецкий роман воспитания об античном юноше Агатоне.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="de-classicism-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1774–1835</p>
+          <h2 class="section-title">«Буря и натиск», Веймарский классицизм и романтизм</h2>
+          <p class="section-desc">Вершины немецкой классики — Гёте и Шиллер, — трагическая высота Гёльдерлина и Клейста, синий цветок Новалиса и фантасмагории Э. Т. А. Гофмана.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-johann-wolfgang-von-goethe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иоганн Вольфганг фон Гёте</h3>
+                  <p class="author-role">Центральная фигура немецкой словесности, поэт, мыслитель и естествоиспытатель · <span class="tabular">1749–1832</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">От бунтаря «Бури и натиска» и веймарского министра до автора универсальной поэмы «Фауст» и провозвестника «мировой литературы» («Weltliteratur»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-die-leiden-des-jungen-werthers">
+                  <div class="work-row">
+                    <span class="work-code">НМ-02.01</span>
+                    <a class="work-link" href="./works/gete-stradaniya-yunogo-vertera.html">Страдания юного Вертера («Die Leiden des jungen Werthers»)</a>
+                    <span class="work-meta">1774 · Сентименталистский эпистолярный роман</span>
+                  </div>
+                  <p class="work-summary">Письма тонкого и ранимого юноши Вертера о безнадёжной любви к Лотте, природе и разладе свободного чувства с холодным сословным обществом.</p>
+                </li>
+                <li class="work-item" id="work-faust-goethe">
+                  <div class="work-row">
+                    <span class="work-code">НМ-02.02</span>
+                    <a class="work-link" href="./works/gete-faust.html">Фауст («Faust»)</a>
+                    <span class="work-meta">1808 / 1832 · Философская трагедия в стихах</span>
+                  </div>
+                  <p class="work-summary">Спор Господа и Мефистофеля о душе учёного Фауста — от трагедии Гретхен в первой части до созидания новой земли и вознесения духа во второй части.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-friedrich-schiller">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фридрих Шиллер</h3>
+                  <p class="author-role">Великий драматург свободы, поэт и философ искусства · <span class="tabular">1759–1805</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Друг и соратник Гёте в Веймаре, создатель огненных драм о чести, тирании и нравственном величии («Разбойники», «Дон Карлос», «Мария Стюарт», «Вильгельм Телль»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-die-rauber-wallenstein">
+                  <div class="work-row">
+                    <span class="work-code">НМ-02.03</span>
+                    <a class="work-link" href="./works/shiller-razbojniki.html">Разбойники («Die Räuber») и «Валленштейн»</a>
+                    <span class="work-meta">1781 / 1799 · Трагедия и историческая трилогия</span>
+                  </div>
+                  <p class="work-summary">От юношеского бунта Карла Моора против лицемерия мира в богемских лесах к монументальной исторической трагедии о честолюбии и роке полководца Валленштейна.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-friedrich-holderlin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фридрих Гёльдерлин</h3>
+                  <p class="author-role">Провидческий поэт античной гармонии и трагедии нового времени · <span class="tabular">1770–1843</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Товарищ Гегеля и Шеллинга по Тюбингенскому штифту, проведший тридцать шесть лет в башне у Неккара и ставший кумиром поэзии XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hyperion-gedichte">
+                  <div class="work-row">
+                    <span class="work-code">НМ-02.04</span>
+                    <a class="work-link" href="./works/gelderlin-giperion.html">Гиперион («Hyperion») и поздние гимны</a>
+                    <span class="work-meta">1797–1799 · Лирический роман и философская поэзия</span>
+                  </div>
+                  <p class="work-summary">Роман в письмах о борьбе грека Гипериона за свободу Эллады, возвышенной любви к Диотиме и гимны о том, «зачем поэты в скудные времена».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-novalis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Новалис</h3>
+                  <p class="author-role">Главный поэт и философ йенского романтизма (Фридрих фон Гарденберг) · <span class="tabular">1772–1801</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Горный инженер и вдохновенный мечтатель, подаривший европейскому романтизму символ «голубого цветка» и ночную мистику поэтического сна.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hymnen-an-die-nacht-ofterdingen">
+                  <div class="work-row">
+                    <span class="work-code">НМ-02.05</span>
+                    <a class="work-link" href="./works/novalis-gimny-k-nochi.html">Гимны к ночи и «Генрих фон Офтердинген»</a>
+                    <span class="work-meta">1800 / 1802 · Романтическая поэма и незавершённый роман</span>
+                  </div>
+                  <p class="work-summary">Воспевание священной ночи, преображающей утрату возлюбленной Софии в вечную встречу, и странствие юного миннезингера Генриха на поиски таинственного голубого цветка.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eta-hoffmann">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрнст Теодор Амадей Гофман</h3>
+                  <p class="author-role">Гений романтической фантастики, музыкант и сатирик-гротеск · <span class="tabular">1776–1822</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Судья в Берлине, дирижёр и композитор из Кёнигсберга, соединивший волшебную сказку («Щелкунчик», «Золотой горшок») с едким осмеянием филистерства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kater-murr-klein-zaches">
+                  <div class="work-row">
+                    <span class="work-code">НМ-02.06</span>
+                    <a class="work-link" href="./works/gofman-kot-murr.html">Житейские воззрения кота Мурра и «Крошка Цахес»</a>
+                    <span class="work-meta">1819 / 1820–1822 · Романтическая повесть-гротеск и сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Самодовольный учёный кот Мурр пишет свои мемуары на разорванных листках трагической биографии безумного капельмейстера Иоганнеса Крейслера.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-heinrich-von-kleist">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генрих фон Клейст</h3>
+                  <p class="author-role">Неистовый мастер психологической новеллы и драмы рубежа романтизма · <span class="tabular">1777–1811</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший прусский офицер, опередивший время жёстким, стремительным синтаксисом новелл о сломе мира, страсти и абсолютной жажде справедливости.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-michael-kohlhaas">
+                  <div class="work-row">
+                    <span class="work-code">НМ-02.07</span>
+                    <a class="work-link" href="./works/klejst-mihael-kolhaas.html">Михаэль Кольхаас («Michael Kohlhaas») и «Принц Фридрих Гомбургский»</a>
+                    <span class="work-meta">1810 · Историческая новелла и драма</span>
+                  </div>
+                  <p class="work-summary">Честный торговец лошадьми Кольхаас, не добившись от продажных судей наказания юнкера-грабителя, поднимает собственный бунт во имя поруганного права — «один из самых праведных и страшных людей своего времени».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="de-heine-realism-xix">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1827–1900</p>
+          <h2 class="section-title">Генрих Гейне, Георг Бюхнер и реализм XIX века</h2>
+          <p class="section-desc">Ироничная лирика и политическая сатира Генриха Гейне, гениальные драмы юного Георга Бюхнера, новеллы Теодора Шторма и Аннетте фон Дросте-Хюльсхоф, берлинский реализм Теодора Фонтане и «Ткачи» Гауптмана.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-heinrich-heine">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генрих Гейне</h3>
+                  <p class="author-role">Последний поэт романтизма и первый великий иронист европейской лирики · <span class="tabular">1797–1856</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Дюссельдорфа и вечный парижский изгнанник, научивший немецкий стих соединять нежнейшее сердечное чувство с острой усмешкой и политической свободой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-buch-der-lieder-wintermarchen">
+                  <div class="work-row">
+                    <span class="work-code">НМ-03.01</span>
+                    <a class="work-link" href="./works/gejne-kniga-pesen.html">Книга песен («Buch der Lieder») и «Германия. Зимняя сказка»</a>
+                    <span class="work-meta">1827 / 1844 · Лирика и сатирическая поэма</span>
+                  </div>
+                  <p class="work-summary">От бессмертной «Лорелеи» и горько-сладких песен безответной любви к язвительной дорожной поэме о прусской реакции, цензуре и утопии новой земли.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-georg-buchner">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Георг Бюхнер</h3>
+                  <p class="author-role">Революционер европейской драмы и предтеча экспрессионизма · <span class="tabular">1813–1837</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач, анатом и политический подпольщик, проживший всего двадцать три года и совершивший переворот в театре и прозе («Ленц»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dantons-tod-woyzeck">
+                  <div class="work-row">
+                    <span class="work-code">НМ-03.02</span>
+                    <a class="work-link" href="./works/byuhner-smert-dantona-vojcek.html">Смерть Дантона («Dantons Tod») и «Войцек» («Woyzeck»)</a>
+                    <span class="work-meta">1835 / 1837 · Революционная трагедия и социальная драма</span>
+                  </div>
+                  <p class="work-summary">Усталый титан Французской революции Жорж Дантон перед гильотиной и трагический бедный солдат Франц Войцек, униженный наукой, армией и нищетой — первая в истории трагедия «маленького человека».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-annette-von-droste-hulshoff">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аннетте фон Дросте-Хюльсхоф</h3>
+                  <p class="author-role">Крупнейшая немецкая поэтесса XIX века и автор «Еврейского бука» · <span class="tabular">1797–1848</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Вестфальская аристократка-затворница, создавшая мрачную, психологически глубокую деревенскую криминальную новеллу о вине и возмездии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-die-judenbuche">
+                  <div class="work-row">
+                    <span class="work-code">НМ-03.03</span>
+                    <a class="work-link" href="./works/droste-hyulshof-evrejskij-buk.html">Еврейский бук («Die Judenbuche»)</a>
+                    <span class="work-meta">1842 · Психологически-детективная повесть</span>
+                  </div>
+                  <p class="work-summary">Фридрих Мергель, выросший среди браконьеров в глухом вестфальском лесу, убивает ростовщика Аарона под старым буком и через двадцать восемь лет скитаний возвращается под ту же ветвь.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-theodor-storm">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Теодор Шторм</h3>
+                  <p class="author-role">Классик севернонемецкого поэтического реализма · <span class="tabular">1817–1888</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист из приморского Хузума в Шлезвиге, соединивший в прозе суровую красоту Северного моря, старые хроники и тревогу перед стихией и суеверием.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-der-schimmelreiter">
+                  <div class="work-row">
+                    <span class="work-code">НМ-03.04</span>
+                    <a class="work-link" href="./works/shtorm-vsadnik-na-belom-kone.html">Всадник на белом коне («Der Schimmelreiter»)</a>
+                    <span class="work-meta">1888 · Повесть-легенда</span>
+                  </div>
+                  <p class="work-summary">Математик и смотритель плотин Хауке Хайен строит новую, невиданно прочную дамбу против ярости Северного моря, сражаясь с косностью крестьян и суеверием о призрачном белом коне.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-theodor-fontane">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Теодор Фонтане</h3>
+                  <p class="author-role">Главный мастер немецкого реалистического романа XIX века · <span class="tabular">1819–1898</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший аптекарь, военный корреспондент и театральный критик в Берлине, взявшийся за роман почти в шестьдесят лет и достигший чеховской мягкости и точности в «Эффи Брист».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-effi-briest">
+                  <div class="work-row">
+                    <span class="work-code">НМ-03.05</span>
+                    <a class="work-link" href="./works/fontane-effi-brist.html">Эффи Брист («Effi Briest»)</a>
+                    <span class="work-meta">1895 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Семнадцатилетнюю жизнерадостную Эффи выдают за педантичного барона Инштеттена в глухой померанский Кессин; давнее увлечение майором Крампасом через шесть лет приводит к дуэли и сломанной жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gerhart-hauptmann">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Герхарт Гауптман</h3>
+                  <p class="author-role">Глава немецкого натурализма, лауреат Нобелевской премии (1912) · <span class="tabular">1862–1946</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Силезский драматург и романист, впервые выведший на сцену коллективный голос голодающих рабочих в пьесе «Ткачи».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-die-weber">
+                  <div class="work-row">
+                    <span class="work-code">НМ-03.06</span>
+                    <a class="work-link" href="./works/gauptman-tkachi.html">Ткачи («Die Weber») и «Перед заходом солнца»</a>
+                    <span class="work-meta">1892 / 1932 · Социальная драма</span>
+                  </div>
+                  <p class="work-summary">Отчаянное восстание силезских ткачей 1844 года против бессердечного фабриканта Дрейсигера — драма без одного главного героя, где главным действующим лицом становится доведённая до края толпа.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="de-mann-hesse-weimar">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1901–1947</p>
+          <h2 class="section-title">Томас Манн, Герман Гессе и Веймарский модернизм</h2>
+          <p class="section-desc">Интеллектуальные вершины XX века: эпопеи Томаса Манна, мистико-философские романы Германа Гессе, берлинский монтаж Альфреда Дёблина, эпический театр Бертольта Брехта, военная правда Ремарка и Ханса Фаллады.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-thomas-mann">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Манн</h3>
+                  <p class="author-role">Величайший немецкий романист XX века, лауреат Нобелевской премии (1929) · <span class="tabular">1875–1955</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Любека и великий антифашистский изгнанник, воплотивший в прозе судьбу немецкой культуры между бюргерством, музыкой, болезнью и демонизмом истории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-buddenbrooks">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.01</span>
+                    <a class="work-link" href="./works/mann-buddenbroki.html">Будденброки («Buddenbrooks»)</a>
+                    <span class="work-meta">1901 · Семейная роман-сага</span>
+                  </div>
+                  <p class="work-summary">История упадка четырёх поколений знатного купеческого дома в Любеке, где вместе с утратой деловой хватки рождается тонкое, хрупкое чувство искусства и музыки.</p>
+                </li>
+                <li class="work-item" id="work-der-zauberberg">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.02</span>
+                    <a class="work-link" href="./works/mann-volshebnaya-gora.html">Волшебная гора («Der Zauberberg»)</a>
+                    <span class="work-meta">1924 · Интеллектуальный роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Молодой инженер Ганс Касторп приезжает на три недели в швейцарский туберкулёзный санаторий Давос и остаётся там на семь лет среди споров Сеттембрини, Нафты и любви к мадам Шоша до самого грома 1914 года.</p>
+                </li>
+                <li class="work-item" id="work-doktor-faustus">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.03</span>
+                    <a class="work-link" href="./works/mann-doktor-faustus.html">Доктор Фаустус («Doktor Faustus»)</a>
+                    <span class="work-meta">1947 · Философско-трагический роман</span>
+                  </div>
+                  <p class="work-summary">Судьба гениального немецкого композитора Адриана Леверкюна, заключившего холодную сделку с дьяволом ради прорыва в музыке — аллегория духовной катастрофы Германии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-heinrich-mann">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генрих Манн</h3>
+                  <p class="author-role">Беспощадный сатирик вильгельмовской Германии и автор «Юности короля Генриха IV» · <span class="tabular">1871–1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Старший брат Томаса Манна, создавший острейший портрет авторитарного обывателя в «Верноподданном» и знаменитую историю учителя Унрата («Голубой ангел»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-der-untertan">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.04</span>
+                    <a class="work-link" href="./works/mann-g-vernopoddannyj.html">Верноподданный («Der Untertan»)</a>
+                    <span class="work-meta">1918 · Политико-сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Трусливый, угодливый перед начальством и деспотичный со слабыми Дидерих Геслинг делает карьеру в кайзеровской Германии — пророческий диагноз психологии будущего фашизма.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hermann-hesse">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Герман Гессе</h3>
+                  <p class="author-role">Лауреат Нобелевской премии 1946 года, духовный наставник XX века · <span class="tabular">1877–1962</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Кальва и швейцарский затворник в Монтаньоле, соединивший немецкий романтизм, юнгианский психоанализ и мудрость Востока («Сиддхартха», «Степной волк», «Игра в бисер»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-der-steppenwolf">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.05</span>
+                    <a class="work-link" href="./works/gesse-stepnoj-volk.html">Степной волк («Der Steppenwolf»)</a>
+                    <span class="work-meta">1927 · Психологически-философский роман</span>
+                  </div>
+                  <p class="work-summary">Интеллигент Гарри Галлер разрывается между мещанским уютом и дикой одинокой природой волка, пока Гермина, Пабло и «Магический театр» не учат его смеху над собой.</p>
+                </li>
+                <li class="work-item" id="work-das-glasperlenspiel">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.06</span>
+                    <a class="work-link" href="./works/gesse-igra-v-biser.html">Игра в бисер («Das Glasperlenspiel»)</a>
+                    <span class="work-meta">1943 · Философский роман-утопия</span>
+                  </div>
+                  <p class="work-summary">Жизнеописание Магистра Игры Иозефа Кнехта в уединённой провинции учёных Касталии будущего, выбирающего живое служение миру вместо блестящей башни из слоновой кости.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alfred-doblin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альфред Дёблин</h3>
+                  <p class="author-role">Мастер урбанистического романа-монтажа, автор «Берлин, Александерплац» · <span class="tabular">1878–1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Берлинский врач-психиатрист в рабочих кварталах, взорвавший традиционное повествование ритмом киномонтажа, рекламы, сводок погоды, библейских образов и живого жаргона.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-berlin-alexanderplatz">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.07</span>
+                    <a class="work-link" href="./works/deblin-berlin-aleksanderplac.html">Берлин, Александерплац («Berlin Alexanderplatz»)</a>
+                    <span class="work-meta">1929 · Модернистский городской роман</span>
+                  </div>
+                  <p class="work-summary">Вышедший из тюрьмы Тегель грузчик Франц Биберкопф тщетно пытается жить «честно» в кипящем предкризисном Берлине конца 1920-х годов среди преступного мира и роковой страсти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bertolt-brecht">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бертольт Брехт</h3>
+                  <p class="author-role">Создатель «эпического театра», великий драматург и поэт XX века · <span class="tabular">1898–1956</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Революционер сцены из Аугсбурга и основатель театра «Берлинер ансамбль», заменивший слепое сопереживание «эффектом очуждения» и критической мыслью зрителя.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mutter-courage-dreigroschenoper">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.08</span>
+                    <a class="work-link" href="./works/breht-mamasha-kurazh.html">Мамаша Кураж и её дети и «Трёхгрошовая опера»</a>
+                    <span class="work-meta">1928 / 1939 · Эпическая драма и зонг-опера</span>
+                  </div>
+                  <p class="work-summary">Маркитантка Анна Фирлинг тащит свой фургон сквозь всю Тридцатилетнюю войну в надежде нажиться на ней, теряя одного за другим троих детей и так и не прозревая.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-erich-maria-remarque">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрих Мария Ремарк</h3>
+                  <p class="author-role">Голос «потерянного поколения», классик антивоенной прозы XX века · <span class="tabular">1898–1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участник Первой мировой войны из Оснабрюка, сказавший миллионам читателей правду о фронтовом братстве, бессмысленной бойне и хрупкости мирной любви.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-im-westen-nichts-neues">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.09</span>
+                    <a class="work-link" href="./works/remark-na-zapadnom-fronte.html">На Западном фронте без перемен и «Три товарища»</a>
+                    <span class="work-meta">1929 / 1936 · Антивоенные романы</span>
+                  </div>
+                  <p class="work-summary">Школьник Пауль Боймер в грязи и газовых атаках окопов Фландрии и послевоенная дружба Роберта Локампа, Отто Кестера, Готтфрида Ленца и Патриции Хольман на фоне наступающего кризиса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hans-fallada">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ханс Фаллада</h3>
+                  <p class="author-role">Мастер сурового социального реализма и автор романа о берлинском сопротивлении · <span class="tabular">1893–1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Рудольф Дитцен, запечатлевший нищету Веймара («Что же дальше, маленький человек?») и за несколько недель до смерти написавший потрясающий роман о тихом бунте против нацизма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jeder-stirbt-fur-sich-allein">
+                  <div class="work-row">
+                    <span class="work-code">НМ-04.10</span>
+                    <a class="work-link" href="./works/fallada-kazhdyj-umiraet-v-odinochku.html">Каждый умирает в одиночку («Jeder stirbt für sich allein»)</a>
+                    <span class="work-meta">1947 · Антифашистский роман</span>
+                  </div>
+                  <p class="work-summary">Основанная на реальном деле Отто и Элизы Хампель история скромной берлинской пары Квангелей, после гибели сына на фронте раскладывающей антигитлеровские открытки в подъездах столицы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="de-gruppe47-boll-grass">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1947–1990</p>
+          <h2 class="section-title">«Литература руин», Генрих Бёлль, Гюнтер Грасс и эпоха двух Германий</h2>
+          <p class="section-desc">Трагический крик Вольфганга Борхерта, нравственная совесть Генриха Бёлля, гротескный эпос Гюнтера Грасса, хроники Уве Йонсона и Зигфрида Ленца, женский голос Кристы Вольф и мировой триумф Патрика Зюскинда.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-wolfgang-borchert">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вольфганг Борхерт</h3>
+                  <p class="author-role">Главный голос «литературы руин» («Trümmerliteratur») · <span class="tabular">1921–1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Гамбургский солдат, приговорённый к казни при нацизме за письма с фронта и умерший в двадцать шесть лет за день до премьеры своей знаменитой пьесы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-draussen-vor-der-tur">
+                  <div class="work-row">
+                    <span class="work-code">НМ-05.01</span>
+                    <a class="work-link" href="./works/borhert-na-ulice-pered-dveryu.html">На улице перед дверью («Draußen vor der Tür»)</a>
+                    <span class="work-meta">1947 · Антивоенная экспрессионистская драма</span>
+                  </div>
+                  <p class="work-summary">Унтер-офицер Бекман возвращается из Сибири в разрушенный Гамбург в противогазных очках, стучится во все двери благополучного тыла и не находит ответа на вопрос о вине за погибших.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-heinrich-boll">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генрих Бёлль</h3>
+                  <p class="author-role">Нобелевский лауреат 1972 года, моральная совесть послевоенной Германии · <span class="tabular">1917–1985</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Кёльна и активный участник «Группы 47», обличавший забвение нацистского прошлого под глянцем «экономического чуда» и отстаивавший достоинство простых людей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ansichten-eines-clowns">
+                  <div class="work-row">
+                    <span class="work-code">НМ-05.02</span>
+                    <a class="work-link" href="./works/bell-glazami-klouna.html">Глазами клоуна («Ansichten eines Clowns») и «Бильярд в половине десятого»</a>
+                    <span class="work-meta">1959 / 1963 · Социально-психологические романы</span>
+                  </div>
+                  <p class="work-summary">Одинокий клоун Ганс Шнир, брошенный возлюбленной Мари и отторгнутый лицемерными боннскими богачами, поёт нищим прохожим на ступенях вокзала.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gunter-grass">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гюнтер Грасс</h3>
+                  <p class="author-role">Мастер барочного гротеска, лауреат Нобелевской премии (1999) · <span class="tabular">1927–2015</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Данцига (Гданьска), скульптор, график и писатель, взорвавший благопристойное молчание 1950-х годов громким барабанным боем Оскара Мацерата.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-die-blechtrommel">
+                  <div class="work-row">
+                    <span class="work-code">НМ-05.03</span>
+                    <a class="work-link" href="./works/grass-zhestyanoj-baraban.html">Жестяной барабан («Die Blechtrommel»)</a>
+                    <span class="work-meta">1959 · Гротескный роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Трёхлетний Оскар Мацерат в Данциге решает больше не расти, чтобы не участвовать в мире взрослых, и барабанит по красно-белой жести сквозь приход нацистов, осаду почты и послевоенный Дюссельдорф.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-siegfried-lenz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Зигфрид Ленц</h3>
+                  <p class="author-role">Классик севернонемецкого романа о долге, фанатизме и совести · <span class="tabular">1926–2014</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Мазурии (Элк), прошедший войну и создавший один из самых глубоких школьных и семейных романов о природе слепого послушания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-deutschstunde">
+                  <div class="work-row">
+                    <span class="work-code">НМ-05.04</span>
+                    <a class="work-link" href="./works/lenc-urok-nemeckogo.html">Урок немецкого («Deutschstunde»)</a>
+                    <span class="work-meta">1968 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">В колонии для трудных подростков Зигги Йепсен пишет сочинение о «Радостях долга» — о своём отце-полицейском из Шлезвига, с тупым усердием преследовавшем старого художника Нансена за «дегенеративное искусство».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-christa-wolf">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Криста Вольф</h3>
+                  <p class="author-role">Крупнейшая писательница ГДР и мастер субъективной памяти XX века · <span class="tabular">1929–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Ландсберга-на-Варте, исследовавшая в «Размышлениях о Кристе Т.», «Образах детства» и «Кассандре» цену компромисса, историю мифа и право женского голоса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kassandra-kindheitsmuster">
+                  <div class="work-row">
+                    <span class="work-code">НМ-05.05</span>
+                    <a class="work-link" href="./works/volf-kassandra.html">Кассандра («Kassandra») и «Образы детства»</a>
+                    <span class="work-meta">1976 / 1983 · Философский мифологический роман</span>
+                  </div>
+                  <p class="work-summary">Троянская пророчица Кассандра у Львиных ворот Микен перед казнью вспоминает, как её родной город шаг за шагом продавал правду ради патриотических иллюзий и войны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-patrick-suskind">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Патрик Зюскинд</h3>
+                  <p class="author-role">Автор всемирного постмодернистского шедевра «Парфюмер» · <span class="tabular">род. 1949</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Баварский затворник, историк по образованию, создавший завораживающую историю гения обоняния во Франции XVIII века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-das-parfum">
+                  <div class="work-row">
+                    <span class="work-code">НМ-05.06</span>
+                    <a class="work-link" href="./works/zyuskind-parfyumer.html">Парфюмер. История одного убийцы («Das Parfum»)</a>
+                    <span class="work-meta">1985 · Постмодернистский исторический роман</span>
+                  </div>
+                  <p class="work-summary">Лишённый собственного запаха Жан-Батист Гренуй, наделённый сверхчеловеческим чутьём на ароматы, стремится создать совершенные духи любви и власти над толпой.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="de-sebald-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1995–XXI век</p>
+          <h2 class="section-title">Объединённая Германия, В. Г. Зебальд и литература XXI века</h2>
+          <p class="section-desc">Меланхолическая поэтика памяти В. Г. Зебальда, нобелевская проза Герты Мюллер, мировой резонанс «Чтеца» Бернхарда Шлинка, дрезденская хроника Уве Телькампа и проза Дженни Эрпенбек, Луца Зайлера и Саши Станишича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-w-g-sebald">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">В. Г. Зебальд</h3>
+                  <p class="author-role">Культовый мастер прозы памяти, документа и меланхолии рубежа XXI века · <span class="tabular">1944–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец баварского Вертаха и профессор литературы в Англии, соединивший путевые заметки, архивные фотографии и историю европейских катастроф в гипнотическую прозу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-austerlitz">
+                  <div class="work-row">
+                    <span class="work-code">НМ-06.01</span>
+                    <a class="work-link" href="./works/zebald-austerlic.html">Аустерлиц («Austerlitz») и «Кольца Сатурна»</a>
+                    <span class="work-meta">1995 / 2001 · Роман-расследование памяти</span>
+                  </div>
+                  <p class="work-summary">Архитектор Жак Аустерлиц, вывезенный ребёнком на «Киндертранспорте» из Праги в Уэльс в 1939 году, на протяжении десятилетий по крупицам восстанавливает память о погибших родителях на вокзалах и в крепостях Европы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bernhard-schlink">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бернхард Шлинк</h3>
+                  <p class="author-role">Юрист и романист, автор всемирно известного романа «Чтец» · <span class="tabular">род. 1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор публичного права и судья, поставивший острейший вопрос о любви, стыде, неграмотности и ответственности «второго поколения» послевоенной Германии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-der-vorleser">
+                  <div class="work-row">
+                    <span class="work-code">НМ-06.02</span>
+                    <a class="work-link" href="./works/shlink-chtec.html">Чтец («Der Vorleser»)</a>
+                    <span class="work-meta">1995 · Психологически-нравственный роман</span>
+                  </div>
+                  <p class="work-summary">Пятнадцатилетний школьник Михаэль Берг влюбляется в загадочную тридцатишестилетнюю Ханну Шмитц, которой читает вслух классику, а через годы видит её на скамье подсудимых как бывшую надзирательницу концлагеря.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-herta-muller">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Герта Мюллер</h3>
+                  <p class="author-role">Лауреат Нобелевской премии по литературе 2009 года · <span class="tabular">род. 1953</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка немецкого Баната в Румынии, эмигрировавшая в Берлин в 1987 году и создавшая поэтику «чужого взгляда», страха и сопротивления диктатуре.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-atemschaukel">
+                  <div class="work-row">
+                    <span class="work-code">НМ-06.03</span>
+                    <a class="work-link" href="./works/myuller-kacheli-dyhaniya.html">Качели дыхания («Atemschaukel»)</a>
+                    <span class="work-meta">2009 · Поэтико-документальный роман</span>
+                  </div>
+                  <p class="work-summary">Юного трансильванского немца Леопольда Ауберга в январе 1945 года депортируют в донецкий трудовой лагерь — пять лет голода, «ангела голода» и хрупкого выживания через поэзию слов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uwe-tellkamp">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уве Телькамп</h3>
+                  <p class="author-role">Летописец позднесоветского Дрездена, лауреат Немецкой книжной премии (2008) · <span class="tabular">род. 1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач и романист из Дрездена, создавший грандиозную в духе Томаса Манна хронику заката ГДР в кругу образованного дрезденского сословия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-der-turm">
+                  <div class="work-row">
+                    <span class="work-code">НМ-06.04</span>
+                    <a class="work-link" href="./works/telkamp-bashnya.html">Башня («Der Turm»)</a>
+                    <span class="work-meta">2008 · Эпический роман-хроника</span>
+                  </div>
+                  <p class="work-summary">Семь последних лет ГДР глазами хирурга Рихарда Хоффманна и его сына-школьника Кристиана на виллах дрезденского «Белого оленя» накануне крушения Берлинской стены в ноябре 1989 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jenny-erpenbeck">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дженни Эрпенбек</h3>
+                  <p class="author-role">Лауреат Международной Букеровской премии 2024 года, мастер историко-психологической прозы · <span class="tabular">род. 1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница и оперный режиссёр из Восточного Берлина, исследующая судьбы XX–XXI веков через образы дома на озере («Канун»), беженцев и любви на руинах эпох.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-heimsuchung-kairos">
+                  <div class="work-row">
+                    <span class="work-code">НМ-06.05</span>
+                    <a class="work-link" href="./works/erpenbek-kajros.html">Кайрос («Kairos») и «Канун» («Heimsuchung»)</a>
+                    <span class="work-meta">2008 / 2021 · Психологические романы времени</span>
+                  </div>
+                  <p class="work-summary">Страстный и мучительный роман юной студентки Катарины и пятидесятитрехлетнего писателя Ганса в Восточном Берлине 1986–1990 годов на фоне краха социалистического государства.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lutz-seiler">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луц Зайлер</h3>
+                  <p class="author-role">Поэт, эссеист и лауреат Немецкой книжной премии и Премии Бюхнера · <span class="tabular">род. 1963</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Тюрингии, прославившийся поэтическим романом «Крузо» об утопии свободы на балтийском острове Хиддензе накануне осени 1989 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kruso">
+                  <div class="work-row">
+                    <span class="work-code">НМ-06.06</span>
+                    <a class="work-link" href="./works/zajler-kruzo.html">Крузо («Kruso»)</a>
+                    <span class="work-meta">2014 · Поэтико-философский роман</span>
+                  </div>
+                  <p class="work-summary">Студент Эдгар Бендлер после гибели любимой устраивается мойщиком посуды на остров Хиддензе, где таинственный бунтарь Крузо спасает «потерпевших кораблекрушение» негласной республикой духа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sasa-stanisic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Саша Станишич</h3>
+                  <p class="author-role">Голос нового многоязычного поколения, лауреат Немецкой книжной премии (2019) · <span class="tabular">род. 1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец боснийского Вышеграда, бежавший от войны с семьёй в Гейдельберг в четырнадцать лет и ставший одним из самых остроумных и тёплых стилистов современной Германии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-herkunft">
+                  <div class="work-row">
+                    <span class="work-code">НМ-06.07</span>
+                    <a class="work-link" href="./works/stanishich-proishozhdenie.html">Происхождение («Herkunft»)</a>
+                    <span class="work-meta">2019 · Автобиографический роман-мозаика</span>
+                  </div>
+                  <p class="work-summary">Трогательное, ироничное и нелинейное исследование памяти, корней, бабушки с деменцией в Боснии, заправок на окраине Гейдельберга и права самому придумывать свои концовки.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание немецкой литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
