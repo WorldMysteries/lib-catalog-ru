@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог польской классической литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 19 писателей · 36 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог польской классической литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от польского Ренессанса и великого романтизма Мицкевича до реализма Пруса и Сенкевича, авангарда и философии XX века.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#pl-renaissance-enlightenment">Раздел I: Ренессанс, барокко и Просвещение</a>
+        <a href="#pl-romanticism">Раздел II: Польский романтизм</a>
+        <a href="#pl-positivism-realism">Раздел III: Позитивизм и великий польский реализм</a>
+        <a href="#pl-young-poland">Раздел IV: «Молодая Польша» и драма рубежа веков</a>
+        <a href="#pl-interwar-grotesque">Раздел V: Межвоенный авангард и гротеск</a>
+        <a href="#pl-late-twentieth-century">Раздел VI: Классика XX века и философская фантастика</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="pl-renaissance-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1560–1815 годы</p>
+          <h2 class="section-title">Ренессанс, барокко и Просвещение</h2>
+          <p class="section-desc">Формирование польского литературного языка, лирика Возрождения, сатирическая проза Просвещения и знаменитый шкатулочный роман рубежа XVIII–XIX столетий.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-kochanowski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ян Кохановский</h3>
+                  <p class="author-role">Родоначальник польской ренессансной поэзии · <span class="tabular">1530–1584</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Крупнейший поэт славянского Возрождения, поднявший польское стихосложение на уровень античной и общеевропейской лирики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-treny">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-01.01</span>
+                    <a class="work-link" href="./works/kochanowski-treny.html">Трены (Плачи)</a>
+                    <span class="work-meta">1580 · Лирический цикл</span>
+                  </div>
+                  <p class="work-summary">Цикл из девятнадцати скорбных элегий, посвящённых памяти рано умершей дочери Уршули — вершина европейской поэзии XVI века.</p>
+                </li>
+                <li class="work-item" id="work-fraszki">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-01.02</span>
+                    <a class="work-link" href="./works/kochanowski-fraszki.html">Фрашки</a>
+                    <span class="work-meta">1584 · Эпиграммы и миниатюры</span>
+                  </div>
+                  <p class="work-summary">Более трёхсот остроумных, философских и застольных стихотворений о человеческой природе, дружбе, природе и превратностях судьбы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-krasicki">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Игнацы Красицкий</h3>
+                  <p class="author-role">«Князь поэтов» польского Просвещения · <span class="tabular">1735–1801</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Сатирик, баснописец и автор первого польского романа нового времени, соединивший просветительский разум с изящной иронией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-doswiadczynski">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-01.03</span>
+                    <a class="work-link" href="./works/krasicki-dosvyadchinskiy.html">Приключения Николая Досвядчинского</a>
+                    <span class="work-meta">1776 · Роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Сатирико-утопический роман о молодом шляхтиче, прошедшем путь от пустых светских увлечений и парижских долгов до мудрого острова Нипу.</p>
+                </li>
+                <li class="work-item" id="work-bajki-i-przypowiesci">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-01.04</span>
+                    <a class="work-link" href="./works/krasicki-basni.html">Басни и притчи</a>
+                    <span class="work-meta">1779 · Сборник басен</span>
+                  </div>
+                  <p class="work-summary">Афористичные, предельно лаконичные басни о тщеславии, власти, хитрости и здравом смысле.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-potocki">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ян Потоцкий</h3>
+                  <p class="author-role">Учёный, путешественник и мастер фантастической прозы · <span class="tabular">1761–1815</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Аристократ и этнограф эпохи Просвещения, создавший легендарный многослойный роман «шкатулочной» композиции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-manuscrit-trouve-a-saragosse">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-01.05</span>
+                    <a class="work-link" href="./works/potocki-rukopis-saragosa.html">Рукопись, найденная в Сарагосе</a>
+                    <span class="work-meta">1805 · Роман в новеллах</span>
+                  </div>
+                  <p class="work-summary">Шестьдесят шесть дней странствий капитана Альфонса ван Вордена по горам Сьерра-Морены, где переплетаются истории разбойников, каббалистов, цыган и призраков.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pl-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1822–1866 годы</p>
+          <h2 class="section-title">Польский романтизм</h2>
+          <p class="section-desc">Золотая эпоха национальной поэзии и драмы: пророки польского романтизма Мицкевич, Словацкий, Красиньский и философская лирика Норвида.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mickiewicz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Адам Мицкевич</h3>
+                  <p class="author-role">Величайший польский поэт, глава романтизма · <span class="tabular">1798–1855</span></p>
+                </div>
+                <span class="author-count">4 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, драматург и мыслитель, создавший национальную эпическую поэму и определивший духовный горизонт польской литературы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pan-tadeusz">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-02.01</span>
+                    <a class="work-link" href="./works/mickiewicz-pan-tadeusz.html">Пан Тадеуш</a>
+                    <span class="work-meta">1834 · Эпическая поэма в стихах</span>
+                  </div>
+                  <p class="work-summary">Светлая панорама уходящей шляхетской Литвы 1811–1812 годов: усадьба Соплицово, распря с родом Горешко, охота, любовь Тадеуша и Зоси, надежды эпохи Наполеона.</p>
+                </li>
+                <li class="work-item" id="work-dziady">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-02.02</span>
+                    <a class="work-link" href="./works/mickiewicz-dzyady.html">Дзяды</a>
+                    <span class="work-meta">1832 · Романтическая драма</span>
+                  </div>
+                  <p class="work-summary">Мистическая и гражданская поэма-драма, названная в честь древнего поминального обряда — о любви, бунте Конрада и судьбе народа.</p>
+                </li>
+                <li class="work-item" id="work-sonety-krymskie">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-02.03</span>
+                    <a class="work-link" href="./works/mickiewicz-krymskie-sonety.html">Крымские сонеты</a>
+                    <span class="work-meta">1826 · Цикл сонетов</span>
+                  </div>
+                  <p class="work-summary">Восемнадцать сонетов, рождённых путешествием по Крыму: аккерманские степи, Бахчисарай, Чатыр-Даг и тоска изгнанника по родине.</p>
+                </li>
+                <li class="work-item" id="work-konrad-wallenrod">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-02.04</span>
+                    <a class="work-link" href="./works/mickiewicz-konrad-wallenrod.html">Конрад Валленрод</a>
+                    <span class="work-meta">1828 · Поэма</span>
+                  </div>
+                  <p class="work-summary">Трагическая историческая поэма о литвине, ставшем магистром Тевтонского ордена ради спасения родной земли ценой собственной чести.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-slowacki">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юлиуш Словацкий</h3>
+                  <p class="author-role">Виртуоз романтической драмы и поэтического слова · <span class="tabular">1809–1849</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Один из «трёх пророков» польского романтизма, мастер трагедии, мифа, сказочной символики и иронической поэмы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kordian">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-02.05</span>
+                    <a class="work-link" href="./works/slowacki-kordian.html">Кордиан</a>
+                    <span class="work-meta">1834 · Драма</span>
+                  </div>
+                  <p class="work-summary">Драма о поколении Ноябрьского восстания: духовные искания юного героя от романтической хандры к трагическому одинокому подвигу.</p>
+                </li>
+                <li class="work-item" id="work-balladyna">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-02.06</span>
+                    <a class="work-link" href="./works/slowacki-balladina.html">Балладина</a>
+                    <span class="work-meta">1839 · Трагедия</span>
+                  </div>
+                  <p class="work-summary">Фантастическая трагедия в духе шекспировских хроник и народной сказки о жажде власти, преступлении и возмездии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-krasinski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Зыгмунт Красиньский</h3>
+                  <p class="author-role">Философский драматург и мыслитель · <span class="tabular">1812–1859</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Третий великий поэт-пророк польского романтизма, создавший пророческую драму о столкновении аристократии и революции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nie-boska-komedia">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-02.07</span>
+                    <a class="work-link" href="./works/krasinski-nebozhestvennaya-komediya.html">Небожественная комедия</a>
+                    <span class="work-meta">1835 · Философская драма</span>
+                  </div>
+                  <p class="work-summary">Драма о трагедии поэта и неизбежном крушении старого мира в битве лагеря графа Генрика и вождя восставших Панкратия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-norwid">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Циприан Камиль Норвид</h3>
+                  <p class="author-role">Поэт-философ и предтеча модернизма · <span class="tabular">1821–1883</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Непризнанный при жизни гений позднего романтизма, открытый заново в XX веке благодаря интеллектуальной глубине и лаконичности стиха.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vade-mecum">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-02.08</span>
+                    <a class="work-link" href="./works/norwid-vade-mecum.html">Vade-mecum (Иди за мной)</a>
+                    <span class="work-meta">1866 · Поэтический цикл</span>
+                  </div>
+                  <p class="work-summary">Сто стихотворений о труде, памяти, молчании, искусстве и достоинстве человека перед лицом истории.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pl-positivism-realism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1873–1900 годы</p>
+          <h2 class="section-title">Позитивизм и великий польский реализм</h2>
+          <p class="section-desc">Социально-психологическая панорама Варшавы, исторические романы-фрески и проза нравственного труда второй половины XIX века.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-prus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Болеслав Прус (Александр Гловацкий)</h3>
+                  <p class="author-role">Классик польского реалистического романа · <span class="tabular">1847–1912</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, журналист и психолог, создавший непревзойдённый портрет Варшавы XIX века и монументальный исторический роман о Древнем Египте.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lalka">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-03.01</span>
+                    <a class="work-link" href="./works/prus-kukla.html">Кукла</a>
+                    <span class="work-meta">1890 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">История варшавского купца Станислава Вокульского, его трагической любви к аристократке Изабелле Ленцкой и картины жизни всех слоёв Польши 1878–1879 годов.</p>
+                </li>
+                <li class="work-item" id="work-faraon">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-03.02</span>
+                    <a class="work-link" href="./works/prus-faraon.html">Фараон</a>
+                    <span class="work-meta">1895 · Историко-философский роман</span>
+                  </div>
+                  <p class="work-summary">Драма молодого фараона Рамсеса XIII и его столкновение с могущественной кастой жрецов — притча о механизме государственной власти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sienkiewicz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генрик Сенкевич</h3>
+                  <p class="author-role">Мастер исторического эпоса, лауреат Нобелевской премии · <span class="tabular">1846–1916</span></p>
+                </div>
+                <span class="author-count">4 произв.</span>
+              </header>
+              <p class="author-bio">Автор знаменитой исторической «Трилогии» и всемирно известного романа о раннем христианстве в Риме, принёсшего ему Нобелевскую премию 1905 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-quo-vadis">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-03.03</span>
+                    <a class="work-link" href="./works/sienkiewicz-kamo-gryadeshi.html">Камо грядеши (Quo vadis)</a>
+                    <span class="work-meta">1896 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Любовь римского патриция Марка Виниция и христианки Лигии на фоне безумного двора Нерона и пожара Рима.</p>
+                </li>
+                <li class="work-item" id="work-ogniem-i-mieczem">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-03.04</span>
+                    <a class="work-link" href="./works/sienkiewicz-ognem-i-mechom.html">Огнём и мечом</a>
+                    <span class="work-meta">1884 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Первая часть знаменитой «Трилогии» — события середины XVII века, судьба шляхтича Яна Скшетуского, Заглобы и Елены Курцевич.</p>
+                </li>
+                <li class="work-item" id="work-potop">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-03.05</span>
+                    <a class="work-link" href="./works/sienkiewicz-potop.html">Потоп</a>
+                    <span class="work-meta">1886 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">История духовного перерождения буйного хорунжего Анджея Кмицица во время шведского нашествия на Речь Посполитую.</p>
+                </li>
+                <li class="work-item" id="work-krzyzacy">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-03.06</span>
+                    <a class="work-link" href="./works/sienkiewicz-krestonoscy.html">Крестоносцы</a>
+                    <span class="work-meta">1900 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Средневековый рыцарский эпос, завершающийся величественной картиной Грюнвальдской битвы 1410 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-orzeszkowa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Элиза Ожешко</h3>
+                  <p class="author-role">Писательница гуманизма и поэзии родного края · <span class="tabular">1841–1910</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка эпохи позитивизма, соединившая социально-нравственную проблематику с эпической картиной жизни Принеманья.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nad-niemnem">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-03.07</span>
+                    <a class="work-link" href="./works/orzeszkowa-nad-nemanom.html">Над Неманом</a>
+                    <span class="work-meta">1888 · Роман</span>
+                  </div>
+                  <p class="work-summary">История преодоления сословной отчуждённости между усадьбой Корчинских и трудовой шляхетской околицей Богатыровичей.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pl-young-poland">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1899–1924 годы</p>
+          <h2 class="section-title">«Молодая Польша» и драма рубежа веков</h2>
+          <p class="section-desc">Неоромантический символизм, крестьянский эпос Нобелевского лауреата Реймонта и национальная символическая драма Выспяньского.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-wyspianski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Станислав Выспяньский</h3>
+                  <p class="author-role">Драматург, поэт и художник-визионер · <span class="tabular">1869–1907</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ключевая фигура краковского модерна, обновивший польский театр соединением народного обряда, сатиры и символического видения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wesele">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-04.01</span>
+                    <a class="work-link" href="./works/wyspianski-svadba.html">Свадьба</a>
+                    <span class="work-meta">1901 · Символическая драма</span>
+                  </div>
+                  <p class="work-summary">Свадьба краковского поэта и крестьянской девушки в Броновицах, на которую в полночь являются призраки национальной истории и Соломенный Сноп.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-reymont">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Владислав Станислав Реймонт</h3>
+                  <p class="author-role">Автор крестьянской эпопеи, лауреат Нобелевской премии · <span class="tabular">1867–1925</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист мощного эпического дыхания, удостоенный Нобелевской премии 1924 года за четырёхтомник «Мужики».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-chlopi">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-04.02</span>
+                    <a class="work-link" href="./works/reymont-muzhiki.html">Мужики</a>
+                    <span class="work-meta">1909 · Роман-эпопея в 4 томах</span>
+                  </div>
+                  <p class="work-summary">Четыре времени года («Осень», «Зима», «Весна», «Лето») в деревне Липцы — страсти семьи Борын, Ягны и ритм вечного крестьянского труда.</p>
+                </li>
+                <li class="work-item" id="work-ziemia-obiecana">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-04.03</span>
+                    <a class="work-link" href="./works/reymont-zemlya-obetovannaya.html">Земля обетованная</a>
+                    <span class="work-meta">1899 · Социальный роман</span>
+                  </div>
+                  <p class="work-summary">Динамичная хроника промышленной Лодзи конца XIX века, где трое друзей — поляк, немец и еврей — строят фабрику ценой утраты идеалов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-zeromski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стефан Жеромский</h3>
+                  <p class="author-role">«Совесть польской литературы» рубежа веков · <span class="tabular">1864–1925</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик лирико-драматического склада, писавший о нравственном выборе интеллигенции, исторических испытаниях и судьбе возрождённой страны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-przedwiosnie">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-04.04</span>
+                    <a class="work-link" href="./works/zeromski-kanun-vesny.html">Канун весны</a>
+                    <span class="work-meta">1924 · Политико-психологический роман</span>
+                  </div>
+                  <p class="work-summary">История Цезаря Барыки, возвращающегося с Кавказа в молодую Польшу 1920-х годов в поисках мифических «стеклянных домов» и справедливости.</p>
+                </li>
+                <li class="work-item" id="work-popioly">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-04.05</span>
+                    <a class="work-link" href="./works/zeromski-pepel.html">Пепел</a>
+                    <span class="work-meta">1904 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Широкая эпопея об участии польских легионов в наполеоновских походах от Италии и Испании до 1812 года.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pl-interwar-grotesque">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1918–1942 годы</p>
+          <h2 class="section-title">Межвоенный авангард и гротеск</h2>
+          <p class="section-desc">Мифопоэтическая проза Бруно Шульца, интеллектуальный гротеск Гомбровича и блистательная поэзия варшавской группы «Скамандр».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-schulz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бруно Шульц</h3>
+                  <p class="author-role">Мастер мифологической прозы и метафоры · <span class="tabular">1892–1942</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и график из Дрогобыча, превративший провинциальный галицийский городок и фигуру отца в волшебную вселенную памяти и детства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sklepy-cynamonowe">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-05.01</span>
+                    <a class="work-link" href="./works/schulz-korichnye-lavki.html">Коричные лавки</a>
+                    <span class="work-meta">1934 · Цикл новелл</span>
+                  </div>
+                  <p class="work-summary">Пятнадцать поэтичных рассказов о детстве, отцовском магазине тканей, зимних ночах и таинственных коричных лавках старого города.</p>
+                </li>
+                <li class="work-item" id="work-sanatorium-pod-klepsydra">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-05.02</span>
+                    <a class="work-link" href="./works/schulz-sanatoriy-pod-klepsidroy.html">Санаторий под клепсидрой</a>
+                    <span class="work-meta">1937 · Сборник повестей и рассказов</span>
+                  </div>
+                  <p class="work-summary">Фантасмагорическое исследование времени, возвращения прошлого, «Книги» и ускользающей реальности.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gombrowicz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Витольд Гомбрович</h3>
+                  <p class="author-role">Классик философского гротеска и «антиформы» · <span class="tabular">1904–1969</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых оригинальных европейских писателей XX века, исследовавший власть социальной «формы» и незрелости над личностью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ferdydurke">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-05.03</span>
+                    <a class="work-link" href="./works/gombrowicz-ferdidurke.html">Фердидурке</a>
+                    <span class="work-meta">1937 · Авангардный роман</span>
+                  </div>
+                  <p class="work-summary">Абсурдистская история тридцатилетнего писателя Юзефа, которого строгий профессор вновь усаживает за школьную парту.</p>
+                </li>
+                <li class="work-item" id="work-kosmos">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-05.04</span>
+                    <a class="work-link" href="./works/gombrowicz-kosmos.html">Космос</a>
+                    <span class="work-meta">1965 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Интеллектуальный «антидетектив» о том, как человеческое сознание выстраивает зловещий смысл из случайных совпадений.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tuwim">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юлиан Тувим</h3>
+                  <p class="author-role">Поэт группы «Скамандр», мастер слова и сатиры · <span class="tabular">1894–1953</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых любимых польских лириков XX века, виртуоз стихотворной музыки, городской лирики и переводчик русской классики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bal-w-operze">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-05.05</span>
+                    <a class="work-link" href="./works/tuwim-bal-v-opere.html">Бал в опере</a>
+                    <span class="work-meta">1936 · Сатирическая поэма</span>
+                  </div>
+                  <p class="work-summary">Стремительный, гротескный ритм предвоенного мира, где светский маскарад превращается в апокалиптическую фантасмагорию.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pl-late-twentieth-century">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1953–1986 годы</p>
+          <h2 class="section-title">Классика XX века и философская фантастика</h2>
+          <p class="section-desc">Мировое признание польской интеллектуальной литературы: философская фантастика Станислава Лема и поэзия Нобелевских лауреатов Милоша и Шимборской.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-lem">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Станислав Лем</h3>
+                  <p class="author-role">Философ, футуролог и классик мировой фантастики · <span class="tabular">1921–2006</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Самый переводимый польский писатель XX века, поставивший в центре научной фантастики проблему предела человеческого познания и контакта с Иным.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-solaris">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-06.01</span>
+                    <a class="work-link" href="./works/lem-solyaris.html">Солярис</a>
+                    <span class="work-meta">1961 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Психолог Крис Кельвин прибывает на орбитальную станцию над мыслящим Океаном Соляриса, который материализует самые сокровенные воспоминания людей.</p>
+                </li>
+                <li class="work-item" id="work-cyberiada">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-06.02</span>
+                    <a class="work-link" href="./works/lem-kiberiada.html">Кибериада</a>
+                    <span class="work-meta">1965 · Философские сказки-притчи</span>
+                  </div>
+                  <p class="work-summary">Остроумные похождения великих конструкторов Трурля и Клапауция в галактике роботов — сатира на науку, власть и амбиции разума.</p>
+                </li>
+                <li class="work-item" id="work-powrot-z-gwiazd">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-06.03</span>
+                    <a class="work-link" href="./works/lem-vozvrashchenie-so-zvezd.html">Возвращение со звёзд</a>
+                    <span class="work-meta">1961 · Роман</span>
+                  </div>
+                  <p class="work-summary">Астронавт Эл Брегг возвращается на Землю спустя 127 лет земного времени в умиротворённый, но совершенно чуждый ему мир.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-milosz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чеслав Милош</h3>
+                  <p class="author-role">Поэт, эссеист и лауреат Нобелевской премии 1980 года · <span class="tabular">1911–2004</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и поэт, соединивший память о Вильно и Литве с глубоким анализом судьбы интеллигенции в XX столетии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dolina-issy">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-06.04</span>
+                    <a class="work-link" href="./works/milosz-dolina-issy.html">Долина Иссы</a>
+                    <span class="work-meta">1955 · Роман</span>
+                  </div>
+                  <p class="work-summary">Лирический роман о детстве мальчика Томаша на берегах литовской реки, о природе, тайнах бытия и первом опыте добра и зла.</p>
+                </li>
+                <li class="work-item" id="work-zniewolony-umysl">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-06.05</span>
+                    <a class="work-link" href="./works/milosz-poraboshchenny-razum.html">Порабощённый разум</a>
+                    <span class="work-meta">1953 · Философская эссеистика</span>
+                  </div>
+                  <p class="work-summary">Классическое исследование психологии интеллектуала под давлением тоталитарной идеологии и «кетмана».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-szymborska">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вислава Шимборская</h3>
+                  <p class="author-role">Поэтесса и лауреат Нобелевской премии 1996 года · <span class="tabular">1923–2012</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер ироничной и пронзительно ясной философской лирики, находившая космическую глубину в повседневных мгновениях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ludzie-na-moscie">
+                  <div class="work-row">
+                    <span class="work-code">ПЛ-06.06</span>
+                    <a class="work-link" href="./works/szymborska-lyudi-na-mostu.html">Люди на мосту</a>
+                    <span class="work-meta">1986 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Поздний сборник стихов о времени, искусстве, хрупкости истории и умении удивляться обычному дню.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание польской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

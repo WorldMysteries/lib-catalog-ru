@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог японской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 27 писателей · 36 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог японской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от «Повести о Гэндзи» и хайку Басё до Сосэки, Акутагавы, нобелевских вершин Кавабаты и Оэ, Мисимы, Кобо Абэ и Харуки Мураками.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#jp-nara-heian">Раздел I: Эпоха Нара и Хэйан: антологии, моногатари и дзуйхицу</a>
+        <a href="#jp-kamakura-muromachi">Раздел II: Воинский эпос Камакура и буддийская эстетика «югэн»</a>
+        <a href="#jp-edo-period">Раздел III: Эпоха Эдо: хайку Басё, городская проза и театр</a>
+        <a href="#jp-meiji-taisho">Раздел IV: Эпоха Мэйдзи и Тайсё: новый роман и гений новеллы</a>
+        <a href="#jp-postwar-nobel">Раздел V: Послевоенный прорыв и Нобелевские вершины</a>
+        <a href="#jp-contemporary">Раздел VI: От Кэндзабуро Оэ до прозы XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="jp-nara-heian">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · VIII–XII века</p>
+          <h2 class="section-title">Эпоха Нара и Хэйан: антологии, моногатари и дзуйхицу</h2>
+          <p class="section-desc">Истоки японской эстетики «моно-но аварэ» («печального очарования вещей»): древнейшая поэзия танка, первый великий психологический роман мира и придворные записки «вслед за кистью».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-manyoshu-anthology">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антология «Манъёсю» (Какиномото-но Хитомаро и др.)</h3>
+                  <p class="author-role">Древнейший и крупнейший свод японской поэзии вака · <span class="tabular">VIII век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Составленная при участии поэта Отомо-но Якамоти антология из 4516 песен — от императорских гимнов до песен пограничников и крестьян эпохи Нара.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-manyoshu-leaves">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-01.01</span>
+                    <a class="work-link" href="./works/manyoshu-sobranie-miriad-listev.html">Манъёсю («Собрание мириад листьев»)</a>
+                    <span class="work-meta">ок. 759 · Поэтическая антология (танка и тёка)</span>
+                  </div>
+                  <p class="work-summary">Двадцать свитков классической лирики об утренней дымке над горами Ямато, разлуке, верности и мимолетности цветущей сливы и вишни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-murasaki-shikibu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мурасаки Сикибу</h3>
+                  <p class="author-role">Придворная дама Хэйана, автор первого великого романа мира · <span class="tabular">ок. 973 – ок. 1014</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница и поэтесса при дворе императрицы Сёси, создавшая панорамную и тончайшую психологическую хронику эпохи Хэйан.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tale-of-genji">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-01.02</span>
+                    <a class="work-link" href="./works/murasaki-povest-o-gendzi.html">Повесть о Гэндзи («Гэндзи-моногатари»)</a>
+                    <span class="work-meta">ок. 1001–1008 · Психологический роман-моногатари</span>
+                  </div>
+                  <p class="work-summary">Пятьдесят четыре главы о судьбе «блистательного» принца Хикару Гэндзи и его потомков: дворцовые страсти, музыка, поэзия и глубокое размышление о хрупкости красоты и карме.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sei-shonagon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сэй-Сёнагон</h3>
+                  <p class="author-role">Основоположница жанра эссе «дзуйхицу» · <span class="tabular">ок. 966 – ок. 1017</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Остроумная и наблюдательная придворная дама при императрице Тэйси, прославившаяся безупречным вкусом и ироническим взглядом на мир.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pillow-book">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-01.03</span>
+                    <a class="work-link" href="./works/sei-shonagon-zapiski-u-izgolovya.html">Записки у изголовья («Макура-но соси»)</a>
+                    <span class="work-meta">ок. 1002 · Дзуйхицу (эссе и зарисовки)</span>
+                  </div>
+                  <p class="work-summary">Списки «того, что радует сердце», «вещей, вызывающих досаду», портреты придворных нравов и поэтичные наблюдения за сменой времён года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ki-no-tsurayuki">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ки-но Цураюки</h3>
+                  <p class="author-role">Поэт, критик и создатель первой дневниковой прозы на кане · <span class="tabular">872–945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Главный составитель императорской антологии «Кокинвакасю», сформулировавший теорию японского стиха и открывший путь женской и мужской лирической прозе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tosa-diary">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-01.04</span>
+                    <a class="work-link" href="./works/tsurayuki-dnevnik-iz-tosa.html">Дневник путешествия из Тоса («Тоса-никки»)</a>
+                    <span class="work-meta">ок. 935 · Лирический дневник-никки</span>
+                  </div>
+                  <p class="work-summary">Поэтическое описание пятидесятипятидневного морского пути возвращения из провинции Тоса в столицу, проникнутое скорбью об умершей дочери.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="jp-kamakura-muromachi">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · XII–XV века</p>
+          <h2 class="section-title">Воинский эпос Камакура и буддийская эстетика «югэн»</h2>
+          <p class="section-desc">Крушение самурайских родов и тема бренности всего сущего в «Повести о доме Тайра», отшельнические раздумья Тёмэя и Кэнко, а также театр Но Дзэами.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-heike-monogatari">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Повесть о доме Тайра («Хэйкэ-моногатари»)</h3>
+                  <p class="author-role">Вершина средневекового японского военного эпоса (гунки) · <span class="tabular">XIII век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Эпос, распевавшийся слепыми сказителями-бива-хоси под аккомпанемент лютни бива о возвышении и гибели могущественного клана Тайра.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tale-of-heike">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-02.01</span>
+                    <a class="work-link" href="./works/heike-povest-o-dome-tajra.html">Повесть о доме Тайра</a>
+                    <span class="work-meta">XIII век · Воинский эпос</span>
+                  </div>
+                  <p class="work-summary">Величественная хроника междоусобных войн Тайра и Минамото, пронизанная буддийской мыслью о непостоянстве власти, славы и жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kamo-no-chomei">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Камо-но Тёмэй</h3>
+                  <p class="author-role">Поэт-отшельник и классик дзуйхицу эпохи Камакура · <span class="tabular">1155–1216</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный, переживший пожары, голод и землетрясения столицы и удалившийся в маленькую деревянную хижину на горе Хино.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hojoki">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-02.02</span>
+                    <a class="work-link" href="./works/chomei-zapiski-iz-keli.html">Записки из кельи («Ходзёки»)</a>
+                    <span class="work-meta">1212 · Философское эссе</span>
+                  </div>
+                  <p class="work-summary">Потрясающая летопись бедствий старого Киото и гимн добровольной простоте в келье площадью десять футов на десять.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yoshida-kenko">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ёсида Кэнко (Кэнко-хоси)</h3>
+                  <p class="author-role">Мастер японской философской миниатюры и эстетики «ваби-саби» · <span class="tabular">ок. 1283 – ок. 1350</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший придворный гвардеец и буддийский монах, сформулировавший классические каноны красоты незавершённого и тихого уединения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tsurezuregusa">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-02.03</span>
+                    <a class="work-link" href="./works/kenko-zapiski-ot-skuki.html">Записки от скуки («Цурэдзурэгуса»)</a>
+                    <span class="work-meta">ок. 1330 · Дзуйхицу (243 миниатюры)</span>
+                  </div>
+                  <p class="work-summary">Тончайшие наблюдения о быстротечности молодости, ценности недосказанности, красоте луны в просвете туч и скромном быте.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-zeami-motokiyo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дзэами Мотокиё</h3>
+                  <p class="author-role">Классик театра Но и великий теоретик сценической красоты · <span class="tabular">1363–1443</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург, актёр и мыслитель эпохи Муромати, создавший теорию «тайного цветка» и сокровенной глубины «югэн».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fushikaden-noh">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-02.04</span>
+                    <a class="work-link" href="./works/zeami-predanie-o-cvetke.html">Предание о цветке стиля («Фусикадэн») и пьесы Но</a>
+                    <span class="work-meta">1400–1418 · Трактат о театре и драматургия</span>
+                  </div>
+                  <p class="work-summary">Тайное руководство мастерства сцены о том, как сохранить «цветок» вдохновения от юности до старости, и поэтические пьесы-призраки («Ацумори», «Мацукадзэ»).</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="jp-edo-period">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · XVII–XVIII века</p>
+          <h2 class="section-title">Эпоха Эдо: хайку Басё, городская проза и театр</h2>
+          <p class="section-desc">Поэтическое преображение трёхстишия хайку великим странником Мацуо Басё, новеллы «весёлых кварталов» Ихара Сайкаку, драмы Тикамацу и таинственная проза Акинари.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-matsuo-basho">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мацуо Басё</h3>
+                  <p class="author-role">Великий мастер и реформатор поэзии хайку · <span class="tabular">1644–1694</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и странник, превративший шутливое трёхстишие рэнга в высокое искусство созерцания вечности в одном мгновении природы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-narrow-road-to-deep-north">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-03.01</span>
+                    <a class="work-link" href="./works/basho-po-tropinkam-severa.html">По тропинкам Севера («Оку-но хосомити») и хокку</a>
+                    <span class="work-meta">1689–1694 · Хайбун (путевая проза и стихи)</span>
+                  </div>
+                  <p class="work-summary">Лирический дневник пятимесячного пешего странствия по северному Хонсю, пронизанный хайку о старых полях битв, цикадах в скалах и осеннем ветре.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ihara-saikaku">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ихара Сайкаку</h3>
+                  <p class="author-role">Создатель городской реалистической прозы «укиё-дзоси» · <span class="tabular">1642–1693</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Осакский поэт и новеллист, с дерзким остроумием показавший мир купцов, ремесленников, страсти и денег новой эпохи Эдо.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-five-women-who-loved-love">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-03.02</span>
+                    <a class="work-link" href="./works/saikaku-pyat-zhenschin.html">Пять женщин, предавшихся любви</a>
+                    <span class="work-meta">1686 · Цикл городских новелл</span>
+                  </div>
+                  <p class="work-summary">Пять ярких историй о женщинах, бросивших вызов суровым сословным запретам ради страсти — от трагедии О-Сан и Моэмона до истории О-Сити, поджёгшей Эдо ради новой встречи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-chikamatsu-monzaemon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тикамацу Мондзаэмон</h3>
+                  <p class="author-role">«Японский Шекспир», драматург театров Дзёрури и Кабуки · <span class="tabular">1653–1725</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Величайший классик традиционной драмы, раскрывший трагический конфликт «гири» (общественного долга) и «ниндзё» (человеческого чувства).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-love-suicides-at-amijima">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-03.03</span>
+                    <a class="work-link" href="./works/chikamatsu-ostrov-nebesnyh-setej.html">Самоубийство влюблённых на Острове Небесных Сетей</a>
+                    <span class="work-meta">1720 · Мещанская трагедия (сэвамоно)</span>
+                  </div>
+                  <p class="work-summary">Трагическая пьеса о торговце бумагой Дзихэе и куртизанке Кохару, которые, не в силах разрешить узел долга и любви в этом мире, уходят вместе на рассвете.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-buson-and-issa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ёса Бусон и Кобаяси Исса</h3>
+                  <p class="author-role">Мастера живописного и лирического хайку позднего Эдо · <span class="tabular">1716–1828</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Художник Бусон, придавший трёхстишиям красочную картинность, и Исса, наполнивший поэзию сочувствием ко всему малому — улиткам, воробьям и детям.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-haiku-buson-issa">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-03.04</span>
+                    <a class="work-link" href="./works/buson-issa-hajku.html">Весеннее море и «Мой Новый год»</a>
+                    <span class="work-meta">1770–1819 · Поэзия хайку и хайбун</span>
+                  </div>
+                  <p class="work-summary">Классика трёхстиший XVIII–XIX веков: «Весеннее море весь день волнами дышит, дышит» Бусона и пронзительная лирика сироты-странника Иссы («Тихо, тихо ползи, улитка, по склону Фудзи…»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ueda-akinari">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уэда Акинари</h3>
+                  <p class="author-role">Классик фантастической новеллы «ёмихон» · <span class="tabular">1734–1809</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач и поэт из Осаки, соединивший китайскую мистическую традицию и японский фольклор в загадочных историях о призраках и верности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tales-of-moonlight-and-rain">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-03.05</span>
+                    <a class="work-link" href="./works/akinari-luna-v-tumane.html">Луна в тумане («Угэцу-моногатари»)</a>
+                    <span class="work-meta">1776 · Сборник мистических новелл</span>
+                  </div>
+                  <p class="work-summary">Девять утончённых новелл о возвращении верного духа («Свидание в день хризантем»), коварстве красоты и призраках разрушенного дома.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="jp-meiji-taisho">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1880–1927</p>
+          <h2 class="section-title">Эпоха Мэйдзи и Тайсё: новый роман и гений новеллы</h2>
+          <p class="section-desc">Встреча Японии с Западом и внутренний разлад личности в романах Нацумэ Сосэки и Мори Огая, виртуозные новеллы Рюноскэ Акутагавы и эстетика Дзюнъитиро Танидзаки.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-natsume-soseki">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Нацумэ Сосэки</h3>
+                  <p class="author-role">Величайший романист эпохи Мэйдзи и «учитель душ» · <span class="tabular">1867–1916</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Англист и мастер иронической и трагической прозы, глубоко показавший одиночество современного человека между древней традицией и западным индивидуализмом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kokoro-soseki">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-04.01</span>
+                    <a class="work-link" href="./works/soseki-kokoro.html">Кокоро («Сердце»)</a>
+                    <span class="work-meta">1914 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Знаменитый роман-завещание о дружбе студента с загадочным Сэнсэем, чья жизнь сломлена многолетним чувством вины перед преданным другом молодости.</p>
+                </li>
+                <li class="work-item" id="work-i-am-a-cat">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-04.02</span>
+                    <a class="work-link" href="./works/soseki-vash-pokornyj-sluga-kot.html">Ваш покорный слуга кот</a>
+                    <span class="work-meta">1905–1906 · Сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Блестящая сатира на японскую интеллигенцию эпохи Мэйдзи глазами безымянного домашнего кота в доме чудаковатого учителя Кусями.</p>
+                </li>
+                <li class="work-item" id="work-botchan-soseki">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-04.03</span>
+                    <a class="work-link" href="./works/soseki-malchugan.html">Мальчуган («Боттян»)</a>
+                    <span class="work-meta">1906 · Юмористическая повесть</span>
+                  </div>
+                  <p class="work-summary">Прямодушный молодой токийский учитель математики ввязывается в комическую войну с лицемерным начальством провинциальной школы на Сикоку.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mori-ogai">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мори Огай</h3>
+                  <p class="author-role">Пионер современной японской прозы, переводчик и историк · <span class="tabular">1862–1922</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Военный врач, учившийся в Германии, один из отцов нового литературного стиля Японии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wild-goose-dancing-girl">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-04.04</span>
+                    <a class="work-link" href="./works/ogai-dikij-gus.html">Дикий гусь и «Танцовщица»</a>
+                    <span class="work-meta">1890–1913 · Лирические повести</span>
+                  </div>
+                  <p class="work-summary">Тонкие истории утраченных возможностей: любовь бедной токийской содержанки О-Тамы и студента Окады, разрушенная случайным камнем и равнодушным ходом времени.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ryunosuke-akutagawa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рюноскэ Акутагава</h3>
+                  <p class="author-role">Гений японской новеллы XX века · <span class="tabular">1892–1927</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Интеллектуал и блестящий стилист, переосмысливший древние хроники «Кондзяку-моногатари» как острые притчи об относительности истины и эгоизме.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rashomon-in-a-grove">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-04.05</span>
+                    <a class="work-link" href="./works/akutagawa-vorota-rasemon.html">Ворота Расёмон и «В чаще»</a>
+                    <span class="work-meta">1915–1922 · Философско-психологические новеллы</span>
+                  </div>
+                  <p class="work-summary">Две легендарные новеллы: столкновение совести и выживания под дождём полуразрушенных ворот Расёмон и полифоническое расследование убийства в роще, где каждый свидетель лжёт по-своему.</p>
+                </li>
+                <li class="work-item" id="work-hell-screen-cogwheels">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-04.06</span>
+                    <a class="work-link" href="./works/akutagawa-muki-ada.html">Муки ада и «Зубчатые колёса»</a>
+                    <span class="work-meta">1918–1927 · Трагическая новелла и исповедь</span>
+                  </div>
+                  <p class="work-summary">История живописца Ёсихидэ, принесшего в жертву своему искусству жизнь собственной дочери, и предсмертная исповедь о галлюцинациях и «смутной тревоге».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-junichiro-tanizaki">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дзюнъитиро Танидзаки</h3>
+                  <p class="author-role">Классик эстетики традиционной красоты и чувственной тайны · <span class="tabular">1886–1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из главных стилистов Японии XX века, воспевший полумрак деревянных комнат, шелест кимоно и психологическую власть страсти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-in-praise-of-shadows">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-04.07</span>
+                    <a class="work-link" href="./works/tanizaki-pohvala-teni.html">Похвала тени и «Мелкий снег»</a>
+                    <span class="work-meta">1933–1948 · Эссе об эстетике и семейный роман</span>
+                  </div>
+                  <p class="work-summary">Знаменитый манифест японской эстетики сумрака и патины времени («Похвала тени») и элегическая хроника угасания старинного осакского дома Макиока перед войной.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="jp-postwar-nobel">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1935–1970-е годы</p>
+          <h2 class="section-title">Послевоенный прорыв и Нобелевские вершины</h2>
+          <p class="section-desc">Изящный лиризм Ясунари Кавабаты, отчаяние Осаму Дадзая, пламенная эстетика Юкио Мисимы и экзистенциальные притчи Кобо Абэ и Сюсаку Эндо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-yasunari-kawabata">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ясунари Кавабата</h3>
+                  <p class="author-role">Лауреат Нобелевской премии по литературе (1968) · <span class="tabular">1899–1972</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Первый японский нобелиат, соединивший средневековое созерцание красоты с тончайшим психологизмом современной японской прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-snow-country">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-05.01</span>
+                    <a class="work-link" href="./works/kawabata-snezhnaya-strana.html">Снежная страна</a>
+                    <span class="work-meta">1935–1947 · Лирический роман</span>
+                  </div>
+                  <p class="work-summary">Пронзительная история несбывшейся любви токийского дилетанта Симамуры и горячей, верной провинциальной гейши Комако среди заснеженных гор на горячих источниках.</p>
+                </li>
+                <li class="work-item" id="work-thousand-cranes-kawabata">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-05.02</span>
+                    <a class="work-link" href="./works/kawabata-tysyachekrylyj-zhuravl.html">Тысячекрылый журавль и «Стон горы»</a>
+                    <span class="work-meta">1949–1954 · Романы</span>
+                  </div>
+                  <p class="work-summary">Драма чувств и вины вокруг древних чаш чайной церемонии и тихое прощание старого Синго Огаты с миром среди звуков осеннего холма Камакуры.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-osamu-dazai">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Осаму Дадзай</h3>
+                  <p class="author-role">Культовый прозаик послевоенного «потерянного поколения» · <span class="tabular">1909–1948</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Сюдзи Цусима — лидер школы «бурайха», оставивший две пронзительнейшие исповеди о крушении аристократического быта и отчуждении человека.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-no-longer-human">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-05.03</span>
+                    <a class="work-link" href="./works/dazai-ispoved-nepolnocennogo-cheloveka.html">Исповедь «неполноценного» человека</a>
+                    <span class="work-meta">1948 · Автобиографическая повесть-исповедь</span>
+                  </div>
+                  <p class="work-summary">Три тетради отчаянного дневника Ёдзо Обы, прячущего смертельный страх перед людьми за маской весёлого шута.</p>
+                </li>
+                <li class="work-item" id="work-the-setting-sun-dazai">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-05.04</span>
+                    <a class="work-link" href="./works/dazai-zahodyaschee-solnce.html">Заходящее солнце («Закат»)</a>
+                    <span class="work-meta">1947 · Роман</span>
+                  </div>
+                  <p class="work-summary">История угасания послевоенной японской аристократии глазами девушки Кадзуко и её брата Наодзи, прощающихся со старым миром.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yukio-mishima">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юкио Мисима</h3>
+                  <p class="author-role">Блестящий романист, драматург и трагический эстет · <span class="tabular">1925–1970</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Кимтакэ Хираока — виртуоз метафоры, исследовавший одержимость абсолютной красотой, эротизм, маску и самурайский кодекс чести.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-temple-of-golden-pavilion">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-05.05</span>
+                    <a class="work-link" href="./works/mishima-zolotoj-hram.html">Золотой храм («Кинкакудзи»)</a>
+                    <span class="work-meta">1956 · Философско-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Основанная на реальных событиях 1950 года драма заикающегося послушника Мидзогути, который решается сжечь идеальный Золотой храм Кинкакудзи, чтобы освободиться от власти его красоты.</p>
+                </li>
+                <li class="work-item" id="work-confessions-of-a-mask">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-05.06</span>
+                    <a class="work-link" href="./works/mishima-ispoved-maski.html">Исповедь маски и «Моряк, которого разлюбило море»</a>
+                    <span class="work-meta">1949–1963 · Психологические романы</span>
+                  </div>
+                  <p class="work-summary">Роман о формировании «маски нормальности» у юноши Котяна и леденящая притча о столкновении романтики моря с детской жестокостью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kobo-abe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кобо Абэ</h3>
+                  <p class="author-role">Мастер японского экзистенциализма и авангардной притчи · <span class="tabular">1924–1993</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист и драматург, сравниваемый с Кафкой и Беккетом, исследователь отчуждения человека в современном мегаполисе и лабиринтах идентичности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-woman-in-the-dunes">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-05.07</span>
+                    <a class="work-link" href="./works/abe-zhenschina-v-peskah.html">Женщина в песках</a>
+                    <span class="work-meta">1962 · Философский роман-притча</span>
+                  </div>
+                  <p class="work-summary">Токийский энтомолог Ники Дзюмпэй отправляется собирать жуков в дюны и попадает в ловушку глубокой песчаной ямы, где обречённая женщина ежедневно откапывает дом от сыплющегося песка.</p>
+                </li>
+                <li class="work-item" id="work-face-of-another">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-05.08</span>
+                    <a class="work-link" href="./works/abe-chuzhoe-lico.html">Чужое лицо и «Человек-ящик»</a>
+                    <span class="work-meta">1964–1973 · Авангардные романы</span>
+                  </div>
+                  <p class="work-summary">Эксперимент обезображенного учёного, надевшего искусственную маску чужого лица, и исповедь бродяги, скрывшегося от взглядов мира в картонной коробке.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-shusaku-endo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сюсаку Эндо</h3>
+                  <p class="author-role">Классик нравственно-психологического романа · <span class="tabular">1923–1996</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, глубоко осмысливший диалог между японской «болотистой почвой» культуры и христианской совестью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-silence-endo">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-05.09</span>
+                    <a class="work-link" href="./works/endo-molchanie.html">Молчание</a>
+                    <span class="work-meta">1966 · Историко-философский роман</span>
+                  </div>
+                  <p class="work-summary">История португальского священника Себастьяна Родригеса в Японии XVII века — потрясающий вопрос о том, почему Бог молчит, когда гибнут верующие, и где граница между отречением и милосердием.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="jp-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1965–2010-е годы</p>
+          <h2 class="section-title">От Кэндзабуро Оэ до прозы XXI века</h2>
+          <p class="section-desc">Вторая Нобелевская вершина Японии, постмодернистские сны Харуки Мураками, прозрачная меланхолия Ёко Огавы, Бананы Ёсимото и проза новой Японии.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-kenzaburo-oe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кэндзабуро Оэ</h3>
+                  <p class="author-role">Лауреат Нобелевской премии по литературе (1994) · <span class="tabular">1935–2023</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Гуманист, публицист и романист с острова Сикоку, соединивший личную боль отца особого ребёнка с мифологией лесной долины и совестью послевоенной Японии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-a-personal-matter">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-06.01</span>
+                    <a class="work-link" href="./works/oe-lichnyj-opyt.html">Личный опыт и «Футбол 1860 года»</a>
+                    <span class="work-meta">1964–1967 · Философско-мифологические романы</span>
+                  </div>
+                  <p class="work-summary">Болезненный нравственный выбор молодого отца по прозвищу Бёрд и возвращение братьев Нэдокоро в родную долину на Сикоку, где оживают восстания 1860 года и духи леса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-haruki-murakami">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Харуки Мураками</h3>
+                  <p class="author-role">Самый популярный современный японский писатель в мире · <span class="tabular">род. 1949</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Мастер меланхоличного магического реализма, джазовых ритмов, снов на дне колодца и поисков утраченного «я» в мегаполисах и на Хоккайдо.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wind-up-bird-chronicle">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-06.02</span>
+                    <a class="work-link" href="./works/murakami-hroniki-zavodnoj-pticy.html">Хроники Заводной Птицы</a>
+                    <span class="work-meta">1994–1995 · Роман-лабиринт</span>
+                  </div>
+                  <p class="work-summary">Поиски пропавшего кота и ушедшей жены Кумико приводят Тору Окаду на дно сухого колодца, в мир сновидений, теней истории Маньчжурии и таинственной Заводной Птицы.</p>
+                </li>
+                <li class="work-item" id="work-wild-sheep-chase-norwegian-wood">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-06.03</span>
+                    <a class="work-link" href="./works/murakami-ohota-na-ovec.html">Охота на овец и «Норвежский лес»</a>
+                    <span class="work-meta">1982–1987 · Романы</span>
+                  </div>
+                  <p class="work-summary">От мистического детектива о загадочной Овце со звездой на спине на заснеженном Хоккайдо до пронзительной студенческой истории любви и утраты 1969 года под музыку «Битлз».</p>
+                </li>
+                <li class="work-item" id="work-kafka-on-the-shore">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-06.04</span>
+                    <a class="work-link" href="./works/murakami-kafka-na-plyazhe.html">Кафка на пляже</a>
+                    <span class="work-meta">2002 · Магический роман</span>
+                  </div>
+                  <p class="work-summary">Две переплетающиеся одиссеи — пятнадцатилетнего беглеца Кафки Тамуры, бегущего от эдипова пророчества в библиотеку Такамацу, и доброго старика Накаты, умеющего говорить с кошками.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-banana-yoshimoto">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Банана Ёсимото</h3>
+                  <p class="author-role">Лирик городской хрупкости, семьи и утешения · <span class="tabular">род. 1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Махоко Ёсимото — писательница, открывшая новой Японии светлый, чистый тон прозы о переживании горя и тепле случайной человеческой близости.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kitchen-yoshimoto">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-06.05</span>
+                    <a class="work-link" href="./works/yoshimoto-kuhnya.html">Кухня</a>
+                    <span class="work-meta">1988 · Повесть</span>
+                  </div>
+                  <p class="work-summary">После смерти бабушки юная Микагэ находит тихий приют на уютной кухне эксцентричной семьи Юити и его матери Эрико — история любви, скорби и вкусной еды.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yoko-ogawa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ёко Огава</h3>
+                  <p class="author-role">Мастер хрустальной психологической и притчевой прозы · <span class="tabular">род. 1962</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Обладательница всех главных литературных премий Японии, создательница утончённых книг о памяти, математике, музыке и тихом исчезновении вещей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-housekeeper-and-professor">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-06.06</span>
+                    <a class="work-link" href="./works/ogawa-lyubimoe-uravnenie-professora.html">Любимое уравнение профессора и «Полиция памяти»</a>
+                    <span class="work-meta">1994–2003 · Роман и антиутопическая притча</span>
+                  </div>
+                  <p class="work-summary">Трогательная дружба домработницы, её десятилетнего сына «Корня» и гениального математика, чья память живёт лишь восемьдесят минут; и антиутопия об острове исчезающих воспоминаний.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sayaka-murata">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Саяка Мурата</h3>
+                  <p class="author-role">Один из самых ярких голосов новейшей японской литературы · <span class="tabular">род. 1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат премии Акутагавы, много лет проработавшая продавцом в круглосуточном магазине, чтобы написать острую сатиру на культ «нормальности».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-convenience-store-woman">
+                  <div class="work-row">
+                    <span class="work-code">ЯП-06.07</span>
+                    <a class="work-link" href="./works/murata-chelovek-kombini.html">Человек-комбини</a>
+                    <span class="work-meta">2016 · Современный роман</span>
+                  </div>
+                  <p class="work-summary">Тридцатишестилетняя Кэйко Фурукура восемнадцать лет счастлива в чётком ритме круглосуточного минимаркета, но общество и семья упорно требуют от неё «нормального» брака и карьеры.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание японской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
