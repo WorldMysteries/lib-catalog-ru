@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог каталонской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 28 писателей · 32 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог каталонской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Рамона Льюля, Аузиаса Марка и «Тиранта Белого» до «Атлантиды» Вердагера, «Площади Диамант» Мерсе Родореды, «Серой тетради» Жозепа Пла и прозы Жауме Кабре.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#ca-medieval-golden-age">Раздел I: Средневековая мистика, хроники и «Золотой век» Валенсии</a>
+        <a href="#ca-renaixenca">Раздел II: «Renaixença»: национальное и поэтическое Возрождение</a>
+        <a href="#ca-modernisme-noucentisme">Раздел III: Каталонский модерн и «Ноусентизм»</a>
+        <a href="#ca-midcentury-masters">Раздел IV: Авангард, мемуарная проза и поэзия сопротивления</a>
+        <a href="#ca-great-novels">Раздел V: Великий роман второй половины XX века</a>
+        <a href="#ca-contemporary">Раздел VI: Современная каталонская проза (XX–XXI века)</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="ca-medieval-golden-age">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIII–XV века</p>
+          <h2 class="section-title">Средневековая мистика, хроники и «Золотой век» Валенсии</h2>
+          <p class="section-desc">От философа и мистика Рамона Льюля и «Четырёх великих хроник» до поэтического гения Аузиаса Марка и рыцарского эпоса Жоанота Мартуреля.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ramon-llull">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рамон Льюль (Раймунд Луллий)</h3>
+                  <p class="author-role">Майоркинский философ, мистик и создатель каталонской прозы · <span class="tabular">1232–1316</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Учёный и поэт-мистик с Майорки, первым в Европе применивший живой народный язык для сложных философских и символических романов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-book-of-lover-and-beloved">
+                  <div class="work-row">
+                    <span class="work-code">КТ-01.01</span>
+                    <a class="work-link" href="./works/llull-kniga-o-vlyublennom.html">Книга о Влюблённом и Возлюбленном («Бланкерна»)</a>
+                    <span class="work-meta">ок. 1283 · Мистический роман и афоризмы</span>
+                  </div>
+                  <p class="work-summary">Триста шестьдесят пять поэтических строф-размышлений на каждый день года о духовном поиске Влюблённого (человеческой души), странствующего навстречу Возлюбленному (Богу).</p>
+                </li>
+                <li class="work-item" id="work-book-of-beasts">
+                  <div class="work-row">
+                    <span class="work-code">КТ-01.02</span>
+                    <a class="work-link" href="./works/llull-kniga-o-zvere.html">Книга о звере («Феликс, или Книга чудес»)</a>
+                    <span class="work-meta">ок. 1288–1289 · Аллегорическая повесть-притча</span>
+                  </div>
+                  <p class="work-summary">Политико-моральная басня в прозе о хитрой лисе мадам Ренар и зверином совете, где под звериными масками вскрываются нравы королевских дворов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ramon-muntaner">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рамон Мунтанер</h3>
+                  <p class="author-role">Классик средиземноморской средневековой хроники · <span class="tabular">1265–1336</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Рыцарь и участник похода каталонских альмогаваров в Византию, оставивший одну из самых живых, темпераментных летописей европейского Средневековья.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-muntaner-chronicle">
+                  <div class="work-row">
+                    <span class="work-code">КТ-01.03</span>
+                    <a class="work-link" href="./works/muntaner-hronika.html">Хроника («Crònica»)</a>
+                    <span class="work-meta">1325–1328 · Историко-мемуарная хроника</span>
+                  </div>
+                  <p class="work-summary">Захватывающий рассказ очевидца о деяниях королей Арагона от Хайме I Завоевателя до Средиземноморской кампании Великой каталонской компании на Востоке.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bernat-metge">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бернат Мече</h3>
+                  <p class="author-role">Пионер каталонского гуманизма эпохи раннего Возрождения · <span class="tabular">ок. 1340–1413</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Королевский секретарь в Барселоне, испытавший влияние Петрарки и Боккаччо и введший в каталанскую прозу диалог в духе Цицерона.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lo-somni">
+                  <div class="work-row">
+                    <span class="work-code">КТ-01.04</span>
+                    <a class="work-link" href="./works/metge-son-lo-somni.html">Сон («Lo Somni»)</a>
+                    <span class="work-meta">1399 · Гуманистический философский диалог</span>
+                  </div>
+                  <p class="work-summary">Написанный в тюрьме диалог автора с тенью внезапно умершего короля Хуана I, Орфеем и Тиресием о бессмертии души, судьбе и природе любви.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ausias-march">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аузиас Марк</h3>
+                  <p class="author-role">Величайший поэт каталанского и европейского Позднего Средневековья · <span class="tabular">1400–1459</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Валенсийский рыцарь, первым порвавший с искусственным провансальским языком трубадуров ради сурового, мучительного и глубоко личного стиха на каталанском.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-songs-of-love-and-death">
+                  <div class="work-row">
+                    <span class="work-code">КТ-01.05</span>
+                    <a class="work-link" href="./works/march-pesni-lyubvi-i-smerti.html">Песни любви и песни смерти</a>
+                    <span class="work-meta">XV век · Философско-психологическая лирика</span>
+                  </div>
+                  <p class="work-summary">Страстные и трагические стихи о разрыве между телесным желанием и духовным идеалом, предвосхитившие барочную тревогу европейской поэзии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-joanot-martorell">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жоанот Мартурель</h3>
+                  <p class="author-role">Автор величайшего реалистического рыцарского романа XV века · <span class="tabular">ок. 1410–1465</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Валенсийский рыцарь-дуэлянт, создавший живую, ироническую и полнокровную альтернативу сказочным рыцарским поэмам — книгу, спасённую в «Дон Кихоте» как лучшую в мире.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tirant-lo-blanc">
+                  <div class="work-row">
+                    <span class="work-code">КТ-01.06</span>
+                    <a class="work-link" href="./works/martorell-tirant-belyj.html">Тирант Белый («Tirant lo Blanc»)</a>
+                    <span class="work-meta">1490 · Рыцарский роман</span>
+                  </div>
+                  <p class="work-summary">Походы бретонского рыцаря Тиранта в Англию, на Родос, в осаждённый Константинополь и Северную Африку — с реальной тактикой боёв, живой речью, остроумием и страстной любовью к Кармесине.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ca-renaixenca">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1833–1895</p>
+          <h2 class="section-title">«Renaixença»: национальное и поэтическое Возрождение</h2>
+          <p class="section-desc">Возвращение каталанского языка в большую литературу после веков упадка: от «Оды родине» Арибау до эпоса Вердагера, драм Гимеры и романов Нарсиса Ольера.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-bonaventura-carles-aribau">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бонавентура Карлес Арибау</h3>
+                  <p class="author-role">Зачинатель каталанского Возрождения (Renaixença) · <span class="tabular">1798–1862</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и экономист, опубликовавший в 1833 году знаменитую «Оду родине», с которой отсчитывается новая каталанская литература.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-oda-a-la-patria">
+                  <div class="work-row">
+                    <span class="work-code">КТ-02.01</span>
+                    <a class="work-link" href="./works/aribau-oda-rodine.html">Ода родине («Oda a la Pàtria»)</a>
+                    <span class="work-meta">1833 · Романтическая ода</span>
+                  </div>
+                  <p class="work-summary">Ностальгическое обращение к горной гряде Монсеррат и древнему языку колыбели («лямова каталана»), пробудившее культурное движение целого столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jacint-verdaguer">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жасинт Вердагер</h3>
+                  <p class="author-role">«Принц каталонских поэтов», классик романтического эпоса · <span class="tabular">1845–1902</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Сельский священник из Вика и корабельный капеллан, создавший могучие эпические полотна мироздания и родных Пиренеев.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-atlantida-verdaguer">
+                  <div class="work-row">
+                    <span class="work-code">КТ-02.02</span>
+                    <a class="work-link" href="./works/verdaguer-atlantida.html">Атлантида («L’Atlàntida»)</a>
+                    <span class="work-meta">1877 · Эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Грандиозная мифологическая поэма о гибели Атлантиды, подвигах Геракла в Испании и рождении у юного Колумба мечты о Новом Свете.</p>
+                </li>
+                <li class="work-item" id="work-canigo-verdaguer">
+                  <div class="work-row">
+                    <span class="work-code">КТ-02.03</span>
+                    <a class="work-link" href="./works/verdaguer-kanigo.html">Каниго («Canigó»)</a>
+                    <span class="work-meta">1886 · Национально-романтическая поэма</span>
+                  </div>
+                  <p class="work-summary">Легенда XI века о рыцаре Жентиле, феях пиренейских вершин и рождении каталонских монастырей у величественной горы Каниго.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-angel-guimera">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анжел Гимера</h3>
+                  <p class="author-role">Классик каталонской драматургии и поэт · <span class="tabular">1845–1924</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург, многократно номинированный на Нобелевскую премию, автор напряжённых социальных и любовных драм о «низине и вершине».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-terra-baixa">
+                  <div class="work-row">
+                    <span class="work-code">КТ-02.04</span>
+                    <a class="work-link" href="./works/guimera-zemlya-dolin.html">Земля долин («Terra baixa»)</a>
+                    <span class="work-meta">1897 · Социально-психологическая драма</span>
+                  </div>
+                  <p class="work-summary">Простодушный горный пастух Манелик спускается с чистых вершин в душную долину интриг, чтобы жениться на Марте — и восстаёт против циничного хозяина Себастиа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-narcis-oller">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Нарсис Ольер</h3>
+                  <p class="author-role">Основоположник современного каталонского реалистического романа · <span class="tabular">1846–1930</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер бальзаковско-золяистской прозы, друг Эмиля Золя, запечатлевший бурный рост Барселоны эпохи биржевой горячки и промышленной буржуазии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-febre-dor">
+                  <div class="work-row">
+                    <span class="work-code">КТ-02.05</span>
+                    <a class="work-link" href="./works/oller-zolotaya-lihoradka.html">Золотая лихорадка («La febre d’or»)</a>
+                    <span class="work-meta">1890–1892 · Реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Взлёт и крах барселонского спекулянта Жильберта Берната в годы финансового бума 1880-х годов: портрет города денег, тщеславия и перемен.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ca-modernisme-noucentisme">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1895–1936</p>
+          <h2 class="section-title">Каталонский модерн и «Ноусентизм»</h2>
+          <p class="section-desc">Поэтика «живого слова» Жоана Марагаля, экспрессивный роман Виктора Каталы «Одиночество», театр Русиньоля и средиземноморский классицизм Ноусентизма.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-joan-maragall">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жоан Марагаль</h3>
+                  <p class="author-role">Ведущий поэт и мыслитель каталонского модерна · <span class="tabular">1860–1911</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Теоретик «живого слова», соединивший витализм, ницшеанское обновление и глубокую духовную прозрачность барселонской поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-visions-i-cants">
+                  <div class="work-row">
+                    <span class="work-code">КТ-03.01</span>
+                    <a class="work-link" href="./works/maragall-videniya-i-pesni.html">Видения и песни («Песнь графа Арнау», «Слепая корова»)</a>
+                    <span class="work-meta">1900 · Лирика и балладный цикл</span>
+                  </div>
+                  <p class="work-summary">Поэзия стихийной жизни природы и мистическая переработка легенды о проклятом всаднике графе Арнау — символе непокорного духа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-victor-catala">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виктор Катала (Катерина Альберт)</h3>
+                  <p class="author-role">Классик экспрессионистской психологической прозы · <span class="tabular">1869–1966</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выдающаяся писательница из Л’Эскалы, выступившая под мужским псевдонимом и создавшая один из сильнейших романов каталонского модернизма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-solitud-catala">
+                  <div class="work-row">
+                    <span class="work-code">КТ-03.02</span>
+                    <a class="work-link" href="./works/catala-odinochestvo.html">Одиночество («Solitud»)</a>
+                    <span class="work-meta">1905 · Психолого-символический роман</span>
+                  </div>
+                  <p class="work-summary">Путь Милы, приехавшей с ленивым мужем служить в затерянную горную часовню высоко в горах: столкновение с дикой природой, мудрым пастухом Гайотом и чудовищным Анималой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-santiago-rusinol">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сантьяго Русиньоль</h3>
+                  <p class="author-role">Художник, иронический романист и драматург богемы · <span class="tabular">1861–1931</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Душа барселонского кафе «Четыре кота», с блестящим юмором показавший вечный конфликт прагматичных лавочников и свободного художника.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-senyor-esteve">
+                  <div class="work-row">
+                    <span class="work-code">КТ-03.03</span>
+                    <a class="work-link" href="./works/rusinol-gospodin-esteve.html">История господина Эстеве («L’auca del senyor Esteve»)</a>
+                    <span class="work-meta">1907 · Сатирический роман и пьеса</span>
+                  </div>
+                  <p class="work-summary">Ироничная хроника барселонского галантерейного дома «Пунктуальность», где добропорядочный буржуа Эстеве с ужасом видит, что его внук Рамель мечтает стать скульптором.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eugeni-dors">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эужени д’Орс (Шениус)</h3>
+                  <p class="author-role">Философ, эссеист и идеолог «Ноусентизма» · <span class="tabular">1881–1954</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Творец эстетической программы Ноусентизма — устремления к порядку, средиземноморскому классицизму, урбанизму и интеллектуальной ясности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-glosari-teresa">
+                  <div class="work-row">
+                    <span class="work-code">КТ-03.04</span>
+                    <a class="work-link" href="./works/dors-glossarij-i-tereza.html">Глоссарий и «Тереза Благородная»</a>
+                    <span class="work-meta">1906–1911 · Философские эссе и притча</span>
+                  </div>
+                  <p class="work-summary">Короткие ежедневные заметки о культуре, науке и городском быте, превратившие газетную колонку в школу европейского мышления.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-josep-carner">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жозеп Карнер</h3>
+                  <p class="author-role">«Принц каталонских поэтов» эпохи Ноусентизма · <span class="tabular">1884–1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Виртуоз каталонского стиха, дипломат и изгнанник, достигший совершенства в иронической и мистической лирике («Набо»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nabi-els-fruits-saborosos">
+                  <div class="work-row">
+                    <span class="work-code">КТ-03.05</span>
+                    <a class="work-link" href="./works/carner-plody-i-nabo.html">Плоды каждого времени и поэма «Набо»</a>
+                    <span class="work-meta">1906–1941 · Поэтические книги</span>
+                  </div>
+                  <p class="work-summary">От светлой лирики садов и возраста человека к глубокому библейскому переосмыслению судьбы пророка Ионы («Набо»), бегущего от долга.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ca-midcentury-masters">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1925–1970</p>
+          <h2 class="section-title">Авангард, мемуарная проза и поэзия сопротивления</h2>
+          <p class="section-desc">Метафизический авангард Ж. В. Фойша, титаническая дневниковая проза Жозепа Пла, трагический цикл Сальвадора Эсприу и новеллы Пере Кальдерса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-jv-foix">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жозеп Висенс Фойш (Ж. В. Фойш)</h3>
+                  <p class="author-role">Классик каталонского авангарда и сюрреализма · <span class="tabular">1893–1987</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Барселонский кондитер из Саррии и гениальный поэт, соединивший строгие сонеты средневековья с дерзкой сюрреалистической фантазией («Я влюблён в старое и обожаю новое»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sol-i-de-dol">
+                  <div class="work-row">
+                    <span class="work-code">КТ-04.01</span>
+                    <a class="work-link" href="./works/foix-odin-i-v-pechali.html">Один, и в печали («Sol, i de dol»)</a>
+                    <span class="work-meta">1947 · Авангардные сонеты</span>
+                  </div>
+                  <p class="work-summary">Семьдесят сонетов поразительной ясности и загадки о пограничье сна и разума, готических теней и современной техники.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-josep-pla">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жозеп Пла</h3>
+                  <p class="author-role">Крупнейший прозаик, журналист и мемуарист Каталонии XX века · <span class="tabular">1897–1981</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Эмпорды, создавший 46 томов живой, точной, скептической и неподражаемо наблюдательной прозы о ландшафтах, кухне, политике и человеке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-quadern-gris">
+                  <div class="work-row">
+                    <span class="work-code">КТ-04.02</span>
+                    <a class="work-link" href="./works/pla-seraya-tetrad.html">Серая тетрадь («El quadern gris»)</a>
+                    <span class="work-meta">1966 · Дневниковая проза</span>
+                  </div>
+                  <p class="work-summary">Знаменитый дневник молодого студента 1918–1919 годов, бежавшего от «испанки» из Барселоны в родной Палафружель: портрет Эмпорды, моря, книг и рождения писателя.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-salvador-espriu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сальвадор Эсприу</h3>
+                  <p class="author-role">Главный поэт памяти и нравственного стоицизма послевоенной Каталонии · <span class="tabular">1913–1985</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель мифологического города Синера (анаграммы родного Аренис-де-Мар) и великого цикла «Бычья шкура» о примирении народов Испании.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pell-de-brau">
+                  <div class="work-row">
+                    <span class="work-code">КТ-04.03</span>
+                    <a class="work-link" href="./works/espriu-bychya-shkura.html">Кладбище в Синере и «Бычья шкура»</a>
+                    <span class="work-meta">1946–1960 · Философская поэзия</span>
+                  </div>
+                  <p class="work-summary">Элегии о разрушенной войной родине и страстный призыв к взаимному пониманию языков и народов на общей «бычьей шкуре» Иберии (Сефарада).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pere-calders">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пере Кальдерс</h3>
+                  <p class="author-role">Классик иронического рассказа и магического абсурда · <span class="tabular">1912–1994</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер короткой прозы, проведший двадцать три года в изгнании в Мексике и подаривший каталонской литературе блестящий юмор парадокса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-croniques-veritat-oculta">
+                  <div class="work-row">
+                    <span class="work-code">КТ-04.04</span>
+                    <a class="work-link" href="./works/calders-hroniki-sokrytoj-pravdy.html">Хроники сокрытой правды</a>
+                    <span class="work-meta">1955 · Цикл иронических новелл</span>
+                  </div>
+                  <p class="work-summary">Удивительные истории о том, как в привычный быт вдруг вторгаются живые тени, мексиканская магия, тихие чудеса и невозмутимая человеческая логика.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-joan-salvat-papasseit">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жоан Сальват-Папассейт</h3>
+                  <p class="author-role">Поэт-авангардист, футурист и лирик барселонского порта · <span class="tabular">1894–1924</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Умерший в 30 лет бывший ночной сторож барселонского дока, оставивший солнечные, дерзкие каллиграммы и песни о радости жизни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-irradiador-port">
+                  <div class="work-row">
+                    <span class="work-code">КТ-04.05</span>
+                    <a class="work-link" href="./works/salvat-papasseit-obluchatel.html">Облучатель маяков и «Оса с кустом роз»</a>
+                    <span class="work-meta">1921–1924 · Авангардная и любовная лирика</span>
+                  </div>
+                  <p class="work-summary">Каллиграммы и страстная любовная поэзия («Роза в губах») — гимн свободе чувств, морю и утреннему порту Барселоны.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ca-great-novels">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1955–1995</p>
+          <h2 class="section-title">Великий роман второй половины XX века</h2>
+          <p class="section-desc">Мировая вершина каталанской прозы — «Площадь Диамант» Мерсе Родореды, «Беарн» Льоренса Вильялонги, семейная память Монтсеррат Роиг и поэтика Марии-Мерсе Марсаль.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-merce-rodoreda">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мерсе Родореда</h3>
+                  <p class="author-role">Самый знаменитый каталонский романист XX века · <span class="tabular">1908–1983</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Мастер глубоко человечной психологической и поэтической прозы, переведённой на десятки языков; Габриэль Гарсиа Маркес назвал её величайшей новеллисткой современной Испании.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-placa-del-diamant">
+                  <div class="work-row">
+                    <span class="work-code">КТ-05.01</span>
+                    <a class="work-link" href="./works/rodoreda-ploschad-diamant.html">Площадь Диамант («Голубка»)</a>
+                    <span class="work-meta">1962 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Незабываемый монолог простой барселонской девушки Наталии-«Голубки» из квартала Грасия: её брак с властным Киметом, разведение голубей, голод Гражданской войны и тихое обретение собственного голоса.</p>
+                </li>
+                <li class="work-item" id="work-mirall-trencat">
+                  <div class="work-row">
+                    <span class="work-code">КТ-05.02</span>
+                    <a class="work-link" href="./works/rodoreda-razbitoe-zerkalo.html">Разбитое зеркало («Mirall trencat»)</a>
+                    <span class="work-meta">1974 · Семейная сага</span>
+                  </div>
+                  <p class="work-summary">Трагическая и поэтическая история угасания богатой барселонской семьи Вальдаура через три поколения — в зеркале тайных страстей, призраков и заброшенного сада.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-llorenc-villalonga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Льоренс Вильялонга</h3>
+                  <p class="author-role">Майоркинский классик элегического романа · <span class="tabular">1897–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач-психиатр и аристократ духа, создавший шедевр о закате просвещённого старого дворянства Майорки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bearn-villalonga">
+                  <div class="work-row">
+                    <span class="work-code">КТ-05.03</span>
+                    <a class="work-link" href="./works/villalonga-bearn.html">Беарн, или Зал кукол</a>
+                    <span class="work-meta">1956–1961 · Роман</span>
+                  </div>
+                  <p class="work-summary">Жизнь эксцентричного сеньора Тони де Беарна в уединённом горном поместье на Майорке, его тайная страсть, библиотека Вольтера и печальная красота уходящего XVIII века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-montserrat-roig">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Монтсеррат Роиг</h3>
+                  <p class="author-role">Романистка и журналистка барселонской памяти XX века · <span class="tabular">1946–1991</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Яркий голос каталонской прозы перехода к демократии, воссоздавший женскую и семейную историю Барселоны и память о каталонцах в Равенсбрюке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-temps-de-les-cireres">
+                  <div class="work-row">
+                    <span class="work-code">КТ-05.04</span>
+                    <a class="work-link" href="./works/roig-vremya-vishen.html">Время вишен («El temps de les cireres»)</a>
+                    <span class="work-meta">1977 · Роман</span>
+                  </div>
+                  <p class="work-summary">Возвращение фотографа Наталии Миральпеш в Барселону 1974 года и хроника её буржуазной семьи сквозь драмы XX столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maria-merce-marcal">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мария-Мерсе Марсаль</h3>
+                  <p class="author-role">Крупнейшая каталонская поэтесса второй половины XX века · <span class="tabular">1952–1998</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер поэтического синтеза фольклорной песни и феминистской метафоры, автор романа о поэтессе Рене Вивьен.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-passion-according-to-renee-vivien">
+                  <div class="work-row">
+                    <span class="work-code">КТ-05.05</span>
+                    <a class="work-link" href="./works/marcal-strast-po-rene-viven.html">Страсть по Рене Вивьен</a>
+                    <span class="work-meta">1994 · Роман-биография</span>
+                  </div>
+                  <p class="work-summary">Полифоническое расследование жизни поэтессы-декадентки начала XX века, переплетённое с поиском собственного голоса современной рассказчицы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ca-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1985–2020-е годы</p>
+          <h2 class="section-title">Современная каталонская проза (XX–XXI века)</h2>
+          <p class="section-desc">Интеллектуальные эпопеи Жауме Кабре, виртуозная новеллистика Кима Монсо, мифология Средиземноморья Бальтасара Порселя, триллеры Пиньоля и новая волна Ирене Солы.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-baltasar-porcel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бальтасар Порсель</h3>
+                  <p class="author-role">Мастер средиземноморского эпического и мифологического романа · <span class="tabular">1937–2009</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Андрача (Майорка), превративший остров, контрабанду, страсти и мифы моря в масштабную барочную прозу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-primaveres-i-tardors">
+                  <div class="work-row">
+                    <span class="work-code">КТ-06.01</span>
+                    <a class="work-link" href="./works/porcel-vesny-i-oseni.html">Весны и осени («Les primaveres i les tardors»)</a>
+                    <span class="work-meta">1986 · Эпический роман</span>
+                  </div>
+                  <p class="work-summary">Многослойная майоркинская сага рода Льисса, где реальная история XX века переплетается с привидениями, контрабандистами и магией острова.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-quim-monzo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ким Монсо</h3>
+                  <p class="author-role">Король современного каталонского рассказа и чёрного юмора · <span class="tabular">род. 1952</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и виртуозный новеллист, преобразивший короткую прозу Барселоны ироничными парадоксами о современном человеке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-magnitude-of-tragedy">
+                  <div class="work-row">
+                    <span class="work-code">КТ-06.02</span>
+                    <a class="work-link" href="./works/monzo-pochemu-pochemu-pochemu.html">Огромная трагедия и «Почему, почему, почему?»</a>
+                    <span class="work-meta">1993–1996 · Сборник рассказов и повесть</span>
+                  </div>
+                  <p class="work-summary">Блестящие и язвительные новеллы о нелепостях любви, литературы и городской жизни, доведённых до абсурдной геометрической точности.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jaume-cabre">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жауме Кабре</h3>
+                  <p class="author-role">Автор мировых интеллектуальных бестселлеров XX–XXI веков · <span class="tabular">род. 1947</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Барселонский филолог, музыкант и романист, соединивший судьбу скрипки XVIII века, историю Европы, Каталонии и трагедию зла в грандиозных полифонических романах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jo-confesso">
+                  <div class="work-row">
+                    <span class="work-code">КТ-06.03</span>
+                    <a class="work-link" href="./works/cabre-ya-ispoveduyus.html">Я исповедуюсь («Jo confesso»)</a>
+                    <span class="work-meta">2011 · Философско-исторический роман</span>
+                  </div>
+                  <p class="work-summary">Прощальное письмо теряющего память учёного Адриа Ардевола к возлюбленной Саре, связывающее воедино антикварную лавку Барселоны, скрипку работы Сториони, инквизицию, Освенцим и вопрос о природе абсолютного зла.</p>
+                </li>
+                <li class="work-item" id="work-les-veus-del-pamano">
+                  <div class="work-row">
+                    <span class="work-code">КТ-06.04</span>
+                    <a class="work-link" href="./works/cabre-golosa-pamano.html">Голоса Памано</a>
+                    <span class="work-meta">2004 · Роман</span>
+                  </div>
+                  <p class="work-summary">Молодая учительница Тина находит в старой пиренейской школе тайные тетради учителя Ориоля Фонтельеса 1940-х годов, раскрывающие историю любви, измены и подлости в горах Пальярса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-albert-sanchez-pinol">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альберт Санчес Пиньоль</h3>
+                  <p class="author-role">Мастер интеллектуального триллера и исторической прозы · <span class="tabular">род. 1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Антрополог и романист, чей дебютный роман «Холодная кожа» стал международным феноменом, переведённым на 37 языков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-pell-freda">
+                  <div class="work-row">
+                    <span class="work-code">КТ-06.05</span>
+                    <a class="work-link" href="./works/pinol-holodnaya-kozha.html">Холодная кожа («La pell freda»)</a>
+                    <span class="work-meta">2002 · Философский роман-триллер</span>
+                  </div>
+                  <p class="work-summary">Бывший ирландский борец за независимость приезжает метеорологом на безлюдный субантарктический остров, где каждую ночь маяк осаждают таинственные морские существа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-irene-sola">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ирене Сола</h3>
+                  <p class="author-role">Ярчайший голос новой каталонской прозы XXI века · <span class="tabular">род. 1990</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница и художница, лауреат Литературной премии ЕС за полифонический, поэтичный роман о жизни Пиренеев глазами людей, животных, облаков и призраков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-canto-jo-i-la-muntanya-balla">
+                  <div class="work-row">
+                    <span class="work-code">КТ-06.06</span>
+                    <a class="work-link" href="./works/sola-ya-poyu-i-gory-tancuyut.html">Я пою, и горы танцуют</a>
+                    <span class="work-meta">2019 · Поэтический магико-реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Необыкновенная книга, где слово поочерёдно берут грозовые тучи, самка косули, призраки старых женщин, грибы-лисички и жители пиренейской долины вокруг Кампдеваноля.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание каталонской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог канадской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 33 писателей · 35 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог канадской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Сюзанны Муди и Люси Мод Монтгомери до квебекской классики Луи Эмона, Маргарет Лоренс, Робертсона Дэвиса, Элис Манро, Маргарет Этвуд, Леонарда Коэна и Янна Мартела.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#can-origins-confederation">Раздел I: Пионеры фронтира, становление нации и поэзия Конфедерации</a>
+        <a href="#can-quebec-classic">Раздел II: Квебекская классика и «Тихая революция»</a>
+        <a href="#can-modern-prose">Раздел III: Формирование современного канадского романа</a>
+        <a href="#can-atwood-munro-masters">Раздел IV: Золотой век канадской литературы: Этвуд, Манро и Финдли</a>
+        <a href="#can-poetry-song-experiment">Раздел V: Канадская поэзия, Леонард Коэн и экспериментальная проза</a>
+        <a href="#can-multicultural-contemporary">Раздел VI: Многоголосие XXI века, иммиграция и голоса Первых Наций</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="can-origins-confederation">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1830–1914</p>
+          <h2 class="section-title">Пионеры фронтира, становление нации и поэзия Конфедерации</h2>
+          <p class="section-desc">Записки первых поселенцев Онтарио, мировая классика Острова Принца Эдуарда, тёплый юмор Стивена Ликока, лирика поэтов Конфедерации и голос Полин Джонсон.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-moodie-traill">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сюзанна Муди и Кэтрин Парр Трейлл</h3>
+                  <p class="author-role">Сёстры-писательницы, летописцы освоения канадских лесов · <span class="tabular">1802–1899</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Англичанки, переселившиеся в Верхнюю Канаду в 1832 году и запечатлевшие суровую поэзию северной природы, морозов и стойкости пионеров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-roughing-it-in-the-bush">
+                  <div class="work-row">
+                    <span class="work-code">КН-01.01</span>
+                    <a class="work-link" href="./works/mudi-surovaya-zhizn-v-glushi.html">Суровая жизнь в лесной глуши</a>
+                    <span class="work-meta">1852 · Мемуарно-этнографическая проза</span>
+                  </div>
+                  <p class="work-summary">Правдивые очерки Сюзанны Муди о строительстве бревенчатой хижины среди лесов Онтарио, пожарах, зимах и постепенном рождении любви к суровой новой родине.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lucy-maud-montgomery">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Люси Мод Монтгомери</h3>
+                  <p class="author-role">Классик мировой литературы, создательница образа Ани Ширли · <span class="tabular">1874–1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Острова Принца Эдуарда, прославившая красные дороги и зелёные луга Приморских провинций Канады на весь мир.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-anne-of-green-gables">
+                  <div class="work-row">
+                    <span class="work-code">КН-01.02</span>
+                    <a class="work-link" href="./works/montgomeri-anya-iz-zelenyh-mezoninov.html">Аня из Зелёных Мезонинов</a>
+                    <span class="work-meta">1908 · Роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Трогательная история рыжеволосой сироты с неиссякаемым воображением, по ошибке присланной в усадьбу Эйвонли к строгой Марилле и добродушному Мэтью Касбертам.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-stephen-leacock">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стивен Ликок</h3>
+                  <p class="author-role">Крупнейший канадский юморист и сатирик XX века · <span class="tabular">1869–1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор экономики Макгиллского университета, подаривший канадской литературе мягкую ироничную поэтику провинциального городка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sunshine-sketches">
+                  <div class="work-row">
+                    <span class="work-code">КН-01.03</span>
+                    <a class="work-link" href="./works/likok-solnechnye-eskizy.html">Солнечные эскизы маленького городка</a>
+                    <span class="work-meta">1912 · Юмористический цикл новелл</span>
+                  </div>
+                  <p class="work-summary">Неповторимая галерея чудаков вымышленного онтарийского городка Марипоза — от парикмахера Джефферсона Торпа до крушения прогулочного парохода на мелководье.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pauline-johnson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмили Полин Джонсон (Текахионваке)</h3>
+                  <p class="author-role">Поэтесса и рассказчица мохокского происхождения · <span class="tabular">1861–1913</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь вождя племени мохок и англичанки, соединившая в лирике и прозе голос коренных народов с традицией романтической баллады.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-flint-and-feather">
+                  <div class="work-row">
+                    <span class="work-code">КН-01.04</span>
+                    <a class="work-link" href="./works/dzhonson-pesnya-vesla.html">Кремень и перо («Песня весла») и «Легенды Ванкувера»</a>
+                    <span class="work-meta">1911–1912 · Лирика и индейские предания</span>
+                  </div>
+                  <p class="work-summary">Завораживающая ритмом каноэ «Песня моего весла» и цикл легенд тихоокеанского побережья, сохранённых со слов вождя Джо Капилано.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lampman-carman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арчибальд Лампман и Блисс Карман</h3>
+                  <p class="author-role">Лидеры «Поэтов Конфедерации» · <span class="tabular">1861–1929</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первое поколение поэтов объединённой Канады, воспевшее суровую тишину зимних полей, озёра Квебека и тоску по гармонии с природой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lyrics-of-earth">
+                  <div class="work-row">
+                    <span class="work-code">КН-01.05</span>
+                    <a class="work-link" href="./works/lampman-lirika-zemli.html">Лирика земли и «Жара» («Heat»)</a>
+                    <span class="work-meta">1888–1896 · Пейзажная и философская лирика</span>
+                  </div>
+                  <p class="work-summary">Созерцательные сонеты и стихи о летнем зное над оттавскими лугами, поющем тростнике и суровой ясности канадской зимы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="can-quebec-classic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1910–1975</p>
+          <h2 class="section-title">Квебекская классика и «Тихая революция»</h2>
+          <p class="section-desc">Франкоязычная традиция Квебека: от сурового эпоса колонизации Луи Эмона и городского реализма Габриель Руа до трагической поэтики Анн Эбер, Неллигана и драматургии Трамбле.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-louis-hemon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луи Эмон</h3>
+                  <p class="author-role">Автор главного романа старого Квебека о земле и верности · <span class="tabular">1880–1913</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Французский писатель, проживший последние полтора года в квебекской деревне Перибонка и создавший бессмертный памятник квебекскому духу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-maria-chapdelaine">
+                  <div class="work-row">
+                    <span class="work-code">КН-02.01</span>
+                    <a class="work-link" href="./works/emon-mariya-shapdelen.html">Мария Шапделен</a>
+                    <span class="work-meta">1914 · Сельский эпический роман</span>
+                  </div>
+                  <p class="work-summary">История девушки из семьи первопоселенцев на северной границе Квебека у озера Сен-Жан, выбирающей между тёплыми огнями американских городов и суровой родиной предков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gabrielle-roy">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Габриель Руа</h3>
+                  <p class="author-role">Классик франкоканадской прозы, лауреат премии Фемина · <span class="tabular">1909–1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка франкоязычного Манитобского Сен-Бонифаса, перевернувшая литературу Квебека честным взглядом на бедные рабочие кварталы Монреаля.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bonheur-doccasion">
+                  <div class="work-row">
+                    <span class="work-code">КН-02.02</span>
+                    <a class="work-link" href="./works/rua-sluchajnoe-schaste.html">Случайное счастье («Жестяная флейта»)</a>
+                    <span class="work-meta">1945 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Судьба юной Флорентины Лакасс и её стойкой матери Роз-Анны в нищем монреальском районе Сент-Анри в первые месяцы Второй мировой войны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-anne-hebert">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анн Эбер</h3>
+                  <p class="author-role">Величайшая поэтесса и романистка Квебека XX века · <span class="tabular">1916–2000</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Трижды лауреат Премии генерал-губернатора и премии Фемина, соединившая квебекскую готику, страсть и бунт против замкнутости старого уклада.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kamouraska">
+                  <div class="work-row">
+                    <span class="work-code">КН-02.03</span>
+                    <a class="work-link" href="./works/eber-kamuraska.html">Камураска</a>
+                    <span class="work-meta">1970 · Готический психологический роман</span>
+                  </div>
+                  <p class="work-summary">Основанная на подлинном преступлении 1839 года исповедь Элизабет д’Ольньер, вспоминающей у постели умирающего второго мужа страсть и убийство в заснеженном Квебеке.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-emile-nelligan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмиль Неллиган</h3>
+                  <p class="author-role">«Квебекский Рембо», основатель новой франкоканадской лирики · <span class="tabular">1879–1941</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юноша-символист, написавший все свои ослепительные стихи до девятнадцати лет, прежде чем болезнь на сорок лет отделила его от мира.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-le-vaisseau-dor">
+                  <div class="work-row">
+                    <span class="work-code">КН-02.04</span>
+                    <a class="work-link" href="./works/nelligan-zolotoj-korabl.html">Золотой корабль («Le Vaisseau d’or»)</a>
+                    <span class="work-meta">1899 / изд. 1904 · Символистская лирика</span>
+                  </div>
+                  <p class="work-summary">Знаменитый сонет о прекрасном корабле мечты с парусами, соткаными из лучей, что разбивается о ледяные рифы Бездны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-michel-tremblay">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мишель Трамбле</h3>
+                  <p class="author-role">Реформатор квебекского театра и романа («монреальский говор») · <span class="tabular">род. 1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург и романист, впервые выведший на большую сцену живой народный язык монреальского квартала Плато — жуаль (joual).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-les-belles-soeurs">
+                  <div class="work-row">
+                    <span class="work-code">КН-02.05</span>
+                    <a class="work-link" href="./works/tramble-zolovki.html">Золовки («Les Belles-Sœurs») и «Хроники Плато Мон-Руаяль»</a>
+                    <span class="work-meta">1968–1978 · Трагикомическая драма и цикл романов</span>
+                  </div>
+                  <p class="work-summary">Пятнадцать женщин на монреальской кухне наклеивают в альбомы миллион выигранных купонов под хор зависти, смеха, боли и подавленных надежд.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="can-modern-prose">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1925–1975</p>
+          <h2 class="section-title">Формирование современного канадского романа</h2>
+          <p class="section-desc">От прерий Манитобы и Саскачевана к интеллектуальной глубине Робертсона Дэвиса, циклу Манаваки Маргарет Лоренс и сатире Мордехая Рихлера.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hugh-maclennan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хью Макленнан</h3>
+                  <p class="author-role">Создатель современной национальной прозы англо- и франко-Канады · <span class="tabular">1907–1990</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Новой Шотландии, давший канадской культуре знаменитую формулу «двух одиночеств» — отношений английской и французской Канады.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-two-solitudes">
+                  <div class="work-row">
+                    <span class="work-code">КН-03.01</span>
+                    <a class="work-link" href="./works/maklennan-dva-odinochestva.html">Два одиночества («Two Solitudes»)</a>
+                    <span class="work-meta">1945 · Социально-исторический роман</span>
+                  </div>
+                  <p class="work-summary">Драма семьи Таллар на берегах реки Святого Лаврентия между Первой и Второй мировыми войнами — о попытке примирить два языка, две веры и две традиции одной страны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-morley-callaghan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Морли Каллахан</h3>
+                  <p class="author-role">Мастер канадского городского модернизма и новеллы · <span class="tabular">1903–1990</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Друг Хемингуэя и Фицджеральда по «Торонто Стар» и Парижу 1920-х, перенёсший чистый, ясный психологизм в прозу о Торонто.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-such-is-my-beloved">
+                  <div class="work-row">
+                    <span class="work-code">КН-03.02</span>
+                    <a class="work-link" href="./works/kallaham-takov-moj-vozlyublennyj.html">Таков мой возлюбленный</a>
+                    <span class="work-meta">1934 · Нравственно-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Пронзительная притча о молодом католическом священнике отце Даулинге, чья искренняя попытка спасти двух бездомных женщин вызывает гнев церковного и светского общества.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sinclair-ross">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Синклер Росс</h3>
+                  <p class="author-role">Классик литературы канадских прерий · <span class="tabular">1908–1996</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Банковский служащий из Саскачевана, создавший эталонный роман о засухе Великой депрессии и духовном одиночестве в степном городке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-as-for-me-and-my-house">
+                  <div class="work-row">
+                    <span class="work-code">КН-03.03</span>
+                    <a class="work-link" href="./works/ross-chto-do-menya-i-moego-doma.html">А что до меня и моего дома</a>
+                    <span class="work-meta">1941 · Дневниково-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Дневник миссис Бентли, жены провинциального пастора и непризнанного художника, о запертости, пыльных бурях прерий и молчании в тесном городке Хорайзон.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-margaret-laurence">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Маргарет Лоренс</h3>
+                  <p class="author-role">Создательница бессмертного цикла городка Манавака · <span class="tabular">1926–1987</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ключевая фигура канадского литературного возрождения 1960–1970-х, подарившая мировой литературе мощные женские характеры прерий Манитобы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-stone-angel">
+                  <div class="work-row">
+                    <span class="work-code">КН-03.04</span>
+                    <a class="work-link" href="./works/lorens-kamennyj-angel.html">Каменный ангел и «Прорицатели»</a>
+                    <span class="work-meta">1964–1974 · Психологические романы</span>
+                  </div>
+                  <p class="work-summary">Суровая, гордая девяностолетняя Хэйгар Шипли, бегущая к морю от дома престарелых и в последних воспоминаниях открывающая, как гордыня мешала ей любить.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-robertson-davies">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Робертсон Дэвис</h3>
+                  <p class="author-role">Классик интеллектуального романа, мастер мифа и юнгианской психологии · <span class="tabular">1913–1995</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первый ректор колледжа Мэсси в Торонто и автор знаменитых трилогий («Дептфордская», «Корнишская»), сочетающих эрудицию, магию и тонкую иронию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fifth-business">
+                  <div class="work-row">
+                    <span class="work-code">КН-03.05</span>
+                    <a class="work-link" href="./works/devis-pyatyj-personazh.html">Пятый персонаж (Дептфордская трилогия)</a>
+                    <span class="work-meta">1970 · Интеллектуальный и философский роман</span>
+                  </div>
+                  <p class="work-summary">История школьного учителя Дунстана Рамзи, вся жизнь которого оказалась связана с одним брошенным зимой 1908 года снежком с камнем внутри, историей святых и великим фокусником Эйзенгримом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mordecai-richler">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мордехай Рихлер</h3>
+                  <p class="author-role">Язвительный сатирик и бытописатель еврейского Монреаля · <span class="tabular">1931–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель острой насмешки и большого сердца, прославивший улицу Сент-Урбен в Монреале в череде блестящих романов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-duddy-kravitz-barneys-version">
+                  <div class="work-row">
+                    <span class="work-code">КН-03.06</span>
+                    <a class="work-link" href="./works/rihler-versiya-barni.html">Ученичество Дадди Кравица и «Версия Барни»</a>
+                    <span class="work-meta">1959 / 1997 · Сатирические романы</span>
+                  </div>
+                  <p class="work-summary">Неукротимый путь монреальского дельца Дадди Кравица и пронзительно смешная, горькая исповедь Барни Панофски о трёх браках, любви и угасании памяти.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="can-atwood-munro-masters">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1965–2015</p>
+          <h2 class="section-title">Золотой век канадской литературы: Этвуд, Манро и Финдли</h2>
+          <p class="section-desc">Международный триумф канадской прозы: нобелевское искусство рассказа Элис Манро, антиутопии и букеровские романы Маргарет Этвуд, антивоенный эпос Тимоти Финдли и Кэрол Шилдс.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-alice-munro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Элис Манро</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (2013), «мастер современного рассказа» · <span class="tabular">1931–2024</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Уингема в юго-западном Онтарио, открывшая целую вселенную человеческих тайн, перемен времени и любви в границах короткой повести-новеллы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-runaway-too-much-happiness">
+                  <div class="work-row">
+                    <span class="work-code">КН-04.01</span>
+                    <a class="work-link" href="./works/manro-beglyanka-i-mnogo-schastya.html">Беглянка и «Слишком много счастья»</a>
+                    <span class="work-meta">2004–2009 · Сборники психологических новелл</span>
+                  </div>
+                  <p class="work-summary">Истории женщин из провинциального Онтарио и судьба Софьи Ковалевской — с потрясающими временными скачками, где вся прожитая жизнь умещается на сорока страницах.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-margaret-atwood">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Маргарет Этвуд</h3>
+                  <p class="author-role">Двукратный лауреат Букеровской премии, классик мировой прозы и поэзии · <span class="tabular">род. 1939</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Главный голос современной канадской литературы — романистка, поэтесса и эссеист, соединяющая феминистскую притчу, историческую тайну и научную антиутопию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-handmaids-tale">
+                  <div class="work-row">
+                    <span class="work-code">КН-04.02</span>
+                    <a class="work-link" href="./works/etvud-rasskaz-sluzhanki.html">Рассказ служанки</a>
+                    <span class="work-meta">1985 · Философская антиутопия</span>
+                  </div>
+                  <p class="work-summary">Исповедь Фредовой, сохраняющей живую память, имя и тайную надежду в тоталитарной теократической республике Галаад.</p>
+                </li>
+                <li class="work-item" id="work-the-blind-assassin">
+                  <div class="work-row">
+                    <span class="work-code">КН-04.03</span>
+                    <a class="work-link" href="./works/etvud-slepoj-ubijca.html">Слепой убийца</a>
+                    <span class="work-meta">2000 · Роман-шкатулка</span>
+                  </div>
+                  <p class="work-summary">Восьмидесятилетняя Айрис Чейз переплетает семейную хронику онтарийской династии, газетные вырезки и фантастический роман о планете Цикрония, написанный её погибшей сестрой Лорой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-timothy-findley">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тимоти Финдли</h3>
+                  <p class="author-role">Мастер трагического исторического и мифологического романа · <span class="tabular">1930–2002</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Актёр и писатель из Торонто, поднявший тему хрупкости человечности перед насилием войны в одном из лучших канадских романов XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-wars-findley">
+                  <div class="work-row">
+                    <span class="work-code">КН-04.04</span>
+                    <a class="work-link" href="./works/findli-vojny.html">Войны («The Wars»)</a>
+                    <span class="work-meta">1977 · Антивоенный роман-реконструкция</span>
+                  </div>
+                  <p class="work-summary">Архивная реконструкция судьбы 19-летнего канадского офицера Роберта Росса, который в аду окопов Ипра и Фландрии спасает запертых в огне лошадей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carol-shields">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кэрол Шилдс</h3>
+                  <p class="author-role">Лауреат Пулитцеровской премии и Премии генерал-губернатора · <span class="tabular">1935–2003</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Оттавы и Виннипега, прославившаяся умением разглядеть драму и поэзию в биографиях внешне «незаметных» женщин XX столетия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-stone-diaries">
+                  <div class="work-row">
+                    <span class="work-code">КН-04.05</span>
+                    <a class="work-link" href="./works/shilds-kamennye-dnevniki.html">Каменные дневники</a>
+                    <span class="work-meta">1993 · Роман-биография</span>
+                  </div>
+                  <p class="work-summary">Вся жизнь Дейзи Гудвилл с 1905 по 1990-е годы — от рождения в известняковом карьере Манитобы до садоводства и старости во Флориде — через письма, рецепты и семейные снимки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jane-urquhart">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джейн Уркхарт</h3>
+                  <p class="author-role">Поэтический романист пейзажа, искусства и памяти · <span class="tabular">род. 1949</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат Премии генерал-губернатора, воссоздающая историю Онтарио и переселений XIX–XX веков через поэзию живописи, карт и водных путей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-away-the-underpainter">
+                  <div class="work-row">
+                    <span class="work-code">КН-04.06</span>
+                    <a class="work-link" href="./works/urkhart-daleko.html">Далеко («Away») и «Подмалёвок»</a>
+                    <span class="work-meta">1993–1997 · Лирико-исторические романы</span>
+                  </div>
+                  <p class="work-summary">Сага о четырёх поколениях ирландских переселенцев у Великих озёр и тихая исповедь американского художника на северном берегу озера Верхнее.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="can-poetry-song-experiment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1945–2000</p>
+          <h2 class="section-title">Канадская поэзия, Леонард Коэн и экспериментальная проза</h2>
+          <p class="section-desc">Поэтический взрыв Монреаля, Торонто и Восточного Онтарио: духовная лирика Леонарда Коэна, голос земли Ала Перди, жанровый синтез Энн Карсон и шедевры Майкла Ондатже.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-leonard-cohen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Леонард Коэн</h3>
+                  <p class="author-role">Великий поэт, романист и автор-исполнитель из Монреаля · <span class="tabular">1934–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Начавший путь как один из самых ярких поэтов и романистов Канады 1950–1960-х, соединивший библейскую традицию, иронию и мистический поиск.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-beautiful-losers-mercy">
+                  <div class="work-row">
+                    <span class="work-code">КН-05.01</span>
+                    <a class="work-link" href="./works/koen-prekrasnye-neudachniki.html">Прекрасные неудачники и «Книга милосердия»</a>
+                    <span class="work-meta">1966 / 1984 · Постмодернистский роман и поэма в прозе</span>
+                  </div>
+                  <p class="work-summary">От бунтарской фантасмагории Монреаля с историей святой ирокезки Катери Текаквиты до пятидесяти пронзительных псалмов духовного смирения и света.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-al-purdy">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ал Перди (и Ирвинг Лейтон)</h3>
+                  <p class="author-role">«Неофициальный поэт-лауреат Канады» · <span class="tabular">1918–2000</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-самоучка из округа Принс-Эдуард в Онтарио, построивший собственный дом на берегу озера Роблин и научивший канадскую поэзию говорить голосом страны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-cariboo-horses">
+                  <div class="work-row">
+                    <span class="work-code">КН-05.02</span>
+                    <a class="work-link" href="./works/perdi-loshadi-karibu.html">Лошади Карибу и «Страна, которую я полюбил»</a>
+                    <span class="work-meta">1965–1972 · Лирическая и историческая поэзия</span>
+                  </div>
+                  <p class="work-summary">Непосредственные, мудрые и полные юмора стихи о северных срубах, заброшенных фермах, арктических льдах и глубинной памяти канадского ландшафта.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-anne-carson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Энн Карсон</h3>
+                  <p class="author-role">Выдающаяся поэтесса, эллинист и экспериментатор мировой литературы · <span class="tabular">род. 1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Торонто и лауреат множества международных премий, стирающая границы между античной филологией, верлибром, эссе и романом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-autobiography-of-red">
+                  <div class="work-row">
+                    <span class="work-code">КН-05.03</span>
+                    <a class="work-link" href="./works/karson-avtobiografiya-krasnogo.html">Автобиография Красного</a>
+                    <span class="work-meta">1998 · Роман в стихах</span>
+                  </div>
+                  <p class="work-summary">Осовремененный античный миф Стесихора: история крылатого красного мальчика Гериона с фотоаппаратом и его любви к юному Гераклу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-robert-kroetsch">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Роберт Кротч</h3>
+                  <p class="author-role">Отец канадского литературного постмодернизма · <span class="tabular">1927–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик и поэт из Альберты, превративший мифы прерий, фермерский фольклор и устные байки Запада в дерзкую игровую прозу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-studhorse-man">
+                  <div class="work-row">
+                    <span class="work-code">КН-05.04</span>
+                    <a class="work-link" href="./works/krotch-zherebec.html">Жеребец («The Studhorse Man»)</a>
+                    <span class="work-meta">1969 · Постмодернистский роман-фарс</span>
+                  </div>
+                  <p class="work-summary">Одиссея Хэзарда Лепажа с его синим жеребцом Посейдоном по дорогам послевоенной Альберты — комическая эпопея о столкновении мифа с современностью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-michael-ondaatje">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Майкл Ондатже</h3>
+                  <p class="author-role">Лауреат «Золотого Букера», мастер поэтической прозы и монтажа · <span class="tabular">род. 1943</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Родившийся на Цейлоне канадский поэт и прозаик из Торонто, создавший одни из самых лирических романов рубежа XX–XXI веков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-english-patient">
+                  <div class="work-row">
+                    <span class="work-code">КН-05.05</span>
+                    <a class="work-link" href="./works/ondatzhe-anglijskij-pacient.html">Английский пациент</a>
+                    <span class="work-meta">1992 · Лирико-философский роман</span>
+                  </div>
+                  <p class="work-summary">Весна 1945 года на разрушенной тосканской вилле: канадская медсестра Хана, вор Караваджо, сапёр Кип и обгоревший картограф пустыни Алмаши, заново собирающие осколки памяти.</p>
+                </li>
+                <li class="work-item" id="work-in-the-skin-of-a-lion">
+                  <div class="work-row">
+                    <span class="work-code">КН-05.06</span>
+                    <a class="work-link" href="./works/ondatzhe-v-lvinoj-shkure.html">В львиной шкуре</a>
+                    <span class="work-meta">1987 · Историко-поэтический роман</span>
+                  </div>
+                  <p class="work-summary">Скрытая поэзия строителей моста Блур и водопроводного туннеля под озером Онтарио — роман о безвестных иммигрантах, построивших Торонто 1920–1930-х годов.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="can-multicultural-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1990–2020-е годы</p>
+          <h2 class="section-title">Многоголосие XXI века, иммиграция и голоса Первых Наций</h2>
+          <p class="section-desc">Современная панорама канадской литературы: мировая притча Янна Мартела, гуманизм Рохинтона Мистри, элегии Кейп-Бретона Алистера Маклеода, проза Первых Наций и Мириам Тейвз.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-yann-martel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Янн Мартел</h3>
+                  <p class="author-role">Лауреат Букеровской премии (2002), мастер философской притчи · <span class="tabular">род. 1963</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Квебекский и англо-канадский романист из Саскатуна, подаривший миру притчу о вере, выживании и силе воображения посреди океана.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-life-of-pi">
+                  <div class="work-row">
+                    <span class="work-code">КН-06.01</span>
+                    <a class="work-link" href="./works/martel-zhizn-pi.html">Жизнь Пи</a>
+                    <span class="work-meta">2001 · Философский роман-притча</span>
+                  </div>
+                  <p class="work-summary">Двести двадцать семь дней индийского юноши Писина Пателя в спасательной шлюпке посреди Тихого океана наедине с бенгальским тигром Ричардом Паркером.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rohinton-mistry">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рохинтон Мистри</h3>
+                  <p class="author-role">Мастер эпического гуманистического романа · <span class="tabular">род. 1952</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Торонто, родившийся в Бомбее, чьи великие полотна («Хрупкое равновесие», «Дела семейные») прославили канадскую литературу во всём мире.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-a-fine-balance">
+                  <div class="work-row">
+                    <span class="work-code">КН-06.02</span>
+                    <a class="work-link" href="./works/mistri-hrupkoe-ravnovesie.html">Хрупкое равновесие</a>
+                    <span class="work-meta">1995 · Социально-эпический роман</span>
+                  </div>
+                  <p class="work-summary">Четыре незнакомца из разных каст и сословий — вдова Дина, студент Манек и двое портных Ишвар и Омпракаш — находят хрупкое тепло человеческого братства в суровом 1975 году.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alistair-macleod">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алистер Маклеод</h3>
+                  <p class="author-role">Классик Атлантической Канады, певец острова Кейп-Бретон · <span class="tabular">1936–2014</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учитель шахтёрского и гэльского Приморья Новой Шотландии, создавший шестнадцать безупречных рассказов и великий роман о памяти крови и моря.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-no-great-mischief">
+                  <div class="work-row">
+                    <span class="work-code">КН-06.03</span>
+                    <a class="work-link" href="./works/makleod-ne-velik-ushherb.html">Не велик ущерб («No Great Mischief»)</a>
+                    <span class="work-meta">1999 · Семейно-исторический роман</span>
+                  </div>
+                  <p class="work-summary">Элегическая хроника клана Макдональдов от шотландского исхода 1779 года до урановых рудников Онтарио и каменистых берегов Кейп-Бретона.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-thomas-king">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Кинг</h3>
+                  <p class="author-role">Ведущий сатирик и прозаик литературы коренных народов Северной Америки · <span class="tabular">род. 1943</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, учёный и радиоведущий черокийского происхождения из Онтарио, блестяще соединивший устную традицию трикстера с постмодернистской иронией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-green-grass-running-water">
+                  <div class="work-row">
+                    <span class="work-code">КН-06.04</span>
+                    <a class="work-link" href="./works/king-zelenaya-trava.html">Зелёная трава, бегущая вода</a>
+                    <span class="work-meta">1993 · Сатирико-мифологический роман</span>
+                  </div>
+                  <p class="work-summary">В резервации Блэкфут в Альберте переплетаются судьбы современных жителей, дамба на реке и четверо сбежавших из клиники бессмертных мифологических стариков с Койотом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-richard-wagamese">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ричард Вагамезе</h3>
+                  <p class="author-role">Один из самых пронзительных писателей народа оджибве · <span class="tabular">1955–2017</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и романист, нашедший в литературе путь к исцелению травмы школ-интернатов и воспевший связь человека с северной землёй и игрой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-indian-horse">
+                  <div class="work-row">
+                    <span class="work-code">КН-06.05</span>
+                    <a class="work-link" href="./works/vagameze-indejskij-kon.html">Индейский конь</a>
+                    <span class="work-meta">2012 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Судьба мальчика Сола Индиан Хорса из северного Онтарио, для которого лёд и хоккейная клюшка становятся крыльями свободы посреди мрака интерната и расизма.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-miriam-toews">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мириам Тейвз</h3>
+                  <p class="author-role">Одна из ярчайших современных романисток Канады · <span class="tabular">род. 1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка меннонитского городка Стейнбах в Манитобе, умеющая говорить о самых тяжёлых человеческих утратах с удивительной нежностью и юмором.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-complicated-kindness-women-talking">
+                  <div class="work-row">
+                    <span class="work-code">КН-06.06</span>
+                    <a class="work-link" href="./works/tejvz-slozhnaya-dobrota.html">Сложная доброта и «Женщины говорят»</a>
+                    <span class="work-meta">2004 / 2018 · Социально-психологические романы</span>
+                  </div>
+                  <p class="work-summary">Бунт шестнадцатилетней Номи Никель в строгой общине Манитобы и тайный ночной совет женщин на сеновале, решающих, простить ли прошлое, сражаться или уйти к новой жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-madeleine-thien">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мадлен Тьен</h3>
+                  <p class="author-role">Ведущая современная канадская романистка мирового масштаба · <span class="tabular">род. 1974</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ванкуверская писательница, лауреат Премии генерал-губернатора и финалист Букеровской премии, исследующая историю музыки, памяти и диктатур XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-do-not-say-we-have-nothing">
+                  <div class="work-row">
+                    <span class="work-code">КН-06.07</span>
+                    <a class="work-link" href="./works/ten-ne-govori-chto-net-nichego.html">Не говори, что у нас ничего нет</a>
+                    <span class="work-meta">2016 · Исторический музыкальный роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">История поколений китайских музыкантов и пианистки Цзян Лили — от Шанхайской консерватории и «Гольдберг-вариаций» Баха до переписи подпольной книги в Ванкувере.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание канадской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

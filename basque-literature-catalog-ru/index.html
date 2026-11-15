@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог баскской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 25 писателей · 27 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог баскской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от первой книги Бернарта Эчепаре (1545) и «Потом» Ашулара до «Морской пены» Агирре, поэзии Лисарди и Арести, «Обабакоак» Бернардо Ачаги и прозы Кирмена Урибе.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#eu-first-books-sara">Раздел I: Первые книги и «Золотой век» школы Сары</a>
+        <a href="#eu-enlightenment-bertsolari">Раздел II: Просвещение, устные берцолари и проза XIX века</a>
+        <a href="#eu-pizkundea">Раздел III: Баскское Возрождение («Эускаль Пицкундеа»)</a>
+        <a href="#eu-batua-modernism">Раздел IV: Обновление прозы, Арести и эпоха «эускара батуа»</a>
+        <a href="#eu-obaba-world">Раздел V: Поэтика Обабы и мировой прорыв Бернардо Ачаги</a>
+        <a href="#eu-contemporary">Раздел VI: Новая баскская проза и поэзия XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="eu-first-books-sara">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVI–XVII века</p>
+          <h2 class="section-title">Первые книги и «Золотой век» школы Сары</h2>
+          <p class="section-desc">От первой печатной книги на баскском языке (1545) Бернарта Эчепаре и перевода Нового Завета до вершины классической прозы XVII века в трудах школы Лабурдана.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-bernat-etxepare">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бернарт Эчепаре</h3>
+                  <p class="author-role">Автор первой печатной книги на баскском языке · <span class="tabular">ок. 1470–1560</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Священник из Нижней Наварры, издатель первого стихотворного сборника на эускара (1545), провозгласивший в знаменитом гимне «Contrapas»: «Выйди в мир, язык басков!»</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-linguae-vasconum-primitiae">
+                  <div class="work-row">
+                    <span class="work-code">БК-01.01</span>
+                    <a class="work-link" href="./works/etxepare-nachatki-baskskogo-yazyka.html">Начатки баскского языка («Linguae Vasconum Primitiae»)</a>
+                    <span class="work-meta">1545 · Поэтический сборник</span>
+                  </div>
+                  <p class="work-summary">Пятнадцать стихотворений — религиозных, любовных, автобиографических и две пламенные песни во славу родного баскского языка.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-joanes-leizarraga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йоанес Лейсаррага</h3>
+                  <p class="author-role">Первый переводчик Нового Завета и создатель книжной нормы · <span class="tabular">ок. 1506–1601</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Протестантский пастор из Лабурдана, по поручению королевы Наварры Жанны д’Альбре переведший Новый Завет и заложивший основы наддиалектного баскского письма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-basque-new-testament">
+                  <div class="work-row">
+                    <span class="work-code">БК-01.02</span>
+                    <a class="work-link" href="./works/leizarraga-novyj-zavet.html">Новый Завет на баскском языке</a>
+                    <span class="work-meta">1571 · Библейский перевод и проза</span>
+                  </div>
+                  <p class="work-summary">Изданный в Ла-Рошели перевод Евангелий и Посланий с блестящим словарём-справочником для читателей разных баскских долин.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pedro-axular">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Педро Ашулар</h3>
+                  <p class="author-role">«Сервантес баскской прозы», глава школы Сары · <span class="tabular">1556–1644</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Настоятель прихода Сара (Лабурдан), превративший баскский язык в инструмент блестящей барочной риторики, метафоры и психологической глубины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gero-axular">
+                  <div class="work-row">
+                    <span class="work-code">БК-01.03</span>
+                    <a class="work-link" href="./works/axular-gero-potom.html">Потом («Gero»)</a>
+                    <span class="work-meta">1643 · Морально-философская барочная проза</span>
+                  </div>
+                  <p class="work-summary">Шедевр классической баскской прозы — трактат о губительности привычки откладывать добрые дела и духовное обновление «на потом» (библия стиля на три столетия вперёд).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-arnaut-oihenart">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арно Ойенар</h3>
+                  <p class="author-role">Первый светский баскский филолог, поэт и паремиолог · <span class="tabular">1592–1668</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Историк из Суля, собравший сотни древних пословиц и разработавший строгую теорию силлабического баскского стиха.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-basque-proverbs-poems">
+                  <div class="work-row">
+                    <span class="work-code">БК-01.04</span>
+                    <a class="work-link" href="./works/oihenart-poslovicy-i-stihi.html">Баскские пословицы и стихотворения</a>
+                    <span class="work-meta">1657 · Свод фольклора и светская лирика</span>
+                  </div>
+                  <p class="work-summary">Собрание 537 народных пословиц на сулетинском диалекте и изысканные любовные стихотворения в традициях французского ренессанса.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="eu-enlightenment-bertsolari">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · XVIII–XIX века</p>
+          <h2 class="section-title">Просвещение, устные берцолари и проза XIX века</h2>
+          <p class="section-desc">От первого диалогического романа «Перу Абарка» Хуана Антонио Могеля и романтической легенды об Айторе до импровизационного искусства берцоларизма.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-juan-antonio-mogel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Антонио Могель</h3>
+                  <p class="author-role">Просветитель и автор первого баскского прозаического романа · <span class="tabular">1745–1804</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный священник из Маркины, прославивший чистую речь, опыт и природную мудрость баскских крестьян в споре с городским книжным цирюльником.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-peru-abarka">
+                  <div class="work-row">
+                    <span class="work-code">БК-02.01</span>
+                    <a class="work-link" href="./works/mogel-peru-abarka.html">Перу Абарка (Учитель из Маркины и городской цирюльник)</a>
+                    <span class="work-meta">1802 (изд. 1881) · Просветительский роман-диалог</span>
+                  </div>
+                  <p class="work-summary">Шесть живых диалогов, в которых мудрый крестьянин Перу Абарка учит самоуверенного горожанина Майсу Хуана богатству баскского языка, ремёслам и здравому смыслу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-joseph-augustin-chaho">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жозеф-Огюстен Шахо</h3>
+                  <p class="author-role">Романтический мыслитель и создатель мифа об Айторе · <span class="tabular">1811–1858</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, этнограф и журналист из Тардеца, создавший романтическую космогонию баскского духа и легендарного праотца Айтора.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-legend-of-aitor">
+                  <div class="work-row">
+                    <span class="work-code">БК-02.02</span>
+                    <a class="work-link" href="./works/chaho-legenda-ob-ajtore.html">Легенда об Айторе</a>
+                    <span class="work-meta">1845 · Романтическая поэма в прозе</span>
+                  </div>
+                  <p class="work-summary">Поэтическая легенда о патриархе Айторе, пережившем потоп на вершинах Пиренеев и передавшем баскам чистый язык, огонь свободы и закон братства.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-txirrita">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Мануэль Луханбио (Чиррита)</h3>
+                  <p class="author-role">Король устной импровизационной поэзии «берцолари» · <span class="tabular">1860–1936</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Легендарный мастер импровизированных стихов-берцо на деревенских площадях Гипускоа, соединявший искромётный юмор с острой социальной сатирой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-txirrita-bertsoak">
+                  <div class="work-row">
+                    <span class="work-code">БК-02.03</span>
+                    <a class="work-link" href="./works/txirrita-berco.html">Берцо и сатирические импровизации</a>
+                    <span class="work-meta">кон. XIX – 1936 · Устная поэзия берцолари (берцо)</span>
+                  </div>
+                  <p class="work-summary">Сотни запоминающихся рифмованных строф-экспромтов о крестьянской бедности, войне, вине, ленивых господах и быстротечности собственной жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jean-baptiste-elissamburu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жан Баттист Элиссамбюрю</h3>
+                  <p class="author-role">Лирик и мастер короткой прозы Ипарральде · <span class="tabular">1828–1891</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Сары, чья песня «Мой родной дом» («Ikusten duzu goizean») стала неофициальным гимном спокойного достоинства баскских хуторов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pierre-adama">
+                  <div class="work-row">
+                    <span class="work-code">БК-02.04</span>
+                    <a class="work-link" href="./works/elissamburu-pierres-arrambalde.html">Пьеррес Аррамбальде и «Мой утренний дом»</a>
+                    <span class="work-meta">1880-е · Повесть и песенная лирика</span>
+                  </div>
+                  <p class="work-summary">Поэтичная история верности родной земле и простая песня о белом домике среди четырёх старых дубов на склоне холма.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="eu-pizkundea">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1890–1937</p>
+          <h2 class="section-title">Баскское Возрождение («Эускаль Пицкундеа»)</h2>
+          <p class="section-desc">Рождение современного романа в книгах Доминго Агирре и прорыв лирики баскского модернизма перед Гражданской войной (Лисарди, Лауаксета, Орише).</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-txomin-agirre">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Доминго (Чомин) Агирре</h3>
+                  <p class="author-role">Классик реалистическо-костумбристского баскского романа · <span class="tabular">1864–1920</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Ондарроа, создавший два фундаментальных романа о двух мирах Страны Басков — море и горах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kresala-agirre">
+                  <div class="work-row">
+                    <span class="work-code">БК-03.01</span>
+                    <a class="work-link" href="./works/agirre-morskaya-pena.html">Морская пена («Kresala»)</a>
+                    <span class="work-meta">1906 · Роман</span>
+                  </div>
+                  <p class="work-summary">Живая хроника рыбацкого городка Аррандондо на Бискайском заливе: любовь Майши и Анешо, опасные выходы в штормовое море и сочный прибрежный фольклор.</p>
+                </li>
+                <li class="work-item" id="work-garoa-agirre">
+                  <div class="work-row">
+                    <span class="work-code">БК-03.02</span>
+                    <a class="work-link" href="./works/agirre-paporotnik.html">Папоротник («Garoa»)</a>
+                    <span class="work-meta">1912 · Роман</span>
+                  </div>
+                  <p class="work-summary">Величественный портрет горной баскской усадьбы-басерри в Оньяте и старого патриарха Хоанаэса — хранителя традиций предков у подножия Айцгорри.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-xabier-lizardi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шабьер Лисарди (Хосе Мария Агирре)</h3>
+                  <p class="author-role">Ведущий поэт-лирик Баскского Возрождения · <span class="tabular">1896–1933</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Тончайший символист и новатор, доказавший в одной небольшой книге, что баскский стих способен к европейской метафизической изощрённости.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bihotz-begietan">
+                  <div class="work-row">
+                    <span class="work-code">БК-03.03</span>
+                    <a class="work-link" href="./works/lizardi-v-serdce-i-glazah.html">В сердце и глазах («Bihotz-begietan»)</a>
+                    <span class="work-meta">1932 · Символистская лирика</span>
+                  </div>
+                  <p class="work-summary">Утончённые стихи об осени в буковом лесу, памяти о юности («Парижский поезд»), тоске по родному слову и хрупкости человеческого присутствия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lauaxeta">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лауаксета (Эстебан Уркиага)</h3>
+                  <p class="author-role">Поэт-авангардист, переводчик Лорки и мученик 1937 года · <span class="tabular">1905–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий поэт и журналист, принесший в баскскую лирику символизм и образы Федерико Гарсиа Лорки, расстрелянный в Витории в июне 1937 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bide-barrijak">
+                  <div class="work-row">
+                    <span class="work-code">БК-03.04</span>
+                    <a class="work-link" href="./works/lauaxeta-novye-puti.html">Новые пути и «Поздним вечером»</a>
+                    <span class="work-meta">1931–1935 · Модернистская поэзия</span>
+                  </div>
+                  <p class="work-summary">Стихотворные циклы, освободившие баскский стих от узкой пасторали — баллады о матросах, бунтах, луне и предчувствии трагической гибели.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-orixe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Орише (Николас Ормаэчеа)</h3>
+                  <p class="author-role">Автор монументальной национальной поэмы XX века · <span class="tabular">1888–1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Знаток всех диалектов эускара и мистик, создавший поэтическую энциклопедию народных игр, свадеб, труда и обычаев басков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-euskaldunak-orixe">
+                  <div class="work-row">
+                    <span class="work-code">БК-03.05</span>
+                    <a class="work-link" href="./works/orixe-baski.html">Баски («Euskaldunak»)</a>
+                    <span class="work-meta">1950 · Эпико-этнографическая поэма</span>
+                  </div>
+                  <p class="work-summary">Двенадцать тысяч стихов о круглогодичном цикле жизни наваррско-гипускоанского села — от игры в пелоту и косьбы до горных паломничеств.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="eu-batua-modernism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1955–1976</p>
+          <h2 class="section-title">Обновление прозы, Арести и эпоха «эускара батуа»</h2>
+          <p class="section-desc">Радикальный разрыв с прежней традицией: экзистенциальный роман Чильярдеги, бунтарская проза Миранде, гражданская лирика Габриэля Арести и «новый роман» Саисарбитории.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-txillardegi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чильярдеги (Хосе Луис Альварес Эмпаранца)</h3>
+                  <p class="author-role">Пионер современного баскского экзистенциалистского романа · <span class="tabular">1929–2012</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лингвист, архитектор единого литературного стандарта «эускара батуа» и прозаик, перенёсший действие романа из деревни в внутренний кризис городского интеллигента.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-leturiaren-egunkari-ezkutua">
+                  <div class="work-row">
+                    <span class="work-code">БК-04.01</span>
+                    <a class="work-link" href="./works/txillardegi-dnevnik-leturii.html">Тайный дневник Летурии («Leturiaren egunkari ezkutua»)</a>
+                    <span class="work-meta">1957 · Экзистенциальный роман-дневник</span>
+                  </div>
+                  <p class="work-summary">Исповедь одинокого интеллигента, мучительно ищущего смысл любви, веры и абсурда после смерти жены Мирен — поворотная точка в истории баскской прозы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gabriel-aresti">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Габриэль Арести</h3>
+                  <p class="author-role">Великий поэт индустриального Бильбао и «социальной лирики» · <span class="tabular">1933–1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Бильбао, выучивший эускара самостоятельно в юности и написавший самое знаменитое стихотворение XX века — «Я буду защищать дом отца».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-harri-eta-herri">
+                  <div class="work-row">
+                    <span class="work-code">БК-04.02</span>
+                    <a class="work-link" href="./works/aresti-kamen-i-narod.html">Камень и народ («Harri eta herri»)</a>
+                    <span class="work-meta">1964 · Гражданская и модернистская поэзия</span>
+                  </div>
+                  <p class="work-summary">Манифест нового баскского поэтического языка — стихи о рабочих фабрик Бильбао, правде камня и несокрушимой клятве защищать отчий дом вопреки всем бурям.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jon-mirande">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йон Миранде</h3>
+                  <p class="author-role">Бунтарский модернист и мастер провокационной прозы · <span class="tabular">1925–1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Парижский баск, полиглот и поэт декаданса, расширивший тематические и стилистические горизонты литературы на эускара.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-haur-besoetakoa">
+                  <div class="work-row">
+                    <span class="work-code">БК-04.03</span>
+                    <a class="work-link" href="./works/mirande-krestnica.html">Крестница («Haur besoetakoa»)</a>
+                    <span class="work-meta">1970 · Модернистский роман</span>
+                  </div>
+                  <p class="work-summary">Психологически напряжённый, бескомпромиссный роман о запретной страсти и бунте против буржуазного лицемерия, десятилетие не находивший издателя.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ramon-saizarbitoria">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рамон Саисарбитория</h3>
+                  <p class="author-role">Мастер экспериментального романа и психологического анализа памяти · <span class="tabular">род. 1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из главных реформаторов современной баскской прозы, автор новаторских «Ста метров» и монументального «Мартутене».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ehun-metro">
+                  <div class="work-row">
+                    <span class="work-code">БК-04.04</span>
+                    <a class="work-link" href="./works/saizarbitoria-sto-metrov.html">Сто метров и «Мартутене»</a>
+                    <span class="work-meta">1976–2012 · Экспериментальный и панорамный романы</span>
+                  </div>
+                  <p class="work-summary">Последние секунды и воспоминания бегущего по площади Конституции в Сан-Себастьяне юноши («Сто метров») и монументальное исследование баскской интеллигенции в «Мартутене».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="eu-obaba-world">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1979–2005</p>
+          <h2 class="section-title">Поэтика Обабы и мировой прорыв Бернардо Ачаги</h2>
+          <p class="section-desc">Выход баскской литературы на мировую орбиту: «Обабакоак» Бернардо Ачаги, странствия и новеллы Хосебы Саррионаиндии, мифологизм Лерчунди и голос Урретабискайи.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-bernardo-atxaga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бернардо Ачага</h3>
+                  <p class="author-role">Классик современной баскской прозы мирового масштаба · <span class="tabular">род. 1951</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Хосе Иразу Гармендиа — первый автор, чья книга на баскском языке завоевала Национальную премию Испании и была переведена более чем на тридцать языков мира.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-obabakoak">
+                  <div class="work-row">
+                    <span class="work-code">БК-05.01</span>
+                    <a class="work-link" href="./works/atxaga-obabakoak.html">Обабакоак («Люди из Обабы»)</a>
+                    <span class="work-meta">1988 · Роман в новеллах (магический реализм)</span>
+                  </div>
+                  <p class="work-summary">Магический мир вымышленной горной долины Обаба: истории о ящерицах, заползающих в ухо, чудаках, немецкой учительнице, плагиате и поиске «девяти слов» родного языка.</p>
+                </li>
+                <li class="work-item" id="work-accordionists-son">
+                  <div class="work-row">
+                    <span class="work-code">БК-05.02</span>
+                    <a class="work-link" href="./works/atxaga-syn-akkordeonista.html">Сын аккордеониста</a>
+                    <span class="work-meta">2003 · Роман</span>
+                  </div>
+                  <p class="work-summary">Завещание умирающего на калифорнийском ранчо баска Давида — прощание с детством в послевоенной Обабе, дружбой с Хосебой, политическим насилием и тайнами отцов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-joseba-sarrionandia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосеба Саррионаиндиа</h3>
+                  <p class="author-role">Культовый поэт, эссеист и автор «островной» прозы · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Филолог и эрудит, проведший десятилетия в изгнании, превративший мотивы моря, библиотек, Борхеса и забытых языков в поэзию высшего класса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lagun-izoztua">
+                  <div class="work-row">
+                    <span class="work-code">БК-05.03</span>
+                    <a class="work-link" href="./works/sarrionandia-zamerzshij-drug.html">Замёрзший друг («Lagun izoztua») и «Не быть из ниоткуда»</a>
+                    <span class="work-meta">1985–2001 · Роман и философские новеллы</span>
+                  </div>
+                  <p class="work-summary">Сны изгнанника между Антарктидой и Бискайей о потере памяти, утраченном доме и хрупких мостах между людьми через десятилетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-anjel-lertxundi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анхель Лерчунди</h3>
+                  <p class="author-role">Мастер баскской историко-мифологической и эссеистической прозы · <span class="tabular">род. 1948</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и эссеист из Орио, соединивший легенду о Вечном Жиде и европейское средневековье с глубинным баскским языковым пластом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-otto-pette">
+                  <div class="work-row">
+                    <span class="work-code">БК-05.04</span>
+                    <a class="work-link" href="./works/lertxundi-otto-pette.html">Отто Пелле («Otto Pette. Hilean biziarena»)</a>
+                    <span class="work-meta">1994 · Философско-аллегорический роман</span>
+                  </div>
+                  <p class="work-summary">Средневековая притча о встрече умирающего военачальника Отто Пелле с таинственным незнакомцем в чёрном — поединок памяти, вины и власти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-arantxa-urretabizkaia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арантса Урретабискайя</h3>
+                  <p class="author-role">Пионерка современной женской и психологической баскской прозы · <span class="tabular">род. 1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Академик Эускальцаиндии (Королевской академии баскского языка), переосмыслившая материнство, женскую свободу и городской опыт.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zergatik-panpox">
+                  <div class="work-row">
+                    <span class="work-code">БК-05.05</span>
+                    <a class="work-link" href="./works/urretabizkaia-pochemu-panampa.html">Почему Панампа? («Zergatik Panpox»)</a>
+                    <span class="work-meta">1979 · Психологическая повесть-монолог</span>
+                  </div>
+                  <p class="work-summary">Один день из жизни молодой матери, оставленной мужем и разговаривающей с пятилетним сыном и самой собой среди повседневных забот Сан-Себастьяна.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="eu-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 2000–2020-е годы</p>
+          <h2 class="section-title">Новая баскская проза и поэзия XXI века</h2>
+          <p class="section-desc">Глобальный диалог нового поколения баскских авторов: автофикшн Кирмена Урибе, новеллы Эйдер Родригес, интеллектуальные романы Кано, Элорриаги и Итксаро Борды.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-kirmen-uribe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кирмен Урибе</h3>
+                  <p class="author-role">Ведущий поэт и романист новой баскской волны · <span class="tabular">род. 1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец рыбацкого Ондарроа, лауреат Национальной премии Испании за роман, соединивший семейную память моряков, эпоху авангарда и современность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bilbao-new-york-bilbao">
+                  <div class="work-row">
+                    <span class="work-code">БК-06.01</span>
+                    <a class="work-link" href="./works/uribe-bilbao-nyu-jork-bilbao.html">Бильбао — Нью-Йорк — Бильбао</a>
+                    <span class="work-meta">2008 · Роман-мозаика (автофикшн)</span>
+                  </div>
+                  <p class="work-summary">За время авиаперелёта из Бильбао в Нью-Йорк писатель связывает истории трёх поколений рыбаков своей семьи, картину художника Аурелио Артеты и поэзию малых языков мира.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-harkaitz-cano">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Харкайц Кано</h3>
+                  <p class="author-role">Один из самых ярких стилистов современной баскской литературы · <span class="tabular">род. 1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, новеллист и трижды лауреат баскской Премии критики за полифонические романы о музыке, памяти и трагедии 1980-х годов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-twist-cano">
+                  <div class="work-row">
+                    <span class="work-code">БК-06.02</span>
+                    <a class="work-link" href="./works/cano-tvist.html">Твист («Twist»)</a>
+                    <span class="work-meta">2011 · Роман</span>
+                  </div>
+                  <p class="work-summary">История друга, предавшего под пытками двух товарищей в годы баскского конфликта 1980-х — болезненная книга о вине, искусстве и невозможности забыть прошлое.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-itxaro-borda">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Итксаро Борда</h3>
+                  <p class="author-role">Главная писательница и поэтесса Северной Страны Басков · <span class="tabular">род. 1959</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Байонны, автор цикла о детективше-сельчанке Амайе Эспелетте и глубоких романов о баскской идентичности на границе Франции и Испании.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hundred-percent-basque">
+                  <div class="work-row">
+                    <span class="work-code">БК-06.03</span>
+                    <a class="work-link" href="./works/borda-sto-procentov-baskskij.html">%100 баскский («%100 Basque»)</a>
+                    <span class="work-meta">2001 · Иронико-лирический роман-эссе</span>
+                  </div>
+                  <p class="work-summary">Остроумная и нежная книга о мифах, сыре, пастухах, сувенирной экзотике и реальной жизни басков по обе стороны Пиренеев.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-unai-elorriaga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Унаи Элорриага</h3>
+                  <p class="author-role">Мастер поэтической притчи о старости и воображении · <span class="tabular">род. 1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат Национальной премии Испании за дебютный роман о чудаковатом старике Лукасе, превратившем свою комнату в воображаемый трамвай.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tram-to-ermoa">
+                  <div class="work-row">
+                    <span class="work-code">БК-06.04</span>
+                    <a class="work-link" href="./works/elorriaga-tramvaj-na-ermoa.html">Трамвай на Эрмоа («SPrako tranbia»)</a>
+                    <span class="work-meta">2001 · Лирический роман</span>
+                  </div>
+                  <p class="work-summary">Трогательная история умирающего старика Лукаса и двух молодых жильцов его квартиры, которым он дарит игру в бесконечный путь воображаемого трамвая.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eider-rodriguez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эйдер Родригес</h3>
+                  <p class="author-role">Мастер современного баскского рассказа · <span class="tabular">род. 1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор из Эррентерии, чьи сборники новелл («Мясо», «Сердце с избытком») стали эталоном современной психологической короткой прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bihotz-handiegia">
+                  <div class="work-row">
+                    <span class="work-code">БК-06.05</span>
+                    <a class="work-link" href="./works/rodriguez-serdce-s-izbytkom.html">Сердце с избытком («Bihotz handiegia»)</a>
+                    <span class="work-meta">2017 · Книга новелл</span>
+                  </div>
+                  <p class="work-summary">Шесть тончайших рассказов о трещинах в семейных союзах, возвращении бывшего мужа и невидимой границе между любовью и усталостью.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание баскской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
