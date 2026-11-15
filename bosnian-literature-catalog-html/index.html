@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог боснийской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 37 писателей · 39 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог боснийской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от эпитафий на стечках, поэзии альхамьядо и «Хасанагиницы» до классики Алексы Шантича и Петара Кочича, романов Иво Андрича и Меши Селимовича, поэмы «Каменный спящий» Мака Диздара, Джевада Карахасана, Александра Хемона и Ланы Басташич.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#ba-stecci-aljamiado-chronicles">Раздел I: Стечки, альхамьядо и летописи Боснии</a>
+        <a href="#ba-ballads-enlightenment-19c">Раздел II: Народная баллада, Просвещение и возрождение XIX века</a>
+        <a href="#ba-realism-modernism-interwar">Раздел III: Реализм Краины, модерн и проза первой половины XX века</a>
+        <a href="#ba-andric-selimovic-dizdar">Раздел IV: Классика XX века: Иво Андрич, Меша Селимович и Мак Диздар</a>
+        <a href="#ba-sarajevo-school-mid-late-20c">Раздел V: Поколение 1960–1980-х: сараевская проза, поэзия и театр</a>
+        <a href="#ba-war-memory-21st-century">Раздел VI: Память Сараева, война и боснийская проза XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="ba-stecci-aljamiado-chronicles">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XII–XVIII века</p>
+          <h2 class="section-title">Стечки, альхамьядо и летописи Боснии</h2>
+          <p class="section-desc">От древней грамоты бана Кулина и каменных эпитафий на боснийских стечках к францисканской прозе Матии Дивковича, исламско-славянской поэзии альхамьядо и живой сараевской летописи Мулы Мустафы Башескии.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ba-kulin-ban-stecci">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Древнебоснийские грамоты и эпитафии стечков</h3>
+                  <p class="author-role">Древнейшие памятники босанчицы и каменной поэзии средневековой Боснии · <span class="tabular">XII–XV века</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Написанная в 1189 году грамота бана Кулина дубровчанам и высеченные на средневековых надгробиях-стечках (Радимля, Болюни) лаконичные изречения о жизни, чести и вечности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-povelja-kulina-stecci">
+                  <div class="work-row">
+                    <span class="work-code">БН-01.01</span>
+                    <a class="work-link" href="./works/bosn-gramota-kulina-stecki.html">Грамота бана Кулина и каменные надписи стечков</a>
+                    <span class="work-meta">1189 / XIV–XV вв. · Средневековая эпиграфика и деловая словесность</span>
+                  </div>
+                  <p class="work-summary">Основополагающий дипломатический документ средневековой Боснии и проникновенные каменные эпитафии вроде надписи воеводы Влатко Владевича: «И прошу вас, не наступайте на меня: я был тем, кто вы, а вы будете тем, кто я».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-matija-divkovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Матия Дивкович</h3>
+                  <p class="author-role">Основатель печатной боснийской книжности на босанчице · <span class="tabular">1563–1631</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Францисканский священник из Елашков под Варешем, напечатавший в Венеции первые книги народным штокавским языком в кириллической графике босанчицы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-nauk-krstjanski-divkovic">
+                  <div class="work-row">
+                    <span class="work-code">БН-01.02</span>
+                    <a class="work-link" href="./works/bosn-divkovich-nauka-hristianskaya.html">Наука христианская и «Сто чудес Девы Марии»</a>
+                    <span class="work-meta">1611 / 1616 · Просветительская и притчевая проза</span>
+                  </div>
+                  <p class="work-summary">Катехизис и живые нравоучительные рассказы, переложенные выразительным народным языком центральной Боснии и положившие начало местной печатной прозе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-muhamed-hevai-uskufi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мухамед Хеваи Ускуфи Босневи</h3>
+                  <p class="author-role">Первый поэт традиции альхамьядо и создатель турецко-боснийского словаря · <span class="tabular">1601 – после 1651</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Добрни у Тузлы, соединивший арабскую графику (аребицу) со звучанием родного боснийского стиха и составивший древнейший стихотворный словарь южных славян.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-potur-sahidija">
+                  <div class="work-row">
+                    <span class="work-code">БН-01.03</span>
+                    <a class="work-link" href="./works/bosn-uskufi-potur-shahidiya.html">Макбул-и ариф («Потур Шахидия») и боснийские илахии</a>
+                    <span class="work-meta">1631 · Стихотворный словарь и лирика альхамьядо</span>
+                  </div>
+                  <p class="work-summary">Стих из 700 строк для изучения боснийской и турецкой речи и духовная песня-призыв к миру между верами «О люди, помыслим о родстве от одного отца и матери».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-hasan-kaimi-baba">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хасан Каими Баба</h3>
+                  <p class="author-role">Сараевский дервишский поэт-суфий, писавший на турецком и боснийском языках · <span class="tabular">ок. 1625–1691</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Шейх сараевского текие, защищавший городской люд в период голода и восстаний 1680-х годов и сосланный в Зворник.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-divan-kaimi-kandija">
+                  <div class="work-row">
+                    <span class="work-code">БН-01.04</span>
+                    <a class="work-link" href="./works/bosn-kaimi-divan-i-kasydy.html">Диван и касыда «О взятии Кандии»</a>
+                    <span class="work-meta">ок. 1669–1683 · Суфийская и гражданская поэзия альхамьядо</span>
+                  </div>
+                  <p class="work-summary">Мистические газели на турецком языке и гневные боснийские стихи альхамьядо, обличающие жадность купцов и пророчески предсказывающие исторические потрясения.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-mula-mustafa-baseskija">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мула Мустафа Башеския</h3>
+                  <p class="author-role">Сараевский писец и создатель самой живой городской хроники Боснии XVIII века · <span class="tabular">1731/1732–1809</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уличный нотариус и учитель у сараевской Башчаршии, полвека записывавший смерть соседей, пожары, ярмарки, суеверия, урожаи и смешные случаи жизни города.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-ljetopis-baseskija">
+                  <div class="work-row">
+                    <span class="work-code">БН-01.05</span>
+                    <a class="work-link" href="./works/bosn-baseskiya-letopis.html">Сараевская летопись («Ljetopis», 1746–1804)</a>
+                    <span class="work-meta">1756–1804 · Городская мемуарная хроника</span>
+                  </div>
+                  <p class="work-summary">Уникальная книга о живом дыхании османского Сараева («что записано — остаётся, что запомнено — исчезает»), ставшая источником вдохновения для Андрича, Селимовича и Карахасана.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ba-ballads-enlightenment-19c">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · конец XVIII – начало XX века</p>
+          <h2 class="section-title">Народная баллада, Просвещение и возрождение XIX века</h2>
+          <p class="section-desc">От всемирно известной боснийской баллады «Хасанагиница» и просветительского труда Ивана Франьо Юкича к поэзии мостарского круга Алексы Шантича, прозе Светозара Чоровича и культурному обновлению Сафвет-бега Башагича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ba-hasanaginica-folk">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Боснийская устная баллада («Хасанагиница»)</h3>
+                  <p class="author-role">Вершина южнославянской народной баллады и лирики севдалинки · <span class="tabular">зап. 1774</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Записанная в XVIII веке в Имотской Краине и переведённая Гёте, Пушкиным, Вальтером Скоттом и Мериме трагическая баллада о жене Хасан-аги Араповича.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-hasanaginica-sevdalinke">
+                  <div class="work-row">
+                    <span class="work-code">БН-02.01</span>
+                    <a class="work-link" href="./works/bosn-hasanaginica.html">Хасанагиница («Hasanaginica») и боснийские севдалинки</a>
+                    <span class="work-meta">1774 · Народная баллада и любовная песня</span>
+                  </div>
+                  <p class="work-summary">Психологическая драма женщины, отвергнутой мужем из-за гордой застенчивости, разлучённой с пятерыми детьми и умирающей от разрыва сердца в день принудительной новой свадьбы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-ivan-frano-jukic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Франьо Юкич</h3>
+                  <p class="author-role">Баньялукский просветитель, публицист и основатель первого боснийского журнала · <span class="tabular">1818–1857</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Францисканец-патриот, собиравший народные песни и географические очерки в журнале «Босански приятель» и умерший в изгнании в Вене.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-zemljopis-i-poviestnica-bosne">
+                  <div class="work-row">
+                    <span class="work-code">БН-02.02</span>
+                    <a class="work-link" href="./works/bosn-yukich-bosanski-priyatel.html">Землеописание и история Боснии и журнал «Босански приятель»</a>
+                    <span class="work-meta">1850–1851 · Просветительские очерки и путевая проза</span>
+                  </div>
+                  <p class="work-summary">Первые современные описания городов, гор, обычаев и ремёсел Боснии, пронизанные верой в просвещение, равенство вероисповеданий и силу родной книги.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-grgo-martic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фра Грго Мартич</h3>
+                  <p class="author-role">Герцеговинский поэт-эпик, переводчик и мемуарист · <span class="tabular">1822–1905</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Родом из Посушья, десятилетиями живший в Сараеве и описавший бурные события XIX века в Боснии как в героических песнях, так и в увлекательных воспоминаниях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-osvetnici-zapamcenja">
+                  <div class="work-row">
+                    <span class="work-code">БН-02.03</span>
+                    <a class="work-link" href="./works/bosn-martich-mstiteli.html">Мстители («Osvetnici») и «Воспоминания» («Zapamćenja»)</a>
+                    <span class="work-meta">1861 / 1906 · Эпическая поэма и мемуары</span>
+                  </div>
+                  <p class="work-summary">Десятерцовый эпос о борьбе с местным произволом в Герцеговине и живописная мемуарная проза о Сараеве эпохи Танзимата и австро-венгерского перелома.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-aleksa-santic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алекса Шантич</h3>
+                  <p class="author-role">Певец Мостара, автор хрестоматийной лирики о любви, родине и сострадании · <span class="tabular">1868–1924</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из основателей знаменитого мостарского журнала «Зора», превративший родной город на Неретве и его сады в вечный поэтический образ.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-santic-mostar-pjesme">
+                  <div class="work-row">
+                    <span class="work-code">БН-02.04</span>
+                    <a class="work-link" href="./works/bosn-shantich-mostarskaya-lirika.html">Мостарская лирика («Эмина», «Оставайтесь здесь», «Вечер на школе»)</a>
+                    <span class="work-meta">1891–1911 · Классическая лирика</span>
+                  </div>
+                  <p class="work-summary">Прекрасная севдалинка «Эмина» о девушке с кувшином у колодца, стихи против эмиграции земляков и суровая поэзия сочувствия к беднякам и хлебопашцам.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-safvet-beg-basagic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сафвет-бег Башагич</h3>
+                  <p class="author-role">Зачинатель боснийского культурного ренессанса рубежа веков и основатель журнала «Бехар» · <span class="tabular">1870–1934</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Невесинья, востоковед, поэт и историк боснийско-исламского книжного наследия, открывший европейские формы в мусульманской среде Боснии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-trofanda-bosnjaci-islamska">
+                  <div class="work-row">
+                    <span class="work-code">БН-02.05</span>
+                    <a class="work-link" href="./works/bosn-bashagich-trofanda.html">Трофанда из герцеговинской дубравы и «Бошняки в исламской литературе»</a>
+                    <span class="work-meta">1896 / 1912 · Романтическая лирика и история литературы</span>
+                  </div>
+                  <p class="work-summary">Первая книга современной боснийской лирики, соединившая восточную газель с европейским стихом, и научное открытие сотен забытых боснийских авторов Османской эпохи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-svetozar-corovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Светозар Чорович</h3>
+                  <p class="author-role">Главный мостарский романист и бытописатель герцеговинской чаршии · <span class="tabular">1875–1919</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Шурин Алексы Шантича и соредактор «Зоры», создавший яркую галерею типов купцов, беков, ремесленников и бедняков Мостара рубежа веков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-stojan-mutikasa">
+                  <div class="work-row">
+                    <span class="work-code">БН-02.06</span>
+                    <a class="work-link" href="./works/bosn-chorovich-stoyan-mutikasha.html">Стоян Мутикаша («Stojan Mutikaša»)</a>
+                    <span class="work-meta">1907 · Социально-бытовой роман</span>
+                  </div>
+                  <p class="work-summary">Путь бедного крестьянского мальчика из Герцеговины, который ценой обмана, расчёта и утраты души превращается в богатого и одинокого ростовщика мостарского базара.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ba-realism-modernism-interwar">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1900–1940-е годы</p>
+          <h2 class="section-title">Реализм Краины, модерн и проза первой половины XX века</h2>
+          <p class="section-desc">Гневная сатира Петара Кочича, проклятая поэзия Мусы Чазима Чатича, тёплые рассказы из жизни сараевских сефардов Исака Самоковлии, лирический роман Хамзы Хумо и драмы Ахмеда Мурадбеговича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ba-petar-kocic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Петар Кочич</h3>
+                  <p class="author-role">Трибун Боснийской Краины, сатирик и певец горного Змиянья · <span class="tabular">1877–1916</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Стричичей под Баня-Лукой, борец против произвола австро-венгерской администрации, соединивший народный говор с беспощадной политической сатирой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-jazavac-pred-sudom">
+                  <div class="work-row">
+                    <span class="work-code">БН-03.01</span>
+                    <a class="work-link" href="./works/bosn-kochich-barsuk-pered-sudom.html">Барсук перед судом («Jazavac pred sudom») и рассказы Змиянья</a>
+                    <span class="work-meta">1904 / 1905 · Сатирическая драма и горная новеллистика</span>
+                  </div>
+                  <p class="work-summary">Бессмертный фарс о крестьянине Давиде Штрпце, принесшем в имперский суд живого барсука за потраву кукурузы, чтобы под видом шутки разоблачить колониальные порядки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-musa-cazim-catic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Муса Чазим Чатич</h3>
+                  <p class="author-role">«Боснийский Бодлер», главный поэт боснийского модерна · <span class="tabular">1878–1915</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Оджака, скитавшийся между Стамбулом, Загребом и Тешнем, переплавивший богемное отчаяние, суфийскую мистику и символизм в чистый, ранимый стих.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-pjesme-catic">
+                  <div class="work-row">
+                    <span class="work-code">БН-03.02</span>
+                    <a class="work-link" href="./works/bosn-chatich-stihotvoreniya.html">Стихотворения («Pjesme»)</a>
+                    <span class="work-meta">1914 · Символистская и богемно-мистическая лирика</span>
+                  </div>
+                  <p class="work-summary">Единственный прижизненный сборник поэта («Господу», «Теута», «Я слабый тростник»): трагическая исповедь души, разрывающейся между грехом, жаждой любви и светом веры.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-osman-dzikic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Осман Джикич</h3>
+                  <p class="author-role">Мостарский поэт-лирик и провозвестник духовного раскрепощения · <span class="tabular">1879–1912</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Редактор сараевского журнала «Гайрет», воспевший любовь наперекор сословным преградам и оставивший проникновенные севдалинки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-asikovanja-dzikic">
+                  <div class="work-row">
+                    <span class="work-code">БН-03.03</span>
+                    <a class="work-link" href="./works/bosn-dzhikich-ashikovane.html">Мусульманской молодёжи и «Ашикованье» («Ašikovanja»)</a>
+                    <span class="work-meta">1903 · Романтическая и гражданская лирика</span>
+                  </div>
+                  <p class="work-summary">Светлые любовные стихи о ночных серенадах у решётчатых окон Мостара (мушабаков) и горячие призывы к молодёжи преодолеть застой и невежество.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-isak-samokovlija">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Исак Самоковлия</h3>
+                  <p class="author-role">Мастер психологической новеллы, летописец сараевских и дринских сефардов · <span class="tabular">1889–1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач из Горажде и Сараева, открывший для боснийской литературы поэтический, печальный и тёплый мир еврейских ремесленников, носильщиков и вдов на берегах Дрины и Миляцки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-nosac-samuel">
+                  <div class="work-row">
+                    <span class="work-code">БН-03.04</span>
+                    <a class="work-link" href="./works/bosn-samokovliya-nosilschik-samuel.html">Носильщик Самуэл («Nosač Samuel») и «Блондинка-еврейка»</a>
+                    <span class="work-meta">1936 / 1946 · Социально-психологическая новеллистика</span>
+                  </div>
+                  <p class="work-summary">Трогательные рассказы о человеческом достоинстве бедняков сараевского Биелава — носильщика Самуэла и торговца Хаима, живущих любовью вопреки нужде.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-hamza-humo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хамза Хумо</h3>
+                  <p class="author-role">Уроженец Мостара, создатель импрессионистской лирической прозы · <span class="tabular">1895–1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, прозаик и искусствовед, превративший палящее солнце Герцеговины, каменный Мостар и виноградники у Буны в чувственный символ жизни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-grozdanin-kikot">
+                  <div class="work-row">
+                    <span class="work-code">БН-03.05</span>
+                    <a class="work-link" href="./works/bosn-humo-grozdanin-kikot.html">Грозденов смех («Grozdanin kikot»)</a>
+                    <span class="work-meta">1927 · Лирико-импрессионистский роман</span>
+                  </div>
+                  <p class="work-summary">Опьянённое летом герцеговинское предание о юной Гроздане и языческом духе земли, где реальные деревенские образы сливаются с легендой о вечном пробуждении природы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-ahmed-muradbegovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ахмед Мурадбегович</h3>
+                  <p class="author-role">Основоположник современной боснийской драматургии и экспрессионистской прозы · <span class="tabular">1898–1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Режиссёр, драматург и прозаик из Градачца, исследовавший в пьесах и рассказах мучительный конфликт патриархальной семьи с современной страстью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-majka-pomracina-krvi">
+                  <div class="work-row">
+                    <span class="work-code">БН-03.06</span>
+                    <a class="work-link" href="./works/bosn-muradbegovich-mat.html">Мать («Majka») и «Затмение крови»</a>
+                    <span class="work-meta">1934 / 1936 · Экспрессионистская драма и новеллы</span>
+                  </div>
+                  <p class="work-summary">Драматические столкновения между отцовской властью, сословной честью боснийских поместий и бунтом молодых сердец накануне новой эпохи.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ba-andric-selimovic-dizdar">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1940–1970-е годы</p>
+          <h2 class="section-title">Классика XX века: Иво Андрич, Меша Селимович и Мак Диздар</h2>
+          <p class="section-desc">Вершина мировой и южнославянской литературы в Боснии: нобелевский эпос Иво Андрича о Дрине и Травнике, философские притчи Меши Селимовича, поэзия средневековых стечков Мака Диздара, партизанские поэмы Куленовича и проза Чопича и Сиярича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ba-ivo-andric">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иво Андрич</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1961), великий летописец боснийской судьбы на стыке цивилизаций · <span class="tabular">1892–1975</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Травника, проведший детство у моста Мехмеда-паши Соколовича в Вишеграде, запечатлевший многовековую трагедию и красоту Боснии как моста между Востоком и Западом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-na-drini-cuprija">
+                  <div class="work-row">
+                    <span class="work-code">БН-04.01</span>
+                    <a class="work-link" href="./works/bosn-andrich-most-na-drine.html">Мост на Дрине («Na Drini ćuprija»)</a>
+                    <span class="work-meta">1945 · Роман-хроника</span>
+                  </div>
+                  <p class="work-summary">Четыре столетия жизни Вишеграда вокруг одиннадцатиарочного каменного моста — от османского великого визиря Соколовича и сербских восстаний до австрийских переломов и Первой мировой войны.</p>
+                </li>
+                <li class="work-item" id="work-ba-travnicka-hronika-prokleta-avlija">
+                  <div class="work-row">
+                    <span class="work-code">БН-04.02</span>
+                    <a class="work-link" href="./works/bosn-andrich-travnickaya-hronika.html">Травницкая хроника и повесть «Проклятый двор»</a>
+                    <span class="work-meta">1945 / 1954 · Исторический роман и философская повесть</span>
+                  </div>
+                  <p class="work-summary">Семь лет наполеоновского «консульского времени» в запертой горами столице боснийских визирей и притча о стамбульской тюрьме устами боснийского монаха фра Петра.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-skender-kulenovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Скендер Куленович</h3>
+                  <p class="author-role">Поэт Козары и автор лирического романа «Бездна» («Понорница») · <span class="tabular">1910–1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Босански-Петроваца, создавший как самую пронзительную антивоенную поэму сопротивления, так и утончённые сонеты о боснийском родном доме.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-stojanka-ponornica">
+                  <div class="work-row">
+                    <span class="work-code">БН-04.03</span>
+                    <a class="work-link" href="./works/bosn-kulenovich-ponornica.html">Стоянка, мать Кнежополька и роман «Понорница» («Ponornica»)</a>
+                    <span class="work-meta">1942 / 1977 · Поэма-плач, сонеты и философский роман</span>
+                  </div>
+                  <p class="work-summary">Реквием матери над телами сыновей в горах Козары и утончённый роман о возвращении студента Мухамеда из Каира в исчезающий мир старой беговской семьи в Боснии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-mesa-selimovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Меша Селимович</h3>
+                  <p class="author-role">Уроженец Тузлы, мастер философско-психологического романа о власти и совести · <span class="tabular">1910–1982</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Создатель великих книг о человеке, раздавленном между догмой, страхом и жаждой нравственной правды в декорациях османской Боснии XVII–XVIII веков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-dervis-i-smrt">
+                  <div class="work-row">
+                    <span class="work-code">БН-04.04</span>
+                    <a class="work-link" href="./works/bosn-selimovich-dervish-i-smert.html">Дервиш и смерть («Derviš i smrt»)</a>
+                    <span class="work-meta">1966 · Философско-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Шейх сараевской текии Ахмед Нурудин после казни невиновного брата теряет слепую веру в порядок мира и, вступив на путь власти и мести, предает собственную душу.</p>
+                </li>
+                <li class="work-item" id="work-ba-tvrdjava-selimovic">
+                  <div class="work-row">
+                    <span class="work-code">БН-04.05</span>
+                    <a class="work-link" href="./works/bosn-selimovich-krepost.html">Крепость («Tvrđava»)</a>
+                    <span class="work-meta">1970 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Солдат Ахмет Шабо возвращается в Сараево с далёкой войны под Хотином, находит счастье в любви Тияны и платит дорогую цену за одно честное слово против сильных мира.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-enver-colakovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Энвер Чолакович</h3>
+                  <p class="author-role">Поэт и романист старого Сараева и Вратника · <span class="tabular">1913–1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и переводчик венгерской поэзии, оставивший один из самых тёплых и поэтичных романов о сараевских кварталах начала XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-legenda-o-ali-pasi">
+                  <div class="work-row">
+                    <span class="work-code">БН-04.06</span>
+                    <a class="work-link" href="./works/bosn-cholakovich-legenda-ali-pashe.html">Легенда об Али-паше («Legenda o Ali-paši»)</a>
+                    <span class="work-meta">1944 · Лирический городской роман</span>
+                  </div>
+                  <p class="work-summary">Светлая история бедного носильщика Али с сараевского базара Башчаршия, прошедшего через войну и чужие страны к сбывшейся мечте и тихой мудрости старого Вратника.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-camil-sijaric">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чямиль Сиярич</h3>
+                  <p class="author-role">Чародей устного сказа Санджака и Боснии, мастер балладной прозы · <span class="tabular">1913–1989</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Судья и радиожурналист в Сараеве, создавший неповторимый лирический язык сказаний о забытых сёлах, горах Бихора и драматических женских судьбах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-bihorci-kuskundaleja">
+                  <div class="work-row">
+                    <span class="work-code">БН-04.07</span>
+                    <a class="work-link" href="./works/bosn-siyarich-bihorcy.html">Бихорцы («Bihorci») и сборник «Зелёный перстень на воде»</a>
+                    <span class="work-meta">1956 · Лирико-эпический роман и новеллы</span>
+                  </div>
+                  <p class="work-summary">Красочная и горькая сага о горцах сурового Бихора накануне перелома эпох, рассказанная с интонацией древнего сказителя и восточной притчи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-branko-copic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бранко Чопич</h3>
+                  <p class="author-role">Уроженец Хашанов под Грмечем, самый светлый и печальный юморист Боснии · <span class="tabular">1915–1984</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель народных героев Николетны Бурсача и пронзительного прощания с детством и рухнувшими мечтами поколения — «Сада цвета мальвы».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-basta-sljezove-boje">
+                  <div class="work-row">
+                    <span class="work-code">БН-04.08</span>
+                    <a class="work-link" href="./works/bosn-chopich-sad-cveta-malvy.html">Сад цвета мальвы («Bašta sljezove boje»)</a>
+                    <span class="work-meta">1970 · Цикл автобиографических новелл</span>
+                  </div>
+                  <p class="work-summary">Трогательные и грустно-смешные истории о дедушке Раде, который видел волка голубым, о старых фронтовых друзьях и о «чёрных всадниках», приближающихся к саду человеческой памяти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-mak-dizdar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мак Диздар</h3>
+                  <p class="author-role">Величайший поэт Боснии и Герцеговины XX века, уроженец Столаца · <span class="tabular">1917–1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участник антифашистского подполья в Сараеве и главный редактор журнала «Живот», переосмысливший средневековую боснийскую епись и стечки в гениальной книге стихов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-kameni-spavac">
+                  <div class="work-row">
+                    <span class="work-code">БН-04.09</span>
+                    <a class="work-link" href="./works/bosn-dizdar-kamennyj-spyaschij.html">Каменный спящий («Kameni spavač»)</a>
+                    <span class="work-meta">1966 · Философская поэма-книга</span>
+                  </div>
+                  <p class="work-summary">Диалог поэта с голосами средневековых мастеров стечков — («Слово о человеке», «Запись о земле», «Слово о небе», «Горчин»): вопрос о тайне Боснии, выстоявшей между крестом, мечом и смертью.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ba-sarajevo-school-mid-late-20c">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1960–1990-е годы</p>
+          <h2 class="section-title">Поколение 1960–1980-х: сараевская проза, поэзия и театр</h2>
+          <p class="section-desc">Путевые эссе Зуко Джумхура, историческая ирония Дервиша Сушича, лирика Изета Сарайлича, драматургия Алии Исаковича, мистические притчи Неджада Ибришимовича и сараевские стихи и сценарии Абдулаха Сидрана.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ba-zuko-dzumhur">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Зуко Джумхур</h3>
+                  <p class="author-role">Уроженец Коница, сараевский эссеист, путешественник и художник-карикатурист · <span class="tabular">1920–1989</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Неповторимый знаток Востока и Балкан, единственный автор, чью книгу путевых очерков лично снабдил предисловием Иво Андрич.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-nekrolog-jednoj-carsiji">
+                  <div class="work-row">
+                    <span class="work-code">БН-05.01</span>
+                    <a class="work-link" href="./works/bosn-dzhumhur-nekrolog-charshii.html">Некролог одной чаршии («Nekrolog jednoj čaršiji»)</a>
+                    <span class="work-meta">1958 · Художественная эссеистика и путевая проза</span>
+                  </div>
+                  <p class="work-summary">Блестящие зарисовки исчезающих балканских городков, кофейных бесед в Почителе и Стамбуле, старых ремесленников и человеческого тепла на перекрёстке времён.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-dervis-susic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дервиш Сушич</h3>
+                  <p class="author-role">Романист и драматург из Власеницы, мастер сатирической исторической прозы · <span class="tabular">1925–1990</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший партизанский комиссар и тузланский журналист, разрушивший казённые мифы о прошлом язвительными и сочными романами о боснийской истории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-hodza-strah-ja-danilo">
+                  <div class="work-row">
+                    <span class="work-code">БН-05.02</span>
+                    <a class="work-link" href="./works/bosn-sushich-hodzha-strah.html">Ходжа Страх («Hodža Strah») и «Я, Данило»</a>
+                    <span class="work-meta">1960 / 1973 · Историко-философский и сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Трагикомическая история образованного сараевского ходжи на фоне мятежей в Боснии и живая исповедь крестьянина-удальца в вихре XX столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-izet-sarajlic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Изет Сарайлич</h3>
+                  <p class="author-role">«Поэт нежности и Сараева», голос поколений 1950–1990-х годов · <span class="tabular">1930–2002</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Проведший всю блокаду в осаждённом Сараеве лирик, превративший разговорный стих в кристально чистый дневник любви, дружбы и антивоенного сопротивления.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-sarajevska-ratna-zbirka">
+                  <div class="work-row">
+                    <span class="work-code">БН-05.03</span>
+                    <a class="work-link" href="./works/bosn-sarajlich-sarajevskij-sbornik.html">Книга прощаний и «Сараевский военный сборник» («Sarajevska ratna zbirka»)</a>
+                    <span class="work-meta">1964 / 1992 · Интимная и гражданская лирика</span>
+                  </div>
+                  <p class="work-summary">Стихи о первой любви, погибших на войне сёстрах и братьях, друзьях-поэтах и осаждённом Сараеве, где поэзия стала последним лекарством против отчаяния.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-alija-isakovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алия Исакович</h3>
+                  <p class="author-role">Прозаик, драматург и лексикограф боснийского языка · <span class="tabular">1932–1997</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Битола, выросший в Столаце и Герцеговине, автор первой современной антологии боснийско-мусульманской словесности «Бисерье» и прославленной драмы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-hasanaginica-pobuna-materije">
+                  <div class="work-row">
+                    <span class="work-code">БН-05.04</span>
+                    <a class="work-link" href="./works/bosn-isakovich-hasanaginica-drama.html">Драма «Хасанагиница» и роман «Бунт материи»</a>
+                    <span class="work-meta">1981 / 1985 · Психологическая драма и роман</span>
+                  </div>
+                  <p class="work-summary">Глубокое переосмысление народной баллады о Хасанагинице как трагедии застенчивой любви и кодекса чести и лирическая проза о человеке среди каменных скал.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-nedzad-ibrisimovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Неджад Ибришимович</h3>
+                  <p class="author-role">Сараевский романист-философ и скульптор слова · <span class="tabular">1940–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Потомок сараевских мастеров, создавший в конце 1960-х блестящий модернистский роман «Угурсуз» и сорок лет писавший свою главную притчу «Вечный».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-ugursuz-vjecnik">
+                  <div class="work-row">
+                    <span class="work-code">БН-05.05</span>
+                    <a class="work-link" href="./works/bosn-ibrishimovich-vechnyj.html">Угурсуз («Ugursuz») и роман-притча «Вечный» («Vječnik»)</a>
+                    <span class="work-meta">1968 / 2005 · Философско-мистический роман</span>
+                  </div>
+                  <p class="work-summary">Исповедь немого слуги в распадающемся роду Авдаги и пятитысячелетняя одиссея боснийского писца Абдулаха Мисирлии, встретившего бессмертного странника Аль-Хизра.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-abdulah-sidran">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Абдулах Сидран</h3>
+                  <p class="author-role">Народный поэт Сараева и сценарист золотой эры боснийского кино · <span class="tabular">1944–2024</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец сараевского квартала Бьелаве, автор сценариев к культовым фильмам Эмира Кустурицы и глубокой лирики о городе на Миляцке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-sarajevski-tabut">
+                  <div class="work-row">
+                    <span class="work-code">БН-05.06</span>
+                    <a class="work-link" href="./works/bosn-sidran-sarajevskij-grob.html">Сараевский гроб («Sarajevski tabut») и «Помнишь ли Долли Белл?»</a>
+                    <span class="work-meta">1981 / 1993 · Поэтический цикл и киноповесть</span>
+                  </div>
+                  <p class="work-summary">Горестно-ироничная книга о взрослении на сараевской окраине в 1960-е и трагическая поэтическая хроника осаждённого города 1992–1993 годов.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ba-war-memory-21st-century">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1990-е – XXI век</p>
+          <h2 class="section-title">Память Сараева, война и боснийская проза XXI века</h2>
+          <p class="section-desc">Современная литература Боснии и диаспоры: европейские романы Джевада Карахасана и Ирфана Хорозовича, «Сараевский блюз» Мехмединовича, проза Александра Хемона, «Лифт Шиндлера» Дарко Цвиятича, «Книга о Уне» Фарука Шехича и «Поймай кролика» Ланы Басташич.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ba-irfan-horozovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ирфан Хорозович</h3>
+                  <p class="author-role">Уроженец Баня-Луки, зачинатель боснийского постмодернизма и притчевой прозы · <span class="tabular">1947–2025</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист, поэт и драматург, соединивший магические сны на берегах Врбаса с интеллектуальной фантастикой в духе Борхеса и Андрича.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-talhe-sedrvanski-vrt">
+                  <div class="work-row">
+                    <span class="work-code">БН-06.01</span>
+                    <a class="work-link" href="./works/bosn-horozovich-talhe.html">Талхе, или Шедрванский сад и «Неизвестный прохожий»</a>
+                    <span class="work-meta">1972 / 1998 · Постмодернистская притчевая проза</span>
+                  </div>
+                  <p class="work-summary">Причудливая хроника загадочной семьи и тайных садов на берегу Врбаса, где реальные судьбы и мистические двойники отражают раны XX столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-dzevad-karahasan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джевад Карахасан</h3>
+                  <p class="author-role">Крупнейший боснийский романист-философ и эссеист конца XX – XXI века · <span class="tabular">1953–2023</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Томиславграда (Дувно) и сараевский драматург, удостоенный премии Гёте за глубокие романы о диалоге культур, Востоке и Западе и моральной памяти Европы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-istocni-diwan-dnevnik-selidbe">
+                  <div class="work-row">
+                    <span class="work-code">БН-06.02</span>
+                    <a class="work-link" href="./works/bosn-karahasan-vostochnyj-divan.html">Восточный диван («Istočni diwan») и «Дневник переселения»</a>
+                    <span class="work-meta">1989 / 1993 · Философско-исторический роман и эссе</span>
+                  </div>
+                  <p class="work-summary">Средневековый багдадский детектив о судьбе философа аль-Мукаффы как зеркало тоталитаризма и блестящее эссе о культурном многоголосии осаждённого Сараева.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-semezdin-mehmedinovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Семездин Мехмединович</h3>
+                  <p class="author-role">Автор главной документально-поэтической книги о блокаде Сараева · <span class="tabular">род. 1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и редактор сараевских журналов, эмигрировавший в 1996 году в США и затем вернувшийся на родину, превративший фрагмент, заметку и память в высокую литературу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-sarajevo-blues-me-mah">
+                  <div class="work-row">
+                    <span class="work-code">БН-06.03</span>
+                    <a class="work-link" href="./works/bosn-mehmedinovich-sarajevskij-blyuz.html">Сараевский блюз («Sarajevo Blues») и «Моё сердце»</a>
+                    <span class="work-meta">1992 / 2021 · Поэзия в прозе и автофикшн</span>
+                  </div>
+                  <p class="work-summary">Мозаика коротких стихотворений и заметок, написанных в осаждённом городе, и пронзительная трилогия о сердце, памяти и старении между Вашингтоном и Сараевом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-aleksandar-hemon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Хемон</h3>
+                  <p class="author-role">Сараевец и двуязычный мировой романист, финалист Пулитцеровской и Национальной книжной премий · <span class="tabular">род. 1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, застигнутый началом боснийской войны в Чикаго в 1992 году и соединивший традиции Гоголя, Набокова и сараевского юмора.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-the-lazarus-project">
+                  <div class="work-row">
+                    <span class="work-code">БН-06.04</span>
+                    <a class="work-link" href="./works/bosn-hemon-proekt-lazar.html">Проект «Лазарь» («The Lazarus Project») и «Человек из ниоткуда»</a>
+                    <span class="work-meta">2002 / 2008 · Постмодернистский роман</span>
+                  </div>
+                  <p class="work-summary">Сараевский эмигрант Владимир Брик расследует загадочное убийство молодого еврея Лазаруса Авербуха в Чикаго 1908 года, путешествуя по следам памяти от Кишинёва и Львова до Сараева.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-darko-cvijetic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дарко Цвиятич</h3>
+                  <p class="author-role">Приедорский поэт, режиссёр и автор коротких трагических романов-реквиемов · <span class="tabular">род. 1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Актёр и поэт из Приедора, прославившийся предельно сжатой, беспощадной прозой о соседях, ставших жертвами и палачами в одной многоэтажке 1990-х.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-schindlerov-lift">
+                  <div class="work-row">
+                    <span class="work-code">БН-06.05</span>
+                    <a class="work-link" href="./works/bosn-cviyatich-lift-shindlera.html">Лифт Шиндлера («Schindlerov lift»)</a>
+                    <span class="work-meta">2018 · Документально-поэтический микророман</span>
+                  </div>
+                  <p class="work-summary">История «Красной многоэтажки» в Приедоре, построенной немецким промышленником и превратившейся в 1992 году в сцену предательства, исчезновений и молчания соседей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-faruk-sehic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фарук Шехич</h3>
+                  <p class="author-role">Уроженец Бихача, лауреат Литературной премии Евросоюза, голос «раздавленного поколения» · <span class="tabular">род. 1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ведущий поэт и прозаик постъюгославского пространства, превративший травму войны на реке Уне и возвращение к детству в гипнотическую прозу исцеления.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-knjiga-o-uni">
+                  <div class="work-row">
+                    <span class="work-code">БН-06.06</span>
+                    <a class="work-link" href="./works/bosn-shehich-kniga-ob-une.html">Книга об Уне («Knjiga o Uni»)</a>
+                    <span class="work-meta">2011 · Поэтический антивоенный роман</span>
+                  </div>
+                  <p class="work-summary">Путешествие сознания сквозь воды изумрудной реки Уны, где сны о рыбалке в Босанска-Крупе вступают в поединок с кошмарами 1992–1995 годов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ba-lana-bastasic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лана Басташич</h3>
+                  <p class="author-role">Представительница нового поколения, лауреат Литературной премии Евросоюза (2020) · <span class="tabular">род. 1986</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выросшая в Баня-Луке романистка и новеллистка, переведённая на десятки языков и исследующая женскую дружбу, послевоенное молчание и поиски правды.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ba-uhvati-zeca">
+                  <div class="work-row">
+                    <span class="work-code">БН-06.07</span>
+                    <a class="work-link" href="./works/bosn-bastashich-pojmaj-krolika.html">Поймай кролика («Uhvati zeca»)</a>
+                    <span class="work-meta">2018 · Психологический роман-путешествие</span>
+                  </div>
+                  <p class="work-summary">Сара и Лела едут из Мостара через Баня-Луку и Загреб в Вену на поиски пропавшего брата Армина, заново открывая правду о своём детстве, лжи и болезненной дружбе.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание боснийской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
