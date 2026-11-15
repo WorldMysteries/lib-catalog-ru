@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог прусской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 37 писателей · 40 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог прусской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от хроник Тевтонского ордена, песен Симона Даха и кёнигсбергского Просвещения Канта, Гамана и Гердера до романтизма Гофмана и Клейста, реализма Фонтане и прозы Данцига и Восточной Пруссии XX века.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#pr-chronicles-humanism-baroque">Раздел I: Хроники Тевтонского ордена, гуманизм и кёнигсбергское барокко</a>
+        <a href="#pr-koenigsberg-enlightenment">Раздел II: Кёнигсбергское Просвещение и предромантизм</a>
+        <a href="#pr-prussian-romanticism">Раздел III: Прусский романтизм: Кёнигсберг, Данциг и Бранденбург</a>
+        <a href="#pr-brandenburg-east-prussian-realism">Раздел IV: Реализм Марки Бранденбург и Восточной Пруссии</a>
+        <a href="#pr-decline-witnesses-lyric">Раздел V: Закат Восточной и Западной Пруссии: лирика, проза и свидетельства</a>
+        <a href="#pr-memory-danzig-masuria-brandenburg">Раздел VI: Память о Сарматии, Данциге, Мазурии и Бранденбурге</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="pr-chronicles-humanism-baroque">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIII–XVII века</p>
+          <h2 class="section-title">Хроники Тевтонского ордена, гуманизм и кёнигсбергское барокко</h2>
+          <p class="section-desc">От орденских летописей о земле древних пруссов и первых сочинений гуманистов «Альбертины» к поэзии «Тыквенного домика» Симона Даха и барочной лирике Померании.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-petr-iz-dusburga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пётр из Дусбурга</h3>
+                  <p class="author-role">Первый крупный летописец Пруссии и Тевтонского ордена · <span class="tabular">ок. 1260 – ок. 1326</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Священник Тевтонского ордена в Кёнигсберге, составивший на латинском языке фундаментальное повествование о покорении прусских племён и древних балтийских святилищах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-chronicon-terrae-prussiae">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.01</span>
+                    <a class="work-link" href="./works/dusburg-hronika-zemli-prusskoj.html">Хроника земли Прусской («Chronicon terrae Prussiae»)</a>
+                    <span class="work-meta">1326 · Средневековая латинская хроника</span>
+                  </div>
+                  <p class="work-summary">Главный исторический и этнографический памятник орденской Пруссии, соединяющий суровые военные анналы, жития рыцарей и уникальные описания нравов, богов и священных рощ древних пруссов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nikolaus-von-jeroschin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Николай фон Ерошин</h3>
+                  <p class="author-role">Основоположник орденской поэзии на немецком языке · <span class="tabular">ок. 1290 – ок. 1345</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Орденский капеллан в Кёнигсберге и Мариенбурге, переложивший латинскую хронику Петра из Дусбурга в живой рифмованный эпос для чтения за братской трапезой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kronike-von-pruzinlant">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.02</span>
+                    <a class="work-link" href="./works/eroshin-rifmovannaya-hronika.html">Рифмованная хроника земли Прусской («Di Kronike von Pruzinlant»)</a>
+                    <span class="work-meta">ок. 1331–1341 · Стихотворная орденская хроника</span>
+                  </div>
+                  <p class="work-summary">Почти двадцать восемь тысяч стихов о крестовых походах, осадах замков над Вислой и Неманом, чудесах и суровом быте прусских рубежей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-simon-grunau">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Симон Грюнау</h3>
+                  <p class="author-role">Доминиканский хронист из Толкамитта, хранитель прусских преданий · <span class="tabular">ок. 1470 – ок. 1530</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Монах из Данцига и Эльбинга, включивший в своё сочинение легендарную генеалогию прусских королей Видевута и Брутено и ценнейший словарь древнепрусского языка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-preussische-chronik">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.03</span>
+                    <a class="work-link" href="./works/gryunau-prusskaya-hronika.html">Прусская хроника («Preussische Chronik»)</a>
+                    <span class="work-meta">ок. 1517–1529 · Ренессансная хроника и свод преданий</span>
+                  </div>
+                  <p class="work-summary">Пестрое полотно прусской старины, где народные саги, городские анекдоты Данцига и первые записи древнепрусской речи соседствуют с острой критикой церковных нравов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-georg-sabinus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Георг Сабинус (Шулер)</h3>
+                  <p class="author-role">Бранденбургский поэт-гуманист, первый ректор Кёнигсбергской «Альбертины» · <span class="tabular">1508–1560</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ученик и зять Филиппа Меланхтона, призванный герцогом Альбрехтом в Кёнигсберг в 1544 году для основания первого прусского университета.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sabinus-poemata">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.04</span>
+                    <a class="work-link" href="./works/sabinus-elegii-albertiny.html">Элегии и стихотворения кёнигсбергского ректора («Poemata»)</a>
+                    <span class="work-meta">1558 · Неолатинская гуманистическая лирика</span>
+                  </div>
+                  <p class="work-summary">Цикл изящных латинских элегий и посланий о янтарных берегах Балтики, основании «Альбертины», бурях в Пиллау и диалоге античных муз с северным краем.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-simon-dach">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Симон Дах</h3>
+                  <p class="author-role">Главный поэт кёнигсбергского барокко, профессор поэзии «Альбертины» · <span class="tabular">1605–1659</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Мемеля и душа содружества «Тыквенный домик» (Kürbishütte) на острове Ломзе в Кёнигсберге, превративший случайные стихи в высокую лирику о дружбе, бренности и верности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-annchen-von-tharau">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.05</span>
+                    <a class="work-link" href="./works/dah-anhen-iz-tarau.html">Анхен из Тарау («Ännchen von Tharau») и песни «Тыквенного домика»</a>
+                    <span class="work-meta">1636–1650 · Барочная песня и элегическая лирика</span>
+                  </div>
+                  <p class="work-summary">Знаменитая свадебная песня, переведённая позднее Гердером на верхненемецкий язык, и стихи о бренности жизни, написанные на тыквах в кёнигсбергском саду композитора Генриха Альберта.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sibylla-schwarz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сибилла Шварц</h3>
+                  <p class="author-role">«Померанская Сафо», ранняя поэтесса барокко из Грайфсвальда · <span class="tabular">1621–1638</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь бургомистра Грайфсвальда, оставившая к семнадцати годам блестящее собрание сонетов, пасторалей и антивоенных стихов эпохи Тридцатилетней войны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-schwarz-poetische-gedichte">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.06</span>
+                    <a class="work-link" href="./works/shvarc-poeticheskie-sochineniya.html">Немецкие поэтические сочинения («Deutsche Poëtische Gedichte»)</a>
+                    <span class="work-meta">1650 · Сонеты, оды и пасторали барокко</span>
+                  </div>
+                  <p class="work-summary">Посмертное собрание стихов о дружбе, стойкости духа, разорённых померанских сёлах и защите права женщины на поэтическое творчество.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pr-koenigsberg-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · XVIII век</p>
+          <h2 class="section-title">Кёнигсбергское Просвещение и предромантизм</h2>
+          <p class="section-desc">Эпоха интеллектуального взлёта Восточной Пруссии и Померании: реформа языка Готтшеда, «критическая философия» Канта, пророческий иррационализм Гамана, сатира Гиппеля и фольклоризм Гердера.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-johann-christoph-gottsched-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иоганн Кристоф Готтшед</h3>
+                  <p class="author-role">Уроженец Юдиттена под Кёнигсбергом, законодатель раннего Просвещения · <span class="tabular">1700–1766</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын восточнопрусского пастора и выпускник «Альбертины», бежавший от вербовщиков Фридриха Вильгельма I в Лейпциг и ставший главным реформатором немецкого языка и театра.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-versuch-critischen-dichtkunst">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.01</span>
+                    <a class="work-link" href="./works/gottshed-kriticheskaya-poetika.html">Опыт критической поэтики («Versuch einer critischen Dichtkunst»)</a>
+                    <span class="work-meta">1730 · Теоретический трактат и драма «Умирающий Катон»</span>
+                  </div>
+                  <p class="work-summary">Программный труд, утвердивший правила ясного стиля, разумного правдоподобия и высокой гражданской трагедии в противовес избыточному барокко и площадному фарсу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ewald-christian-von-kleist">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эвальд Кристиан фон Клейст</h3>
+                  <p class="author-role">Померанско-прусский поэт и офицер, друг Лессинга · <span class="tabular">1715–1759</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Цеблина в Померании, смертельно раненный в Кунерсдорфском сражении, воспевший мирную природу и сельский покой на фоне порохового дыма Семилетней войны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-der-fruehling-kleist">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.02</span>
+                    <a class="work-link" href="./works/kleist-vesna.html">Весна («Der Frühling»)</a>
+                    <span class="work-meta">1749 · Описательная поэма в гекзаметрах</span>
+                  </div>
+                  <p class="work-summary">Лирико-философская прогулка по пробуждающимся полям и лесам Бранденбурга, соединившая точность пейзажной живописи с меланхоличной мольбой о мире.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-immanuel-kant-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иммануил Кант</h3>
+                  <p class="author-role">Великий кёнигсбергский философ и мастер эстетической эссеистики · <span class="tabular">1724–1804</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец и пожизненный житель Кёнигсберга, профессор логики и метафизики «Альбертины», преобразивший европейскую мысль и оказавший прямое влияние на Шиллера, Клейста и всю прусско-немецкую словесность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kritik-der-reinen-vernunft-pr">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.03</span>
+                    <a class="work-link" href="./works/kant-kritika-chistogo-razuma.html">Критика чистого разума и «Наблюдения над чувством прекрасного и возвышенного»</a>
+                    <span class="work-meta">1764 / 1781 · Философский трактат и эстетическое эссе</span>
+                  </div>
+                  <p class="work-summary">Переворот в теории познания и морали, дополненный тонким кёнигсбергским эссе о природе возвышенного, вкуса и человеческого достоинства.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-johann-georg-hamann">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иоганн Георг Гаман</h3>
+                  <p class="author-role">«Северный маг», кёнигсбергский мыслитель и критик плоского рационализма · <span class="tabular">1730–1788</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Земляк, друг и главный интеллектуальный оппонент Канта, провозгласивший поэзию «родным языком человеческого рода» и вдохновивший движение «Бури и натиска».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sokratische-denkwuerdigkeiten">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.04</span>
+                    <a class="work-link" href="./works/gaman-sokratovskie-dostopamyatnosti.html">Сократовские достопамятности и «Крестовые походы филолога»</a>
+                    <span class="work-meta">1759 / 1762 · Философская эссеистика и притча</span>
+                  </div>
+                  <p class="work-summary">Тёмная, насыщенная библейскими аллюзиями и иронией проза о роли страсти, гения, веры и живого слова в познании мира.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-theodor-gottlieb-von-hippel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Теодор Готлиб фон Гиппель</h3>
+                  <p class="author-role">Обер-бургомистр Кёнигсберга, юмористический романист и сторонник эмансипации женщин · <span class="tabular">1741–1796</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Гердауэна в Восточной Пруссии и сотрапезник Канта, публиковавший анонимные романы в духе Стерна о причудливой жизни прибалтийско-прусских пасторатов и курляндских поместий.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lebenslaeufe-nach-aufsteigender-linie">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.05</span>
+                    <a class="work-link" href="./works/hippel-zhizneopisaniya.html">Жизнеописания по восходящей линии («Lebensläufe nach aufsteigender Linie»)</a>
+                    <span class="work-meta">1778–1781 · Сентиментально-юмористический роман</span>
+                  </div>
+                  <p class="work-summary">Афористичная, полная отступлений и бытовых зарисовок семейная хроника Александра на фоне Курляндии, Восточной Пруссии и стен кёнигсбергских аудиторий.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-johann-gottfried-herder-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иоганн Готфрид Гердер</h3>
+                  <p class="author-role">Уроженец Морунгена в Восточной Пруссии, первооткрыватель народной поэзии · <span class="tabular">1744–1803</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ученик Канта и Гамана в Кёнигсберге, пастор и преподаватель в Риге, открывший самоценность народных песен и национальных культур от латышских дайн до шотландских баллад.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-stimmen-der-voelker-herder">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.06</span>
+                    <a class="work-link" href="./works/gerder-golosa-narodov.html">Голоса народов в песнях и «Идеи к философии истории человечества»</a>
+                    <span class="work-meta">1778 / 1784–1791 · Антология фольклора и философия культуры</span>
+                  </div>
+                  <p class="work-summary">Свод народной поэзии Европы (включая песни Пруссии и Балтии) и монументальное учение о том, что каждый народ обладает неповторимым духом и правом на собственный голос.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pr-prussian-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · конец XVIII – первая треть XIX века</p>
+          <h2 class="section-title">Прусский романтизм: Кёнигсберг, Данциг и Бранденбург</h2>
+          <p class="section-desc">Тёмная фантастика и музыкальная ирония Э. Т. А. Гофмана, беспощадный трагизм Генриха фон Клейста, мемуары старого Данцига Иоганны Шопенгауэр, сказки Фуке и «Волшебный рог» Арнима.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-johanna-schopenhauer">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иоганна Шопенгауэр</h3>
+                  <p class="author-role">Уроженка Данцига, автор светских романов и воспоминаний о вольном городе · <span class="tabular">1766–1838</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь данцигского сенатора Трозинера и мать философа Артура Шопенгауэра, создавшая в своих книгах самый живой портрет купеческого Данцига XVIII столетия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jugendleben-und-wanderbilder">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.01</span>
+                    <a class="work-link" href="./works/shopengauer-vospominaniya-danciga.html">Воспоминания юности («Jugendleben und Wanderbilder») и роман «Габриэле»</a>
+                    <span class="work-meta">1819 / 1839 · Автобиографическая проза и роман</span>
+                  </div>
+                  <p class="work-summary">Тонкие зарисовки узких улиц Данцига, Мотлавы, янтарных лавок и драматического перехода вольного ганзейского города под власть Пруссии в 1793 году.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-zacharias-werner">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Захариас Вернер</h3>
+                  <p class="author-role">Уроженец Кёнигсберга, друг Гофмана и создатель «трагедии рока» · <span class="tabular">1768–1823</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын кёнигсбергского профессора и прусский чиновник в Варшаве, чья мистическая драматургия об Ордене храмовников и роковых проклятиях потрясла сцену эпохи романтизма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-der-vierundzwanzigste-februar">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.02</span>
+                    <a class="work-link" href="./works/verner-dvadcat-chetvertoe-fevralya.html">Двадцать четвёртое февраля («Der vierundzwanzigste Februar»)</a>
+                    <span class="work-meta">1810 · Романтическая трагедия рока</span>
+                  </div>
+                  <p class="work-summary">Одноактная драма о семейном проклятии, роковом ноже и возвращении блудного сына, поставленная Гёте в Веймаре и давшая начало целому жанру «драмы судьбы».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eta-hoffmann-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрнст Теодор Амадей Гофман</h3>
+                  <p class="author-role">Уроженец Кёнигсберга, юрист прусской судебной палаты и гений фантастики · <span class="tabular">1776–1822</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Сын адвоката и выпускник «Альбертины», соединивший службу в Плоцке, Варшаве и Берлине с неистощимой фантасмагорией и едкой иронией над прусским филистерством.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-goldner-topf-pr">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.03</span>
+                    <a class="work-link" href="./works/prus-gofman-zolotoj-gorshok.html">Золотой горшок и «Крошка Цахес, по прозванию Циннобер»</a>
+                    <span class="work-meta">1814 / 1819 · Романтическая сказка-новелла</span>
+                  </div>
+                  <p class="work-summary">Столкновение поэтической Атлантиды с чиновничьим бытом и беспощадная сатира на карьерный мир, где ничтожеству Цинноберу приписываются чужие таланты.</p>
+                </li>
+                <li class="work-item" id="work-kater-murr-pr">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.04</span>
+                    <a class="work-link" href="./works/prus-gofman-kot-murr.html">Житейские воззрения кота Мурра («Lebens-Ansichten des Katers Murr»)</a>
+                    <span class="work-meta">1819–1821 · Роман-монтаж</span>
+                  </div>
+                  <p class="work-summary">Переплетённые страницы самодовольной автобиографии учёного кота-обывателя и разорванных листов трагической жизни капельмейстера Иоганнеса Крейслера.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-heinrich-von-kleist-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генрих фон Клейст</h3>
+                  <p class="author-role">Уроженец Франкфурта-на-Одере, прусский офицер и величайший трагик эпохи · <span class="tabular">1777–1811</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Потомок старинного померанско-прусского рода и редактор «Берлинских вечерних листков», доведший конфликт между государственным законом, честью и сердцем до предельного напряжения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-michael-kohlhaas-pr">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.05</span>
+                    <a class="work-link" href="./works/prus-kleist-mihael-kolhaas.html">Михаэль Кольхаас («Michael Kohlhaas») и «Принц Фридрих Гомбургский»</a>
+                    <span class="work-meta">1810 / 1811 · Историческая повесть и прусская драма</span>
+                  </div>
+                  <p class="work-summary">История бранденбургского барышника, ставшего разбойником из жажды справедливости, и драма о молодом полководце при Фербеллине, нарушившем приказ курфюрста ради победы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fouque-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фридрих де ла Мотт Фуке</h3>
+                  <p class="author-role">Уроженец Бранденбурга, офицер и певец рыцарской романтики · <span class="tabular">1777–1843</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Внук прославленного прусского генерала и владелец поместья Неннхаузен в Хафельланде, создавший самую поэтичную сказку немецкого романтизма, ставшую основой для баллады Жуковского.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-undine-fouque">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.06</span>
+                    <a class="work-link" href="./works/fuke-undina.html">Ундина («Undine»)</a>
+                    <span class="work-meta">1811 · Романтическая сказочная повесть</span>
+                  </div>
+                  <p class="work-summary">Трогательная история водной девы Ундины, обретшей бессмертную человеческую душу через любовь рыцаря Хульдбранда и погибшей от его измены.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-achim-von-arnim-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ахим фон Арним</h3>
+                  <p class="author-role">Уроженец Берлина и уккермаркский помещик, собиратель «Волшебного рога мальчика» · <span class="tabular">1781–1831</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из лидеров позднего романтизма, превративший своё бранденбургское имение Виперсдорф в очаг исторической прозы и поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-isabella-von-aegypten">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.07</span>
+                    <a class="work-link" href="./works/arnim-izabella-egipetskaya.html">Изабелла Египетская и «Хранители короны»</a>
+                    <span class="work-meta">1812 / 1817 · Историко-фантастическая проза</span>
+                  </div>
+                  <p class="work-summary">Причудливое сплетение истории, фольклорных чудес, алрауна и голема в судьбах юной цыганской княжны и последнего наследника императорской короны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-max-von-schenkendorf">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Макс фон Шенкендорф</h3>
+                  <p class="author-role">Уроженец Тильзита, поэт Освободительных войн и старинных замков Пруссии · <span class="tabular">1783–1817</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Восточнопрусский дворянин и участник «Битвы народов», воспевший в мелодичной лирике Неман, Мариенбургский замок и мечту о свободном гражданском союзе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-schenkendorf-gedichte">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.08</span>
+                    <a class="work-link" href="./works/shenkendorf-stihotvoreniya.html">Стихотворения («Gedichte»)</a>
+                    <span class="work-meta">1815 · Патриотическая и историческая лирика</span>
+                  </div>
+                  <p class="work-summary">Элегии и песни, среди которых — «Свобода, которую я люблю» и стихи в защиту древних орденских стен замка Мариенбург от разрушения.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pr-brandenburg-east-prussian-realism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1830–1900-е годы</p>
+          <h2 class="section-title">Реализм Марки Бранденбург и Восточной Пруссии</h2>
+          <p class="section-desc">От исторических романов Виллибальда Алексиса и социальной прозы кёнигсбергской романистки Фанни Левальд к вершинам Теодора Фонтане, «Литовским историям» Вихерта и Зудермана и революции стиха Арно Хольца.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-willibald-alexis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виллибальд Алексис (Г. В. Г. Херинг)</h3>
+                  <p class="author-role">«Вальтер Скотт Марки Бранденбург», создатель прусского исторического романа · <span class="tabular">1798–1871</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер масштабных полотен о старой Пруссии — от борьбы курфюрстов с разбойным рыцарством XVI века до эпохи Фридриха Великого и наполеоновского разгрома.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-die-hosen-des-herrn-von-bredow">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.01</span>
+                    <a class="work-link" href="./works/aleksis-shtany-bredova.html">Штаны господина фон Бредова («Die Hosen des Herrn von Bredow»)</a>
+                    <span class="work-meta">1846 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Искромётная и точная в бытовых деталях книга о бранденбургском юнкере Гётце фон Бредове, его кожаных штанах и превращении Марки из края рыцарей-грабителей в правовое государство.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fanny-lewald">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фанни Левальд</h3>
+                  <p class="author-role">Кёнигсбергская романистка и поборница женского равноправия · <span class="tabular">1811–1889</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь кёнигсбергского городского советника из еврейской купеческой семьи, ставшая одной из самых читаемых писательниц Пруссии XIX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jenny-meine-lebensgeschichte">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.02</span>
+                    <a class="work-link" href="./works/levald-dzhenni.html">Дженни («Jenny») и «История моей жизни»</a>
+                    <span class="work-meta">1843 / 1861 · Социальный роман и мемуары</span>
+                  </div>
+                  <p class="work-summary">Драма эмансипации и конфессиональных предрассудков в прусском обществе и панорамные воспоминания о культурном и купеческом Кёнигсберге первой половины XIX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-theodor-fontane-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Теодор Фонтане</h3>
+                  <p class="author-role">Уроженец Нойруппина, главный летописец Бранденбурга и прусского дворянства · <span class="tabular">1819–1898</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Аптекарь, балладный поэт, военный корреспондент и величайший немецкий романист-реалист конца XIX века, запечатлевший душу прусских озёр, имений и берлинских салонов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wanderungen-mark-brandenburg">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.03</span>
+                    <a class="work-link" href="./works/fontane-stranstviya-po-marke.html">Странствия по марке Бранденбург («Wanderungen durch die Mark Brandenburg»)</a>
+                    <span class="work-meta">1862–1889 · Историко-литературная хроника и путевые очерки</span>
+                  </div>
+                  <p class="work-summary">Четырёхтомный эпос тихих бранденбургских сосняков, руин монастырей, усадебных архивов и прусских преданий от Руппина до Шпревальда.</p>
+                </li>
+                <li class="work-item" id="work-effi-briest-stechlin-pr">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.04</span>
+                    <a class="work-link" href="./works/prus-fontane-effi-brist.html">Эффи Брист («Effi Briest») и «Штехлин»</a>
+                    <span class="work-meta">1895 / 1899 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Трагедия юной Эффи, сломленной прусским кодексом чести в померанском Кессине, и прощальный роман о старом дворянине Дубславе фон Штехлине накануне XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ernst-wichert-sr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрнст Вихерт (старший)</h3>
+                  <p class="author-role">Уроженец Инстербурга, судья в Прёкуле и летописец Прусской Литвы · <span class="tabular">1831–1902</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист кёнигсбергского высшего суда, вошедший в литературу достоверными рассказами о жизни крестьян и рыбаков дельты Немана и масштабным орденским эпосом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-heinrich-von-plauen-wichert">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.05</span>
+                    <a class="work-link" href="./works/vihert-st-genrih-fon-plauen.html">Генрих фон Плауэн и «Литовские истории»</a>
+                    <span class="work-meta">1881 / 1881–1890 · Исторический роман и краеведческие новеллы</span>
+                  </div>
+                  <p class="work-summary">Героическая оборона Мариенбурга великим магистром после Грюнвальда и серия психологически точных новелл о нравах, суевериях и труде по обе стороны Куршского залива.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hermann-sudermann">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Герман Зудерман</h3>
+                  <p class="author-role">Уроженец Мацикена у Мемеля, мастер драмы и восточнопрусской прозы · <span class="tabular">1857–1928</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын пивовара из дельты Немана, получивший образование в Эльбинге, Тильзите и Кёнигсберге и прославившийся на сценах всей Европы драмами и рассказами о малой родине.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-litauische-geschichten-katzensteg">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.06</span>
+                    <a class="work-link" href="./works/zuderman-litovskie-istorii.html">Кошачья тропа («Der Katzensteg») и «Литовские истории»</a>
+                    <span class="work-meta">1890 / 1917 · Роман и цикл восточнопрусских повестей</span>
+                  </div>
+                  <p class="work-summary">Драма отверженности и любви «Кошачья тропа» и пронзительные повести о Куршском заливе и Немане («Путешествие в Тильзит», «Микс Бумбаллис»), легшие в основу фильма Мурнау «Восход солнца».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-arno-holz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арно Хольц</h3>
+                  <p class="author-role">Уроженец Растенбурга в Мазурии, теоретик натурализма и верлибра · <span class="tabular">1863–1929</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из главных реформаторов немецкой поэтики рубежа XIX–XX веков, отказавшийся от метрических шаблонов ради естественного «ритма оси» в грандиозной поэме-вселенной.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-phantasus-holz">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.07</span>
+                    <a class="work-link" href="./works/holc-fantazus.html">Фантазус («Phantasus»)</a>
+                    <span class="work-meta">1898–1925 · Экспериментальный поэтический цикл</span>
+                  </div>
+                  <p class="work-summary">Разраставшийся на протяжении десятилетий цикл свободных, симметрично выстроенных вокруг центральной оси стихотворений, охватывающий детство в Мазурии и космос человеческого воображения.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pr-decline-witnesses-lyric">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1900–1960-е годы</p>
+          <h2 class="section-title">Закат Восточной и Западной Пруссии: лирика, проза и свидетельства</h2>
+          <p class="section-desc">Трагедия исчезающего мира Кёнигсберга, Мазурии и Данцига в натуралистических драмах Макса Хальбе, балладах Агнес Мигель, прозе Эрнста Вихерта и Альфреда Бруста, мемуарах Дёнхофф и дневнике врача Лендорфа.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-max-halbe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Макс Хальбе</h3>
+                  <p class="author-role">Уроженец Гютланда под Данцигом, драматург Вислы и Западной Пруссии · <span class="tabular">1865–1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын западнопрусского землевладельца, перенёсший на сцену дух поместий над Вислой, весеннего ледохода и конфликта между страстью и укладом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jugend-halbe">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.01</span>
+                    <a class="work-link" href="./works/halbe-yunost.html">Юность («Jugend») и повесть «Пани Мезницкая»</a>
+                    <span class="work-meta">1893 / 1903 · Лирическая драма и проза Западной Пруссии</span>
+                  </div>
+                  <p class="work-summary">Шедевр немецкого натурализма о первой любви в польско-немецком пасторате у самой прусской границы и драма «Осенний поток» о прорыве плотин на Висле.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-agnes-miegel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Агнес Мигель</h3>
+                  <p class="author-role">Уроженка Кёнигсберга, мастер исторической баллады и элегии о Куршской косе · <span class="tabular">1879–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтесса и журналистка, воспевшая старый Кёнигсберг, древнепрусские легенды и суровую красоту янтарного побережья Замланда и Нерунга.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-balladen-und-lieder-miegel">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.02</span>
+                    <a class="work-link" href="./works/migel-ballady-i-pesni.html">Баллады и песни («Balladen und Lieder») и «Сказки старой Нерунг»</a>
+                    <span class="work-meta">1907 / 1927 · Баллады, лирика и новеллы</span>
+                  </div>
+                  <p class="work-summary">Драматические баллады о женщинах прошлого, стихи о кёнигсбергском кафедральном соборе, могиле Канта и блуждающих дюнах Куршской косы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ernst-wiechert-jr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрнст Вихерт</h3>
+                  <p class="author-role">Уроженец лесничества Кляйнёрт в Мазурии, прозаик лесов, озёр и совести · <span class="tabular">1887–1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выросший в глухих мазурских лесах и учительствовавший в Кёнигсберге писатель, прошедший концлагерь Бухенвальд за открытое неприятие нацизма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-die-jeromin-kinder">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.03</span>
+                    <a class="work-link" href="./works/vihert-deti-erominych.html">Дети Ероминых («Die Jeromin-Kinder») и «Простая жизнь»</a>
+                    <span class="work-meta">1939 / 1945–1947 · Роман-хроника Мазурии</span>
+                  </div>
+                  <p class="work-summary">Великий роман о бедной мазурской деревне Совирог на краю Восточной Пруссии, где дети углежогов и рыбаков ищут справедливости между двумя мировыми войнами.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alfred-brust">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альфред Бруст</h3>
+                  <p class="author-role">Уроженец Инстербурга, экспрессионист восточнопрусской земли · <span class="tabular">1891–1934</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург и романист, близкий к «Мосту» и экспрессионистскому журналу «Штурм», наделивший восточнопрусские болота и долину Немана мистическим напряжением.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-die-verlorene-erde">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.04</span>
+                    <a class="work-link" href="./works/brust-poteryannaya-zemlya.html">Потерянная земля («Die verlorene Erde»)</a>
+                    <span class="work-meta">1926 · Экспрессионистский роман</span>
+                  </div>
+                  <p class="work-summary">Визионерское повествование о столкновении языческой древней земли пруссов и литовцев с индустриальной цивилизацией и кризисом веры накануне катастроф XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-marion-doenhoff">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марион Грёфин Дёнхофф</h3>
+                  <p class="author-role">Писательница из рода Фридрихштайна под Кёнигсбергом, главная фигура немецкой публицистики · <span class="tabular">1909–2002</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участница антигитлеровского Сопротивления, покинувшая Восточную Пруссию верхом в январе 1945 года и посвятившая всю жизнь примирению Германии с Польшей и Восточной Европой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-namen-die-keiner-mehr-nennt">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.05</span>
+                    <a class="work-link" href="./works/denhoff-imena-kotorye-ne-nazovut.html">Имена, которые никто больше не назовёт («Namen, die keiner mehr nennt»)</a>
+                    <span class="work-meta">1962 · Мемуарная проза и реквием по Восточной Пруссии</span>
+                  </div>
+                  <p class="work-summary">Сдержанная и душераздирающая книга памяти об усадьбе Фридрихштайн, зиме 1945 года и исчезнувшем многонациональном укладе восточнопрусской провинции без реваншизма и фальши.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hans-graf-von-lehndorff">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ганс Граф фон Лендорф</h3>
+                  <p class="author-role">Восточнопрусский хирург, поэт и автор кёнигсбергского дневника · <span class="tabular">1910–1987</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Градица и врач кёнигсбергских больниц, остававшийся среди раненых и мирных жителей во время штурма города в 1945 году и вплоть до 1947 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ostpreussisches-tagebuch">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.06</span>
+                    <a class="work-link" href="./works/lendorf-vostochnoprusskij-dnevnik.html">Восточнопрусский дневник («Ostpreußisches Tagebuch»)</a>
+                    <span class="work-meta">1961 · Документальный дневник-свидетельство</span>
+                  </div>
+                  <p class="work-summary">Одно из самых честных и глубоко гуманных свидетельств XX века: записи врача, спасавшего жизни среди руин Кёнигсберга, голода и всеобщего отчаяния.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pr-memory-danzig-masuria-brandenburg">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · вторая половина XX – XXI век</p>
+          <h2 class="section-title">Память о Сарматии, Данциге, Мазурии и Бранденбурге</h2>
+          <p class="section-desc">Художественное осмысление утраченных краёв в поэзии и прозе Йоханнеса Бобровского, «Данцигской трилогии» Гюнтера Грасса, романах Зигфрида Ленца и Арно Зурмински, свидетельствах Михаэля Вика и бранденбургских книгах Гюнтера де Бройна.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-johannes-bobrowski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йоханнес Бобровский</h3>
+                  <p class="author-role">Уроженец Тильзита, певец пограничья Немана, Вилии и древней Сарматии · <span class="tabular">1917–1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и прозаик, выросший в семье железнодорожника на границе Восточной Пруссии и Литвы и превративший память о немцах, литовцах, поляках, евреях и древних пруссах в высокую лирику вины и покаяния.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sarmatische-zeit-levins-muehle">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.01</span>
+                    <a class="work-link" href="./works/bobrovskij-sarmatskoe-vremya.html">Сарматское время («Sarmatische Zeit») и роман «Мельница Левина»</a>
+                    <span class="work-meta">1961 / 1964 · Философская лирика и роман о пограничье</span>
+                  </div>
+                  <p class="work-summary">Стихи о великих реках Востока и горько-ироничный роман о том, как в западнопрусской деревне 1874 года богатый мельник смывает плотиной мельницу своего соседа-еврея.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-siegfried-lenz-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Зигфрид Ленц</h3>
+                  <p class="author-role">Уроженец мазурского города Лик (Элк), летописец утраченной малой родины · <span class="tabular">1926–2014</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из ведущих западногерманских романистов послевоенного времени, посвятивший свои самые личные книги озёрной Мазурии и урокам исторической памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-heimatmuseum-so-zaertlich-suleyken">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.02</span>
+                    <a class="work-link" href="./works/prus-lenc-kraevedcheskij-muzej.html">Краеведческий музей («Heimatmuseum») и «Так нежно было в Зулейкене»</a>
+                    <span class="work-meta">1955 / 1978 · Роман-парабола и цикл мазурских новелл</span>
+                  </div>
+                  <p class="work-summary">История мазурского ткача Зигмунда Рогаллы, сжигающего собственный музей родного края, чтобы спасти память от политических спекуляций, и тёплые притчи о деревне Зулейкен.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-guenter-de-bruyn">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гюнтер де Бройн</h3>
+                  <p class="author-role">Хронист Марки Бранденбург и наследник прозы Теодора Фонтане · <span class="tabular">1926–2020</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Берлинский библиотекарь и отшельник в бранденбургском хуторе Блаббер, написавший глубокие книги о нравах ГДР, истории Бранденбурга и судьбах прусской культуры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-buridans-esel-maerkische-forschungen">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.03</span>
+                    <a class="work-link" href="./works/de-brojn-buridanov-osel.html">Буриданов осёл («Buridans Esel») и «Бранденбургские разыскания»</a>
+                    <span class="work-meta">1968 / 1978 · Психологический роман и сатира</span>
+                  </div>
+                  <p class="work-summary">Тонкие по стилю книги о человеческой половинчатости, бранденбургском пейзаже, архивных поисках правды и внутренней свободе личности.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-guenter-grass-pr">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гюнтер Грасс</h3>
+                  <p class="author-role">Уроженец Данцига, нобелевский лауреат, певец города над Мотлавой · <span class="tabular">1927–2015</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Скульптор, график и прозаик из данцигского предместья Лангфур, сделавший многонациональный Свободный город Данциг главным героем и сценой мировой литературы XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-blechtrommel-danzig-trilogie">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.04</span>
+                    <a class="work-link" href="./works/prus-grass-zhestyanoj-baraban.html">Жестяной барабан («Die Blechtrommel») и «Данцигская трилогия»</a>
+                    <span class="work-meta">1959–1963 · Гротескный роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Оскар Мацерат отказывается расти в три года и под бой жестяного барабана прослеживает историю кашубов, немцев и поляков Данцига от начала века через 1945 год.</p>
+                </li>
+                <li class="work-item" id="work-im-krebsgang-grass">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.05</span>
+                    <a class="work-link" href="./works/grass-traektoriya-kraba.html">Траектория краба («Im Krebsgang»)</a>
+                    <span class="work-meta">2002 · Документально-художественная повесть</span>
+                  </div>
+                  <p class="work-summary">Повесть о гибели лайнера «Вильгельм Густлофф» в Балтийском море зимой 1945 года и о запоздалом разговоре трёх поколений о беженцах из Восточной и Западной Пруссии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-michael-wieck">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михаэль Вик</h3>
+                  <p class="author-role">Уроженец Кёнигсберга, скрипач и автор мемуарного реквиема родному городу · <span class="tabular">1928–2021</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын музыкантов из Кёнигсберга, переживший нацистские преследования, ковровые бомбардировки 1944 года, штурм города и первые послевоенные годы в зарождающемся Калининграде.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zeugnis-vom-untergang-koenigsbergs">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.06</span>
+                    <a class="work-link" href="./works/vik-zakat-kenigsberga.html">Закат Кёнигсберга: Свидетельство немецкого еврея («Zeugnis vom Untergang Königsbergs»)</a>
+                    <span class="work-meta">1988 · Автобиографическая хроника города</span>
+                  </div>
+                  <p class="work-summary">Пронзительный рассказ подростка с жёлтой звездой о любимом городе Канта, гибели его библиотек и кварталов и прощании с родной землёй в 1948 году.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-arno-surminski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арно Зурмински</h3>
+                  <p class="author-role">Уроженец Еглиннена в Восточной Пруссии, романист-летописец сельской Мазурии · <span class="tabular">род. 1934</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и журналист, оставшийся сиротой в двенадцать лет в конце войны и создавший один из самых знаменитых романов о повседневной жизни восточнопрусской деревни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jokehnen-surminski">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.07</span>
+                    <a class="work-link" href="./works/surminski-jokehnen.html">Йокенен, или Как долго ехать из Восточной Пруссии в Германию («Jokehnen»)</a>
+                    <span class="work-meta">1974 · Эпический роман о деревне</span>
+                  </div>
+                  <p class="work-summary">Увиденная глазами мальчика Германа Штайервальда панорама маленькой деревни Йокенен между довоенными полями, бурями фронта и изгнанием на запад.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание прусской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

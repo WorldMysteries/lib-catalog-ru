@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог кипрской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 36 писателей · 37 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог кипрской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от античных «Киприев», стоика Зенона и хроники Леонтия Махеры до диалектной поэмы Василиса Михаилидиса, прозы Костаса Монтиса и Иви Мелеагру, поэзии Кириакоса Хараламбидиса, Неше Яшин, Эмилиоса Солому и Кристи Лефтери.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#cyp-antiquity-byzantium-lusignan">Раздел I: Античность, Византия и хроники Франкского Кипра</a>
+        <a href="#cyp-poietarides-dialect-awakening">Раздел II: Народная поэзия («поэтаридес»), диалект и эпоха пробуждения</a>
+        <a href="#cyp-modernism-interwar-midcentury">Раздел III: Становление кипрского модернизма: проза и лирика 1920–1950-х годов</a>
+        <a href="#cyp-independence-split-generations">Раздел IV: Независимость, авангард и свидетели раскола острова</a>
+        <a href="#cyp-1974-generation-bicommunal">Раздел V: Поколение 1974 года, разделённый город и двуобщинная поэзия</a>
+        <a href="#cyp-contemporary-diaspora-21c">Раздел VI: Современная проза Кипра, диаспора и XXI век</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="cyp-antiquity-byzantium-lusignan">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · VII в. до н. э. – XVI век</p>
+          <h2 class="section-title">Античность, Византия и хроники Франкского Кипра</h2>
+          <p class="section-desc">От эпических «Киприев» и стоицизма Зенона из Кития до плачей святого Неофита Затворника, блистательной кипрской хроники Леонтия Махеры и ренессансной любовной лирики острова Афродиты.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-cyp-stasinos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стасин Кипрский (поэма «Киприи»)</h3>
+                  <p class="author-role">Древнегреческий поэт Кипра, автор первой песни Троянского цикла · <span class="tabular">VII–VI вв. до н. э.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Упоминаемый античной традицией автор эпической поэмы «Киприи», открывавшей события до начала Гомеровой «Илиады».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-cypria-epic">
+                  <div class="work-row">
+                    <span class="work-code">КП-01.01</span>
+                    <a class="work-link" href="./works/kipr-kiprii-epos.html">Киприи («Κύπρια»)</a>
+                    <span class="work-meta">VII–VI вв. до н. э. · Античный героический эпос (фрагменты)</span>
+                  </div>
+                  <p class="work-summary">Эпическое повествование о Суде Париса, похищении Елены, сборах ахейского флота в Авлиде и первых девяти годах Троянской войны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-zeno-of-citium">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Зенон Китийский</h3>
+                  <p class="author-role">Уроженец Кития (Ларнаки), основатель школы стоицизма · <span class="tabular">ок. 334 – ок. 262 до н. э.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Философ финикийско-греческого Кипра, потерпевший кораблекрушение у берегов Аттики и создавший в Афинах учение о внутренней стойкости и мировом гражданстве.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-zeno-politeia">
+                  <div class="work-row">
+                    <span class="work-code">КП-01.02</span>
+                    <a class="work-link" href="./works/kipr-zenon-o-gosudarstve.html">О государстве («Πολιτεία») и фрагменты стоиков Кития</a>
+                    <span class="work-meta">ок. 300 до н. э. · Античный философский трактат</span>
+                  </div>
+                  <p class="work-summary">Утопическое учение о космополитическом содружестве мудрых без границ и храмов, а также этические фрагменты о жизни в согласии с природой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-neophytos-recluse">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Святой Неофит Затворник</h3>
+                  <p class="author-role">Кипрский аскет, богослов и первый византийский летописец острова · <span class="tabular">1134 – после 1214</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Лефкары и основатель пещерного монастыря близ Пафоса, оставивший гомилии и суровое свидетельство о падении византийского Кипра под властью крестоносцев.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-peri-kata-kipron-symforon">
+                  <div class="work-row">
+                    <span class="work-code">КП-01.03</span>
+                    <a class="work-link" href="./works/kipr-neofit-slovo-o-bedstviyah.html">Слово о бедствиях земли Кипрской</a>
+                    <span class="work-meta">ок. 1196 · Византийская ораторская проза и хроника</span>
+                  </div>
+                  <p class="work-summary">Драматическое свидетельство очевидца о бурных событиях 1191 года, тирании Исаака Комнина, высадке Ричарда Львиное Сердце и начале владычества Лузиньянов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-leontios-machairas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Леонтий Махера</h3>
+                  <p class="author-role">Величайший прозаик средневекового Кипра, дипломат королевства Лузиньянов · <span class="tabular">ок. 1360 – после 1432</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный киприот, написавший на живом кипрском диалекте самую яркую и человечную хронику крестоносного Средиземноморья.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-chronikon-machairas">
+                  <div class="work-row">
+                    <span class="work-code">КП-01.04</span>
+                    <a class="work-link" href="./works/kipr-mahera-povest-o-kipre.html">Повесть о сладкой земле Кипрской («Χρονικόν»)</a>
+                    <span class="work-meta">ок. 1430 · Средневековая кипрская хроника</span>
+                  </div>
+                  <p class="work-summary">Увлекательная сага о королях Петре I и Янусе, походах в Александрию, интригах генуэзцев и мамлюков и непоколебимой любви автора к родному острову.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-georgios-boustronios">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Георгий Бустрониос</h3>
+                  <p class="author-role">Придворный и хронист заката Кипрского королевства · <span class="tabular">XV век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Кипрский чиновник эпохи последней королевы Катерины Корнаро, продолживший рассказ Махеры живописным повествованием о междоусобицах и переходе острова к Венеции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-diigisis-kronikas-kyprou">
+                  <div class="work-row">
+                    <span class="work-code">КП-01.05</span>
+                    <a class="work-link" href="./works/kipr-bustronios-hronika.html">Хроника Кипра 1456–1501 годов («Διήγησις Κρόνικας Κύπρου»)</a>
+                    <span class="work-meta">конец XV в. · Историческая проза на кипрском диалекте</span>
+                  </div>
+                  <p class="work-summary">Живая картина борьбы за трон между Шарлоттой Лузиньянской и Яковом II Незаконным, осад Фамагусты и вступления венецианского льва в Никосию.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-poiemata-tis-kyprou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кипрская книга любовных песен</h3>
+                  <p class="author-role">Анонимный шедевр кипрского петраркизма венецианской эпохи · <span class="tabular">XVI век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уникальная рукопись XVI столетия из библиотеки Марчиана (Венеция), соединившая формы итальянского сонета и канцоны с мелодикой кипрского греческого языка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-rimes-damour-chypriotes">
+                  <div class="work-row">
+                    <span class="work-code">КП-01.06</span>
+                    <a class="work-link" href="./works/kipr-lyubovnye-pesni-xvi.html">Кипрские любовные стихи («Rimes d’amour chypriotes»)</a>
+                    <span class="work-meta">ок. 1540–1570 · Ренессансная любовная лирика</span>
+                  </div>
+                  <p class="work-summary">Сто пятьдесят шесть сонетов, баллат и октав о страсти, ревности и красоте киприоток, созданных накануне османского завоевания острова 1570 года.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cyp-poietarides-dialect-awakening">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · середина XIX – 1920-е годы</p>
+          <h2 class="section-title">Народная поэзия («поэтаридес»), диалект и эпоха пробуждения</h2>
+          <p class="section-desc">Рождение современной литературы Кипра в пламенной поэме Василиса Михаилидиса, идиллиях Димитриса Липертиса, газелях Кайтаззаде Мехмета Назыма, диалектной лирике Павлоса Лиасидиса и прозе Никоса Николаидиса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-cyp-vasilis-michaelides">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Василис Михаилидис</h3>
+                  <p class="author-role">Национальный поэт Кипра, классик кипрского диалекта · <span class="tabular">ок. 1849–1917</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Лефконико, санитар лимасольской больницы и художник-самоучка, поднявший устную диалектную традицию до вершин европейской эпической поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-9th-july-1821">
+                  <div class="work-row">
+                    <span class="work-code">КП-02.01</span>
+                    <a class="work-link" href="./works/kipr-mihailidis-devyatoe-iyulya.html">Девятое июля 1821 года («Η 9η Ιουλίου του 1821») и «Хиоска»</a>
+                    <span class="work-meta">1884–1895 · Историческая эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Величественная поэма о трагедии и стойкости архиепископа Киприана перед казнью в Никосии в 1821 году — главный поэтический символ кипрского народа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-kaytazzade-mehmet-nazim">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кайтаззаде Мехмет Назым</h3>
+                  <p class="author-role">Крупнейший поэт турко-кипрской диванной и новой лирики рубежа веков · <span class="tabular">1857–1924</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Никосии, чиновник в Стамбуле, Измире и Лимасоле, ставший первым романистом и ведущим лириком среди турок-киприотов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-ruh-i-mecruh">
+                  <div class="work-row">
+                    <span class="work-code">КП-02.02</span>
+                    <a class="work-link" href="./works/kipr-nazym-izranennaya-dusha.html">Израненная душа («Ruh-i Mecruh») и лирика Никосии</a>
+                    <span class="work-meta">1900–1924 · Поэтический диван и газели</span>
+                  </div>
+                  <p class="work-summary">Изящные газели, месневи и первые образцы новой прозы Никосии, передающие ностальгию по кипрским садам и раздумья о переменчивости судьбы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-dimitris-lipertis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Димитрис Липертис</h3>
+                  <p class="author-role">Классик кипрской диалектной лирики и бытописатель деревни · <span class="tabular">1866–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Потомок знатного кипрского рода и преподаватель в Ларнаке и Никосии, воспевший простодушную красоту, юмор и печали кипрских крестьян.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-tzipriotika-tragoudia">
+                  <div class="work-row">
+                    <span class="work-code">КП-02.03</span>
+                    <a class="work-link" href="./works/kipr-lipertis-kiprskie-pesni.html">Кипрские песни («Τζυπριώτικα τραγούδια»)</a>
+                    <span class="work-meta">1923–1937 · Диалектная лирика</span>
+                  </div>
+                  <p class="work-summary">Четыре сборника музыкальных стихотворений, многие из которых стали народными песнями («Красная букашка», «Луна»), запечатлевшими уходящий быт острова.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-nikos-nikolaidis-cy">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Никос Николаидис (Киприанец)</h3>
+                  <p class="author-role">Уроженец Никосии, основатель психологической новеллы и прозы о низах · <span class="tabular">1884–1956</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Художник и скиталец, живший в Египте, Афинах и Никосии, запечатлевший жизнь обездоленных героев и тонкие движения ранимой души.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-anthropines-zoes">
+                  <div class="work-row">
+                    <span class="work-code">КП-02.04</span>
+                    <a class="work-link" href="./works/kipr-nikolaidis-rasskazy.html">Рассказы («Διηγήματα») и повесть «Скелет»</a>
+                    <span class="work-meta">1921 / 1924 · Психологическая новеллистика</span>
+                  </div>
+                  <p class="work-summary">Короткие, эмоционально насыщенные истории («Разгневанный», «Три старухи») о человеческом одиночестве, бедности и гордости на границе Востока и Запада.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-pavlos-liasides">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Павлос Лиасидис</h3>
+                  <p class="author-role">Великий крестьянский поэт из Лиси, мастер народного стиха поэтаридес · <span class="tabular">1901–1985</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Безземельный рабочий из Месаории, не имевший университетского образования, но сумевший соединить традиционный устный стих с глубокой современной философией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-ta-tragoudia-mou">
+                  <div class="work-row">
+                    <span class="work-code">КП-02.05</span>
+                    <a class="work-link" href="./works/kipr-liasidis-pesni-ostrova.html">Песни моего острова («Τα τραγούδια μου»)</a>
+                    <span class="work-meta">1928–1979 · Народно-диалектная и гражданская поэзия</span>
+                  </div>
+                  <p class="work-summary">Тринадцать книг стихов о засухе в равнине Месаории, любви к труду, солидарности бедняков и боли беженца после потери родного села Лиси в 1974 году.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-tevkros-anthias">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тефкрос Антиас (Андреас Павлу)</h3>
+                  <p class="author-role">Бунтарский поэт-богемщик, журналист и автор кипрского авангарда · <span class="tabular">1903–1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Контеи, учитель, социалист и скиталец, потрясший греческий и кипрский мир исповедью голодного бродяги и яркой сатирой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-ta-sfyrigmata-tou-aliti">
+                  <div class="work-row">
+                    <span class="work-code">КП-02.06</span>
+                    <a class="work-link" href="./works/kipr-antias-svist-brodyagi.html">Свист бродяги («Τα σφυρίγματα του αλήτη»)</a>
+                    <span class="work-meta">1929 · Социально-богемная лирика</span>
+                  </div>
+                  <p class="work-summary">Дерзкий поэтический монолог бездомного поэта на улицах межвоенных Афин и Никосии — гимн свободе духа перед лицом голода и мещанского благополучия.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cyp-modernism-interwar-midcentury">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1920–1950-е годы</p>
+          <h2 class="section-title">Становление кипрского модернизма: проза и лирика 1920–1950-х годов</h2>
+          <p class="section-desc">Поэзия лимасольца Глафкоса Алитерсиса, социальные хроники Йоргоса Филиппу Пиеридиса и Лукиса Акритаса, новеллы Никоса Кранидиотиса и многоликое творчество великого Костаса Монтиса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-cyp-glafkos-alithersis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Глафкос Алитерсис (Михаил Хадзидимитриу)</h3>
+                  <p class="author-role">Лимасольский поэт и теоретик, проводник европейского модернизма на Кипр · <span class="tabular">1897–1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Спортсмен, учитель в Александрии и друг Кавафиса, принесший в кипрскую поэзию свободную форму, тонкий символизм и античную ностальгию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-orama-glafkou">
+                  <div class="work-row">
+                    <span class="work-code">КП-03.01</span>
+                    <a class="work-link" href="./works/kipr-alitersis-videniya.html">Простые приношения и «Видения» («Οράματα του Εωσφόρου»)</a>
+                    <span class="work-meta">1923 / 1929 · Модернистская лирика</span>
+                  </div>
+                  <p class="work-summary">Музыкальные стихи о морских горизонтах Лимасола, мимолётной юности и трагической красоте средиземноморских мифов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-giorgos-philippou-pieridis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йоргос Филиппу Пиеридис</h3>
+                  <p class="author-role">Классик реалистической новеллы и «летописец времён испытаний» · <span class="tabular">1904–1999</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выросший в Ниле и вернувшийся на Кипр писатель, запечатлевший жизнь феллахов в Египте, а затем — борьбу и внутренний раскол кипрского общества в 1950–1970-е годы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-oi-vamvakades-kairoi">
+                  <div class="work-row">
+                    <span class="work-code">КП-03.02</span>
+                    <a class="work-link" href="./works/kipr-pieridis-hlopkovody.html">Хлопководы («Οι βαμβακάδες») и тетралогия «Времена испытаний»</a>
+                    <span class="work-meta">1945 / 1966–1986 · Социальный роман и циклы новелл</span>
+                  </div>
+                  <p class="work-summary">Суровая правда о труде египетских земледельцев и четырёхтомная художественная панорама Кипра от освободительной борьбы 1955–1959 годов до катастрофы 1974 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-loukis-akritas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лукис Акритас</h3>
+                  <p class="author-role">Уроженец Морфу, один из первых мастеров социального романа Кипра · <span class="tabular">1909–1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учитель и политик, с редкой силой передавший бедность, засуху и жажду справедливости кипрской деревни межвоенного времени.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-o-kampos">
+                  <div class="work-row">
+                    <span class="work-code">КП-03.03</span>
+                    <a class="work-link" href="./works/kipr-akritas-ravnina.html">Равнина («Ο κάμπος»)</a>
+                    <span class="work-meta">1936 · Социально-реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Жизнь безземельных крестьян, сражающихся с засухой, ростовщиками и природной стихией на бескрайней равнине Месаории.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-nikos-kranidiotis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Никос Кранидиотис</h3>
+                  <p class="author-role">Уроженец Кирении, поэт, новеллист, издатель «Кипрских писем» и дипломат · <span class="tabular">1911–1997</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из создателей интеллектуального журнала «Κυπριακά Γράμματα» и первый посол Республики Кипр в Афинах, воспевший нежную красоту северного берега острова.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-chronika-spoudes">
+                  <div class="work-row">
+                    <span class="work-code">КП-03.04</span>
+                    <a class="work-link" href="./works/kipr-kranidiotis-hroniki.html">Хроники («Χρονικά») и книга стихов «Возвращение»</a>
+                    <span class="work-meta">1945 / 1974 · Новеллы и элегическая лирика</span>
+                  </div>
+                  <p class="work-summary">Психологические рассказы о тихой провинции Кирении и горькие элегии об утраченном прибрежном городе после событий 1974 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-costas-montis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Костас Монтис</h3>
+                  <p class="author-role">Крупнейший поэт и прозаик современного Кипра, мастер лаконичных «Моментов» · <span class="tabular">1914–2004</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Фамагусты и пожизненный певец Никосии, соединивший едкую иронию, эпиграмматическую сжатость стиха и драматическую историю освободительной борьбы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-kleistes-portes">
+                  <div class="work-row">
+                    <span class="work-code">КП-03.05</span>
+                    <a class="work-link" href="./works/kipr-montis-zakrytye-dveri.html">Закрытые двери («Κλειστές πόρτες»)</a>
+                    <span class="work-meta">1964 · Историко-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Хроника кипрской семьи в годы восстания против британского колониального правления (1955–1959), где героизм, страх и утраты показаны глазами подростка и без ложного пафоса.</p>
+                </li>
+                <li class="work-item" id="work-cyp-stigmes-grammata-sti-mitera">
+                  <div class="work-row">
+                    <span class="work-code">КП-03.06</span>
+                    <a class="work-link" href="./works/kipr-montis-momenty.html">Моменты («Στιγμές») и «Письма матери»</a>
+                    <span class="work-meta">1958 / 1965 · Философская миниатюра и поэма</span>
+                  </div>
+                  <p class="work-summary">Знаменитые трёхстрочные поэтические озарения о жизни и смерти и одно из самых глубоких диалогических стихотворений новогреческой поэзии XX века.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cyp-independence-split-generations">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1950–1980-е годы</p>
+          <h2 class="section-title">Независимость, авангард и свидетели раскола острова</h2>
+          <p class="section-desc">Экзистенциальные поиски Никоса Врахимиса и Пантелиса Миханикоса, космическая поэзия Османа Тюркэя, монументальный роман Иви Мелеагру о разделённой Никосии и острая проза Паноса Иоаннидиса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-cyp-nikos-vrachimis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Никос Врахимис</h3>
+                  <p class="author-role">Первооткрыватель экзистенциализма и потока сознания в кипрской прозе · <span class="tabular">1914–1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Никосии, предвосхитивший в своей короткой, напряжённой прозе и сюрреалистических стихах кризис отчуждённого человека XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-gyro-apo-enan-anthropo">
+                  <div class="work-row">
+                    <span class="work-code">КП-04.01</span>
+                    <a class="work-link" href="./works/kipr-vrahimis-okolo-cheloveka.html">Около одного человека («Γύρω από έναν άνθρωπο») и «Неизвестный»</a>
+                    <span class="work-meta">1941 / 1945 · Модернистский психологический роман</span>
+                  </div>
+                  <p class="work-summary">Внутренняя исповедь безымянного юноши на улицах Никосии, исследующая разлад между мечтой, эросом, мещанской повседневностью и поиском подлинного «я».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-manos-kralis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Манос Кралис</h3>
+                  <p class="author-role">Лирик ностальгии, сумерек и военной тревоги 1940–1960-х годов · <span class="tabular">1914–1989</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и эссеист, одним из первых привнёсший в кипрский стих интонацию Кариотакиса и Сефериса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-gefsi-pikrou-amygdalou">
+                  <div class="work-row">
+                    <span class="work-code">КП-04.02</span>
+                    <a class="work-link" href="./works/kipr-kralis-vkus-mindalya.html">Дорога пустыря и «Вкус горького миндаля» («Γεύση πικρού αμυγδάλου»)</a>
+                    <span class="work-meta">1942 / 1974 · Элегическая лирика</span>
+                  </div>
+                  <p class="work-summary">Утончённые стихи о меланхолии провинциальных вечеров, утраченных садах Кипра и пророческом предчувствии бури над островом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-pantelis-michanikos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пантелис Миханикос</h3>
+                  <p class="author-role">Поэт-провидец, мастер горького сарказма и трагической гражданской поэзии · <span class="tabular">1926–1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Никосии, написавший до трагического раскола острова 1974 года стихи редкой моральной ясности об ответственности перед историей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-poiimata-salamina">
+                  <div class="work-row">
+                    <span class="work-code">КП-04.03</span>
+                    <a class="work-link" href="./works/kipr-mihanikos-salamin.html">Стихотворения и поэма «Саламин» («Σαλαμίνα»)</a>
+                    <span class="work-meta">1952–1975 · Модернистская и гражданская лирика</span>
+                  </div>
+                  <p class="work-summary">Отвержение фальшивого героизма в пользу суровой правды о жертвах и расколе: легендарный диалог древних руин Саламина с совестью современного киприота.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-osman-turkay">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Осман Тюркэй</h3>
+                  <p class="author-role">Турко-кипрский поэт-философ, номинант на Нобелевскую премию по литературе · <span class="tabular">1927–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Казанфаны (Озанкёй) под Киренией, живший между Кипром и Лондоном и соединивший тюркскую лирику с мифами о космосе, времени и единстве человечества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-7-telli-evren">
+                  <div class="work-row">
+                    <span class="work-code">КП-04.04</span>
+                    <a class="work-link" href="./works/kipr-tyurkej-sem-strun.html">Семь струн Вселенной («7 Telli») и «Космические симфонии»</a>
+                    <span class="work-meta">1959 / 1971 · Космологическая и философская поэзия</span>
+                  </div>
+                  <p class="work-summary">Медитативные стихи о звёздной музыке и кипрских соснах, звучащих в унисон с древними преданиями о гармонии микрокосма и Вселенной.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-ivi-meleagrou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иви Мелеагру</h3>
+                  <p class="author-role">Выдающаяся кипрская романистка XX века, автор провидческого романа о Никосии · <span class="tabular">1928–2019</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Соосновательница журнала «Кипрские хроники», создавшая самое масштабное и смелое художественное исследование межнациональной драмы на острове.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-anatoliki-mesogeios">
+                  <div class="work-row">
+                    <span class="work-code">КП-04.05</span>
+                    <a class="work-link" href="./works/kipr-meleagrou-vostochnoe-sredizemnomore.html">Восточное Средиземноморье («Ανατολική Μεσόγειος»)</a>
+                    <span class="work-meta">1969 · Политико-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Панорама Никосии первых лет независимости (1960–1964), где судьбы интеллигентов, бывших боевиков и женщин раскрывают нарастающее напряжение накануне катастрофы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-panos-ioannidis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Панос Иоаннидис</h3>
+                  <p class="author-role">Уроженец Фамагусты, мастер политико-экзистенциальной прозы и драматургии · <span class="tabular">1935–2021</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист, сценарист и многолетний председатель кипрского ПЕН-клуба, соединивший тонкий сарказм, абсурдизм и хронику новейшей истории острова.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-apografi-gregory">
+                  <div class="work-row">
+                    <span class="work-code">КП-04.06</span>
+                    <a class="work-link" href="./works/kipr-ioannidis-perepis.html">Перепись («Απογραφή») и «Грегори»</a>
+                    <span class="work-meta">1973 / 1974 · Роман и сборник новелл</span>
+                  </div>
+                  <p class="work-summary">Аллегорическая история обречённой дружбы между повстанцем и пленником во время войны и острый сатирический портрет кипрского общества эпохи перелома.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cyp-1974-generation-bicommunal">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1970–1990-е годы</p>
+          <h2 class="section-title">Поколение 1974 года, разделённый город и двуобщинная поэзия</h2>
+          <p class="section-desc">Монументальная поэзия Кириакоса Хараламбидиса об утраченной Фамагусте, городские хроники Ники Марангу, театр Михалиса Пиериса, проза Христоса Хадзипапы и двуобщинный голос любви к общему острову Мехмета и Неше Яшин.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-cyp-kyriakos-charalambides">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кириакос Хараламбидис</h3>
+                  <p class="author-role">Патриарх современной кипрской поэзии, уроженец Ачны · <span class="tabular">род. 1940</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-классик, превративший травму 1974 года, оккупацию Фамагусты и античную мифологию в высокую, сдержанную и музыкальную поэзию европейского масштаба.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-ammochostos-vasilevousa">
+                  <div class="work-row">
+                    <span class="work-code">КП-05.01</span>
+                    <a class="work-link" href="./works/kipr-haralambidis-ammohostos.html">Аммохостос правящая («Αμμόχωστος βασιλεύουσα») и «Купол»</a>
+                    <span class="work-meta">1982 / 1989 · Поэтический цикл</span>
+                  </div>
+                  <p class="work-summary">Элегия о мёртвом городе-призраке Фамагусте (Вароше), где опустевшие дома, кошки, иконы и античные тени вступают в диалог с исторической памятью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-christos-hadjipapas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Христос Хадзипапа</h3>
+                  <p class="author-role">Уроженец Фамагусты, прозаик, драматург и переводчик с болгарского · <span class="tabular">род. 1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из ведущих новеллистов поколения 1974 года, исследующий судьбу беженцев, психологическую травму и попытку найти новую почву под ногами.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-sto-anthismeno-gkremo">
+                  <div class="work-row">
+                    <span class="work-code">КП-05.02</span>
+                    <a class="work-link" href="./works/kipr-hadzhipapas-v-cvetuschem-ovrage.html">В цветущем овраге и «Сорока разбойников»</a>
+                    <span class="work-meta">1979 / 1991 · Новеллы и психологический роман</span>
+                  </div>
+                  <p class="work-summary">Тонкие рассказы и роман о людях, потерявших родной берег и пытающихся заново собрать осколки любви, достоинства и памяти среди чужих стен.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-niki-marangou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ники Марангу</h3>
+                  <p class="author-role">Поэтесса, прозаик и хранительница памяти старой Никосии · <span class="tabular">1948–2013</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Лимасола и хозяйка знаменитого книжного магазина в центре Никосии, воспевшая ароматы садов, античные камни и многонациональное прошлое города.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-lefkosia-historia-mias-polis">
+                  <div class="work-row">
+                    <span class="work-code">КП-05.03</span>
+                    <a class="work-link" href="./works/kipr-marangou-nikosiya.html">Никосия: История города и роман «Дивина»</a>
+                    <span class="work-meta">1997 / 2005 · Лирическая хроника и роман</span>
+                  </div>
+                  <p class="work-summary">Интимная биография разделённой столицы через семейные фотографии, старинные рецепты, голоса греков, турок, армян и маронитов и драму XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-michalis-pieris">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михалис Пиерис</h3>
+                  <p class="author-role">Уроженец Эфтогонии, поэт, филолог и создатель театральной сцены Никосии · <span class="tabular">1952–2021</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор Кипрского университета, соединивший поэзию городов Леванта и Средиземноморья с драматической инсценировкой хроники Леонтия Махеры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-metamorphoseis-poleon">
+                  <div class="work-row">
+                    <span class="work-code">КП-05.04</span>
+                    <a class="work-link" href="./works/kipr-pieris-metamorfozy-gorodov.html">Метаморфозы городов («Μεταμορφώσεις πόλεων») и драма «Хроника Махеры»</a>
+                    <span class="work-meta">1978 / 1995 · Поэзия и историческая драма</span>
+                  </div>
+                  <p class="work-summary">Лирическая перекличка Александрии, Смирны, Никосии и Венеции как единого средиземноморского мира, пронизанного памятью об изгнании и культуре.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-mehmet-yasin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мехмет Яшин</h3>
+                  <p class="author-role">Крупнейший современный турко-кипрский поэт, романист и антологист · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Никосии, возродивший интерес к многоязычной кипрской поэзии и рассказавший в прозе историю смешанных кварталов старой столицы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-sevgilim-olu-asker">
+                  <div class="work-row">
+                    <span class="work-code">КП-05.05</span>
+                    <a class="work-link" href="./works/kipr-yashin-mertvye-soldaty.html">Любимые мёртвые солдаты и роман «Константинопольский отель»</a>
+                    <span class="work-meta">1984 / 2012 · Антивоенная лирика и роман</span>
+                  </div>
+                  <p class="work-summary">Антимилитаристский цикл стихов, ставший голосом примирения по обе стороны буферной зоны, и семейная сага о потерянной Никосии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-nese-yasin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Неше Яшин</h3>
+                  <p class="author-role">Знаменитая поэтесса и прозаик Никосии, голос кипрского миротворчества · <span class="tabular">род. 1959</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сестра Мехмета Яшина, автор культового стихотворения «Люби свою родину…», ставшего неофициальным гимном единства разделённого острова.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-which-half-secret-history">
+                  <div class="work-row">
+                    <span class="work-code">КП-05.06</span>
+                    <a class="work-link" href="./works/kipr-yashin-kotoraya-polovina.html">Которая половина («Which Half») и «Тайная история грустных девушек»</a>
+                    <span class="work-meta">1995 / 2002 · Лирика и психологический роман</span>
+                  </div>
+                  <p class="work-summary">Стихи с вопросом «какую из двух половин родины я должна любить?» и роман о женском взрослении в тени войны и патриархальных табу.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cyp-contemporary-diaspora-21c">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 2000-е – XXI век</p>
+          <h2 class="section-title">Современная проза Кипра, диаспора и XXI век</h2>
+          <p class="section-desc">Европейское признание Эмилиоса Солому и Антониса Георгиу, исторические романы Ставроса Христодулу, новеллы Норы Наджиарян и Константии Сотериу, мировые бестселлеры кипрско-британских авторов Алекса Михаилидиса и Кристи Лефтери.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-cyp-stavros-christodoulou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ставрос Христодулу</h3>
+                  <p class="author-role">Никосийский прозаик, лауреат Литературной премии Евросоюза (2020) · <span class="tabular">род. 1963</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и романист, соединяющий детективную интригу с тёмными страницами кипрской истории XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-treis-skalies-istoria">
+                  <div class="work-row">
+                    <span class="work-code">КП-06.01</span>
+                    <a class="work-link" href="./works/kipr-hristodulu-tri-lestnicy.html">Три лестницы истории («Τρεις σκαλιές ιστορία») и «День, когда замёрзла река»</a>
+                    <span class="work-meta">2016 / 2018 · Историко-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Удостоенная европейской премии история расследования, связывающего судьбы киприота времён 1950-х, семьи в Москве и новейшей истории острова.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-antonis-georgiou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антонис Георгиу</h3>
+                  <p class="author-role">Лимасольский писатель, драматург и лауреат Литературной премии Евросоюза (2016) · <span class="tabular">род. 1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист и редактор литературного журнала «Анемофоры», прославившийся новаторской фрагментарной композицией семейного альбома.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-ena-almpoum-istories">
+                  <div class="work-row">
+                    <span class="work-code">КП-06.02</span>
+                    <a class="work-link" href="./works/kipr-georgiu-albom-istorij.html">Альбом историй («Ένα άλμπουμ ιστορίες»)</a>
+                    <span class="work-meta">2014 · Экспериментальный роман-мозаика</span>
+                  </div>
+                  <p class="work-summary">Семейная история современного Кипра, сложенная из старых фотографий, дневников, газетных вырезок и воспоминаний о беженцах, любви и взрослении.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-nora-nadjarian">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Нора Наджиарян</h3>
+                  <p class="author-role">Армяно-кипрская поэтесса и новеллист, голос многокультурной Никосии · <span class="tabular">род. 1966</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Лимасола армянского происхождения, пишущая на английском с кипрскими интонациями о границах, изгнании, памяти и женском опыте.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-ledra-street-girl-wolf-bones">
+                  <div class="work-row">
+                    <span class="work-code">КП-06.03</span>
+                    <a class="work-link" href="./works/kipr-nadzhiaryan-ledra-strit.html">Ледра-стрит («Ledra Street») и «Девушка, волк и кость»</a>
+                    <span class="work-meta">2006 / 2011 · Краткая проза и лирика</span>
+                  </div>
+                  <p class="work-summary">Сборник остроумных и горьких рассказов о разделённой улице Ледра в сердце Никосии, пересечении буферной зоны и многовековой армянской памяти на Кипре.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-emilios-solomou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмилиос Солому</h3>
+                  <p class="author-role">Никосийский романист, лауреат Литературной премии Евросоюза (2013) · <span class="tabular">род. 1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Историк и преподаватель в Никосии, исследующий в своих романах память, археологию прошлого, вину и тайные связи между поколениями.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-imerologio-mias-apistias">
+                  <div class="work-row">
+                    <span class="work-code">КП-06.04</span>
+                    <a class="work-link" href="./works/kipr-solomu-dnevnik-nevernosti.html">Дневник неверности («Ημερολόγιο μιας απιστίας»)</a>
+                    <span class="work-meta">2012 · Интеллектуальный психологический роман</span>
+                  </div>
+                  <p class="work-summary">Археолог возвращается на крошечный средиземноморский остров раскопок и воспоминаний, чтобы распутать тайну исчезновения жены и собственной вины.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-constantia-soteriou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Константиа Сотериу</h3>
+                  <p class="author-role">Никосийская романистка и драматург, лауреат Премии Содружества за рассказ (2019) · <span class="tabular">род. 1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Одна из самых ярких современных писательниц Кипра, дающая голос женщинам разных поколений и общин — от древних богинь до матерей пропавших без вести.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-pikri-foni-aise">
+                  <div class="work-row">
+                    <span class="work-code">КП-06.05</span>
+                    <a class="work-link" href="./works/kipr-soteriu-gorkij-golos.html">Горький голос («Πικρή φωνή») и «Айше едет в отпуск»</a>
+                    <span class="work-meta">2014 / 2017 · Монологический роман и повесть</span>
+                  </div>
+                  <p class="work-summary">Полифония женских монологов о молчании, войнах и тайнах прошлого, замалчиваемых в кипрских семьях, и трагикомический рассказ о границе и миграции.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-alex-michaelides">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алекс Михаилидис</h3>
+                  <p class="author-role">Уроженец Кипра, автор мировых психологических триллеров XXI века · <span class="tabular">род. 1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Кипрско-британский сценарист и романист из Никосии, чей дебютный роман стал глобальным феноменом с тиражом более шести миллионов экземпляров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-the-silent-patient">
+                  <div class="work-row">
+                    <span class="work-code">КП-06.06</span>
+                    <a class="work-link" href="./works/kipr-mihailidis-bezmolvnyj-pacient.html">Безмолвный пациент («The Silent Patient») и «Ярость»</a>
+                    <span class="work-meta">2019 / 2024 · Психологический триллер</span>
+                  </div>
+                  <p class="work-summary">Психотерапевт Тео Фабер пытается разговорить художницу Алисию Беренсон, замолчавшую после убийства мужа, вплетая в интригу мотивы древнегреческой трагедии об Алкесте.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cyp-christy-lefteri">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристи Лефтери</h3>
+                  <p class="author-role">Лондонско-кипрская романистка из семьи беженцев 1974 года · <span class="tabular">род. 1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь греков-киприотов, бежавших с острова в 1974 году, соединяющая семейную память о Кипре с гуманистической прозой о беженцах и исцелении.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cyp-beekeeper-of-aleppo">
+                  <div class="work-row">
+                    <span class="work-code">КП-06.07</span>
+                    <a class="work-link" href="./works/kipr-lefteri-pchelovod-iz-aleppo.html">Пчеловод из Алеппо («The Beekeeper of Aleppo») и «Птицы с неба»</a>
+                    <span class="work-meta">2019 / 2021 · Гуманистический роман</span>
+                  </div>
+                  <p class="work-summary">Пронзительная история пчеловода Нури и его ослепшей жены Афры на пути бегства к морю и роман «Птицы с неба» о кипрской деревенской общине, природе и поиске надежды.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание кипрской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
