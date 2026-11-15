@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог американской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 39 писателей · 45 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог американской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Ирвинга, Эдгара По, Мелвилла и Уитмена до Марка Твена, Фицджеральда, Хемингуэя, Фолкнера, Сэлинджера, Тони Моррисон и Кормака Маккарти.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#us-romanticism-origins">Раздел I: Становление национальной словесности и тёмный романтизм</a>
+        <a href="#us-transcendentalism-poetry">Раздел II: Трансцендентализм, Гражданская война и новая поэзия</a>
+        <a href="#us-realism-naturalism">Раздел III: Эпоха реализма, психология и «позолоченный век»</a>
+        <a href="#us-lost-generation-jazz">Раздел IV: «Потерянное поколение», Век джаза и Южная готика</a>
+        <a href="#us-postwar-beats-drama">Раздел V: Послевоенный роман, битничество и новая драматургия</a>
+        <a href="#us-postmodern-contemporary">Раздел VI: Постмодернизм, многоголосие и проза рубежа веков</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="us-romanticism-origins">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1780–1860</p>
+          <h2 class="section-title">Становление национальной словесности и тёмный романтизм</h2>
+          <p class="section-desc">От легенд Новой Англии Вашингтона Ирвинга и приключенческого эпоса Купера до готической поэтики Эдгара Аллана По, символизма Готорна и метафизической глубины Мелвилла.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-washington-irving">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вашингтон Ирвинг</h3>
+                  <p class="author-role">Первый профессиональный американский писатель и мастер новеллы · <span class="tabular">1783–1859</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель американского литературного фольклора долины Гудзона, придавший новой нации собственную мифологию и ироническую интонацию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sleepy-hollow-rip-van-winkle">
+                  <div class="work-row">
+                    <span class="work-code">АМ-01.01</span>
+                    <a class="work-link" href="./works/irving-sonnaya-loshhina.html">Легенда о Сонной Лощине и «Рип ван Винкль»</a>
+                    <span class="work-meta">1819–1820 · Романтические новеллы</span>
+                  </div>
+                  <p class="work-summary">Две бессмертные истории из «Книги эскизов»: о незадачливом школьном учителе Икабоде Крейне, преследуемом Всадником без головы, и о лентяе, проспавшем двадцать лет Американской революции.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-james-fenimore-cooper">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джеймс Фенимор Купер</h3>
+                  <p class="author-role">Создатель эпопеи американского фронтира · <span class="tabular">1789–1851</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор знаменитой пенталогии о Кожаном Чулке (Натти Бампо), открывший мировой литературе дикую природу Северной Америки и трагедию коренных народов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-last-of-the-mohicans">
+                  <div class="work-row">
+                    <span class="work-code">АМ-01.02</span>
+                    <a class="work-link" href="./works/kuper-poslednij-iz-mogikan.html">Последний из могикан</a>
+                    <span class="work-meta">1826 · Историко-приключенческий роман</span>
+                  </div>
+                  <p class="work-summary">В разгар Франко-индейской войны 1757 года охотник Соколиный Глаз, Чингачгук и его сын Ункас спасают сестёр Манро среди лесов, водопадов и засад у озера Джордж.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-edgar-allan-poe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдгар Аллан По</h3>
+                  <p class="author-role">Гений романтической мистики, создатель детективного жанра и музыкального стиха · <span class="tabular">1809–1849</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых влиятельных авторов XIX века, предсказавший символизм, научную фантастику и психологический триллер.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-raven-house-of-usher">
+                  <div class="work-row">
+                    <span class="work-code">АМ-01.03</span>
+                    <a class="work-link" href="./works/po-voron-i-dom-asherov.html">Ворон и «Падение дома Ашеров»</a>
+                    <span class="work-meta">1839–1845 · Готическая новелла и поэзия</span>
+                  </div>
+                  <p class="work-summary">Заклинательная музыка утраты («Никогда!») и зловещая история разрушения древнего родового замка вместе с душой его последнего обитателя Родерика Ашера.</p>
+                </li>
+                <li class="work-item" id="work-murders-in-rue-morgue">
+                  <div class="work-row">
+                    <span class="work-code">АМ-01.04</span>
+                    <a class="work-link" href="./works/po-ubijstvo-na-ulice-morg.html">Убийство на улице Морг и «Золотой жук»</a>
+                    <span class="work-meta">1841–1843 · Детективные новеллы</span>
+                  </div>
+                  <p class="work-summary">Рождение классического сыщика Огюста Дюпена, распутывающего невозможную загадку запертой комнаты силой чистого аналитического ума.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nathaniel-hawthorne">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Натаниэль Готорн</h3>
+                  <p class="author-role">Мастер психологического романа о пуританской совести и грехе · <span class="tabular">1804–1864</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Салема, исследовавший наследие пуританской Новой Англии, скрытую вину, лицемерие и искупление.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-scarlet-letter">
+                  <div class="work-row">
+                    <span class="work-code">АМ-01.05</span>
+                    <a class="work-link" href="./works/gotorn-alaya-bukva.html">Алая буква</a>
+                    <span class="work-meta">1850 · Психологически-символический роман</span>
+                  </div>
+                  <p class="work-summary">В Бостоне XVII века Эстер Прин, отказавшаяся назвать имя отца своего ребёнка, вынуждена носить на груди вышитую золотом алую букву «A» — превращая знак позора в символ достоинства.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-herman-melville">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Герман Мелвилл</h3>
+                  <p class="author-role">Автор величайшего философского эпоса Америки · <span class="tabular">1819–1891</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Бывший моряк китобойного судна, превративший охоту на белого кашалота в грандиозную притчу о борьбе человека с непостижимым роком.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-moby-dick">
+                  <div class="work-row">
+                    <span class="work-code">АМ-01.06</span>
+                    <a class="work-link" href="./works/melvill-mobi-dik.html">Моби Дик, или Белый Кит</a>
+                    <span class="work-meta">1851 · Философский роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Рассказ Измаила о роковом плавании китобойца «Пекод» под началом одержимого капитана Ахава, бросающего гарпун в само воплощение бездны и судьбы.</p>
+                </li>
+                <li class="work-item" id="work-bartleby-the-scrivener">
+                  <div class="work-row">
+                    <span class="work-code">АМ-01.07</span>
+                    <a class="work-link" href="./works/melvill-pisec-bartlbi.html">Писец Бартлби</a>
+                    <span class="work-meta">1853 · Экзистенциальная повесть</span>
+                  </div>
+                  <p class="work-summary">Загадочная история переписчика на Уолл-стрит, на любое требование мира отвечающего кротким, но несокрушимым: «Я предпочёл бы отказаться».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="us-transcendentalism-poetry">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1835–1890</p>
+          <h2 class="section-title">Трансцендентализм, Гражданская война и новая поэзия</h2>
+          <p class="section-desc">Конкордская философия свободы и единения с природой, аболиционистский роман и грандиозный переворот в мировой поэзии Уолта Уитмена и Эмили Дикинсон.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ralph-waldo-emerson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ральф Уолдо Эмерсон</h3>
+                  <p class="author-role">Духовный глава американского трансцендентализма · <span class="tabular">1803–1882</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Философ, поэт и эссеист, призвавший американскую мысль обрести независимость от европейских догм и доверять внутреннему свету личности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nature-self-reliance">
+                  <div class="work-row">
+                    <span class="work-code">АМ-02.01</span>
+                    <a class="work-link" href="./works/emerson-priroda-i-doverie-k-sebe.html">Природа и «Доверие к себе»</a>
+                    <span class="work-meta">1836–1841 · Философская эссеистика</span>
+                  </div>
+                  <p class="work-summary">Программные трактаты о духовном родстве человека и космоса, нонконформизме и праве каждой души читать книгу вселенной собственными глазами.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-henry-david-thoreau">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генри Дэвид Торо</h3>
+                  <p class="author-role">Философ простоты, природы и гражданского неповиновения · <span class="tabular">1817–1862</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель из Конкорда, построивший хижину на берегу Уолденского пруда, чтобы испытать цену подлинной свободы вне власти вещей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-walden-civil-disobedience">
+                  <div class="work-row">
+                    <span class="work-code">АМ-02.02</span>
+                    <a class="work-link" href="./works/toro-uolden-ili-zhizn-v-lesu.html">Уолден, или Жизнь в лесу</a>
+                    <span class="work-meta">1854 · Философско-натуралистическая проза</span>
+                  </div>
+                  <p class="work-summary">Два года, два месяца и два дня уединения в лесу, ставшие гимном осознанной простоте, тишине утренних озёр и неподкупности совести.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-walt-whitman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уолт Уитмен</h3>
+                  <p class="author-role">Отец свободного стиха и певец демократического космоса · <span class="tabular">1819–1892</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-провидец с Лонг-Айленда и Бруклина, распахнувший поэзию навстречу шумным улицам, простым людям, телу и бесконечности вселенной.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-leaves-of-grass">
+                  <div class="work-row">
+                    <span class="work-code">АМ-02.03</span>
+                    <a class="work-link" href="./works/uitmen-listya-travy.html">Листья травы («Песнь о себе»)</a>
+                    <span class="work-meta">1855–1892 · Верлибр и эпическая лирика</span>
+                  </div>
+                  <p class="work-summary">Книга всей жизни поэта — космический гимн единству человека, труда, любви, свободы и травинки, пробивающейся из-под земли.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-emily-dickinson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмили Дикинсон</h3>
+                  <p class="author-role">Величайшая поэтесса Америки, мастер зашифрованной лирики · <span class="tabular">1830–1886</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Отшельница из Амхерста, создавшая почти тысячу восемьсот коротких стихотворений с поразительной смелостью метафор, тире и внезапной глубины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dickinson-poems">
+                  <div class="work-row">
+                    <span class="work-code">АМ-02.04</span>
+                    <a class="work-link" href="./works/dikinson-stihotvoreniya.html">Стихотворения («Поскольку я не могла остановиться ради Смерти…»)</a>
+                    <span class="work-meta">1858–1886 (изд. 1890) · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Сжатые до алмазной твёрдости размышления о бессмертии, надежде — «птице в душе», одиночестве комнаты и величии внутреннего мира.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-harriet-beecher-stowe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гарриет Бичер-Стоу</h3>
+                  <p class="author-role">Автор романа, изменившего нравственную историю Америки · <span class="tabular">1811–1896</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница и просветительница, чья книга против рабства всколыхнула общественное сознание по обе стороны Атлантики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uncle-toms-cabin">
+                  <div class="work-row">
+                    <span class="work-code">АМ-02.05</span>
+                    <a class="work-link" href="./works/bicher-stou-hizhina-dyadi-toma.html">Хижина дяди Тома</a>
+                    <span class="work-meta">1852 · Социальный роман</span>
+                  </div>
+                  <p class="work-summary">История благородства, стойкости и трагической судьбы невольника дяди Тома и беглой матери Элизы на фоне южных плантаций и ледяного Огайо.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="us-realism-naturalism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1870–1920</p>
+          <h2 class="section-title">Эпоха реализма, психология и «позолоченный век»</h2>
+          <p class="section-desc">Живая речь Миссисипи у Марка Твена, утончённый психологизм Генри Джеймса и Эдит Уортон, а также суровый натурализм Крейна, Драйзера и Джека Лондона.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mark-twain">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марк Твен (Сэмюэл Клеменс)</h3>
+                  <p class="author-role">Отец современной американской прозы и великий сатирик · <span class="tabular">1835–1910</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Бывший лоцман на Миссисипи и журналист Дикого Запада, превративший живую разговорную речь мальчишки в главный источник американского романа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-huckleberry-finn">
+                  <div class="work-row">
+                    <span class="work-code">АМ-03.01</span>
+                    <a class="work-link" href="./works/tven-geklberri-finn.html">Приключения Гекльберри Финна</a>
+                    <span class="work-meta">1884 · Плутовской и социально-лирический роман</span>
+                  </div>
+                  <p class="work-summary">Побег мальчика Гека и беглого раба Джима на плоту вниз по великой Миссисипи — гимн дружбе, свободе и человечности вопреки лживой морали берегов.</p>
+                </li>
+                <li class="work-item" id="work-connecticut-yankee">
+                  <div class="work-row">
+                    <span class="work-code">АМ-03.02</span>
+                    <a class="work-link" href="./works/tven-yanki-iz-konnektikuta.html">Янки из Коннектикута при дворе короля Артура</a>
+                    <span class="work-meta">1889 · Сатирико-фантастический роман</span>
+                  </div>
+                  <p class="work-summary">Остроумное и пророческое столкновение предприимчивого инженера XIX века Хэнка Моргана со средневековыми мифами, суеверием и ценой прогресса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-henry-james">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генри Джеймс</h3>
+                  <p class="author-role">Верховный мастер психологического романа и «точки зрения» · <span class="tabular">1843–1916</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Космополит и тончайший аналитик души, исследовавший встречу американской невинности с изощрённым и коварным опытом Старой Европы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-portrait-of-a-lady-turn-of-the-screw">
+                  <div class="work-row">
+                    <span class="work-code">АМ-03.03</span>
+                    <a class="work-link" href="./works/dzhejms-zhenskij-portret.html">Женский портрет и «Поворот винта»</a>
+                    <span class="work-meta">1881–1898 · Психологический роман и мистическая повесть</span>
+                  </div>
+                  <p class="work-summary">Драма гордой американки Изабеллы Арчер, попавшей в сети расчётливого эстета Осмонда, и двусмысленная призрачная история гувернантки в усадьбе Блай.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-stephen-crane">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стивен Крейн</h3>
+                  <p class="author-role">Первооткрыватель импрессионистической военной прозы · <span class="tabular">1871–1900</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Проживший всего 28 лет журналист и поэт, показавший войну без парадного героизма — через страх, дым и вспышки сознания рядового солдата.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-red-badge-of-courage">
+                  <div class="work-row">
+                    <span class="work-code">АМ-03.04</span>
+                    <a class="work-link" href="./works/krejn-alyj-znak-doblesti.html">Алый знак доблести</a>
+                    <span class="work-meta">1895 · Военно-психологическая повесть</span>
+                  </div>
+                  <p class="work-summary">Внутреннее преображение юного новобранца Генри Флеминга в горниле Гражданской войны — от панического бегства к спокойному мужеству среди порохового дыма.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-theodore-dreiser">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Теодор Драйзер</h3>
+                  <p class="author-role">Монументальный летописец «американской мечты» и капитализма · <span class="tabular">1871–1945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын бедных немецких иммигрантов, с суровой честностью показавший иллюзии успеха, власть денег и трагедию маленького человека в большом городе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-an-american-tragedy">
+                  <div class="work-row">
+                    <span class="work-code">АМ-03.05</span>
+                    <a class="work-link" href="./works/drajzer-amerikanskaya-tragediya.html">Американская трагедия и «Сестра Керри»</a>
+                    <span class="work-meta">1900–1925 · Социально-психологические романы</span>
+                  </div>
+                  <p class="work-summary">Падение слабовольного Клайдa Гриффитса, ради блеска высшего света решившегося на преступление на озере Биг-Биттерн, и путь провинциалки Керри к сценической славе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jack-london">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джек Лондон</h3>
+                  <p class="author-role">Классик приключенческой и психологической прозы Севера и океанов · <span class="tabular">1876–1916</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Матрос, золотоискатель Клондайка и самоучка, воспевший мужество человека и зверя перед лицом стихии и драму творца в буржуазном мире.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-martin-eden-call-of-the-wild">
+                  <div class="work-row">
+                    <span class="work-code">АМ-03.06</span>
+                    <a class="work-link" href="./works/london-martin-iden.html">Мартин Иден и «Зов предков»</a>
+                    <span class="work-meta">1903–1909 · Роман о художнике и северная повесть</span>
+                  </div>
+                  <p class="work-summary">Головокружительный взлёт простого моряка, ценой нечеловеческого труда ставшего знаменитым писателем, но открывшего пустоту славы, и одиссея пса Бэка в снегах Юкона.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-edith-wharton">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдит Уортон</h3>
+                  <p class="author-role">Первая женщина — лауреат Пулитцеровской премии · <span class="tabular">1862–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Тонкая наблюдательница уходящего старого Нью-Йорка, его ритуалов, жестокой вежливости и тайных бунтов против условностей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-age-of-innocence">
+                  <div class="work-row">
+                    <span class="work-code">АМ-03.07</span>
+                    <a class="work-link" href="./works/uorton-epoha-nevinnosti.html">Эпоха невинности</a>
+                    <span class="work-meta">1920 · Светско-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Драма юриста Ньюленда Арчера в Нью-Йорке 1870-х годов, выбирающего между безопасным браком с Мэй Велланд и страстью к независимой графине Эллен Оленской.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="us-lost-generation-jazz">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1920–1950</p>
+          <h2 class="section-title">«Потерянное поколение», Век джаза и Южная готика</h2>
+          <p class="section-desc">Золотой век американского романа XX столетия: от ослепительного Нью-Йорка Фицджеральда и лаконизма Хемингуэя до полифонии Фолкнера, эпоса Стейнбека и трагедий О’Нила.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-f-scott-fitzgerald">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фрэнсис Скотт Фицджеральд</h3>
+                  <p class="author-role">Поэт Века джаза и трагедии американской мечты · <span class="tabular">1896–1940</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Создатель самой музыкальной и горькой прозы 1920-х годов о любви, блеске богатства и хрупкости иллюзий.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-great-gatsby">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.01</span>
+                    <a class="work-link" href="./works/ficdzherald-velikij-getsbi.html">Великий Гэтсби</a>
+                    <span class="work-meta">1925 · Лирико-символический роман</span>
+                  </div>
+                  <p class="work-summary">История таинственного миллионера Джея Гэтсби с берега Уэст-Эгг, закатывающего сказочные пиры ради одного зелёного огонька на причале у Дейзи Бьюкенен.</p>
+                </li>
+                <li class="work-item" id="work-tender-is-the-night">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.02</span>
+                    <a class="work-link" href="./works/ficdzherald-noch-nezhna.html">Ночь нежна</a>
+                    <span class="work-meta">1934 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Медленное угасание блестящего психиатра Дика Дайвера под солнечным небом Французской Ривьеры на фоне любви, жертвенности и душевной усталости.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ernest-hemingway">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрнест Хемингуэй</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1954), мастер стиля «айсберга» · <span class="tabular">1899–1961</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Репортёр, солдат и путешественник, преобразивший мировую прозу сдержанностью диалога, мужеством перед поражением и верой в человеческое достоинство.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-farewell-to-arms-old-man">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.03</span>
+                    <a class="work-link" href="./works/heminguej-proshhaj-oruzhie-i-starik.html">Прощай, оружие! и «Старик и море»</a>
+                    <span class="work-meta">1929 / 1952 · Роман о войне и философская повесть-притча</span>
+                  </div>
+                  <p class="work-summary">От трагической любви лейтенанта Фредерика Генри и Кэтрин Баркли на итальянском фронте до эпической схватки старого кубинского рыбака Сантьяго с гигантским марлином в Гольфстриме.</p>
+                </li>
+                <li class="work-item" id="work-the-sun-also-rises">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.04</span>
+                    <a class="work-link" href="./works/heminguej-fiesta.html">И восходит солнце (Фиеста)</a>
+                    <span class="work-meta">1926 · Роман «потерянного поколения»</span>
+                  </div>
+                  <p class="work-summary">Парижские кафе Монпарнаса, форелевая рыбалка в Пиренеях и коррида в Памплоне глазами Джейка Барнса и прекрасной леди Брет Эшли.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-william-faulkner">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уильям Фолкнер</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1949), создатель саги округа Йокнапатофа · <span class="tabular">1897–1962</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Архитектор вымышленного графства на Юге США, воплотивший в полифонии потоков сознания библейскую трагедию истории, расы и семьи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sound-and-the-fury">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.05</span>
+                    <a class="work-link" href="./works/folkner-shum-i-yarost.html">Шум и ярость</a>
+                    <span class="work-meta">1929 · Модернистский полифонический роман</span>
+                  </div>
+                  <p class="work-summary">Распад аристократического семейства Компсонов в Миссисипи, рассказанный в четырёх частях глазами блаженного Бенджи, одержимого Квентина, циничного Джейсона и верной служанки Дилси.</p>
+                </li>
+                <li class="work-item" id="work-light-in-august">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.06</span>
+                    <a class="work-link" href="./works/folkner-svet-v-avguste.html">Свет в августе</a>
+                    <span class="work-meta">1932 · Южноамериканский трагический роман</span>
+                  </div>
+                  <p class="work-summary">Переплетение судеб бездомного скитальца Джо Кристмаса, преследуемого вопросом собственного происхождения, и светлой, доверчивой Лены Гроув.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-john-steinbeck">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джон Стейнбек</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1962), певец Калифорнии и человеческой солидарности · <span class="tabular">1902–1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист сострадания и библейского размаха, запечатлевший Великую депрессию, скитания батраков и вечную связь людей с землёй.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-grapes-of-wrath-of-mice-and-men">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.07</span>
+                    <a class="work-link" href="./works/stejnbek-grozdya-gneva.html">Гроздья гнева и «О мышах и людях»</a>
+                    <span class="work-meta">1937–1939 · Социальный эпос и трагическая повесть</span>
+                  </div>
+                  <p class="work-summary">Исход разорившейся семьи Джоудов по шоссе 66 из пыльной Оклахомы в калифорнийский «земной рай» и трогательная мечта Джорджа и Ленни о собственной крошечной ферме.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-john-dos-passos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джон Дос Пассос</h3>
+                  <p class="author-role">Реформатор панорамного романа XX века · <span class="tabular">1896–1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер киномонтажа в литературе, соединивший в прозе газетные заголовки, биографии современников и калейдоскоп человеческих судеб.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-manhattan-transfer-usa">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.08</span>
+                    <a class="work-link" href="./works/dos-passos-manhetten.html">Манхэттен и трилогия «США»</a>
+                    <span class="work-meta">1925–1936 · Экспериментальный роман-панорама</span>
+                  </div>
+                  <p class="work-summary">Грандиозная симфония Нью-Йорка и Америки первых трёх десятилетий XX века: небоскрёбы, биржи, кинохроника, «Киноглаз» и судьбы десятков героев.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-thomas-wolfe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Вулф</h3>
+                  <p class="author-role">Неистовый романтик-визионер американской провинции и мегаполиса · <span class="tabular">1900–1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист огромного лирического дыхания, искавший в потоках памяти утраченную дверь детства и тайну одиночества человека в гигантской стране.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-look-homeward-angel">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.09</span>
+                    <a class="work-link" href="./works/vulf-vzglyani-na-dom-svoj-angel.html">Взгляни на дом свой, ангел</a>
+                    <span class="work-meta">1929 · Автобиографический роман воспитания</span>
+                  </div>
+                  <p class="work-summary">История взросления Юджина Ганта в городке Алтамонт среди бурной, противоречивой семьи каменотёса — и вечный поиск утраченного отчего порога.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eugene-oneill">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юджин О’Нил</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1936), основатель великой американской драмы · <span class="tabular">1888–1953</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург-новатор, вынесший на бродвейскую сцену античный рок, психоанализ и беспощадную семейную исповедь.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-long-days-journey-into-night">
+                  <div class="work-row">
+                    <span class="work-code">АМ-04.10</span>
+                    <a class="work-link" href="./works/onil-dolgij-den-uhodit-v-noch.html">Долгий день уходит в ночь</a>
+                    <span class="work-meta">1941 / изд. 1956 · Семейная психологическая трагедия</span>
+                  </div>
+                  <p class="work-summary">Один туманный августовский день 1912 года в доме семьи Тайронов — беспощадная, но пронизанная любовью и прощением драма о прошлом, которое никогда не отпускает.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="us-postwar-beats-drama">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1945–1975</p>
+          <h2 class="section-title">Послевоенный роман, битничество и новая драматургия</h2>
+          <p class="section-desc">Исповедь юности у Сэлинджера, бунт битников Керуака и Гинзберга, расцвет театра Уильямса и Миллера, а также антивоенная сатира Воннегута и Хеллера.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-j-d-salinger">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джером Дэвид Сэлинджер</h3>
+                  <p class="author-role">Голос юности и сокровенной искренности XX века · <span class="tabular">1919–2010</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Загадочный стилист, превративший трёхдневные скитания подростка по предрождественскому Нью-Йорку и истории семьи Гласс в культовые тексты эпохи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-catcher-in-the-rye">
+                  <div class="work-row">
+                    <span class="work-code">АМ-05.01</span>
+                    <a class="work-link" href="./works/selindzher-nad-propastyu-vo-rzhi.html">Над пропастью во ржи</a>
+                    <span class="work-meta">1951 · Исповедальный роман</span>
+                  </div>
+                  <p class="work-summary">Отчаянный монолог шестнадцатилетнего Холдена Колфилда против взрослой «липы» — о мечте ловить малышей, играющих во ржи у самого края обрыва.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ray-bradbury">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рэй Брэдбери</h3>
+                  <p class="author-role">Поэт научной фантастики и хранитель гуманистической памяти · <span class="tabular">1920–2012</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер ностальгической и тревожной прозы, соединивший поэтику маленького городка Иллинойса с космическими притчами и антиутопией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fahrenheit-451-martian-chronicles">
+                  <div class="work-row">
+                    <span class="work-code">АМ-05.02</span>
+                    <a class="work-link" href="./works/bredberi-451-po-farengejtu.html">451 градус по Фаренгейту и «Марсианские хроники»</a>
+                    <span class="work-meta">1950–1953 · Философская антиутопия и фантастика</span>
+                  </div>
+                  <p class="work-summary">Пробуждение пожарного Гая Монтэга в обществе, сжигающем книги ради бездумного развлечения, и поэтическая хроника освоения Марса человечеством.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jack-kerouac">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джек Керуак</h3>
+                  <p class="author-role">Король бит-поколения, создатель «спонтанной прозы» · <span class="tabular">1922–1969</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт дорог, джаза бибоп и бесконечного движения от Атлантики до Тихого океана на рулонах телетайпной бумаги.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-on-the-road">
+                  <div class="work-row">
+                    <span class="work-code">АМ-05.03</span>
+                    <a class="work-link" href="./works/keruak-v-doroge.html">В дороге («On the Road»)</a>
+                    <span class="work-meta">1957 · Роман-путешествие бит-поколения</span>
+                  </div>
+                  <p class="work-summary">Бешеная одиссея Сэла Парадайза и неукротимого Дина Мориарти по американским трассам — в поисках подлинной жизни, музыки, неба и братства.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-allen-ginsberg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аллен Гинзберг</h3>
+                  <p class="author-role">Главный поэт бит-поколения и наследник Уолта Уитмена · <span class="tabular">1926–1997</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Пророк поэтических чтений Сан-Франциско 1950-х, вернувший в американский стих длинную библейскую строку, экстаз и гнев против конформизма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-howl-and-kaddish">
+                  <div class="work-row">
+                    <span class="work-code">АМ-05.04</span>
+                    <a class="work-link" href="./works/ginzberg-vopl.html">Вопль («Howl») и «Каддиш»</a>
+                    <span class="work-meta">1956–1961 · Авангардная поэма</span>
+                  </div>
+                  <p class="work-summary">Огненный поэтический манифест поколения, взорвавший цензуру и академизм, и пронзительная поэма-молитва памяти матери Наоми.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tennessee-williams">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Теннесси Уильямс</h3>
+                  <p class="author-role">Поэтичнейший драматург американского Юга · <span class="tabular">1911–1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер «пластического театра» хрупких мечтателей, разбивающихся о грубость реального мира, в душном воздухе Нового Орлеана и Сент-Луиса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-streetcar-named-desire">
+                  <div class="work-row">
+                    <span class="work-code">АМ-05.05</span>
+                    <a class="work-link" href="./works/uilyams-tramvaj-zhelanie.html">Трамвай «Желание» и «Стеклянный зверинец»</a>
+                    <span class="work-meta">1944–1947 · Психологическая поэтическая драма</span>
+                  </div>
+                  <p class="work-summary">Столкновение утончённой, надломленной Бланш Дюбуа с грубой жизненной силой Стэнли Ковальски во Французском квартале Нового Орлеана.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-arthur-miller">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Артур Миллер</h3>
+                  <p class="author-role">Совесть американского театра, мастер социальной трагедии · <span class="tabular">1915–2005</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург, поднявший судьбу обычного бруклинского служащего на высоту античной трагедии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-death-of-a-salesman">
+                  <div class="work-row">
+                    <span class="work-code">АМ-05.06</span>
+                    <a class="work-link" href="./works/miller-smert-kommivoyazhera.html">Смерть коммивояжёра</a>
+                    <span class="work-meta">1949 · Трагедия обычного человека</span>
+                  </div>
+                  <p class="work-summary">Последние сутки стареющего коммивояжёра Вилли Ломена, запутавшегося между мифом об «успехе любой ценой», любовью сыновей и неминуемым крахом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-harper-lee">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Харпер Ли</h3>
+                  <p class="author-role">Автор одного из самых любимых романов Америки · <span class="tabular">1926–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Алабамы, подарившая мировой культуре светлый образ адвоката Аттикуса Финча, отстаивающего правду и милосердие.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-to-kill-a-mockingbird">
+                  <div class="work-row">
+                    <span class="work-code">АМ-05.07</span>
+                    <a class="work-link" href="./works/li-ubit-peresmeshnika.html">Убить пересмешника</a>
+                    <span class="work-meta">1960 · Роман воспитания и нравственная драма</span>
+                  </div>
+                  <p class="work-summary">Взгляд юной Джин-Луизы («Глазастика») на тихий городок Мейкомб, где её отец Аттикус защищает невиновного Тома Робинсона от расовых предрассудков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kurt-vonnegut">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Курт Воннегут</h3>
+                  <p class="author-role">Великий гуманист, мастер чёрного юмора и философской фантастики · <span class="tabular">1922–2007</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Переживший бомбардировку Дрездена ветеран, превративший абсурд войны и XX века в горько-смешные притчи с неизменным припевом «Такие дела».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-slaughterhouse-five">
+                  <div class="work-row">
+                    <span class="work-code">АМ-05.08</span>
+                    <a class="work-link" href="./works/vonnegut-bojnya-nomer-pyat.html">Бойня номер пять, или Крестовый поход детей</a>
+                    <span class="work-meta">1969 · Антивоенный фантастический роман</span>
+                  </div>
+                  <p class="work-summary">Выпавший из времени Билли Пилигрим путешествует между окопами Арденн, руинами Дрездена и планетой Тральфамадор в попытке осмыслить ужас истории.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-joseph-heller">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джозеф Хеллер</h3>
+                  <p class="author-role">Создатель главной антибюрократической сатиры XX века · <span class="tabular">1923–1999</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший лётчик бомбардировщика в Италии, подаривший мировым языкам само понятие «Уловка-22» как символ безвыходного абсурда власти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-catch-22">
+                  <div class="work-row">
+                    <span class="work-code">АМ-05.09</span>
+                    <a class="work-link" href="./works/heller-ulovka-22.html">Уловка-22 («Catch-22»)</a>
+                    <span class="work-meta">1961 · Антивоенный сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Безумный круговорот эскадрильи на острове Пианоса, где капитан Йоссариан пытается остаться в живых вопреки приказам генералов, повышающих норму боевых вылетов.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="us-postmodern-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1970–2010-е годы</p>
+          <h2 class="section-title">Постмодернизм, многоголосие и проза рубежа веков</h2>
+          <p class="section-desc">Энциклопедический постмодернизм Пинчона и Делилло, нобелевская мощь Тони Моррисон, «американская пастораль» Рота, библейская суровость Маккарти, Пол Остер и Донна Тартт.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-thomas-pynchon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Пинчон</h3>
+                  <p class="author-role">Главная фигура американского литературного постмодернизма · <span class="tabular">род. 1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель-невидимка, соединяющий теорию заговора, историю науки, энтропию, чёрный юмор и грандиозные лабиринты смыслов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gravitys-rainbow-lot-49">
+                  <div class="work-row">
+                    <span class="work-code">АМ-06.01</span>
+                    <a class="work-link" href="./works/pinchon-raduga-tyagoteniya.html">Радуга тяготения и «Выкрикивается лот 49»</a>
+                    <span class="work-meta">1966–1973 · Постмодернистский роман-энциклопедия</span>
+                  </div>
+                  <p class="work-summary">От поиска тайной почтовой сети «Тристеро» Эдипой Маас в Калифорнии до монументальной фрески Европы 1945 года, движущейся по параболе ракеты Фау-2.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-toni-morrison">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тони Моррисон</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1993), голос исторической памяти · <span class="tabular">1931–2019</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница завораживающей библейской и фольклорной поэтики, вернувшая истории Америки забытые голоса и трагедию рабства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-beloved-morrison">
+                  <div class="work-row">
+                    <span class="work-code">АМ-06.02</span>
+                    <a class="work-link" href="./works/morrison-vozlyublennaya.html">Возлюбленная («Beloved»)</a>
+                    <span class="work-meta">1987 · Историко-психологический роман-притча</span>
+                  </div>
+                  <p class="work-summary">В дом бывшей рабыни Сети на окраине Цинциннати после Гражданской войны возвращается во плоти призрак её погибшей дочери, заставляя пережить невыносимую цену свободы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-philip-roth">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Филип Рот</h3>
+                  <p class="author-role">Крупнейший мастер американского социально-психологического романа рубежа веков · <span class="tabular">1933–2018</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор трилогии о Натане Цукермане и Ньюарке, с беспощадной энергией исследовавший иллюзии послевоенного процветания США.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-american-pastoral">
+                  <div class="work-row">
+                    <span class="work-code">АМ-06.03</span>
+                    <a class="work-link" href="./works/rot-amerikanskaya-pastoral.html">Американская пастораль</a>
+                    <span class="work-meta">1997 · Роман-хроника</span>
+                  </div>
+                  <p class="work-summary">Крушение идеальной жизни благородного «Шведа» Левова в конце 1960-х, когда его любимая дочь уходит в радикальное подполье и взрывает мирный пасторальный миф семьи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cormac-mccarthy">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кормак Маккарти</h3>
+                  <p class="author-role">Великий стилист библейской пустыни и пограничья · <span class="tabular">1933–2023</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Затворник Юго-Запада, продолживший линию Мелвилла и Фолкнера в суровых притчах о зле, отцовской любви и угасании света.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-blood-meridian-the-road">
+                  <div class="work-row">
+                    <span class="work-code">АМ-06.04</span>
+                    <a class="work-link" href="./works/makkarti-krovavyj-meridian-i-doroga.html">Кровавый меридиан и «Дорога»</a>
+                    <span class="work-meta">1985 / 2006 · Философский антивестерн и постапокалиптическая притча</span>
+                  </div>
+                  <p class="work-summary">От инфернального похода банды охотников за скальпами под водительством судьи Холдена по пустыням Техаса до тихого пути отца и сына сквозь пепел мёртвого мира, несущих внутри себя огонь.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-don-delillo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дон Делилло</h3>
+                  <p class="author-role">Летописец медиа-эпохи, страха и позднего XX века · <span class="tabular">род. 1936</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер отстранённой, гипнотической прозы о супермаркетах, телевидении, Холодной войне и незаметных катастрофах современности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-white-noise-underworld">
+                  <div class="work-row">
+                    <span class="work-code">АМ-06.05</span>
+                    <a class="work-link" href="./works/delillo-belyj-shum.html">Белый шум и «Изнанка мира»</a>
+                    <span class="work-meta">1985–1997 · Сатирико-философские романы</span>
+                  </div>
+                  <p class="work-summary">Жизнь профессора Джека Глэдни под гул экранов и «воздушное токсическое событие», а также грандиозная история США второй половины века вслед за бейсбольным мячом 1951 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-paul-auster">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пол Остер</h3>
+                  <p class="author-role">Мастер интеллектуального детектива и поэтики случайности · <span class="tabular">1947–2024</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Голос Бруклина и Нью-Йорка, превративший улицы Манхэттена в метафизический лабиринт двойников, рукописей и прихотей судьбы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-new-york-trilogy">
+                  <div class="work-row">
+                    <span class="work-code">АМ-06.06</span>
+                    <a class="work-link" href="./works/oster-nyu-jorkskaya-trilogiya.html">Нью-йоркская трилогия</a>
+                    <span class="work-meta">1985–1986 · Метафизический детектив</span>
+                  </div>
+                  <p class="work-summary">Три загадочные повести («Стеклянный город», «Призраки», «Запертая комната»), где слежка превращается в растворение собственной личности в лабиринте города и слов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-donna-tartt">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Донна Тартт</h3>
+                  <p class="author-role">Мастер классического «большого романа» рубежа XX–XXI веков · <span class="tabular">род. 1963</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Миссисипи, вернувшая современному читателю наслаждение многослойным сюжетом, психологизмом и диккенсовским размахом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-secret-history-goldfinch">
+                  <div class="work-row">
+                    <span class="work-code">АМ-06.07</span>
+                    <a class="work-link" href="./works/tartt-tajnaya-istoriya-i-shhegol.html">Тайная история и «Щегол»</a>
+                    <span class="work-meta">1992 / 2013 · Интеллектуальный триллер и роман воспитания</span>
+                  </div>
+                  <p class="work-summary">История кружка студентов-классицистов в Вермонте, перешедших черту ради красоты и рока, и одиссея Тео Декера, пронёсшего сквозь годы картину Карела Фабрициуса.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание американской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

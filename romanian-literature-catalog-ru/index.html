@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог румынской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 33 писателей · 37 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог румынской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от баллады «Миорица», летописей и Димитрие Кантемира до Михая Эминеску, Караджале, Ребряну, Элиаде, Ионеско и Мирчи Кэртэреску.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#ro-folklore-chroniclers">Раздел I: Народный эпос, летописцы и Просвещение</a>
+        <a href="#ro-nineteenth-classics">Раздел II: Романтизм и золотой век классики («Жунимя»)</a>
+        <a href="#ro-interwar-novel">Раздел III: Межвоенный расцвет романа и прозы</a>
+        <a href="#ro-poetry-avantgarde">Раздел IV: Великая поэзия XX века и румынский авангард</a>
+        <a href="#ro-philosophy-exile">Раздел V: Эссеистика, драма абсурда и мировая диаспора</a>
+        <a href="#ro-postwar-contemporary">Раздел VI: Послевоенное обновление, эпоха перемен и современная проза</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="ro-folklore-chroniclers">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVI–XVIII века</p>
+          <h2 class="section-title">Народный эпос, летописцы и Просвещение</h2>
+          <p class="section-desc">Устные баллады Карпат и Дуная, молдавские летописи XVII века, энциклопедический труд Димитрие Кантемира и ироикомическая поэма Трансильванской школы.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-romanian-folklore">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Румынский народный эпос («Миорица» и «Мастер Маноле»)</h3>
+                  <p class="author-role">Краеугольный камень румынской поэтической традиции · <span class="tabular">XV–XVIII века (зап. XIX в.)</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Пастушеские баллады и строительные легенды, переосмысляющие судьбу, творческую жертву и гармонию человека с горным космосом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-miorita-manole">
+                  <div class="work-row">
+                    <span class="work-code">РМ-01.01</span>
+                    <a class="work-link" href="./works/narodnyj-epos-miorica-i-manole.html">Миорица и «Мастер Маноле» («Монастырь Арджеш»)</a>
+                    <span class="work-meta">зап. 1850 · Народные баллады</span>
+                  </div>
+                  <p class="work-summary">Два главных мифа румынской культуры: о молдавском пастухе, принимающем смерть как космическую свадьбу, и о зодчем Маноле, замуровавшем ради прочности храма любимую жену Анну.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ureche-costin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Григоре Уреке и Мирон Костин</h3>
+                  <p class="author-role">Основоположники румынской историографии и барочной прозы · <span class="tabular">ок. 1590–1691</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Молдавские книжники XVII века, заложившие основы румынского литературного языка и впервые осмыслившие единство романских корней.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-letopisetul-moldovei">
+                  <div class="work-row">
+                    <span class="work-code">РМ-01.02</span>
+                    <a class="work-link" href="./works/ureche-kostin-letopis-moldavii.html">Летопись Земли Молдавской и «Жизнь мира»</a>
+                    <span class="work-meta">1647–1675 · Историческая проза и философская поэма</span>
+                  </div>
+                  <p class="work-summary">Яркие портреты господарей — от Стефана Великого до грозных усобиц XVII века — и суровые размышления Костина о бренности власти и превратности времени.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dimitrie-cantemir">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Димитрие Кантемир</h3>
+                  <p class="author-role">Учёный-энциклопедист, господарь и первый румынский романист · <span class="tabular">1673–1723</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель европейского масштаба, член Берлинской академии и сподвижник Петра I, создавший первый аллегорический роман на румынском языке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-historia-hieroglyphica">
+                  <div class="work-row">
+                    <span class="work-code">РМ-01.03</span>
+                    <a class="work-link" href="./works/kantemir-ieroglificheskaya-istoriya.html">Иероглифическая история и «Описание Молдавии»</a>
+                    <span class="work-meta">1705–1716 · Барочный аллегорический роман и трактат</span>
+                  </div>
+                  <p class="work-summary">Блистательная политическая сатира в образах зверей и птиц, скрывающая борьбу боярских партий Молдавии и Валахии на фоне османского двора.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ion-budai-deleanu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ион Будай-Деляну</h3>
+                  <p class="author-role">Выдающийся поэт-просветитель Трансильванской школы · <span class="tabular">1760–1820</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист, филолог и мастер гротеска, объединивший в стихах античную эпопею Тассо и Ариосто с язвительной сатирой на феодальный порядок.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tiganiada">
+                  <div class="work-row">
+                    <span class="work-code">РМ-01.04</span>
+                    <a class="work-link" href="./works/budai-delyanu-cyganiada.html">Цыганиада («Țiganiada»)</a>
+                    <span class="work-meta">1800–1812 · Ироикомическая поэма</span>
+                  </div>
+                  <p class="work-summary">Бурлескная поэма о походе вольного табора в войске Влада Цепеша против турок — смелая притча о свободе, государстве и человеческих слабостях.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ro-nineteenth-classics">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1840–1900</p>
+          <h2 class="section-title">Романтизм и золотой век классики («Жунимя»)</h2>
+          <p class="section-desc">Рождение современной румынской словесности: романтизм Василе Александри, гений Михая Эминеску, сказочная проза Иона Крянгэ, драматургия Караджале и реализм Славича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-vasile-alecsandri">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Василе Александри</h3>
+                  <p class="author-role">Поэт, драматург и собиратель народных песен · <span class="tabular">1821–1890</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из вождей революции 1848 года и основателей современного румынского театра, открывший миру красоту карпатского фольклора.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pasteluri-doine">
+                  <div class="work-row">
+                    <span class="work-code">РМ-02.01</span>
+                    <a class="work-link" href="./works/aleksandri-pasteli-i-dojmy.html">Пастели («Pasteluri») и «Дойны»</a>
+                    <span class="work-meta">1853–1868 · Пейзажная и фольклорная лирика</span>
+                  </div>
+                  <p class="work-summary">Прозрачные, музыкальные стихи о смене времён года в поместье Мирчешти, заснеженных степях Молдавии, весне на Сирете и песнях пахарей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mihai-eminescu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михай Эминеску</h3>
+                  <p class="author-role">Национальный поэт Румынии, величайший романтик XIX века · <span class="tabular">1850–1889</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Гений румынского стиха и мыслитель, соединивший философию Канта и Шопенгауэра, древние мифы Дакии и завораживающую музыку слова.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-luceafarul">
+                  <div class="work-row">
+                    <span class="work-code">РМ-02.02</span>
+                    <a class="work-link" href="./works/eminesku-luchaferul.html">Лучафэрул («Вечерняя звезда») и «Письма»</a>
+                    <span class="work-meta">1881–1883 · Романтическая поэма и философская лирика</span>
+                  </div>
+                  <p class="work-summary">Величайшая поэма румынской литературы — история трагической любви бессмертной Вечерней звезды Гипериона к земной царевне Каталине — и гневные сатиры о судьбе родины.</p>
+                </li>
+                <li class="work-item" id="work-sarmandionis">
+                  <div class="work-row">
+                    <span class="work-code">РМ-02.03</span>
+                    <a class="work-link" href="./works/eminesku-bednyj-dionis.html">Бедный Дионис и «Чезара»</a>
+                    <span class="work-meta">1872–1876 · Фантастико-романтические повести</span>
+                  </div>
+                  <p class="work-summary">Философская проза о бедном бухарестском переписчике, открывающем с помощью старинной книги астрологии тайну переселения во времени и бегства на Луну.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ion-creanga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ион Крянгэ</h3>
+                  <p class="author-role">Классик румынской прозы, мастер народного сказа и юмора · <span class="tabular">1837–1889</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын крестьянина из предгорной деревни Хумулешти и близкий друг Эминеску, превративший живую народную речь Молдавии в бессмертную литературу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-amintiri-din-copilarie">
+                  <div class="work-row">
+                    <span class="work-code">РМ-02.04</span>
+                    <a class="work-link" href="./works/kryange-vospominaniya-detstva.html">Воспоминания детства и «Сказка о Белом Арапе»</a>
+                    <span class="work-meta">1877–1888 · Автобиографическая повесть и литературная сказка</span>
+                  </div>
+                  <p class="work-summary">Искромётная хроника проказ маленького Никэ на берегах Озаны — от кражи черешни и учёбы в бурсе до мудрых и весёлых сказок о дружбе и испытаниях.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ion-luca-caragiale">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ион Лука Караджале</h3>
+                  <p class="author-role">Крупнейший румынский драматург и мастер сатирической новеллы · <span class="tabular">1852–1912</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Непревзойдённый обличитель мещанской пустоты, политического фарса и бухарестских нравов, предвосхитивший европейский театр абсурда.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-scrisoare-pierduta">
+                  <div class="work-row">
+                    <span class="work-code">РМ-02.05</span>
+                    <a class="work-link" href="./works/karadzhale-poteryannoe-pismo.html">Потерянное письмо и «Моменты и очерки»</a>
+                    <span class="work-meta">1884–1901 · Сатирическая комедия и новеллы</span>
+                  </div>
+                  <p class="work-summary">Блистательный фарс о провинциальных выборах, где любовное письмо префекта становится главным оружием политического шантажа, и зарисовки о несносном господине Гэе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ioan-slavici">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иоан Славич</h3>
+                  <p class="author-role">Основоположник психологического реализма в Трансильвании · <span class="tabular">1848–1925</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер суровых трагических повестей и романов о нравственном выборе, власти денег и укладе трансильванских городков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-moara-cu-noroc">
+                  <div class="work-row">
+                    <span class="work-code">РМ-02.06</span>
+                    <a class="work-link" href="./works/slavich-schastlivaya-melnica.html">Счастливая мельница и «Мара»</a>
+                    <span class="work-meta">1881–1894 · Психологическая повесть и роман</span>
+                  </div>
+                  <p class="work-summary">История сапожника Гицэ, взявшего в аренду одинокий постоялый двор в степи и постепенно разрушившего душу и семью под властью страха и золотой наживы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ro-interwar-novel">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1910–1945</p>
+          <h2 class="section-title">Межвоенный расцвет романа и прозы</h2>
+          <p class="section-desc">Золотое двадцатилетие румынского романа: монументальный реализм Ливиу Ребряну, поэтика Михаила Садовяну, модернизм Камила Петреску, дендизм Матейу Караджале и проза Блехера.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-liviu-rebreanu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ливиу Ребряну</h3>
+                  <p class="author-role">Создатель современного румынского эпического романа · <span class="tabular">1885–1944</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Трагический и беспристрастный мастер эпоса, раскрывший стихийную власть земли над крестьянством и драму Первой мировой войны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ion-rebreanu">
+                  <div class="work-row">
+                    <span class="work-code">РМ-03.01</span>
+                    <a class="work-link" href="./works/rebryanu-ion.html">Ион («Ion»)</a>
+                    <span class="work-meta">1920 · Социально-эпический роман</span>
+                  </div>
+                  <p class="work-summary">Монументальная фреска трансильванского села Припас: страсть бедного крестьянина Иона к земле заставляет его предать любовь ради приданого нелюбимой Аны.</p>
+                </li>
+                <li class="work-item" id="work-padurea-spanzuratilor">
+                  <div class="work-row">
+                    <span class="work-code">РМ-03.02</span>
+                    <a class="work-link" href="./works/rebryanu-les-poveshennyh.html">Лес повешенных («Pădurea spânzuraților»)</a>
+                    <span class="work-meta">1922 · Военно-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Трагедия румынского офицера австро-венгерской армии Апостола Бологи, разрываемого между воинской присягой империи, любовью и голосом совести перед лицом гибели.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mihail-sadoveanu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михаил Садовяну</h3>
+                  <p class="author-role">Патриарх румынской эпической прозы, певец природы и старины · <span class="tabular">1880–1961</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Автор более сотни книг о карпатских лесах, древней Молдавии и нерушимых законах народной правды.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-baltagul">
+                  <div class="work-row">
+                    <span class="work-code">РМ-03.03</span>
+                    <a class="work-link" href="./works/sadovyanu-sekira.html">Секира («Baltagul»)</a>
+                    <span class="work-meta">1930 · Лирико-эпический роман-баллада</span>
+                  </div>
+                  <p class="work-summary">Вдохновлённый балладой «Миорица» роман о горной крестьянке Витории Липан, которая с сыном Георгицэ отправляется по следам отар, чтобы разыскать могилу убитого мужа и свершить правый суд.</p>
+                </li>
+                <li class="work-item" id="work-fratii-jderi">
+                  <div class="work-row">
+                    <span class="work-code">РМ-03.04</span>
+                    <a class="work-link" href="./works/sadovyanu-bratya-zhder.html">Братья Ждер («Frații Jderi»)</a>
+                    <span class="work-meta">1935–1942 · Историческая трилогия</span>
+                  </div>
+                  <p class="work-summary">Великолепный исторический эпос о Молдавском княжестве XV века в эпоху господаря Стефана Великого и подвигах верного рода Ждеров.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-camil-petrescu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Камил Петреску</h3>
+                  <p class="author-role">Пионер румынского модернистского и психологического романа · <span class="tabular">1894–1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист, философ и драматург, перенесший в румынскую прозу прустовскую технику памяти, внутреннего монолога и бескомпромиссную правду о войне.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ultima-noapte-de-dragoste">
+                  <div class="work-row">
+                    <span class="work-code">РМ-03.05</span>
+                    <a class="work-link" href="./works/petresku-poslednyaya-noch-lyubvi.html">Последняя ночь любви, первая ночь войны</a>
+                    <span class="work-meta">1930 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Двойная исповедь студента Штефана Георгиудиу — сначала о мучительной ревности к жене Эле, а затем о леденящем абсурде боёв 1916 года в Карпатах, обесценивающем прежние страсти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mateiu-caragiale">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Матейу Караджале</h3>
+                  <p class="author-role">Культовый стилист бухарестского декаданса · <span class="tabular">1885–1936</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын И. Л. Караджале, создатель уникального орнаментального языка и легенды о гибнущем балканско-левантийском Бухаресте.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-craii-de-curtea-veche">
+                  <div class="work-row">
+                    <span class="work-code">РМ-03.06</span>
+                    <a class="work-link" href="./works/karadzhale-m-povesy-starogo-dvora.html">Повесы Старого Двора («Craii de Curtea-Veche»)</a>
+                    <span class="work-meta">1929 · Лирико-символический роман</span>
+                  </div>
+                  <p class="work-summary">Ночные странствия четырёх аристократов-денди по кабакам, старым особнякам и теням восточного Бухареста в канун заката прежнего мира.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-panait-istrati">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Панаит Истрати</h3>
+                  <p class="author-role">«Горький Балкан», писатель на французском и румынском языках · <span class="tabular">1884–1935</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Скиталец из Брэилы, прославленный Роменом Ролланом за ослепительные повести о бродягах, ремесленниках и бунтарях Дуная и Востока.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-chira-chiralina">
+                  <div class="work-row">
+                    <span class="work-code">РМ-03.07</span>
+                    <a class="work-link" href="./works/istrati-kira-kiralina.html">Кира Киралина и «Кодин»</a>
+                    <span class="work-meta">1924–1926 · Цикл повестей</span>
+                  </div>
+                  <p class="work-summary">Красочная и горькая сага о Адриане Зограффи, прекрасной сестре Кире, похищенной в гарем, и трагической дружбе с дунайским силачом Кодином.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hortensia-papadat-bengescu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хортензия Пападат-Бенджеску</h3>
+                  <p class="author-role">Мастер румынского городского и психологического романа · <span class="tabular">1876–1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создательница «цикла семьи Халлипа» — тончайшего аналитического исследования буржуазного общества, болезни, тщеславия и музыки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-concert-din-muzica-de-bach">
+                  <div class="work-row">
+                    <span class="work-code">РМ-03.08</span>
+                    <a class="work-link" href="./works/papadat-bengesku-koncert-baha.html">Концерт баховской музыки</a>
+                    <span class="work-meta">1927 · Модернистский роман</span>
+                  </div>
+                  <p class="work-summary">Сложная паутина интриг вокруг подготовки светского концерта в салоне Елены Дрэганеску, контрастирующая с тихой трагедией умирания композитора Максенциу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-max-blecher">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Макс Блехер</h3>
+                  <p class="author-role">Гений европейского экзистенциального и сюрреалистического романа · <span class="tabular">1909–1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Умерший в 28 лет от костного туберкулёза автор пронзительной прозы о хрупкости границ между сном, телом и предметным миром, высоко ценимый Сартром и Бруно Шульцем.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-intamplari-in-irealitatea-imediata">
+                  <div class="work-row">
+                    <span class="work-code">РМ-03.09</span>
+                    <a class="work-link" href="./works/bleher-proisshestviya-v-irrealnosti.html">Происшествия в непосредственной ирреальности</a>
+                    <span class="work-meta">1936 · Сюрреалистическо-экзистенциальный роман</span>
+                  </div>
+                  <p class="work-summary">Галлюцинаторные прогулки по окраинам провинциального городка Роман, восковые фигуры ярмарок, кинотеатры и внезапные провалы в пустоту собственного «я».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ro-poetry-avantgarde">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1915–1965</p>
+          <h2 class="section-title">Великая поэзия XX века и румынский авангард</h2>
+          <p class="section-desc">Мировая вершина румынской лирики: траурный символизм Баковии, мощь Аргези, метафизика Благи, герметизм Иона Барбу и гротеск Урмуза и Тристана Тцары.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-george-bacovia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джордже Баковия</h3>
+                  <p class="author-role">Величайший поэт румынского символизма и предтеча экзистенциализма · <span class="tabular">1881–1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Певец осенней тоски, свинцовых дождей, скрипок в пустых провинциальных парках и безысходного одиночества XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-plumb-bacovia">
+                  <div class="work-row">
+                    <span class="work-code">РМ-04.01</span>
+                    <a class="work-link" href="./works/bakoviya-svinec.html">Свинец («Plumb») и «Жёлтые искры»</a>
+                    <span class="work-meta">1916–1926 · Символистская лирика</span>
+                  </div>
+                  <p class="work-summary">Знаменитый дебютный сборник («Спали глубоко свинцовые гробы…»), где мокрая осень, жёлтые листья и глухая тишина становятся музыкой мировой скорби.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tudor-arghezi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тудор Аргези</h3>
+                  <p class="author-role">Реформатор румынского стиха, преемник Эминеску · <span class="tabular">1880–1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший монах, часовщик и публицист, соединивший в поэзии библейский пафос псалмов, дерзость уличного просторечия и «эстетику безобразного».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cuvinte-potrivite">
+                  <div class="work-row">
+                    <span class="work-code">РМ-04.02</span>
+                    <a class="work-link" href="./works/argezi-podhodyashhie-slova.html">Подходящие слова и «Цветы плесени»</a>
+                    <span class="work-meta">1927–1931 · Философская и тюремная лирика</span>
+                  </div>
+                  <p class="work-summary">Знаменитые «Псалмы» о богоборческом поиске Бога в молчании вселенной, гимн труду «Завет» и стихи, написанные ногтем на оштукатуренной стене тюрьмы Вэкэрешти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lucian-blaga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лучиан Блага</h3>
+                  <p class="author-role">Поэт-экспрессионист, драматург и философ культуры · <span class="tabular">1895–1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и дипломат из Трансильвании, создавший оригинальную философию «миоритического пространства» и лирику космической тайны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poemele-luminii">
+                  <div class="work-row">
+                    <span class="work-code">РМ-04.03</span>
+                    <a class="work-link" href="./works/blaga-poemy-sveta.html">Поэмы света и «Трилогия культуры»</a>
+                    <span class="work-meta">1919–1944 · Экспрессионистская лирика и философия</span>
+                  </div>
+                  <p class="work-summary">Знаменитое стихотворение «Я не растопчу венчик чудес мира» — гимн любви, приумножающей тайну бытия, — и учение о душе румынского пейзажа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ion-barbu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ион Барбу (Дан Барбилиан)</h3>
+                  <p class="author-role">Великий поэт герметизма и выдающийся математик · <span class="tabular">1895–1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор геометрии, видевший в чистом поэтическом слове отражение платоновских идей и кристаллических формул вселенной.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-joc-secund">
+                  <div class="work-row">
+                    <span class="work-code">РМ-04.04</span>
+                    <a class="work-link" href="./works/barbu-vtoraya-igra.html">Вторая игра («Joc secund») и «Рига Крипто и лапонька Энигель»</a>
+                    <span class="work-meta">1930 · Герметическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Математически выверенная поэзия отражённых миров и трагическая баллада о грибном царе Крипто, погибшем от лучей северного солнца.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-urmuz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Урмуз (Деметер Деметереску-Бузэу)</h3>
+                  <p class="author-role">Предтеча дадаизма и европейского театра абсурда · <span class="tabular">1883–1923</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Скромный судебный клерк, писавший для сестёр парадоксальные миниатюры, из которых выросли Тцара, Ионеско и весь румынский авангард.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pagini-bizare">
+                  <div class="work-row">
+                    <span class="work-code">РМ-04.05</span>
+                    <a class="work-link" href="./works/urmuz-strannye-stranicy.html">Странные страницы («Pagini bizare»)</a>
+                    <span class="work-meta">1922–1930 · Авангардная проза абсурда</span>
+                  </div>
+                  <p class="work-summary">Блестящие гротески («Воронка и Стамате», «Исмаил и Турнавиту», «Фуксиада»), в которых герои состоят из столовых шкафов, крыльев и чистой логической чепухи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tristan-tzara">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тристан Тцара (Самуэль Розеншток)</h3>
+                  <p class="author-role">Поэт-бунтарь, основатель дадаизма · <span class="tabular">1896–1963</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец румынского Мойнешти, начавший с антивоенных румынских стихов и потрясший Европу взрывом Дада в Цюрихе и Париже.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-manifeste-dada">
+                  <div class="work-row">
+                    <span class="work-code">РМ-04.06</span>
+                    <a class="work-link" href="./works/cara-manifesty-dada.html">Семь манифестов Дада и «Приблизительный человек»</a>
+                    <span class="work-meta">1918–1931 · Авангардные манифесты и поэзия</span>
+                  </div>
+                  <p class="work-summary">Дерзкий вызов войне и буржуазному лицемерию, освободивший европейскую поэзию XX века от застывших условностей.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ro-philosophy-exile">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1930–1989</p>
+          <h2 class="section-title">Эссеистика, драма абсурда и мировая диаспора</h2>
+          <p class="section-desc">Поколение бухарестских интеллектуалов, покорившее мировую культуру: фантастика и мифология Мирчи Элиаде, афоризмы Эмиля Чорана, театр Эжена Ионеско и дневники Себастьяна.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mircea-eliade">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мирча Элиаде</h3>
+                  <p class="author-role">Всемирно известный историк религий и мастер фантастической прозы · <span class="tabular">1907–1986</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Бухарестский энциклопедист и профессор Чикагского университета, создавший самобытную прозу о прорыве сакрального в повседневную жизнь.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-maitreyi-domnisoara-christina">
+                  <div class="work-row">
+                    <span class="work-code">РМ-05.01</span>
+                    <a class="work-link" href="./works/eliade-majtreji-i-kristina.html">Майтрейи и «Девица Кристина»</a>
+                    <span class="work-meta">1933–1936 · Роман и мистическая повесть</span>
+                  </div>
+                  <p class="work-summary">Пронзительная история невозможной любви европейского инженера в Калькутте к бенгальской поэтессе Майтрейи и зловещая мистика старинной усадьбы Дунайской равнины.</p>
+                </li>
+                <li class="work-item" id="work-pe-strada-mantuleasa">
+                  <div class="work-row">
+                    <span class="work-code">РМ-05.02</span>
+                    <a class="work-link" href="./works/eliade-na-ulice-myntulyasa.html">В дворе Минулясы («На улице Мынтуляса»)</a>
+                    <span class="work-meta">1968 · Фантастико-аллегорическая повесть</span>
+                  </div>
+                  <p class="work-summary">Поединок старичка-учителя Фэрыма с машиной тоталитарных допросов с помощью бесконечных сказок, легенд и ускользающих воспоминаний о старом Бухаресте.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-emil-cioran">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмиль Чоран</h3>
+                  <p class="author-role">Мастер трагического афоризма и философской эссеистики · <span class="tabular">1911–1995</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец трансильванской деревни Рэшинари, писавший в молодости на румынском, а затем ставший одним из самых отточенных стилистов Франции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pe-culmile-disperarii">
+                  <div class="work-row">
+                    <span class="work-code">РМ-05.03</span>
+                    <a class="work-link" href="./works/choran-na-vershinah-otchayaniya.html">На вершинах отчаяния и «Краткий учебник разложения»</a>
+                    <span class="work-meta">1934–1949 · Философская эссеистика и афоризмы</span>
+                  </div>
+                  <p class="work-summary">Книга, рождённая в муках бессонницы 22-летнего философа: ослепительные фрагменты о времени, меланхолии, музыке Баха и парадоксах человеческого существования.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eugene-ionesco">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эжен Ионеско (Эуджен Ионеску)</h3>
+                  <p class="author-role">Классик мирового театра абсурда, член Французской академии · <span class="tabular">1909–1994</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Начинал как острый румынский критик («Нет!»), а в Париже перевернул мировую сцену пьесами о распаде языка и стадности тоталитаризма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rhinocero-cantatrice-chauve">
+                  <div class="work-row">
+                    <span class="work-code">РМ-05.04</span>
+                    <a class="work-link" href="./works/ionesko-lysayaya-pevica-i-nosorogi.html">Лысая певица и «Носороги»</a>
+                    <span class="work-meta">1950–1959 · Пьесы театра абсурда</span>
+                  </div>
+                  <p class="work-summary">От бессмысленных диалогов по самоучителю английского до страшной притчи о городке, где все жители добровольно превращаются в носорогов, кроме одинокого Беранже.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mihail-sebastian">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михаил Себастьян</h3>
+                  <p class="author-role">Драматург, романист и автор великого дневника XX века · <span class="tabular">1907–1945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий бухарестский эссеист и драматург, оставивший один из самых честных и трагических документов эпохи Второй мировой войны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jurnal-steaua-fara-nume">
+                  <div class="work-row">
+                    <span class="work-code">РМ-05.05</span>
+                    <a class="work-link" href="./works/sebastyan-dnevnik-i-bezymyannaya-zvezda.html">Дневник (1935–1944) и «Безымянная звезда»</a>
+                    <span class="work-meta">1944 / изд. 1996 · Дневниковая проза и лирическая пьеса</span>
+                  </div>
+                  <p class="work-summary">Бесстрашная хроника нравственного падения бухарестской интеллигенции в годы войны и светлая пьеса о любви мечтателя-астронома и светской красавицы на глухом полустанке.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ro-postwar-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1955–2010-е годы</p>
+          <h2 class="section-title">Послевоенное обновление, эпоха перемен и современная проза</h2>
+          <p class="section-desc">Трагедия и стойкость румынской словесности во второй половине XX – начале XXI века: эпос Марина Преды, метафоры Никиты Стэнеску, притчи Сореску и мировая слава Мирчи Кэртэреску.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-marin-preda">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марин Преда</h3>
+                  <p class="author-role">Крупнейший румынский романист послевоенного периода · <span class="tabular">1922–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель образа мудрого крестьянина Илие Моромете и смелого романа о судьбе интеллигента в эпоху тоталитаризма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-morometii">
+                  <div class="work-row">
+                    <span class="work-code">РМ-06.01</span>
+                    <a class="work-link" href="./works/preda-moromety.html">Морометы («Moromeții») и «Самый любимый из землян»</a>
+                    <span class="work-meta">1955–1980 · Социально-философские романы</span>
+                  </div>
+                  <p class="work-summary">Медлительная, полная горького юмора сага о распаде традиционной крестьянской семьи перед лицом новых времён и драма философа Виктора Петрини, пришедшего к выводу: «Если нет любви — нет ничего».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nichita-stanescu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Никита Стэнеску</h3>
+                  <p class="author-role">Величайший румынский поэт второй половины XX века · <span class="tabular">1933–1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель «неслов» (necuvinte) и метафизической поэзии, освободивший румынский стих от догматизма 1950-х годов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-unsprezece-elegii">
+                  <div class="work-row">
+                    <span class="work-code">РМ-06.02</span>
+                    <a class="work-link" href="./works/stenesku-odinnadcat-elegij.html">Одиннадцать элегий («11 elegii») и «Неслова»</a>
+                    <span class="work-meta">1966–1969 · Метафизическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Философский цикл о рождении сознания, потере цельности и поэзии как «искусстве плача глазами, которые видят то, чего нет».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-marin-sorescu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марин Сореску</h3>
+                  <p class="author-role">Поэт-ироник и автор философских драм-притч · <span class="tabular">1936–1996</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер парадокса и светлого народного юмора Олтении, чья пьеса о пророке Ионе в чреве кита вошла в золотой фонд европейского театра.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-iona-la-lilieci">
+                  <div class="work-row">
+                    <span class="work-code">РМ-06.03</span>
+                    <a class="work-link" href="./works/soresku-iona.html">Иона и «У сиреней» («La Lilieci»)</a>
+                    <span class="work-meta">1968–1995 · Монодрама-притча и поэтический цикл</span>
+                  </div>
+                  <p class="work-summary">Трагикомический монолог рыбака Ионы, проглоченного рыбой и открывающего внутри неё новую, ещё более огромную рыбу — метафора бесконечной борьбы за свободу духа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ana-blandiana">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ана Бландиана</h3>
+                  <p class="author-role">Выдающаяся поэтесса и моральный авторитет современной Румынии · <span class="tabular">род. 1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор хрупкой, кристально чистой лирики, прозы о памяти и основательница первого в мире Мемориала жертвам коммунизма в Сигете.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ore-de-nisip-proiecte-de-trecut">
+                  <div class="work-row">
+                    <span class="work-code">РМ-06.04</span>
+                    <a class="work-link" href="./works/blandiana-proekty-proshlogo.html">Проекты прошлого и «Восстановленный день»</a>
+                    <span class="work-meta">1982–2010 · Фантастические новеллы и лирика</span>
+                  </div>
+                  <p class="work-summary">Поэтическая проза о людях, сосланных в Бэрэганскую степь, где память и воображение перестраивают мир вопреки абсурду диктатуры.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mircea-cartarescu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мирча Кэртэреску</h3>
+                  <p class="author-role">Ведущий современный прозаик и поэт Румынии, лауреат премии «Formentor» · <span class="tabular">род. 1956</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Главный представитель «поколения 80-х», превративший Бухарест с его трамваями, бетонными кварталами и подземными лабиринтами в мистическую вселенную.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-orbitor-nostalgia">
+                  <div class="work-row">
+                    <span class="work-code">РМ-06.05</span>
+                    <a class="work-link" href="./works/kerteresku-oslepitelnyj.html">Ослепительный («Orbitor») и «Ностальгия»</a>
+                    <span class="work-meta">1989–2007 · Постмодернистский визионерский роман и новеллы</span>
+                  </div>
+                  <p class="work-summary">Трилогия, построенная как два крыла и тело гигантской бабочки — грандиозная фантасмагория памяти, сна, анатомии мира и судьбы бухарестского мальчика Мирчи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-norman-manea">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Норман Маня</h3>
+                  <p class="author-role">Всемирно известный эссеист и романист, летописец изгнания · <span class="tabular">род. 1936</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Узник Транснистрии в детстве и эмигрант из эпохи Чаушеску, автор пронзительных книг о памяти, языке и «хулиганской» честности писателя.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-intoarcerea-huliganului">
+                  <div class="work-row">
+                    <span class="work-code">РМ-06.06</span>
+                    <a class="work-link" href="./works/manya-vozvrashhenie-huligana.html">Возвращение хулигана («Întoarcerea huliganului»)</a>
+                    <span class="work-meta">2003 · Автобиографический роман-исповедь</span>
+                  </div>
+                  <p class="work-summary">История первого возвращения писателя на родину после десятилетия изгнания — сквозь воспоминания о концлагере детства, бухарестской юности и утраченных друзьях.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dan-lungu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дан Лунгу</h3>
+                  <p class="author-role">Один из самых переводимых современных прозаиков Румынии · <span class="tabular">род. 1969</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Социолог и писатель из Ясс, с тонким и тёплым юмором описывающий повседневную жизнь Румынии на переломе эпох.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sunt-o-baba-comunista">
+                  <div class="work-row">
+                    <span class="work-code">РМ-06.07</span>
+                    <a class="work-link" href="./works/lungu-ya-kommunisticheskaya-babka.html">Я — коммунистическая бабка!</a>
+                    <span class="work-meta">2007 · Сатирико-лирический роман</span>
+                  </div>
+                  <p class="work-summary">Искренняя и комичная исповедь пенсионерки Эмилии Апосту, которой уехавшая в Канаду дочь пытается объяснить преимущества капитализма, пока сама Эмилия вспоминает молодость на заводе.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание румынской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
