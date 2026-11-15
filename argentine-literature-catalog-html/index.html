@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог аргентинской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 36 писателей · 38 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог аргентинской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Сармьенто, поэмы «Мартин Фьерро» и Роберто Арльта до Борхеса, Биоя Касареса, Эрнесто Сабато, Хулио Кортасара, Мануэля Пуига, Алехандры Писарник и Марианы Энрикес.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#ar-gaucho-nation">Раздел I: Становление нации, романтизм и поэзия гаучо</a>
+        <a href="#ar-modernismo-boedo-florida">Раздел II: На рубеже веков: модернизм, «Флорида» и «Боэдо»</a>
+        <a href="#ar-golden-fantastic">Раздел III: Золотой век интеллектуальной и фантастической прозы («Сур»)</a>
+        <a href="#ar-cortazar-new-prose">Раздел IV: Бум 1960-х: Хулио Кортасар, полифония и поп-мифология</a>
+        <a href="#ar-poetry-memory">Раздел V: Лирика XX века, память и эпоха перемен</a>
+        <a href="#ar-contemporary">Раздел VI: Новая волна и мировая аргентинская проза XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="ar-gaucho-nation">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1830–1900</p>
+          <h2 class="section-title">Становление нации, романтизм и поэзия гаучо</h2>
+          <p class="section-desc">От антитиранического гротеска Эстебана Эчеверрии и историософии Сармьенто до народного эпоса бескрайней пампы — поэмы «Мартин Фьерро» и раннего аргентинского романа.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-esteban-echeverria">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эстебан Эчеверрия</h3>
+                  <p class="author-role">Родоначальник аргентинского романтизма и политической новеллы · <span class="tabular">1805–1851</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и публицист «Поколения 1837 года», привёзший в Буэнос-Айрес дух европейского романтизма и заложивший в жестокой притче «Бойня» основу всей аргентинской прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-matadero-la-cautiva">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-01.01</span>
+                    <a class="work-link" href="./works/echeverriya-bojnya.html">Бойня («El matadero») и «Пленница»</a>
+                    <span class="work-meta">1838–1839 (изд. 1871) · Романтическая новелла и поэма</span>
+                  </div>
+                  <p class="work-summary">Бесстрашный гротеск о бойне на окраине Буэнос-Айреса эпохи диктатуры Росаса, где столкновение одичавшей толпы и юного «унитария» превращается в аллегорию насилия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-domingo-faustino-sarmiento">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Доминго Фаустино Сармьенто</h3>
+                  <p class="author-role">Мыслитель, просветитель и президент-писатель Аргентины · <span class="tabular">1811–1888</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель главной культурологической антитезы Латинской Америки — борьбы «цивилизации» городов и просвещения против «варварства» безбрежной пампы и каудильо.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-facundo-civilizacion-y-barbarie">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-01.02</span>
+                    <a class="work-link" href="./works/sarmento-fakundo.html">Факундо: цивилизация и варварство</a>
+                    <span class="work-meta">1845 · Историко-философская эпопея и очерк</span>
+                  </div>
+                  <p class="work-summary">Блестящая биография грозного провинциального вождя Факундо Кироги и грандиозный портрет аргентинской пампы, трактов, кочевых гаучо и роковых развилок истории страны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-hernandez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Эрнандес</h3>
+                  <p class="author-role">Творец национальной поэмы Аргентины, поэт пампы · <span class="tabular">1834–1886</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и политик, вложивший в уста простого конного пастуха-пайядора под гитару весь гнев, мудрость и достоинство гонимого гаучо.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-martin-fierro">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-01.03</span>
+                    <a class="work-link" href="./works/ernandes-martin-ferro.html">Мартин Фьерро («Гаучо Мартин Фьерро» и «Возвращение»)</a>
+                    <span class="work-meta">1872–1879 · Народно-эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Исповедь гаучо, насильно угнанного на границу, потерявшего семью и ушедшего в степь к индейцам, а затем вернувшегося к сыновьям с заветами о братстве и совести.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-del-campo-ascasubi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эстанислао дель Кампо и Иларио Аскасуби</h3>
+                  <p class="author-role">Мастера ранней гауческской поэзии · <span class="tabular">1807–1880</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэты Ла-Платы, превратившие разговорную речь и остроумие всадников пампы в изысканную литературную и пародийную форму.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fausto-criollo">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-01.04</span>
+                    <a class="work-link" href="./works/del-kampo-faust-gaucho.html">Фауст (Впечатления гаучо Анастасио эль Польо)</a>
+                    <span class="work-meta">1866 · Поэма-диалог в традиции гауческо</span>
+                  </div>
+                  <p class="work-summary">Очаровательный рассказ гаучо другу о том, как он случайно побывал в театре «Колон» в Буэнос-Айресе на опере Гуно «Фауст» и принял происходящее на сцене за живую истину.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cambaceres-gutierrez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эухенио Камбасерес и Эдуардо Гутьеррес</h3>
+                  <p class="author-role">Первооткрыватели натурализма и городского романа Ла-Платы · <span class="tabular">1843–1889</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романисты эпохи «Поколения 1880 года», запечатлевшие преображение Буэнос-Айреса, драму иммиграции и народную легенду о благородном бунтаре.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sin-rumbo-juan-moreira">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-01.05</span>
+                    <a class="work-link" href="./works/kambaseres-bez-celi.html">Без цели («Sin rumbo») и «Хуан Морейра»</a>
+                    <span class="work-meta">1879–1885 · Натуралистический и приключенческий романы</span>
+                  </div>
+                  <p class="work-summary">История душевного опустошения пресыщенного помещика Андреса, спасённого лишь любовью к дочери, и народный роман о гаучо Хуане Морейре, ставшем символом борьбы с произволом.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ar-modernismo-boedo-florida">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1900–1940</p>
+          <h2 class="section-title">На рубеже веков: модернизм, «Флорида» и «Боэдо»</h2>
+          <p class="section-desc">Поэтический модерн Леопольдо Лугонеса и Альфонсины Сторни, прощание с пампой в «Дон Сегундо Сомбре» Гуиральдеса и ожесточённый бунт городского Буэнос-Айреса у Роберто Арльта и Хирондо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-leopoldo-lugones">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Леопольдо Лугонес</h3>
+                  <p class="author-role">Крупнейший поэт и прозаик аргентинского модернизма · <span class="tabular">1874–1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер виртуозной метафоры, предтеча Борхеса в жанре научной и философской фантастики и творец иронического верлибра в Аргентине.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-las-fuerzas-extranas-lunario">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-02.01</span>
+                    <a class="work-link" href="./works/lugones-strannye-sily.html">Странные силы и «Лунарий сентиментальный»</a>
+                    <span class="work-meta">1906–1909 · Фантастические новеллы и модернистская поэзия</span>
+                  </div>
+                  <p class="work-summary">Зловещие истории о забытых науках, соляных столбах, говорящих обезьянах и музыке луны, открывшие дорогу всей аргентинской фантастике XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ricardo-guiraldes">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рикардо Гуиральдес</h3>
+                  <p class="author-role">Создатель классической элегии об уходящем мире гаучо · <span class="tabular">1886–1927</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Друг Валери Ларбо и покровитель молодого авангарда, создавший в Париже и в поместье Сан-Антонио-де-Ареко поэтический роман о взрослении в степи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-don-segundo-sombra">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-02.02</span>
+                    <a class="work-link" href="./works/guiraldes-don-segundo-sombra.html">Дон Сегундо Сомбра</a>
+                    <span class="work-meta">1926 · Лирический роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Юный Фабио Касерес убегает из дома и становится учеником мудрого, молчаливого погонщика скота дона Сегундо, постигая свободу, честь и поэзию ночных костров пампы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-roberto-arlt">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Роберто Арльт</h3>
+                  <p class="author-role">«Аргентинский Достоевский», бунтарь городских окраин · <span class="tabular">1900–1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Самоучка, репортёр криминальной хроники и изобретатель, взорвавший благопристойную словесность яростной прозой о нищете, безумии и подполье Буэнос-Айреса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-juguete-rabioso-siete-locos">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-02.03</span>
+                    <a class="work-link" href="./works/arlt-sem-bezumcev.html">Бешеная игрушка и «Семь безумцев»</a>
+                    <span class="work-meta">1926–1929 · Экспрессионистский городской роман</span>
+                  </div>
+                  <p class="work-summary">Метания юного Сильвио Астьера и безумное тайное общество астролога Эрдосайна, мечтающего перевернуть мир с помощью подпольных борделей и газовой фабрики.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-macedonio-fernandez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Маседонио Фернандес</h3>
+                  <p class="author-role">Философ парадокса, главный учитель и миф Хорхе Луиса Борхеса · <span class="tabular">1874–1952</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист-оригинал и мыслитель буэнос-айресских кафе, превративший метароман о несуществующем чтении в тонкую игру с реальностью и временем.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-museo-novela-de-la-eterna">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-02.04</span>
+                    <a class="work-link" href="./works/fernandes-muzej-romana-o-vechnoj.html">Музей романа о Вечной</a>
+                    <span class="work-meta">1925–1952 (изд. 1967) · Авангардный метароман</span>
+                  </div>
+                  <p class="work-summary">Уникальная книга с полусотней прологов, опередившая постмодернизм на полвека: автор беседует с персонажами и читателем на пороге не начавшегося романа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alfonsina-storni">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альфонсина Сторни</h3>
+                  <p class="author-role">Классик латиноамериканской женской поэзии XX века · <span class="tabular">1892–1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Смелая и ранимая поэтесса из Буэнос-Айреса и Мар-дель-Платы, привнесшая в модернизм иронический бунт женщины, море и трагическую нежность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-languidez-mascarilla-y-trebol">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-02.05</span>
+                    <a class="work-link" href="./works/storni-istoma-i-maska.html">Истома и «Маска и трилистник»</a>
+                    <span class="work-meta">1920–1938 · Лирика и антисонеты</span>
+                  </div>
+                  <p class="work-summary">От страстных сонетов против лицемерия («Ты хочешь, чтобы я была белой…») к авангардным антисонетам и предсмертному прощанию у Атлантики «Я ложусь спать».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-oliverio-girondo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Оливерио Хирондо</h3>
+                  <p class="author-role">Главная фигура буэнос-айресского ультраизма и авангарда («Мартин Фьерро») · <span class="tabular">1891–1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-новатор озорного ритма и языкового фейерверка, превративший трамваи, улицы Буэнос-Айреса и человеческое тело в карнавал метафор.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-veinte-poemas-para-ser-leidos-en-el-tranvia">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-02.06</span>
+                    <a class="work-link" href="./works/hirondo-stihi-dlya-tramvaya.html">Двадцать стихотворений для чтения в трамвае и «Пугало»</a>
+                    <span class="work-meta">1922–1932 · Авангардная поэзия и верлибр</span>
+                  </div>
+                  <p class="work-summary">Солнечные, дерзкие зарисовки городов, площадей и влюблённостей («Мы плачем на улице, когда светит солнце…»), перевернувшие аргентинскую поэзию.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ar-golden-fantastic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1935–1975</p>
+          <h2 class="section-title">Золотой век интеллектуальной и фантастической прозы («Сур»)</h2>
+          <p class="section-desc">Мировое чудо аргентинской словесности: бесконечные лабиринты Хорхе Луиса Борхеса, фантастика Биой Касареса и Сильвины Окампо, трагический экзистенциализм Сабато и эстетика «Сур».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-jorge-luis-borges">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хорхе Луис Борхес</h3>
+                  <p class="author-role">Архитектор мировой литературы XX века, классик интеллектуальной новеллы и поэзии · <span class="tabular">1899–1986</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Слепой хранитель Национальной библиотеки Аргентины, превративший зеркала, ножи окраин Буэнос-Айреса, тигров, богословие и бесконечные библиотеки в кристально точные притчи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ficciones-el-aleph">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-03.01</span>
+                    <a class="work-link" href="./works/borhes-vymysly-i-alef.html">Вымыслы («Ficciones») и «Алеф»</a>
+                    <span class="work-meta">1944–1949 · Философско-фантастические новеллы</span>
+                  </div>
+                  <p class="work-summary">Шедевры краткой прозы — «Тлён, Укбар, Орбис Терциус», «Вавилонская библиотека», «Сад расходящихся тропок», «Пьер Менар, автор „Дон Кихота“» и «Алеф» — точка, вмещающая всю вселенную.</p>
+                </li>
+                <li class="work-item" id="work-el-libro-de-arena">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-03.02</span>
+                    <a class="work-link" href="./works/borhes-kniga-peska.html">Всеобщая история бесчестья и «Книга песка»</a>
+                    <span class="work-meta">1935 / 1975 · Притчи, эссе и поэтические рассказы</span>
+                  </div>
+                  <p class="work-summary">От стилизаций судьбы гангстеров и пиратов до поздней истории о бесконечной книге без первой и последней страницы, спрятанной в глубине Национальной библиотеки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-adolfo-bioy-casares">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Адольфо Биой Касарес</h3>
+                  <p class="author-role">Соавтор Борхеса и мастер элегантной фантастической повести · <span class="tabular">1914–1999</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат премии Сервантеса, создавший эталон «безупречной по конструкции» фантастической прозы о бессмертии, двойниках и любви.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-invencion-de-morel">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-03.03</span>
+                    <a class="work-link" href="./works/bioj-kasares-izobretenie-morelya.html">Изобретение Мореля</a>
+                    <span class="work-meta">1940 · Философско-фантастическая повесть</span>
+                  </div>
+                  <p class="work-summary">Беглец на необитаемом острове влюбляется в прекрасную Фостину среди компании призрачных отдыхающих — пока не разгадывает тайну машины, обрекающей на вечное повторение одной недели.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-silvina-ocampo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сильвина Окампо</h3>
+                  <p class="author-role">Мастер таинственной, дерзкой и жестокой новеллы · <span class="tabular">1903–1993</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Жена Биоя Касареса и сестра Виктории Окампо, подарившая аргентинской литературе загадочные рассказы о детях, снах и пугающих превращениях обыденности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-furia-viaje-olvidado">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-03.04</span>
+                    <a class="work-link" href="./works/okampo-yarost.html">Ярость («La furia») и «Забытое путешествие»</a>
+                    <span class="work-meta">1937–1959 · Сборники сюрреалистических новелл</span>
+                  </div>
+                  <p class="work-summary">Изысканные и тревожные истории («Голос по телефону», «Свадебное платье»), где детская наивность оборачивается тёмным пророчеством и колдовством.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-victoria-ocampo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виктория Окампо</h3>
+                  <p class="author-role">Основательница журнала «Сур», эссеистка и меценат мировой культуры · <span class="tabular">1890–1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первая женщина — член Аргентинской академии литературы, объединившая в Сан-Исидро голоса Борхеса, Вулф, Камю, Ортеги-и-Гассета и Стравинского.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-testimonios-sur">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-03.05</span>
+                    <a class="work-link" href="./works/okampo-svidetelstva.html">Свидетельства («Testimonios») и «Автобиография»</a>
+                    <span class="work-meta">1935–1979 · Эссеистика и мемуары</span>
+                  </div>
+                  <p class="work-summary">Десять томов блестящих портретов великих современников, очерков о свободе женщины, музыке и строительстве культурного моста между Америками и Европой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ernesto-sabato">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрнесто Сабато</h3>
+                  <p class="author-role">Великий экзистенциальный романист и моральный авторитет Аргентины · <span class="tabular">1911–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Физик-ядерщик, оставивший лабораторию Кюри ради литературы и написавший три великих мрачных романа о душе XX века — «Туннель», «О героях и могилах» и «Абаддон-губитель».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-tunel-sobre-heroes-y-tumbas">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-03.06</span>
+                    <a class="work-link" href="./works/sabato-tunnel-i-o-geroyah.html">Туннель и «О героях и могилах»</a>
+                    <span class="work-meta">1948 / 1961 · Экзистенциально-психологические романы</span>
+                  </div>
+                  <p class="work-summary">Исповедь художника Хуана Пабло Кастеля об одиночестве «стеклянного туннеля» и грандиозная фреска Буэнос-Айреса с легендарным «Докладом о слепых».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-mujica-lainez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Мухика Лайнес</h3>
+                  <p class="author-role">Мастер историко-мистического романа и портретист старого Буэнос-Айреса · <span class="tabular">1910–1984</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель-эрудит, соединивший ослепительную культуру итальянского Возрождения с декадансом аристократических усадеб Рио-де-ла-Платы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bomarzo-misteriosa-buenos-aires">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-03.07</span>
+                    <a class="work-link" href="./works/muhika-lajnes-bomarco.html">Бомарцо («Bomarzo») и «Таинственный Буэнос-Айрес»</a>
+                    <span class="work-meta">1950–1962 · Исторический роман и хроника новелл</span>
+                  </div>
+                  <p class="work-summary">Роскошная автобиография горбатого герцога Пьера Франческо Орсини, создавшего в Италии мистический «Сад чудовищ», и сорок две легенды четырёх веков Буэнос-Айреса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-marco-denevi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марко Деневи</h3>
+                  <p class="author-role">Мастер психологической тайны и микрорассказа · <span class="tabular">1922–1998</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист и прозаик, покоривший читателей многоголосой интригой и отточенными миниатюрами о человеческих иллюзиях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rosaura-a-las-diez">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-03.08</span>
+                    <a class="work-link" href="./works/denevi-rosaura-v-desyat-chasov.html">Росаура в десять часов и «Тайная церемония»</a>
+                    <span class="work-meta">1955–1960 · Психологический детектив и новеллы</span>
+                  </div>
+                  <p class="work-summary">Тайна загадочной невесты скромного реставратора Камило Канегро в дешёвом пансионе Буэнос-Айреса, рассказанная глазами четырёх разных свидетелей.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ar-cortazar-new-prose">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1950–1985</p>
+          <h2 class="section-title">Бум 1960-х: Хулио Кортасар, полифония и поп-мифология</h2>
+          <p class="section-desc">Поворот к открытой форме и новому языку: «Игра в классики» Хулио Кортасара, эпопея Маречаля, трагикомедия Мануэля Пуига, классика Антонио Ди Бенедетто, Саэра и Уолша.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-julio-cortazar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хулио Кортасар</h3>
+                  <p class="author-role">Величайший новатор латиноамериканской прозы и мастер джазового слова · <span class="tabular">1914–1984</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист и рассказчик, живший между Буэнос-Айресом и Парижем; превратил чтение в свободную игру, а бытовые мелочи — в порталы в иное измерение.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rayuela-cortazar">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-04.01</span>
+                    <a class="work-link" href="./works/kortasar-igra-v-klassiki.html">Игра в классики («Rayuela»)</a>
+                    <span class="work-meta">1963 · Роман-лабиринт («антироман»)</span>
+                  </div>
+                  <p class="work-summary">Скитания аргентинца Орасио Оливейры по набережным Сены в поисках возлюбленной Маги и возвращение в Буэнос-Айрес — книга, которую можно читать двумя маршрутами.</p>
+                </li>
+                <li class="work-item" id="work-bestiario-historias-cronopios">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-04.02</span>
+                    <a class="work-link" href="./works/kortasar-bestiarij-i-hronopy.html">Бестиарий, «Истории хронопов и фамов» и «Другое небо»</a>
+                    <span class="work-meta">1951–1966 · Фантастические новеллы и притчи</span>
+                  </div>
+                  <p class="work-summary">Изысканные рассказы («Захваченный дом», «Аксолотль», «Слюни дьявола», «Южное шоссе»), где повседневный Буэнос-Айрес незаметно сдвигается в сон и чудо.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-leopoldo-marechal">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Леопольдо Маречаль</h3>
+                  <p class="author-role">Создатель великого модернистского эпоса о Буэнос-Айресе · <span class="tabular">1900–1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт авангарда, заложивший в своём монументальном романе основу для всего латиноамериканского бума 1960-х.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-adan-buenosayres">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-04.03</span>
+                    <a class="work-link" href="./works/marechal-adan-buenosajres.html">Адан Буэносайрес</a>
+                    <span class="work-meta">1948 · Мифопоэтический роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Путешествие поэта Адана и его друзей-авангардистов по улицам и окраинам Буэнос-Айреса и спуск в пародийный подземный город Какодельфию в духе Данте и Джойса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-puig">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Пуиг</h3>
+                  <p class="author-role">Мастер диалогического романа и поэтики массовой культуры · <span class="tabular">1932–1990</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из городка Хенераль-Вильегас, сплетавший драмы человеческого одиночества из голливудских мелодрам, танго, радиопостановок и тюремных бесед.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-beso-de-la-mujer-arana">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-04.04</span>
+                    <a class="work-link" href="./works/puig-poceluj-zhenshhiny-pauka.html">Поцелуй женщины-паука и «Предательство Риты Хейворт»</a>
+                    <span class="work-meta">1968 / 1976 · Полифонический роман-диалог</span>
+                  </div>
+                  <p class="work-summary">В тесной буэнос-айресской камере мечтатель Молина ночами пересказывает политзаключённому Валентину старые фильмы, рождая между ними удивительную нежность и жертвенную солидарность.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-antonio-di-benedetto">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антонио Ди Бенедетто</h3>
+                  <p class="author-role">Классик латиноамериканского экзистенциализма, автор шедевра о колониальном ожидании · <span class="tabular">1922–1986</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и прозаик из Мендосы, опередивший время сухим, гипнотическим стилем о тщетности человеческого ожидания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zama-trilogia-espera">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-04.05</span>
+                    <a class="work-link" href="./works/di-benedetto-zama.html">Зама («Zama»)</a>
+                    <span class="work-meta">1956 · Историко-экзистенциальный роман</span>
+                  </div>
+                  <p class="work-summary">Бесконечные годы томительного ожидания королевского чиновника дона Диего де Замы в глухом городке Асунсьоне конца XVIII века — «книга для жертв ожидания».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juan-jose-saer">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Хосе Саэр</h3>
+                  <p class="author-role">Один из величайших стилистов испаноязычной прозы конца XX века · <span class="tabular">1937–2005</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Санта-Фе, превративший берега Параны и прибрежные острова в микрокосм памяти, восприятия и таинственной встречи культур.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-entenado-la-pesquisa">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-04.06</span>
+                    <a class="work-link" href="./works/saer-pasynok.html">Пасынок («El entenado»)</a>
+                    <span class="work-meta">1983 · Философско-исторический роман</span>
+                  </div>
+                  <p class="work-summary">Старый испанский юнга вспоминает десять лет, проведённых среди таинственного племени индейцев-коластине на берегах Ла-Платы, которые оставили его в живых единственным свидетелем.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rodolfo-walsh">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Родольфо Уолш</h3>
+                  <p class="author-role">Создатель документального расследования («нон-фикшн романа») в мировой литературе · <span class="tabular">1927–1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер детектива, переводчик и бесстрашный журналист, похищенный хунтой на следующий день после публикации своего знаменитого «Открытого письма».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-operacion-masacre">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-04.07</span>
+                    <a class="work-link" href="./works/uolsh-operaciya-bojnya.html">Операция «Бойня» и «Ирландцы за столом»</a>
+                    <span class="work-meta">1957–1965 · Документальный роман-расследование и новеллы</span>
+                  </div>
+                  <p class="work-summary">Написанное за девять лет до «Хладнокровного убийства» Капоте потрясающее расследование тайного расстрела рабочих на свалке Хосе-Леон-Суарес в 1956 году.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ar-poetry-memory">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1955–2000</p>
+          <h2 class="section-title">Лирика XX века, память и эпоха перемен</h2>
+          <p class="section-desc">Трагическая глубина стихов Алехандры Писарник, афористика Роберто Хуарроса и Хуана Хельмана, сатира Освальдо Сориано и метароман о диктатуре Рикардо Пильи.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-alejandra-pizarnik">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алехандра Писарник</h3>
+                  <p class="author-role">Культовая поэтесса Аргентины, голос ночи, тишины и бездны языка · <span class="tabular">1936–1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Авельянеды в семье эмигрантов из России, создавшая сжатую, ослепительную и трагическую лирику на границе слова и молчания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-arbol-de-diana-extraccion-piedra">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-05.01</span>
+                    <a class="work-link" href="./works/pisarnik-derevo-diany.html">Дерево Дианы и «Извлечение камня безумия»</a>
+                    <span class="work-meta">1962–1968 · Лирическая и прозаическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Кристальные миниатюры о хрупкости «я», ночи, словах, которые не могут исцелить («Я прыгнула из себя в рассвет»), и поэтика предельной честности.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juan-gelman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Хельман</h3>
+                  <p class="author-role">Лауреат премии Сервантеса (2007), великий поэт боли и нежности · <span class="tabular">1930–2014</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт Буэнос-Айреса и изгнания, потерявший сына и невестку в годы диктатуры и создавший в стихах новую интонацию — от танго до сефардского ладино.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-violines-sin-cuerdas-carta-abierta">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-05.02</span>
+                    <a class="work-link" href="./works/helman-otkrytoe-pismo.html">Открытое письмо и «Наброски памяти»</a>
+                    <span class="work-meta">1980–2000 · Гражданская и элегическая лирика</span>
+                  </div>
+                  <p class="work-summary">Пронзительный разговор поэта с «исчезнувшим» сыном Марсело и хрупкие, нежные стихи о том, как любовь продолжает жить сквозь утрату.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-roberto-juarroz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Роберто Хуаррос</h3>
+                  <p class="author-role">Мастер философского созерцания и «Вертикальной поэзии» · <span class="tabular">1925–1995</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Библиотекарь и поэт, посвятивший сорок лет одной сквозной пронумерованной книге стихов о тишине, пустоте и сокровенной геометрии мира.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poesia-vertical">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-05.03</span>
+                    <a class="work-link" href="./works/huarros-vertikalnaya-poeziya.html">Вертикальная поэзия («Poesía vertical»)</a>
+                    <span class="work-meta">1958–1997 · Философская поэзия</span>
+                  </div>
+                  <p class="work-summary">Четырнадцать томов ясных, афористичных верлибров о центре тишины, взгляде из-за края вещей и прозрачности бытия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-osvaldo-soriano">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Освальдо Сориано</h3>
+                  <p class="author-role">Мастер трагикомического и политико-иронического романа · <span class="tabular">1943–1997</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и романист, соединивший любовь к Лорелу и Харди, боксу, футболу и маленьким людям с горькой иронией об аргентинской истории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-no-habra-mas-penas-ni-olvido">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-05.04</span>
+                    <a class="work-link" href="./works/soriano-ne-budet-pechalej.html">Не будет больше ни печалей, ни забвения</a>
+                    <span class="work-meta">1978 · Сатирическая повесть-притча</span>
+                  </div>
+                  <p class="work-summary">Безумный и трагически смешной поединок за власть в вымышленном городке Колония-Вела в 1974 году, перерастающий в гротескную гражданскую войну вокруг муниципалитета.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ricardo-piglia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рикардо Пилья</h3>
+                  <p class="author-role">Главный теоретик и архитектор интеллектуальной аргентинской прозы после Борхеса · <span class="tabular">1941–2017</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист, критик и профессор Принстона, объединивший детектив, дневник, эзопов язык диктатуры и уроки Арльта и Борхеса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-respiracion-artificial">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-05.05</span>
+                    <a class="work-link" href="./works/pilya-iskusstvennoe-dyhanie.html">Искусственное дыхание («Respiración artificial»)</a>
+                    <span class="work-meta">1980 · Интеллектуальный детектив-роман</span>
+                  </div>
+                  <p class="work-summary">Вышедший в разгар военной хунты роман о загадочном исчезновении профессора Магги и ночных беседах в городке Конкордия — о том, как читать историю между строк.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tomas-eloy-martinez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Элой Мартинес</h3>
+                  <p class="author-role">Мастер историко-документального мифа и журналистской прозы · <span class="tabular">1934–2010</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Тукумана, исследовавший в грандиозных романах механику политического мифа, власти и коллективного бессознательного Аргентины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-santa-evita">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-05.06</span>
+                    <a class="work-link" href="./works/martines-svyataya-evita.html">Святая Эвита</a>
+                    <span class="work-meta">1995 · Историко-мистический роман</span>
+                  </div>
+                  <p class="work-summary">Поразительная, почти невероятная история посмертных скитаний забальзамированного тела Эвы Перон — между любовью народа, паранойей генералов и тайной Европы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ar-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1990–2020-е годы</p>
+          <h2 class="section-title">Новая волна и мировая аргентинская проза XXI века</h2>
+          <p class="section-desc">Безбрежная фантазия Сесара Айры, космополитизм Родриго Фресана, нравственные расследования Коана и Пиньейро и мировой успех новой готики Марианы Энрикес и Саманты Швеблин.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-cesar-aira">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сесар Айра</h3>
+                  <p class="author-role">Самый плодовитый и изобретательный авангардист современной Латинской Америки · <span class="tabular">род. 1949</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Житель буэнос-айресского района Флорес, написавший свыше ста кратких блистательных повестей о «бегстве вперёд», чудесах и пампах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-episodio-en-la-vida-del-pintor-viajero">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-06.01</span>
+                    <a class="work-link" href="./works/ajra-epizod-iz-zhizni-hudozhnika.html">Эпизод из жизни художника-путешественника</a>
+                    <span class="work-meta">2000 · Авангардная историческая повесть</span>
+                  </div>
+                  <p class="work-summary">Поражённый молнией в аргентинской пампе XIX века немецкий художник Мориц Ругендас продолжает рисовать бури, индейские набеги и бесконечный горизонт сквозь боль и экстаз.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rodrigo-fresan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Родриго Фресан</h3>
+                  <p class="author-role">Мастер поп-культуры, музыки и многослойной прозы · <span class="tabular">род. 1963</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Буэнос-Айреса, переосмысливший в прозе аргентинскую историю, рок-музыку, Джеймса Барри и природу писательского вымысла.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-historia-argentina">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-06.02</span>
+                    <a class="work-link" href="./works/fresan-argentinskaya-istoriya.html">Аргентинская история и «Сады Кенсингтона»</a>
+                    <span class="work-meta">1991 / 2003 · Цикл рассказов и метароман</span>
+                  </div>
+                  <p class="work-summary">Ироничная, быстрая и музыкальная хроника поколения, выросшего между Фолклендской войной, пластинками «Битлз» и мечтами о бегстве из времени.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-martin-kohan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мартин Коан</h3>
+                  <p class="author-role">Один из самых тонких современных прозаиков и эссеистов Аргентины · <span class="tabular">род. 1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Преподаватель теории литературы, исследующий механику повседневной власти, скрытого надзора и исторической памяти в Буэнос-Айресе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ciencias-morales">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-06.03</span>
+                    <a class="work-link" href="./works/koan-nravstvennye-nauki.html">Нравственные науки («Ciencias morales»)</a>
+                    <span class="work-meta">2007 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">В 1982 году в престижном Буэнос-Айресском колледже молодая инспекторша Мария Тереса начинает одержимо выслеживать учеников в туалетах в поисках запаха сигарет, повторяя в малом логику диктатуры.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-claudia-pineiro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Клаудия Пиньейро</h3>
+                  <p class="author-role">Мастер остросюжетного социального романа и драмы · <span class="tabular">род. 1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Буэнос-айресская писательница и сценаристка, умеющая закрутить детективную интригу так, чтобы она вскрыла социальное неравенство и тайны общества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-las-viudas-de-los-jueves">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-06.04</span>
+                    <a class="work-link" href="./works/pinejro-vdovy-po-chetvergam.html">Вдовы по четвергам и «Елена знает»</a>
+                    <span class="work-meta">2005–2007 · Социальный нуар и психологическая драма</span>
+                  </div>
+                  <p class="work-summary">Страшная развязка в роскошном закрытом коттеджном посёлке накануне аргентинского кризиса 2001 года и трогательное путешествие больной матери в поисках правды о смерти дочери.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mariana-enriquez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мариана Энрикес</h3>
+                  <p class="author-role">Звезда мировой «южной готики» и лауреат премии Эрральде · <span class="tabular">род. 1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналистка и писательница из Буэнос-Айреса, соединившая ужасы городской бедности, призраков диктатуры, панк-рок и мрачную мифологию Аргентины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nuestra-parte-de-noche">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-06.05</span>
+                    <a class="work-link" href="./works/enrikes-nasha-chast-nochi.html">Наша часть ночи и «Опасности курения в постели»</a>
+                    <span class="work-meta">2009 / 2019 · Готический роман и рассказы</span>
+                  </div>
+                  <p class="work-summary">Эпическая семейная сага о медиуме Хуане и его сыне Гаспаре, бегущих от зловещего Ордена Тьмы через мрачные десятилетия Аргентины 1970–1990-х годов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-samanta-schweblin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Саманта Швеблин</h3>
+                  <p class="author-role">Мастер современной новеллы и психологического саспенса, финалист Международного Букера · <span class="tabular">род. 1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Буэнос-Айреса, прославившаяся леденящей ясностью письма на границе семейной драмы, экологической тревоги и тревожной фантастики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-distancia-de-rescate">
+                  <div class="work-row">
+                    <span class="work-code">АРГ-06.06</span>
+                    <a class="work-link" href="./works/shveblin-distanciya-spaseniya.html">Дистанция спасения («Distancia de rescate»)</a>
+                    <span class="work-meta">2014 · Психологический триллер-притча</span>
+                  </div>
+                  <p class="work-summary">Лихорадочный диалог умирающей Аманды с таинственным мальчиком Давидом о невидимой нити материнского страха и отравленной пестицидами аргентинской деревне.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание аргентинской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог мексиканской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 35 писателей · 37 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог мексиканской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от песен Несауалькойотля и барокко Сор Хуаны Инес де ла Крус до прозы Революции Мариано Асуэлы, «Педро Парамо» Хуана Рульфо, Октавио Паса, Карлоса Фуэнтеса, Пачеко и Валерии Луизелли.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#mx-precolumbian-baroque">Раздел I: Доколумбова поэзия, Новая Испания и барокко</a>
+        <a href="#mx-nineteenth-modernismo">Раздел II: Романтизм, костумбризм и мексиканский модернизм</a>
+        <a href="#mx-revolution-contemporaneos">Раздел III: Роман Мексиканской революции и «Контемпоранеос»</a>
+        <a href="#mx-golden-age-rulfo-paz-fuentes">Раздел IV: Золотой век: Хуан Рульфо, Октавио Пас и Карлос Фуэнтес</a>
+        <a href="#mx-la-onda-city">Раздел V: Литература «Волны», сатира и хроники Мехико</a>
+        <a href="#mx-contemporary">Раздел VI: Мексиканская проза XXI века: граница, память и мир</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="mx-precolumbian-baroque">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XV–XVIII века</p>
+          <h2 class="section-title">Доколумбова поэзия, Новая Испания и барокко</h2>
+          <p class="section-desc">От философских песен царя-поэта Несауалькойотля на языке науатль и барочного гения сестры Хуаны Инес де ла Крус до драматургии Аларкона и первого латиноамериканского романа Лисарди.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-nezahualcoyotl-nahuatl">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Несауалькойотль и поэзия науатль («Песни Тескоко»)</h3>
+                  <p class="author-role">Царь-поэт Тескоко и хранитель древнемексиканской мудрости · <span class="tabular">1402–1472</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Правитель, зодчий и мудрец долины Анауак, в поэзии «цветов и песен» (ин шочитль ин куикатль) размышлявший о хрупкости земной славы и вечности красоты.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cantares-mexicanos">
+                  <div class="work-row">
+                    <span class="work-code">МК-01.01</span>
+                    <a class="work-link" href="./works/nesaualkojotl-pesni-anauak.html">Песни долины Анауак («Не навсегда мы на земле…»)</a>
+                    <span class="work-meta">XV в. (рук. XVI в.) · Доколумбова философская лирика</span>
+                  </div>
+                  <p class="work-summary">Пронзительные гимны о быстротечности человеческой жизни, сравненной с нефритом и перьями кецаля, и поиске истины через поэзию и искусство.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juan-ruiz-de-alarcon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Руис де Аларкон</h3>
+                  <p class="author-role">Классик Золотого века драматургии, уроженец Мехико и Таско · <span class="tabular">ок. 1581–1639</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из четырёх величайших драматургов испаноязычного барокко, создавший психологическую комедию нравов, на которую опирались Корнель и Мольер.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-verdad-sospechosa">
+                  <div class="work-row">
+                    <span class="work-code">МК-01.02</span>
+                    <a class="work-link" href="./works/ruis-de-alarkon-somnitelnaya-pravda.html">Сомнительная правда</a>
+                    <span class="work-meta">1620 / изд. 1630 · Комедия характеров в стихах</span>
+                  </div>
+                  <p class="work-summary">Остроумная нравственная комедия о блестящем лгуне доне Гарсии, который так запутывается в собственных выдумках, что ему перестают верить даже тогда, когда он говорит правду.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sor-juana-ines-de-la-cruz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуана Инес де ла Крус (Сор Хуана)</h3>
+                  <p class="author-role">«Десятая муза», величайшая поэтесса и мыслительница Новой Испании · <span class="tabular">1648–1695</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Монахиня-иеронимитка в Мехико, собравшая в келье крупнейшую библиотеку Америки и отстоявшая право женщины на разум, науку и поэзию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-primero-sueno-respuesta">
+                  <div class="work-row">
+                    <span class="work-code">МК-01.03</span>
+                    <a class="work-link" href="./works/sor-huana-pervyj-son.html">Первый сон и «Ответ сестре Филотее»</a>
+                    <span class="work-meta">1691–1692 · Барочная философская поэма и полемическое письмо</span>
+                  </div>
+                  <p class="work-summary">Грандиозная поэма о ночном взлёте человеческой души к познанию мироздания и блестящая защита свободы знания, иронии и поэтического дара женщины.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fernandez-de-lizardi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Хоакин Фернандес де Лисарди</h3>
+                  <p class="author-role">«Мексиканский мыслитель», автор первого романа Латинской Америки · <span class="tabular">1776–1827</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Просветитель и журналист эпохи борьбы за независимость, создавший яркую плутовскую сатиру на колониальное общество Мехико.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-periquillo-sarniento">
+                  <div class="work-row">
+                    <span class="work-code">МК-01.04</span>
+                    <a class="work-link" href="./works/lisardi-perrikilo-sarnento.html">Перрикильо Сарньенто</a>
+                    <span class="work-meta">1816 · Плутовской сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Похождения пройдохи Педро Сармьенто по тавернам, монастырям, тюрьмам и кораблям Новой Испании — живая энциклопедия мексиканских улиц на пороге свободы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="mx-nineteenth-modernismo">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1840–1915</p>
+          <h2 class="section-title">Романтизм, костумбризм и мексиканский модернизм</h2>
+          <p class="section-desc">Формирование национального романа у Альтамирано и Пайно, музыкальная поэзия Гутьерреса Нахеры и Амадо Нерво и классический гуманизм «Атенея молодёжи» Альфонсо Рейеса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ignacio-manuel-altamirano">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Игнасио Мануэль Альтамирано</h3>
+                  <p class="author-role">Основатель национальной школы мексиканского романа XIX века · <span class="tabular">1834–1893</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учитель, солдат Реформы и поэт индейского происхождения из Герреро, объединивший в литературе пейзажи Мексики, романтическую страсть и гражданскую совесть.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-clemencia-el-zarco">
+                  <div class="work-row">
+                    <span class="work-code">МК-02.01</span>
+                    <a class="work-link" href="./works/altamirano-klemensiya-i-el-sarko.html">Клеменсия и «Эль Сарко»</a>
+                    <span class="work-meta">1869 / изд. 1901 · Романтико-исторические романы</span>
+                  </div>
+                  <p class="work-summary">Драмы чести, любви и гражданской войны 1860-х годов в Гвадалахаре и Морелосе, противопоставляющие подлинное благородство духа обманчивому внешнему блеску.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-payno">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Пайно</h3>
+                  <p class="author-role">Мастер грандиозного панорамного романа нравов XIX века · <span class="tabular">1810–1894</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, дипломат и государственный деятель, запечатлевший в увлекательной саге всю мозаику мексиканского общества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-bandidos-de-rio-frio">
+                  <div class="work-row">
+                    <span class="work-code">МК-02.02</span>
+                    <a class="work-link" href="./works/pajno-bandity-s-rio-frio.html">Бандиты с Рио-Фрио</a>
+                    <span class="work-meta">1889–1891 · Костумбристский роман-фельетон</span>
+                  </div>
+                  <p class="work-summary">Разбойники горных трактов, тайный полковник Релусе, судьи, торговки и маркизы — многоголосая эпопея о нравах, карнавалах и пороках Мексики XIX столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gutierrez-najera-diaz-miron">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Гутьеррес Нахера и Сальвадор Диас Мирон</h3>
+                  <p class="author-role">Первооткрыватели мексиканского поэтического модернизма · <span class="tabular">1853–1928</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Тонкий лирик и репортёр столичных бульваров Нахера и гордый, чеканный стилист Диас Мирон, обновившие музыку испанского стиха.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cuentos-fragiles-lascas">
+                  <div class="work-row">
+                    <span class="work-code">МК-02.03</span>
+                    <a class="work-link" href="./works/nahera-hrupkie-novelly.html">Хрупкие новеллы и стихи «Осколки» («Lascas»)</a>
+                    <span class="work-meta">1883–1901 · Модернистская поэзия и хроники</span>
+                  </div>
+                  <p class="work-summary">Музыкальные стихотворения в прозе о парижско-мексиканском Мехико («Герцогиня Хоб») и суровые, скульптурно отточенные строфы из Веракруса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-amado-nervo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Амадо Нерво</h3>
+                  <p class="author-role">Поэт тихой меланхолии, мистики и любви · <span class="tabular">1870–1919</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Тепика, чья ясная, напевная лирика сделала его одним из самых любимых поэтов всего испаноязычного мира начала XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-amada-inmovil-plenitud">
+                  <div class="work-row">
+                    <span class="work-code">МК-02.04</span>
+                    <a class="work-link" href="./works/nervo-nepodvizhnaya-vozlyublennaya.html">Неподвижная возлюбленная и «Полнота»</a>
+                    <span class="work-meta">1918–1922 · Лирический дневник и философская поэзия</span>
+                  </div>
+                  <p class="work-summary">Потрясённый смертью возлюбленной Аны Сесилии Дайлье, поэт создал книгу светлой скорби, тишины и прощального примирения с жизнью («Жизнь, мы в расчёте!»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alfonso-reyes">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альфонсо Рейес</h3>
+                  <p class="author-role">«Универсальный мексиканец», величайший эссеист и гуманист XX века · <span class="tabular">1889–1959</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель, поэт и дипломат из Монтеррея, чьей ясностью прозы восхищался Хорхе Луис Борхес, соединивший античную Грецию с душой долины Мехико.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vision-de-anahuac">
+                  <div class="work-row">
+                    <span class="work-code">МК-02.05</span>
+                    <a class="work-link" href="./works/rejes-videnie-anauaka.html">Видение Анауака (1519) и «Жестокая Ифигения»</a>
+                    <span class="work-meta">1917–1924 · Поэтическая эссеистика и трагедия</span>
+                  </div>
+                  <p class="work-summary">Ослепительный портрет высокогорного Теночтитлана в прозрачном воздухе 1519 года («Странник, ты достиг самой прозрачной области воздуха») и античная драма о памяти и судьбе.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="mx-revolution-contemporaneos">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1915–1950</p>
+          <h2 class="section-title">Роман Мексиканской революции и «Контемпоранеос»</h2>
+          <p class="section-desc">Суровая правда революционного вихря в книгах Мариано Асуэлы, Мартина Луиса Гусмана и Нелли Кампобельо, метафизическая поэзия Горостисы и Вильяуррутии и предчувствие перемен у Яньеса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mariano-azuela">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мариано Асуэла</h3>
+                  <p class="author-role">Основоположник романа Мексиканской революции · <span class="tabular">1873–1952</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Полевой врач в отрядах Панчо Вильи, создавший лаконичную, резкую, как выстрел, хронику крестьянского восстания и крушения его идеалов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-de-abajo">
+                  <div class="work-row">
+                    <span class="work-code">МК-03.01</span>
+                    <a class="work-link" href="./works/asuela-te-kto-vnizu.html">Те, кто внизу («Los de abajo»)</a>
+                    <span class="work-meta">1915 · Революционно-эпический роман</span>
+                  </div>
+                  <p class="work-summary">Путь простого крестьянина Деметрио Масиаса от маленького каньона в Сакатекасе через победы и мародёрство гражданской войны — к камню, катящемуся вниз без остановки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-martin-luis-guzman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мартин Луис Гусман</h3>
+                  <p class="author-role">Мастер политического и документально-исторического романа · <span class="tabular">1887–1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Соратник генералов революции и блестящий стилист из Чиуауа, запечатлевший драму власти, предательства и борьбы за президентское кресло.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-aguila-y-la-serpiente-sombra-caudillo">
+                  <div class="work-row">
+                    <span class="work-code">МК-03.02</span>
+                    <a class="work-link" href="./works/gusman-ten-kaudilo.html">Орёл и змея и «Тень каудильо»</a>
+                    <span class="work-meta">1928–1929 · Политический роман и мемуарная проза</span>
+                  </div>
+                  <p class="work-summary">Захватывающие воспоминания о Панчо Вилье и беспощадная трагедия генерала Игнасио Агирре, раздавленного машиной политических заговоров 1920-х годов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nellie-campobello">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Нелли Кампобельо</h3>
+                  <p class="author-role">Уникальный женский голос романа Мексиканской революции · <span class="tabular">1900–1986</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтесса и хореограф из Дуранго, передавшая ужас и странную поэзию гражданской войны на Севере глазами маленькой девочки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cartucho">
+                  <div class="work-row">
+                    <span class="work-code">МК-03.03</span>
+                    <a class="work-link" href="./works/kampobelo-kartucho.html">Картучо («Cartucho»)</a>
+                    <span class="work-meta">1931 · Фрагментарная повесть-свидетельство</span>
+                  </div>
+                  <p class="work-summary">Короткие, как вспышки памяти, рассказы девочки о расстрелянных всадниках Вильи на улице Второй дель-Райо в Паррале, написанные с детской бесхитростностью и нежностью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-vasconcelos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Васконселос</h3>
+                  <p class="author-role">Философ, реформатор просвещения и мастер мемуарного эпоса · <span class="tabular">1882–1959</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель «Космической расы» и министр просвещения, поддержавший муралистов Риверу и Ороско и написавший страстную автобиографическую эпопею.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ulises-criollo">
+                  <div class="work-row">
+                    <span class="work-code">МК-03.04</span>
+                    <a class="work-link" href="./works/vaskonselos-meksikanskij-odissej.html">Мексиканский Одиссей («Ulises Criollo»)</a>
+                    <span class="work-meta">1935 · Автобиографический роман</span>
+                  </div>
+                  <p class="work-summary">Одиссея детства на границе в Пьедрас-Неграс, страстей, философских споров, революционных скитаний и любви к Мексике на переломе XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gorostiza-villaurrutia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Горостиса и Хавьер Вильяуррутия</h3>
+                  <p class="author-role">Вершины поэзии группы «Контемпоранеос» · <span class="tabular">1901–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастера интеллектуальной, ноктюрной мексиканской лирики, вступившие в диалог с Т. С. Элиотом, Валери и европейским сюрреализмом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-muerte-sin-fin-nostalgia">
+                  <div class="work-row">
+                    <span class="work-code">МК-03.05</span>
+                    <a class="work-link" href="./works/gorostisa-beskonechnaya-smert.html">Бесконечная смерть и «Ностальгия по смерти»</a>
+                    <span class="work-meta">1938–1939 · Философская поэма и лирика</span>
+                  </div>
+                  <p class="work-summary">Метафизическая поэма о воде и форме стеклянного сосуда как образе сознания и бытия («Бесконечная смерть»), и ночные элегии Вильяуррутии о снах и бессоннице Мехико.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-agustin-yanez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Агустин Яньес</h3>
+                  <p class="author-role">Предтеча нового мексиканского романа XX века · <span class="tabular">1904–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Гвадалахары, соединивший модернистскую технику потока сознания с портретом провинциального городка Халиско накануне революции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-al-filo-del-agua">
+                  <div class="work-row">
+                    <span class="work-code">МК-03.06</span>
+                    <a class="work-link" href="./works/yanes-na-krayu-buri.html">На краю бури («Al filo del agua»)</a>
+                    <span class="work-meta">1947 · Полифонический роман</span>
+                  </div>
+                  <p class="work-summary">Жизнь «селения женщин в чёрном» в Халиско 1909 года, скованного страхом греха и молчанием колоколов — в момент, когда издалека надвигается гроза Революции.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="mx-golden-age-rulfo-paz-fuentes">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1950–1985</p>
+          <h2 class="section-title">Золотой век: Хуан Рульфо, Октавио Пас и Карлос Фуэнтес</h2>
+          <p class="section-desc">Триумфальное вхождение Мексики в канон мировой литературы XX века: призрачная Комала Рульфо, нобелевская поэзия Паса, эпика Фуэнтеса, притчи Арреолы и проза Кастельянос и Гарро.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-juan-rulfo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Рульфо</h3>
+                  <p class="author-role">Гений латиноамериканской прозы, автор двух бессмертных книг · <span class="tabular">1917–1986</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Молчаливый мастер из Халиско, создавший всего один сборник рассказов и один небольшой роман, определивший весь «магический реализм» от Маркеса до современности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pedro-paramo">
+                  <div class="work-row">
+                    <span class="work-code">МК-04.01</span>
+                    <a class="work-link" href="./works/rulfo-pedro-paramo.html">Педро Парамо</a>
+                    <span class="work-meta">1955 · Мифопоэтический роман</span>
+                  </div>
+                  <p class="work-summary">Хуан Пресиадо спускается в знойную, заброшенную деревню Комала искать отца — могущественного касика Педро Парамо — и постепенно понимает, что говорит лишь с шёпотом мёртвых.</p>
+                </li>
+                <li class="work-item" id="work-el-llano-en-llamas">
+                  <div class="work-row">
+                    <span class="work-code">МК-04.02</span>
+                    <a class="work-link" href="./works/rulfo-ravnina-v-ogne.html">Равнина в огне («El llano en llamas»)</a>
+                    <span class="work-meta">1953 · Сборник рассказов</span>
+                  </div>
+                  <p class="work-summary">Семнадцать суровых, пронзительно лаконичных новелл о выжженной земле Халиско («Скажи им, чтобы меня не убивали!», «Нет, ты не слышишь лая собак»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-octavio-paz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Октавио Пас</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1990), великий поэт и мыслитель · <span class="tabular">1914–1998</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, дипломат и эссеист из Мехико, соединивший сюрреализм, индийскую философию, мексиканский миф и блестящий анализ национального характера.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-laberinto-de-la-soledad-piedra-de-sol">
+                  <div class="work-row">
+                    <span class="work-code">МК-04.03</span>
+                    <a class="work-link" href="./works/pas-labirint-odinochestva.html">Лабиринт одиночества и поэма «Камень солнца»</a>
+                    <span class="work-meta">1950 / 1957 · Философская эссеистика и поэма</span>
+                  </div>
+                  <p class="work-summary">Классическое исследование мексиканской души, масок фиесты и одиночества истории, а также 584-строчная круговая поэма по календарю ацтеков о любви, времени и памяти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carlos-fuentes">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карлос Фуэнтес</h3>
+                  <p class="author-role">Один из лидеров латиноамериканского бума, летописец XX века Мексики · <span class="tabular">1928–2012</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист и эссеист грандиозного исторического воображения, исследовавший тайны власти, революционного предательства и столкновения двух миров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-muerte-de-artemio-cruz">
+                  <div class="work-row">
+                    <span class="work-code">МК-04.04</span>
+                    <a class="work-link" href="./works/fuentes-smert-artemio-krusa.html">Смерть Артемио Круса</a>
+                    <span class="work-meta">1962 · Полифонический роман</span>
+                  </div>
+                  <p class="work-summary">Умирающий магнат в голосах «Я», «Ты» и «Он» перебирает двенадцать решающих дней своей жизни — от юного идеалиста революции до циничного хозяина мексиканской элиты.</p>
+                </li>
+                <li class="work-item" id="work-aura-terra-nostra">
+                  <div class="work-row">
+                    <span class="work-code">МК-04.05</span>
+                    <a class="work-link" href="./works/fuentes-aura.html">Аура и «Край, где воздух ясен»</a>
+                    <span class="work-meta">1958–1962 · Мистическая повесть и городской роман</span>
+                  </div>
+                  <p class="work-summary">Готическая повесть во втором лице о молодом историке в тёмном особняке сеньоры Консуэло и её загадочной зеленоглазой племянницы Ауры.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juan-jose-arreola">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Хосе Арреола</h3>
+                  <p class="author-role">Виртуозный мастер миниатюры, притчи и фантастического гротеска · <span class="tabular">1918–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик из Сапотлана, чьи отточенные новеллы («Стрелочник», «Баллада», «Бестиарий») стоят в одном ряду с прозой Борхеса и Кафки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-confabulario-la-feria">
+                  <div class="work-row">
+                    <span class="work-code">МК-04.06</span>
+                    <a class="work-link" href="./works/arreola-konfabulyarij.html">Конфабулярий и роман «Ярмарка»</a>
+                    <span class="work-meta">1952–1963 · Сборник притч и полифонический роман</span>
+                  </div>
+                  <p class="work-summary">Парадоксальные миниатюры о поезде, идущем куда придётся, верблюде и игольном ушке, и блестящая хоровая панорама маленького мексиканского городка перед праздником.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rosario-castellanos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Росарио Кастельянос</h3>
+                  <p class="author-role">Крупнейшая писательница, поэтесса и мыслительница Мексики XX века · <span class="tabular">1925–1974</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выросшая в штате Чьяпас среди народа цоциль, подарила литературе голос угнетённых индейских общин и тонкую, смелую женскую поэзию и прозу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-balun-canan">
+                  <div class="work-row">
+                    <span class="work-code">МК-04.07</span>
+                    <a class="work-link" href="./works/kastelyanos-balun-kanan.html">Балун-Канан («Девять стражей»)</a>
+                    <span class="work-meta">1957 · Социально-лирический роман</span>
+                  </div>
+                  <p class="work-summary">Драма распадающегося поместья Аргуэльо в Чьяпасе 1930-х годов на пороге аграрной реформы — глазами семилетней девочки и её верной няни-индеанки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-elena-garro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Элена Гарро</h3>
+                  <p class="author-role">Первооткрывательница мексиканского магического реализма и драматургии · <span class="tabular">1916–1998</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург и романистка, создавшая поэтический шедевр о времени, восстании кристерос и памяти городка Истепек.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-recuerdos-del-porvenir">
+                  <div class="work-row">
+                    <span class="work-code">МК-04.08</span>
+                    <a class="work-link" href="./works/garro-vospominaniya-o-budushhem.html">Воспоминания о будущем</a>
+                    <span class="work-meta">1963 · Магико-реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Сам городок Истепек на камне над долиной вспоминает дни оккупации генералом Росасом, страстную любовь и мистическое превращение Хулии в тумане утра.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="mx-la-onda-city">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1960–2000</p>
+          <h2 class="section-title">Литература «Волны», сатира и хроники Мехико</h2>
+          <p class="section-desc">Ироническое развенчание мифов у Ибаргуэнгойтии, документальный нерв Элены Понятовской, ностальгия по Мехико у Хосе Эмилио Пачеко, эрудиция Питоля и дель Пасо, поэзия Сабинеса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-jorge-ibarguengoitia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хорхе Ибаргуэнгойтия</h3>
+                  <p class="author-role">Главный сатирик и мастер чёрного юмора современной Мексики · <span class="tabular">1928–1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и драматург из Гуанахуато, высмеявший помпезную мифологию революции и политических заговоров с беспощадным изяществом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-relampagos-de-agosto-las-muertas">
+                  <div class="work-row">
+                    <span class="work-code">МК-05.01</span>
+                    <a class="work-link" href="./works/ibarguengojtia-avgustovskie-molnii.html">Августовские молнии и «Мёртвые девушки»</a>
+                    <span class="work-meta">1964 / 1977 · Сатирический роман и криминальная хроника</span>
+                  </div>
+                  <p class="work-summary">Пародийные мемуары бестолкового генерала Хосе Гуадалупе Арройо о бунте 1929 года и леденяще-спокойная сатирическая реконструкция дела сестёр Баладро.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-elena-poniatowska">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Элена Понятовска</h3>
+                  <p class="author-role">Лауреат премии Сервантеса (2013), голос женщин и хроникёр Мексики · <span class="tabular">род. 1932</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналистка и романистка, соединившая документальное свидетельство со страстным сочувствием к «маленьким людям» и студентам Мехико.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-noche-de-tlatelolco-jesusita">
+                  <div class="work-row">
+                    <span class="work-code">МК-05.02</span>
+                    <a class="work-link" href="./works/ponyatovska-noch-tlatelolko.html">Ночь Тлателолько и «До завтра, мой Иисус!»</a>
+                    <span class="work-meta">1969–1971 · Документальная хроника и биографический роман</span>
+                  </div>
+                  <p class="work-summary">Хор голосов трагедии 2 октября 1968 года на площади Трёх культур и яркая исповедь крестьянки-прачки Хосефины Боркес, прошедшей революцию в обозе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-emilio-pacheco">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Эмилио Пачеко</h3>
+                  <p class="author-role">Лауреат премии Сервантеса (2009), поэт и классик новеллы · <span class="tabular">1939–2014</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель безупречного такта и эрудиции, воспевший уходящий Мехико конца 1940-х и хрупкость памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-las-batallas-en-el-desierto">
+                  <div class="work-row">
+                    <span class="work-code">МК-05.03</span>
+                    <a class="work-link" href="./works/pacheko-srazheniya-v-pustyne.html">Сражения в пустыне («Las batallas en el desierto»)</a>
+                    <span class="work-meta">1981 · Лирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Трогательный рассказ о первой влюблённости школьника Карлитоса в маму своего одноклассника Мариану среди перемен послевоенного района Рома в Мехико.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sergio-pitol">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Серхио Питоль</h3>
+                  <p class="author-role">Лауреат премии Сервантеса (2005), эссеист и переводчик русской и польской классики · <span class="tabular">1933–2018</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дипломат и писатель-космополит, подаривший испаноязычному миру «Трилогию памяти» и блестящую прозу на стыке эссе, путешествия и гротеска.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-arte-de-la-fuga">
+                  <div class="work-row">
+                    <span class="work-code">МК-05.04</span>
+                    <a class="work-link" href="./works/pitol-iskusstvo-fugi.html">Искусство фуги и «Вальс Мефистофеля»</a>
+                    <span class="work-meta">1988–1996 · Эссеистическая проза и новеллы</span>
+                  </div>
+                  <p class="work-summary">Свободное блуждание памяти между Венецией, Варшавой, Прагой, Халапой и страницами Гоголя, Томаса Манна и Бахтина — о спасительной силе иронии и литературы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fernando-del-paso">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фернандо дель Пасо</h3>
+                  <p class="author-role">Лауреат премии Сервантеса (2015), мастер необарочного романа-эпопеи · <span class="tabular">1935–2018</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор гигантских, языково ослепительных романов («Палинур Мексиканский», «Хосе Триго»), переосмысливших историю Мексики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-noticias-del-imperio">
+                  <div class="work-row">
+                    <span class="work-code">МК-05.05</span>
+                    <a class="work-link" href="./works/del-paso-novosti-iz-imperii.html">Новости из Империи</a>
+                    <span class="work-meta">1987 · Исторический барочный роман</span>
+                  </div>
+                  <p class="work-summary">Монологи шестидесяти лет безумия императрицы Карлоты Бельгийской в замке Бушу вперемешку с панорамой недолговечной мексиканской империи Максимилиана и победы Хуареса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jaime-sabines">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хайме Сабинес</h3>
+                  <p class="author-role">Самый народный и пронзительный мексиканский поэт XX века · <span class="tabular">1926–1999</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из Чьяпаса, отказавшийся от вычурной риторики ради прямого, страстного и человечного разговора о любви, смерти и повседневности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tarumba-algo-sobre-la-muerte">
+                  <div class="work-row">
+                    <span class="work-code">МК-05.06</span>
+                    <a class="work-link" href="./works/sabines-tarumba.html">Тарумба и «Кое-что о смерти майора Сабинеса»</a>
+                    <span class="work-meta">1956–1973 · Лирическая и элегическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Разговор с простым именем жизни «Тарумба» и великая, неистовая элегия о болезни и уходе отца («Влюблённые молчат…»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carlos-monsivais">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карлос Монсивайс</h3>
+                  <p class="author-role">Величайший хронист городского Мехико и культурной жизни страны · <span class="tabular">1938–2010</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Эссеист невероятного остроумия и эрудиции, описавший мегаполис Мехико от народных праздников и кино до студенческих протестов и кошек.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-rituales-del-caos">
+                  <div class="work-row">
+                    <span class="work-code">МК-05.07</span>
+                    <a class="work-link" href="./works/monsivajs-ritualy-haosa.html">Ритуалы хаоса и «Дни хранения»</a>
+                    <span class="work-meta">1970–1995 · Городская хроника и культурологическое эссе</span>
+                  </div>
+                  <p class="work-summary">Блестящие зарисовки жизни двадцатимиллионного Мехико: метро, стадионы, Луча Либре, площади и неутомимое искусство выживания горожан.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-laura-esquivel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лаура Эскивель</h3>
+                  <p class="author-role">Мастер чувственного магического реализма · <span class="tabular">род. 1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка и сценаристка из Мехико, превратившая мексиканскую кухню и семейные рецепты в поэтический язык любви и бунта.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-como-agua-para-chocolate">
+                  <div class="work-row">
+                    <span class="work-code">МК-05.08</span>
+                    <a class="work-link" href="./works/eskivel-shokolad-na-krutom-kipyatke.html">Шоколад на крутом кипятке</a>
+                    <span class="work-meta">1989 · Роман-календарь в традициях магического реализма</span>
+                  </div>
+                  <p class="work-summary">Двенадцать месяцев с кулинарными рецептами о запретной любви младшей дочери Титы и Педро на северном ранчо в годы Революции, когда слёзы и страсть переходят в вкус блюд.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="mx-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1995–2020-е годы</p>
+          <h2 class="section-title">Мексиканская проза XXI века: граница, память и мир</h2>
+          <p class="section-desc">Поколение «Крэк» и блестящие современные писательницы Мексики, завоевавшие мировое признание: Хорхе Вольпи, Кристина Ривера Гарса, Юри Эррера, Гуадалупе Неттель, Валерия Луизелли и Фернанда Мельчор.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-jorge-volpi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хорхе Вольпи</h3>
+                  <p class="author-role">Лидер поколения «Крэк», мастер интеллектуального и криминального романа · <span class="tabular">род. 1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист, профессор и прозаик, открывший мексиканской прозе рубежа веков масштаб глобальной истории науки, политики и документального триллера.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-en-busca-de-klingsor">
+                  <div class="work-row">
+                    <span class="work-code">МК-06.01</span>
+                    <a class="work-link" href="./works/volpi-v-poiskah-klingsora.html">В поисках Клингсора</a>
+                    <span class="work-meta">1999 · Интеллектуальный исторический триллер</span>
+                  </div>
+                  <p class="work-summary">В послевоенной Германии американский физик Фрэнсис Бэкон и математик Линкс ищут загадочного советника нацистской атомной программы, соединяя теорию относительности с детективом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cristina-rivera-garza">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристина Ривера Гарса</h3>
+                  <p class="author-role">Лауреат Пулитцеровской премии (2024), новатор мексиканской прозы · <span class="tabular">род. 1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Историк и писательница из Тамаулипаса, соединяющая архивный документ, личную память и смелые жанровые эксперименты о границе и женской доле.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-invencible-verano-de-liliana">
+                  <div class="work-row">
+                    <span class="work-code">МК-06.02</span>
+                    <a class="work-link" href="./works/rivera-garsa-nepobedimoe-leto.html">Непобедимое лето Лилианы и «Никто не увидит моего плача»</a>
+                    <span class="work-meta">1999 / 2021 · Документальная проза и исторический роман</span>
+                  </div>
+                  <p class="work-summary">Книга памяти о погибшей младшей сестре Лилиане, восстановленная из писем и дневников Мехико начала 1990-х, и странная встреча архивариуса с судьбой Матильды Бургос в психиатрической клинике 1920-х.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yuri-herrera">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юри Эррера</h3>
+                  <p class="author-role">Поэтический мастер мифологии границы и языка улицы · <span class="tabular">род. 1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Идальго, с ювелирной краткостью переосмысливший миф об Орфее и подземном мире Миктлан на материале мексикано-американской границы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-senales-que-precederan-al-fin-del-mundo">
+                  <div class="work-row">
+                    <span class="work-code">МК-06.03</span>
+                    <a class="work-link" href="./works/errera-znaki-konca-sveta.html">Знаки, предшествующие концу света</a>
+                    <span class="work-meta">2009 · Мифопоэтическая притча</span>
+                  </div>
+                  <p class="work-summary">Девять этапов странствия бесстрашной юной Макины через бурную реку на Север в поисках пропавшего брата — современная одиссея миграции и смены языка.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-guadalupe-nettel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гуадалупе Неттель</h3>
+                  <p class="author-role">Один из самых тонких психологических прозаиков современной Мексики · <span class="tabular">род. 1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Мехико, финалистка Международного Букера, исследующая телесность, материнство, изъяны восприятия и хрупкую близость людей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-huesped-la-hija-unica">
+                  <div class="work-row">
+                    <span class="work-code">МК-06.04</span>
+                    <a class="work-link" href="./works/nettel-edinstvennaya-doch.html">Гость («El huésped») и «Единственная дочь»</a>
+                    <span class="work-meta">2006 / 2020 · Психологические романы</span>
+                  </div>
+                  <p class="work-summary">Причудливая история о слепоте и внутреннем двойнике «Существе» в подземном Мехико и пронзительная книга о выборе материнства и женской дружбе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-valeria-luiselli">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Валерия Луизелли</h3>
+                  <p class="author-role">Двуязычная звезда мировой современной прозы и эссеистики · <span class="tabular">род. 1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выросшая между Мехико, Коста-Рикой, Кореей и ЮАР писательница, соединившая в эссе и романах звуковые карты, миграцию и поэзию архива.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-desierto-sonoro-los-ingravidos">
+                  <div class="work-row">
+                    <span class="work-code">МК-06.05</span>
+                    <a class="work-link" href="./works/luizelli-arhiv-poteryannyh-detej.html">Архив потерянных детей и «Лица в толпе»</a>
+                    <span class="work-meta">2011 / 2019 · Дорожный роман и экспериментальная проза</span>
+                  </div>
+                  <p class="work-summary">Дорога семьи звукодокументалистов из Нью-Йорка в Апачерию в Аризоне на фоне трагедии детей-мигрантов на южной границе и призрачный диалог с поэтом Хильберто Оуэном.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fernanda-melchor">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фернанда Мельчор</h3>
+                  <p class="author-role">Самый мощный и стремительный голос мексиканской прозы XXI века · <span class="tabular">род. 1982</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналистка и романистка из Веракруса, чья ритмичная, яростная проза без пауз вскрывает насилие, суеверия и нищету современной провинции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-temporada-de-huracanes">
+                  <div class="work-row">
+                    <span class="work-code">МК-06.06</span>
+                    <a class="work-link" href="./works/melchor-sezon-uraganov.html">Сезон ураганов («Temporada de huracanes»)</a>
+                    <span class="work-meta">2017 · Социальный готический роман</span>
+                  </div>
+                  <p class="work-summary">В затерянном среди тростниковых полей селении Ла-Матоса находят тело Ведьмы — и голоса четырёх жителей сплетаются в гипнотический поток правды о безысходности и предрассудках.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание мексиканской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
