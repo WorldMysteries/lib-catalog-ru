@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог грузинской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 27 писателей · 38 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог грузинской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от агиографии V века и «Витязя в тигровой шкуре» Руставели до лирики Бараташвили, эпоса Важа-Пшавелы, «Голубых рогов», Нодара Думбадзе и Отара Чиладзе.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#ge-golden-age">Раздел I: Древнегрузинская агиография и «Золотой век» Руставели</a>
+        <a href="#ge-enlightenment-renaissance">Раздел II: Эпоха Сулхан-Сабы Орбелиани и поэзия XVIII века</a>
+        <a href="#ge-romanticism">Раздел III: Грузинский романтизм и поэтика Николоза Бараташвили</a>
+        <a href="#ge-realism-tergdaleulebi">Раздел IV: «Тергдалеулеби», реализм и горский эпос Важа-Пшавелы</a>
+        <a href="#ge-modernism-epics">Раздел V: «Голубые роги», авангард и большой роман XX века</a>
+        <a href="#ge-contemporary">Раздел VI: Лирический гуманизм, миф и современная проза</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="ge-golden-age">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · V–XIII века</p>
+          <h2 class="section-title">Древнегрузинская агиография и «Золотой век» Руставели</h2>
+          <p class="section-desc">От первых памятников раннесредневековой грузинской прозы V–X веков до вершин светского рыцарского эпоса эпохи царицы Тамар.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-iakob-tsurtaveli">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Якоб Цуртавели</h3>
+                  <p class="author-role">Древнейший известный грузинский писатель · <span class="tabular">V век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Духовник и очевидец, создавший первое дошедшее до нас оригинальное литературное произведение на грузинском языке — образец живой психологической драмы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-martyrdom-of-shushanik">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-01.01</span>
+                    <a class="work-link" href="./works/tsurtaveli-muchenichestvo-shushanik.html">Мученичество святой царицы Шушаник</a>
+                    <span class="work-meta">ок. 476–483 · Агиографическая повесть</span>
+                  </div>
+                  <p class="work-summary">Драматическая история стойкости армяно-грузинской княгини Шушаник из рода Мамиконянов, отвергшей вероотступничество своего мужа питиахша Варскена.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ioane-sabanisdze">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иоанэ Сабанисдзе</h3>
+                  <p class="author-role">Мастер раннесредневековой тбилисской агиографии · <span class="tabular">VIII век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Агиограф и церковный мыслитель Картли, воспевший мужество и культурное самосознание Грузии эпохи арабского владычества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-martyrdom-of-abo">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-01.02</span>
+                    <a class="work-link" href="./works/sabanisdze-muchenichestvo-abo.html">Мученичество святого Або Тбилисского</a>
+                    <span class="work-meta">ок. 786–790 · Агиографическое житие</span>
+                  </div>
+                  <p class="work-summary">История молодого багдадского араба-парфюмера Або, прибывшего в Тбилиси в свите эристава Нерсе, принявшего христианство и погибшего за новую веру.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-giorgi-merchule">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гиорги Мерчуле</h3>
+                  <p class="author-role">Классик Тао-Кларджетской школы прозы · <span class="tabular">X век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Летописец духовного и культурного строительства юго-западной Грузии, впервые сформулировавший языковое и культурное единство страны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-life-of-grigol-khandzteli">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-01.03</span>
+                    <a class="work-link" href="./works/merchule-zhitie-grigola-handzteli.html">Житие Григола Хандзтели</a>
+                    <span class="work-meta">951 · Историко-агиографическая хроника</span>
+                  </div>
+                  <p class="work-summary">Панорамное полотно культурной жизни Кларджети и Абхазии IX–X веков с портретами монахов, царей и подвижников слова.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-shota-rustaveli">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шота Руставели</h3>
+                  <p class="author-role">Великий национальный поэт Грузии, вершина Грузинского Ренессанса · <span class="tabular">ок. 1172 – ок. 1216</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт эпохи царицы Тамар, создатель бессмертной поэмы в шестнадцатисложном размере «шаири», прославившей рыцарскую дружбу, любовь («миджнуроба») и свободу духа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-knight-in-panthers-skin">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-01.04</span>
+                    <a class="work-link" href="./works/rustaveli-vityaz-v-tigrovoj-shkure.html">Витязь в тигровой шкуре</a>
+                    <span class="work-meta">кон. XII – нач. XIII в. · Эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Поэма о братстве индийского витязя Тариэла и аравийского полководца Автандила, преодолении испытаний ради любви к Нестан-Дареджан и Тинатин и торжестве справедливости.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ge-enlightenment-renaissance">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · XVII–XVIII века</p>
+          <h2 class="section-title">Эпоха Сулхан-Сабы Орбелиани и поэзия XVIII века</h2>
+          <p class="section-desc">Возрождение светской прозы и лексикографии, философская притча, трагическая поэзия изгнания Давида Гурамишвили и тбилисская городская лирика.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-sulkhan-saba-orbeliani">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сулхан-Саба Орбелиани</h3>
+                  <p class="author-role">Просветитель, дипломат, лексикограф и мастер притчи · <span class="tabular">1658–1725</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Энциклопедист эпохи Вахтанга VI, составитель первого толкового словаря грузинского языка «Ситквис кона» и классического сборника поучительных притч.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wisdom-of-lies">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-02.01</span>
+                    <a class="work-link" href="./works/orbeliani-mudrost-vymysla.html">Мудрость вымысла («О мудрости вымысла»)</a>
+                    <span class="work-meta">ок. 1680–1698 · Книга притч и новелл</span>
+                  </div>
+                  <p class="work-summary">Обрамлённый рассказ о воспитании царевича Джумбера мудрым скопцом Рукой и визирем Седраком: десятки остроумных басен и притч о справедливости, труде и человеческой природе.</p>
+                </li>
+                <li class="work-item" id="work-journey-to-europe">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-02.02</span>
+                    <a class="work-link" href="./works/orbeliani-puteshestvie-v-evropu.html">Путешествие в Европу</a>
+                    <span class="work-meta">1713–1716 · Дневник-травелог</span>
+                  </div>
+                  <p class="work-summary">Живые записки грузинского посла при дворе Людовика XIV в Версале, папы Климента XI в Риме и о городах Италии, Франции и Мальты.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-davit-guramishvili">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Давид Гурамишвили</h3>
+                  <p class="author-role">Крупнейший грузинский поэт XVIII века · <span class="tabular">1705–1792</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт трагической судьбы: похищенный горцами, бежавший в Россию, гусар и миргородский помещик, создавший на чужбине великую книгу поэзии и памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-davitiani">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-02.03</span>
+                    <a class="work-link" href="./works/guramishvili-davitiani.html">Давитиани («Бедствия Грузии», «Весёлая весна»)</a>
+                    <span class="work-meta">1787 · Автобиографическая поэма и лирика</span>
+                  </div>
+                  <p class="work-summary">Поэтическая летопись исторических бурь Грузии первой половины XVIII века, пасторальная «Весёлая весна» и исповедальные стихи о тоске по родине.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-besiki-gabashvili">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виссарион Габашвили (Бесики)</h3>
+                  <p class="author-role">Мастер изысканной любовной и героической лирики · <span class="tabular">1750–1791</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт при дворе царя Ираклия II, превративший восточные строфические узоры и народную песню в безупречную музыку грузинского стиха.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-garden-of-sorrow">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-02.04</span>
+                    <a class="work-link" href="./works/besiki-sad-pechali.html">Сад печали («Тан-о-тано» и газели)</a>
+                    <span class="work-meta">1770–1780-е · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Виртуозные любовные стихотворения и поэмы о красоте, разлуке и битве при Аспиндзе, предвосхитившие интонации грузинского романтизма.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sayat-nova-ge">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Саят-Нова</h3>
+                  <p class="author-role">Великий тбилисский ашуг и придворный певец Ираклия II · <span class="tabular">1712–1795</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Тбилисский поэт-сазандари армянского происхождения, создавший бессмертные песни о любви и братстве на грузинском, армянском и тюркском языках.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-georgian-songs-sayat-nova">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-02.05</span>
+                    <a class="work-link" href="./works/sayat-nova-gruzinskie-pesni.html">Тбилисские песни и мухаммазы</a>
+                    <span class="work-meta">XVIII век · Ашугская поэзия</span>
+                  </div>
+                  <p class="work-summary">Собрание песен тбилисского многоязычного старого города — гимны красоте, честному ремеслу слова и благородному сердцу.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ge-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · Первая половина XIX века</p>
+          <h2 class="section-title">Грузинский романтизм и поэтика Николоза Бараташвили</h2>
+          <p class="section-desc">Осмысление утраченной государственности, рождение гражданской элегии и трагический полёт гения Николоза Бараташвили.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-alexander-chavchavadze">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Чавчавадзе</h3>
+                  <p class="author-role">Родоначальник грузинского романтизма · <span class="tabular">1786–1846</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, генерал и хозяин легендарной усадьбы Цинандали, соединивший европейское Просвещение с восточной элегией и патриотической скорбью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lake-gokcha">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-03.01</span>
+                    <a class="work-link" href="./works/chavchavadze-ozero-gokcha.html">Озеро Гокча и «Горе миру сему»</a>
+                    <span class="work-meta">1841 · Романтические элегии</span>
+                  </div>
+                  <p class="work-summary">Размышления о быстротечности царств и суете времени перед лицом безмолвных горных вод и древних руин.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-grigol-orbeliani">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Григол Орбелиани</h3>
+                  <p class="author-role">Классик романтической поэмы и тбилисского тоста · <span class="tabular">1804–1883</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-романтик, мастер героических од и уличных песен старого Тифлиса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zazdravnaya-toast">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-03.02</span>
+                    <a class="work-link" href="./works/orbeliani-zazdravnaya.html">Заздравная («Садгегрдзело»)</a>
+                    <span class="work-meta">1827–1871 · Лирико-эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Торжественная поэма-тост во славу истории Грузии, её царей, воинов и вечной надежды на духовное обновление края.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nikoloz-baratashvili">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Николоз Бараташвили</h3>
+                  <p class="author-role">Гений грузинского романтизма, «грузинский Байрон» · <span class="tabular">1817–1845</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Проживший всего двадцать семь лет скромный тифлисский чиновник, оставивший сорок стихотворений и поэм ошеломляющей философской высоты.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-merani">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-03.03</span>
+                    <a class="work-link" href="./works/baratashvili-merani.html">Мерани</a>
+                    <span class="work-meta">1842 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Стремительная песня всадника на крылатом коне Мерани, бросающего вызов року ради того, чтобы проложить будущим поколениям светлую дорогу сквозь бурю.</p>
+                </li>
+                <li class="work-item" id="work-twilight-mtatsminda">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-03.04</span>
+                    <a class="work-link" href="./works/baratashvili-sumerki-na-mtacminde.html">Сумерки на Мтацминде и «Синий цвет»</a>
+                    <span class="work-meta">1836–1841 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Глубочайшие медитации о одиночестве, гармонии звёздного неба над Тбилиси и небесном «синем цвете» как символе чистой мечты.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ge-realism-tergdaleulebi">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1860–1910-е годы</p>
+          <h2 class="section-title">«Тергдалеулеби», реализм и горский эпос Важа-Пшавелы</h2>
+          <p class="section-desc">Национально-демократическое обновление Грузии: сатира и моральный призыв Ильи Чавчавадзе, лирика Акакия Церетели и пантеистические трагедии Важа-Пшавелы.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ilia-chavchavadze">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Илья Чавчавадзе</h3>
+                  <p class="author-role">«Отец нации», классик критического реализма и поэзии · <span class="tabular">1837–1907</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Глава движения «Тергдалеулеби» («испивших воды Терека»), писатель, публицист и мыслитель, определивший культурный облик современной Грузии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-is-a-man-a-human">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-04.01</span>
+                    <a class="work-link" href="./works/chavchavadze-chelovek-li-on.html">Человек ли он?!</a>
+                    <span class="work-meta">1863 · Сатирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Беспощадная, гоголевская по силе сатира на помещичью лень и духовное оцепенение в образе князя Луарсаба Таткаридзе и его жены Дареджан.</p>
+                </li>
+                <li class="work-item" id="work-otarashvili-widow">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-04.02</span>
+                    <a class="work-link" href="./works/chavchavadze-vdova-otarashvili.html">Вдова Отарашвили</a>
+                    <span class="work-meta">1887 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Трагическая и величественная история крестьянки, матери Георгия, олицетворяющей несгибаемое достоинство и раскол между народом и дворянством.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-akaki-tsereteli">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Акакий Церетели</h3>
+                  <p class="author-role">Великий лирик («Соловей Грузии») и исторический прозаик · <span class="tabular">1840–1915</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Народный поэт, чьи стихи стали песнями всей страны, а исторические повести и лирика вдохнули веру в свободу и просвещение.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-suliko-and-dawn">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-04.03</span>
+                    <a class="work-link" href="./works/tsereteli-suliko-i-rassvet.html">Сулико и «Рассвет» («Гантиади»)</a>
+                    <span class="work-meta">1895 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Символ грузинской любовной лирики — поиски утраченной «души-возлюбленной» среди роз и соловьёв — и гимн памяти Дмитрия Кипиани.</p>
+                </li>
+                <li class="work-item" id="work-bashi-achuk">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-04.04</span>
+                    <a class="work-link" href="./works/tsereteli-bashi-achuk.html">Баши-Ачук</a>
+                    <span class="work-meta">1895–1896 · Историческая повесть</span>
+                  </div>
+                  <p class="work-summary">Героическая повесть о Кахетинском восстании 1659 года и народном мстителе Глахе Баши-Ачуке, сражающемся за честь и свободу родной земли.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vazha-pshavela">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Важа-Пшавела</h3>
+                  <p class="author-role">Гений горской философской поэмы и кавказского эпоса · <span class="tabular">1861–1915</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Лука Разикашвили — сельский учитель из Чаргали, поднявший суровые обычаи пшавских и хевсурских гор до античной трагедии о милосердии и совести.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-aluda-ketelauri">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-04.05</span>
+                    <a class="work-link" href="./works/vazha-aluda-ketelauri.html">Алуда Кетелаури</a>
+                    <span class="work-meta">1888 · Поэма-трагедия</span>
+                  </div>
+                  <p class="work-summary">Хевсурский богатырь Алуда в честном поединке убивает киста Муцу, но поражённый его доблестью отказывается отрубать правую руку врага и приносит жертву за его душу вопреки закону общины.</p>
+                </li>
+                <li class="work-item" id="work-host-and-guest">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-04.06</span>
+                    <a class="work-link" href="./works/vazha-gost-i-hozyain.html">Гость и хозяин</a>
+                    <span class="work-meta">1893 · Эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Кист Джокола, не зная, что перед ним кровный враг — хевсур Звиадаури, принимает его как гостя и затем защищает ценой конфликта с собственным племенем.</p>
+                </li>
+                <li class="work-item" id="work-the-snake-eater">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-04.07</span>
+                    <a class="work-link" href="./works/vazha-zmeeed.html">Змееед</a>
+                    <span class="work-meta">1901 · Философская поэма</span>
+                  </div>
+                  <p class="work-summary">Мистическая трагедия Миндии, обретшего в плену у каджев дар понимать язык зверей, птиц и трав и страдающего от жестокости людского мира.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alexander-kazbegi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Казбеги</h3>
+                  <p class="author-role">Певец кавказских гор и родовой трагедии Хеви · <span class="tabular">1848–1893</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дворянин, ушедший в пастухи ради познания народной жизни, автор страстных, драматических повестей о горах Казбеги.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-khevisberi-gocha">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-04.08</span>
+                    <a class="work-link" href="./works/kazbegi-hevisberi-gocha.html">Хевисбери Гоча и «Отцеубийца»</a>
+                    <span class="work-meta">1882–1884 · Горские повести</span>
+                  </div>
+                  <p class="work-summary">Суровая драма горного старейшины Гочи, который ради закона чести общины приносит в жертву собственного сына Онисе, и повесть о благородном абреке Кобе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-david-kldiashvili">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Давид Клдиашвили</h3>
+                  <p class="author-role">Мастер грузинской трагикомической новеллы · <span class="tabular">1862–1931</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Тонкий чеховский художник Имеретии, с любовью и горьким смехом показавший закат «осеннего дворянства».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-samanishvilis-stepmother">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-04.09</span>
+                    <a class="work-link" href="./works/kldiashvili-macheha-samanishvili.html">Мачеха Саманишвили</a>
+                    <span class="work-meta">1897 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Бедный имеретинский дворянин Платон боится раздела скудного отцовского клочка земли и отчаянно ищет старому отцу такую невесту, которая «гарантированно» не родит наследника.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ge-modernism-epics">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1915–1960-е годы</p>
+          <h2 class="section-title">«Голубые роги», авангард и большой роман XX века</h2>
+          <p class="section-desc">Серебряный век тифлисской поэзии, великая музыка Галактиона Табидзе, орден «Голубые роги» и монументальные романы Джавахишвили и Гамсахурдиа.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-galaktion-tabidze">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Галактион Табидзе</h3>
+                  <p class="author-role">«Король грузинских поэтов», мастер символизма и музыки стиха · <span class="tabular">1891–1959</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Преобразователь грузинской поэтики XX века, чьи стихи о ветре, синих конях и луне над Мтацминдой обладают гипнотической напевностью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wind-blows-mtatsminda">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-05.01</span>
+                    <a class="work-link" href="./works/tabidze-g-veter-duet.html">Артистические цветы («Ветер дует», «Луна Мтацминды»)</a>
+                    <span class="work-meta">1919 · Символистская лирика</span>
+                  </div>
+                  <p class="work-summary">Революционная для грузинского стиха книга, соединившая прозрачный символизм с трагическим одиночеством и абсолютным музыкальным слухом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-titsian-tabidze">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тициан Табидзе</h3>
+                  <p class="author-role">Вдохновитель ордена символистов «Голубые роги» · <span class="tabular">1895–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий поэт и друг Пастернака и Мандельштама, соединивший парижский символизм со стихией колхидских рек и грузинской истории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-chaldean-cities">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-05.02</span>
+                    <a class="work-link" href="./works/tabidze-t-haldejskie-goroda.html">Халдейские города и «Рион-порт»</a>
+                    <span class="work-meta">1916–1928 · Поэзия и поэма</span>
+                  </div>
+                  <p class="work-summary">Стихи о древней Колхиде, Тифлисе как столице поэтов и трагическом призвании стиха, «переходящего в бред и стихию».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-paolo-iashvili">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Паоло Яшвили</h3>
+                  <p class="author-role">Один из создателей «Голубых рогов», мастер сонета · <span class="tabular">1894–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блистательный тифлисский лирик и трибун Серебряного века Грузии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-letters-to-dariane">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-05.03</span>
+                    <a class="work-link" href="./works/iashvili-darianovskie-stihi.html">Дариановские стихи и лирика</a>
+                    <span class="work-meta">1915–1930 · Лирический цикл</span>
+                  </div>
+                  <p class="work-summary">Мистификация женского поэтического голоса Елены Дариани и огненные сонеты о любви, искусстве и тифлисской богеме.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mikheil-javakhishvili">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михаил Джавахишвили</h3>
+                  <p class="author-role">Классик грузинского психологического и социального романа XX века · <span class="tabular">1880–1937</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист огромного критического и драматического дарования, запечатлевший слом старой Грузии и трагедию интеллигенции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jakos-dispossessed">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-05.04</span>
+                    <a class="work-link" href="./works/javakhishvili-postoyalcy-dzhako.html">Постояльцы Джако («Джакос хизнеби»)</a>
+                    <span class="work-meta">1924 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Беспощадный портрет безвольного интеллигента князя Теймураза Хевистави и хищного, невежественного управляющего Джако Дживашвили, захватывающего власть и имение.</p>
+                </li>
+                <li class="work-item" id="work-kvachi-kvachantiradze">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-05.05</span>
+                    <a class="work-link" href="./works/javakhishvili-kvachi.html">Квача Квачантирадзе</a>
+                    <span class="work-meta">1924 · Плутовской роман</span>
+                  </div>
+                  <p class="work-summary">Головокружительные похождения грузинского авантюриста и обаятельного мошенника Квачи по Европе, Петербургу Распутина, революции и Стамбулу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-konstantine-gamsakhurdia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Константинэ Гамсахурдиа</h3>
+                  <p class="author-role">Мастер монументального исторического и экспрессионистского романа · <span class="tabular">1893–1975</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Образованный в Германии прозаик и стилист, создавший чеканный язык грузинской исторической эпопеи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-right-hand-of-grand-master">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-05.06</span>
+                    <a class="work-link" href="./works/gamsakhurdia-desnica-velikogo-mastera.html">Десница великого мастера</a>
+                    <span class="work-meta">1939 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Величественная история XI века о строительстве храма Светицховели в Мцхете, тайной любви зодчего Константина Арсакидзе к царевне Шорене и трагической расправе царя Георгия I.</p>
+                </li>
+                <li class="work-item" id="work-kidnapping-the-moon">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-05.07</span>
+                    <a class="work-link" href="./works/gamsakhurdia-pohischenie-luny.html">Похищение луны</a>
+                    <span class="work-meta">1935–1936 · Роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Многослойная трагедия абхазско-мегрельского дворянского рода Шервашидзе и гибели Тараша Эмхвари в бурях начала XX столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-grigol-robakidze">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Григол Робакидзе</h3>
+                  <p class="author-role">Философ, модернист и автор мифопоэтической прозы · <span class="tabular">1880–1962</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и романист грузинской эмиграции, высоко ценимый Стефаном Цвейгом и Томасом Манном за восточно-европейский мифологизм.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-snakes-skin">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-05.08</span>
+                    <a class="work-link" href="./works/robakidze-zmeinaya-rubashka.html">Змеиная рубашка</a>
+                    <span class="work-meta">1926 · Модернистский роман</span>
+                  </div>
+                  <p class="work-summary">Мистическое путешествие Арчибальда Мекеша из Персии в Грузию в поисках утраченных корней, идентичности и древнего зова предков.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ge-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1960–2010-е годы</p>
+          <h2 class="section-title">Лирический гуманизм, миф и современная проза</h2>
+          <p class="section-desc">Мировое созвездие грузинской прозы второй половины XX века: солнечная человечность Нодара Думбадзе, роман-притча «Дата Туташхиа» и мифологический эпос Отара Чиладзе.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-nodar-dumbadze">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Нодар Думбадзе</h3>
+                  <p class="author-role">Классик солнечного грузинского юмора и гуманизма · <span class="tabular">1928–1984</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Любимый писатель поколений, соединивший искромётную гурийскую иронию с пронзительной добротой, состраданием и верой в человеческое сердце.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-me-grandma-iliko-ilarion">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-06.01</span>
+                    <a class="work-link" href="./works/dumbadze-ya-babushka-iliko.html">Я, бабушка, Илико и Илларион</a>
+                    <span class="work-meta">1960 · Лирико-юмористическая повесть</span>
+                  </div>
+                  <p class="work-summary">Светлая история взросления сироты Зурико в гурийском селе военных лет рядом с мудрой бабушкой Ольгой и двумя неразлучными остряками-стариками.</p>
+                </li>
+                <li class="work-item" id="work-white-flags">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-06.02</span>
+                    <a class="work-link" href="./works/dumbadze-belye-flagi.html">Белые флаги</a>
+                    <span class="work-meta">1973 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Исповедь несправедливо обвинённого студента Зазы Накашидзе в камере предварительного заключения, где люди разных судеб ищут прощение и смысл.</p>
+                </li>
+                <li class="work-item" id="work-law-of-eternity">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-06.03</span>
+                    <a class="work-link" href="./works/dumbadze-zakon-vechnosti.html">Закон вечности</a>
+                    <span class="work-meta">1978 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Писатель Бачана Рамишвили в больничной палате после инфаркта переосмысляет всю жизнь и формулирует «закон вечности»: душа человека во сто крат тяжелее его тела.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-chabua-amirejibi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чабуа Амирэджиби</h3>
+                  <p class="author-role">Создатель великого грузинского романа-притчи XX века · <span class="tabular">1921–2013</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прошедший лагеря Колымы писатель-аристократ духа, создавший эпический образ благородного абрека Даты Туташхиа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-data-tutashkhia">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-06.04</span>
+                    <a class="work-link" href="./works/amirejibi-data-tutashkhia.html">Дата Туташхиа</a>
+                    <span class="work-meta">1973–1975 · Эпический роман-притча</span>
+                  </div>
+                  <p class="work-summary">Философская дилемма двух двоюродных братьев — благородного бунтаря-абрека Даты Туташхиа и имперского жандарма Мушни Зарандиа, ищущих ответ на вопрос: можно ли исправить мир злом или добром.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-otar-chiladze">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Отар Чиладзе</h3>
+                  <p class="author-role">Мастер мифологического и историко-философского романа · <span class="tabular">1933–2009</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и прозаик мирового масштаба (номинант на Нобелевскую премию), превративший миф об аргонавтах и историю Вани в притчу о судьбе малого народа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-a-man-was-going-down-the-road">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-06.05</span>
+                    <a class="work-link" href="./works/chiladze-shel-po-doroge-chelovek.html">Шёл по дороге человек</a>
+                    <span class="work-meta">1973 · Мифологический роман</span>
+                  </div>
+                  <p class="work-summary">Завораживающее переосмысление прибытия аргонавтов и Ясона в Колхиду: история царя Ээта, Медеи, Фрикса и превращения моря из родного простора в границу тревоги.</p>
+                </li>
+                <li class="work-item" id="work-everyone-that-findeth-me">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-06.06</span>
+                    <a class="work-link" href="./works/chiladze-vsyakij-kto-vstretitsya.html">Всякий, кто встретится со мной…</a>
+                    <span class="work-meta">1976 · Роман-хроника</span>
+                  </div>
+                  <p class="work-summary">Многопоколенная история кахетинской семьи Макабели XIX века, где любовь, гордость и историческая обречённость сплетаются в полифонический эпос.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-guram-dochanashvili">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гурам Дочанашвили</h3>
+                  <p class="author-role">Культовый грузинский прозаик магического реализма и притчи · <span class="tabular">1939–2021</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Любимый писатель-философ современной Грузии, воспевший свободу воображения, братство и преобразующую силу литературы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-first-garment">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-06.07</span>
+                    <a class="work-link" href="./works/dochanashvili-odeyanie-pervoe.html">Одеяние первое</a>
+                    <span class="work-meta">1975 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Магический роман о юном Доменико, отправившемся в далёкий мир Каморы и сказочный город Ламас, где каждый житель носит в сердце по три великих слова.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-aka-morchiladze">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ака Морчиладзе</h3>
+                  <p class="author-role">Ведущий современный грузинский романист и историк · <span class="tabular">род. 1966</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Георгий Ахвледиани — самый читаемый прозаик постсоветской Грузии, соединяющий авантюрный сюжет, тонкую иронию и глубокое знание старого Тбилиси.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-journey-to-karabakh">
+                  <div class="work-row">
+                    <span class="work-code">ГЗ-06.08</span>
+                    <a class="work-link" href="./works/morchiladze-puteshestvie-v-karabah.html">Путешествие в Карабах</a>
+                    <span class="work-meta">1992 · Современный роман</span>
+                  </div>
+                  <p class="work-summary">Роман-поколение о тбилисском юноше Гио начала 1990-х годов, случайно оказавшемся со своим другом Гоглико посреди кавказской смуты и конфликта.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание грузинской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

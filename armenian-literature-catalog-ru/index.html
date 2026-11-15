@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог армянской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 29 писателей · 39 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог армянской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от историографии Мовсеса Хоренаци и эпоса «Давид Сасунский» до «Нарека» Григора Нарекаци, айренов Кучака, баллад Туманяна, Егише Чаренца, Паруйра Севака и прозы Гранта Матевосяна.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#am-golden-age-epic">Раздел I: Золотой век древнеармянской письменности и народный эпос</a>
+        <a href="#am-medieval-renaissance">Раздел II: Армянское Возрождение и поэзия средневековья</a>
+        <a href="#am-enlightenment-romanticism">Раздел III: Просвещение, романтизм и рождение новой словесности</a>
+        <a href="#am-realism-silver-age">Раздел IV: Реализм, сатира и «Поэт всех армян» на рубеже веков</a>
+        <a href="#am-western-avantgarde">Раздел V: Западноармянский расцвет, авангард и Егише Чаренц</a>
+        <a href="#am-contemporary">Раздел VI: Поэзия памяти, проза Цмакута и литература Диаспоры</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="am-golden-age-epic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · V–X века</p>
+          <h2 class="section-title">Золотой век древнеармянской письменности и народный эпос</h2>
+          <p class="section-desc">От создания армянского алфавита Месропом Маштоцем и классической историографии V века до героического эпоса о богатырях Сасуна.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-koryun-mashtots">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Корюн</h3>
+                  <p class="author-role">Первый биограф Месропа Маштоца, писатель Золотого века · <span class="tabular">ок. 380 – ок. 450</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ученик создателя армянской письменности Месропа Маштоца, оставивший первое оригинальное памятное сочинение на грабаре.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-life-of-mashtots">
+                  <div class="work-row">
+                    <span class="work-code">АР-01.01</span>
+                    <a class="work-link" href="./works/koryun-zhitie-mashtoca.html">Житие Маштоца</a>
+                    <span class="work-meta">ок. 443–450 · Историко-биографическое сочинение</span>
+                  </div>
+                  <p class="work-summary">Документальный рассказ о сотворении армянского алфавита в 405 году, переводе Священного Писания и открытии первых школ в Армении.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-movses-khorenatsi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мовсес Хоренаци</h3>
+                  <p class="author-role">«Отец армянской историографии» (Патмаайр) · <span class="tabular">V век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Великий историк, философ и стилист V века, объединивший древние мифы о Хайке и Ара Прекрасном с летописью армянской государственности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-history-of-armenia">
+                  <div class="work-row">
+                    <span class="work-code">АР-01.02</span>
+                    <a class="work-link" href="./works/khorenatsi-istoriya-armenii.html">История Армении</a>
+                    <span class="work-meta">V век · Историко-литературный свод</span>
+                  </div>
+                  <p class="work-summary">Фундаментальная книга в трёх частях — от прародителя Хайка и царя Тиграна до падения Аршакидов и знаменитого «Плача» о бедствиях страны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yeghishe">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Егише (Елишэ)</h3>
+                  <p class="author-role">Классик армянской героической историографии · <span class="tabular">ок. 410 – ок. 475</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Очевидец и мыслитель V века, воспевший Аварайрскую битву 451 года за духовную и национальную свободу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vardan-and-armenian-war">
+                  <div class="work-row">
+                    <span class="work-code">АР-01.03</span>
+                    <a class="work-link" href="./works/yeghishe-o-vardane.html">О Вардане и войне армянской</a>
+                    <span class="work-meta">V век · Историческая проза</span>
+                  </div>
+                  <p class="work-summary">Высокопоэтическое повествование о восстании спарапета Вардана Мамиконяна против сасанидской империи ради веры и достоинства народа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sasna-tsrer">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Народный эпос «Сасна црер»</h3>
+                  <p class="author-role">Великий армянский героический эпос («Неистовые сасунцы») · <span class="tabular">VIII–X вв.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Устное эпическое сказание о четырёх поколениях богатырей Сасуна — Санасаре и Багдасаре, Мгере Старшем, Давиде и Мгере Младшем.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-david-of-sassoun">
+                  <div class="work-row">
+                    <span class="work-code">АР-01.04</span>
+                    <a class="work-link" href="./works/epos-david-sasunskij.html">Давид Сасунский</a>
+                    <span class="work-meta">VIII–X вв. · Народный героический эпос</span>
+                  </div>
+                  <p class="work-summary">Сердцевина армянского эпоса: поединок отважного и прямодушного богатыря Давида на огненном коне Куркик Джалали с Мсра-Меликом ради мира и вольности родной земли.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="am-medieval-renaissance">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · X–XVIII века</p>
+          <h2 class="section-title">Армянское Возрождение и поэзия средневековья</h2>
+          <p class="section-desc">Мистическая высота «Нарека», киликийская элегия Нерсеса Шнорали, средневековая притча, айрены Наапета Кучака и ашугская поэзия Саят-Новы.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-grigor-narekatsi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Григор Нарекаци</h3>
+                  <p class="author-role">Великий мистик, поэт и философ Армянского Возрождения · <span class="tabular">ок. 951–1003</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Монах Нарекской обители у озера Ван, поднявший армянскую поэзию к вершинам вселенского диалога человеческой души с Творцом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-book-of-lamentations">
+                  <div class="work-row">
+                    <span class="work-code">АР-02.01</span>
+                    <a class="work-link" href="./works/narekatsi-kniga-skorbnyh-pesnopenij.html">Книга скорбных песнопений («Нарек»)</a>
+                    <span class="work-meta">ок. 1002 · Философско-мистическая поэма</span>
+                  </div>
+                  <p class="work-summary">Девяносто пять «глав-слов из глубины сердца» о грехе, хрупкости человека, покаянии и беспредельном милосердии Божием.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nerses-shnorhali">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Нерсес Шнорали</h3>
+                  <p class="author-role">Поэт-гуманист Киликийской Армении, мастер духовной поэзии · <span class="tabular">1102–1173</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Католикос и просветитель, внёсший в армянскую поэтику виртуозную рифму, историческую элегию и народные загадки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lament-over-edessa">
+                  <div class="work-row">
+                    <span class="work-code">АР-02.02</span>
+                    <a class="work-link" href="./works/shnorhali-plach-ob-edesse.html">Плач о взятии Эдессы</a>
+                    <span class="work-meta">1145 · Историческая поэма-элегия</span>
+                  </div>
+                  <p class="work-summary">Поэтическая песнь от лица разрушенного крестоносно-христианского города Эдессы, обращённая с болью и призывом к миру ко всему христианскому Востоку и Западу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mkitargosh-aygektsi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мхитар Гош и Вардан Айгекци</h3>
+                  <p class="author-role">Основоположники армянской басенной и притчевой прозы · <span class="tabular">XII–XIII вв.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Средневековые мыслители, соединившие светскую мудрость, социальную критику и живые народные сюжеты в коротких аллегориях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fables-fox-book">
+                  <div class="work-row">
+                    <span class="work-code">АР-02.03</span>
+                    <a class="work-link" href="./works/gosh-aygekci-basni-i-lisya-kniga.html">Басни Мхитара Гоша и «Лисья книга» Айгекци</a>
+                    <span class="work-meta">XII–XIII вв. · Сборники басен и притч</span>
+                  </div>
+                  <p class="work-summary">Остроумные аллегории о зверях, купцах, судьях и ремесленниках, прославляющие честный труд, смекалку и милосердие.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nahapet-kuchak">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Наапет Кучак</h3>
+                  <p class="author-role">Легендарный мастер средневековой любовной лирики (айренов) · <span class="tabular">XVI век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Средневековый поэт-лирик из окрестностей Вана, чьим именем традиция увенчала сокровищницу армянских четырёхстиший — айренов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hayrens-kuchak">
+                  <div class="work-row">
+                    <span class="work-code">АР-02.04</span>
+                    <a class="work-link" href="./works/kuchak-ajreny.html">Айрены (Лирика любви и чужбины)</a>
+                    <span class="work-meta">XVI век · Любовная и скитальческая лирика</span>
+                  </div>
+                  <p class="work-summary">Четырёхстишия ослепительной земной страсти, красоты возлюбленной, разлуки и горького хлеба странствий («пандухт»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sayat-nova-am">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Саят-Нова</h3>
+                  <p class="author-role">«Царь песнопений», великий поэт-ашуг Закавказья · <span class="tabular">1712–1795</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Арутюн Саядян — гений закавказской лирики, воспевший возвышенную, неразделённую любовь, честь мастера и братство народов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-armenian-songs-sayat-nova">
+                  <div class="work-row">
+                    <span class="work-code">АР-02.05</span>
+                    <a class="work-link" href="./works/sayat-nova-armyanskie-pesni.html">Армянские песни («Тагер»)</a>
+                    <span class="work-meta">XVIII век · Ашугская лирика</span>
+                  </div>
+                  <p class="work-summary">Виртуозные стихи под кеманчу о «смертельной ране любви», верности слову и трагической судьбе поэта, принявшего мученический венец в Ахпате.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="am-enlightenment-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · XIX век</p>
+          <h2 class="section-title">Просвещение, романтизм и рождение новой словесности</h2>
+          <p class="section-desc">Переход на живой народный язык «ашхарабар» в романе Хачатура Абовяна, гражданский романтизм Микаэла Налбандяна, историческая эпопея Раффи и театр Сундукяна.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-khachatur-abovyan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хачатур Абовян</h3>
+                  <p class="author-role">Основоположник новой армянской литературы и просветитель · <span class="tabular">1809–1848</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный, педагог и первый восходитель на вершину Арарата (с Парротом), смело введший в большую прозу живой разговорный язык народа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wounds-of-armenia">
+                  <div class="work-row">
+                    <span class="work-code">АР-03.01</span>
+                    <a class="work-link" href="./works/abovyan-rany-armenii.html">Раны Армении</a>
+                    <span class="work-meta">1841 (изд. 1858) · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Страстный роман-крик о страданиях и подвиге героя Агаси в годы русско-персидской войны 1826–1828 годов, открывший новую эпоху армянской прозы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mikael-nalbandyan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Микаэл Налбандян</h3>
+                  <p class="author-role">Поэт-демократ, философ и публицист · <span class="tabular">1829–1866</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Революционный демократ из Нор-Нахичевана, друг Герцена и Огарёва, борец за просвещение и освобождение крестьян.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-freedom-nalbandyan">
+                  <div class="work-row">
+                    <span class="work-code">АР-03.02</span>
+                    <a class="work-link" href="./works/nalbandyan-svoboda.html">Свобода (и «Песнь итальянской девушки»)</a>
+                    <span class="work-meta">1859 · Гражданская лирика</span>
+                  </div>
+                  <p class="work-summary">Программное стихотворение-манифест о призвании поэта («Когда ж явился на свет немой — первым словом моим было: свобода!») и основа национального гимна.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-raffi-hakob">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Раффи (Акоп Мелик-Акопян)</h3>
+                  <p class="author-role">Великий романист армянского романтического историзма · <span class="tabular">1835–1888</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Любимый исторический романист нескольких поколений, создавший героические фрески древней Армении и борьбы за национальное возрождение.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-samvel-raffi">
+                  <div class="work-row">
+                    <span class="work-code">АР-03.03</span>
+                    <a class="work-link" href="./works/raffi-samvel.html">Самвел</a>
+                    <span class="work-meta">1886 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Масштабная историческая драма IV века о сыне нахарара Ваана Мамиконяна, совершающем трагический выбор между сыновним чувством к отступнику-отцу и верностью родине.</p>
+                </li>
+                <li class="work-item" id="work-the-fool-raffi">
+                  <div class="work-row">
+                    <span class="work-code">АР-03.04</span>
+                    <a class="work-link" href="./works/raffi-hent-bezumec.html">Хент («Безумец»)</a>
+                    <span class="work-meta">1881 · Роман</span>
+                  </div>
+                  <p class="work-summary">История трагической осады Баязета в 1877 году и дерзкого подвига Вардана, в одиночку прорвавшегося сквозь кольцо осады с письмом о помощи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-petros-durian">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Петрос Дурян</h3>
+                  <p class="author-role">Западноармянский поэт-романтик трагического взлёта · <span class="tabular">1851–1872</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Константинопольский юноша, сгоревший от туберкулёза в двадцать лет, но оставивший стихи неистовой страсти и бунта перед смертью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-complaints-lake-durian">
+                  <div class="work-row">
+                    <span class="work-code">АР-03.05</span>
+                    <a class="work-link" href="./works/durian-ropoty-i-ozero.html">Ропоты и «Озеро»</a>
+                    <span class="work-meta">1870–1872 · Романтическая лирика</span>
+                  </div>
+                  <p class="work-summary">Исповедальные стихи умирающего поэта, спорящего с небесами и вглядывающегося в безмятежную гладь озера Скутари.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gabriel-sundukyan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Габриэл Сундукян</h3>
+                  <p class="author-role">Классик армянской реалистической комедии и театра · <span class="tabular">1825–1912</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель тифлисского реалистического театра, выведший на сцену сочный народный колорит старого Авлабара и Сололаки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pepo-sundukyan">
+                  <div class="work-row">
+                    <span class="work-code">АР-03.06</span>
+                    <a class="work-link" href="./works/sundukyan-pepo.html">Пэпо</a>
+                    <span class="work-meta">1871 · Социальная комедия</span>
+                  </div>
+                  <p class="work-summary">История бедного, честного тифлисского рыбака Пэпо, разоблачающего мошенника-купца Арутина Зимзимова, присвоившего приданое его сестры Кекел.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="am-realism-silver-age">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1880–1915</p>
+          <h2 class="section-title">Реализм, сатира и «Поэт всех армян» на рубеже веков</h2>
+          <p class="section-desc">Народный эпос и новелла Ованеса Туманяна, философская поэзия Аветика Исаакяна, сатира Акопа Пароняна, романы Ширванзаде и символизм Ваана Терьяна.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hovhannes-tumanyan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ованес Туманян</h3>
+                  <p class="author-role">«Поэт всех армян», классик эпоса, баллады и рассказа · <span class="tabular">1869–1923</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец горного Лори, соединивший мудрость народного предания, шекспировский трагизм роковой любви и хрустальную простоту прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-anush-tumanyan">
+                  <div class="work-row">
+                    <span class="work-code">АР-04.01</span>
+                    <a class="work-link" href="./works/tumanyan-anush.html">Ануш</a>
+                    <span class="work-meta">1890–1902 · Лиро-эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Трагедия прекрасной девушки Ануш и пастуха Саро в ущелье Лори: нарушение древнего закона борьбы приводит к кровной мести брата Моси и гибели влюблённых.</p>
+                </li>
+                <li class="work-item" id="work-capture-of-tmkaberd">
+                  <div class="work-row">
+                    <span class="work-code">АР-04.02</span>
+                    <a class="work-link" href="./works/tumanyan-tmkaberd.html">Взятие Тмкаберда и «Капля мёда»</a>
+                    <span class="work-meta">1902–1909 · Поэма и баллада-притча</span>
+                  </div>
+                  <p class="work-summary">Историческая поэма о предательстве красавицы-княгини ради тщеславия и знаменитая баллада о том, как одна случайная капля мёда породила войну между двумя царствами.</p>
+                </li>
+                <li class="work-item" id="work-gikor-tumanyan">
+                  <div class="work-row">
+                    <span class="work-code">АР-04.03</span>
+                    <a class="work-link" href="./works/tumanyan-gikor.html">Гикор</a>
+                    <span class="work-meta">1895 · Психологический рассказ</span>
+                  </div>
+                  <p class="work-summary">Душераздирающая история деревенского мальчика Гикора, отданного бедным отцом Амбо «в люди» к жестокому тифлисскому лавочнику Базазу Артему.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-avetis-isahakyan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аветик Исаакян</h3>
+                  <p class="author-role">«Варпет» («Мастер»), классик армянской философской лирики · <span class="tabular">1875–1957</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт с берегов Ахуряна (Гюмри), чья простая, песенная и скорбная лирика стала частью души народа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-abu-lala-maari">
+                  <div class="work-row">
+                    <span class="work-code">АР-04.04</span>
+                    <a class="work-link" href="./works/isahakyan-abu-lala-maari.html">Абу-Лала Маари</a>
+                    <span class="work-meta">1909 · Философская поэма</span>
+                  </div>
+                  <p class="work-summary">Бунтарский монолог великого арабского поэта-слепца, уходящего с ночным караваном из лицемерного Багдада в свободную тишину пустыни к солнцу.</p>
+                </li>
+                <li class="work-item" id="work-songs-and-wounds">
+                  <div class="work-row">
+                    <span class="work-code">АР-04.05</span>
+                    <a class="work-link" href="./works/isahakyan-pesni-i-rany.html">Песни и раны</a>
+                    <span class="work-meta">1897 · Сборник стихотворений</span>
+                  </div>
+                  <p class="work-summary">Первая книга поэта, подарившая армянской культуре бессмертные песни об ивах на чужбине, материнской любви и гордой печали.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hakob-paronyan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Акоп Паронян</h3>
+                  <p class="author-role">Король армянской сатиры и социальной комедии · <span class="tabular">1843–1891</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий константинопольский публицист и сатирик, высмеявший тупость мещанства, лицемерие богачей и тщеславие псевдо-интеллигенции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-honorable-beggars">
+                  <div class="work-row">
+                    <span class="work-code">АР-04.06</span>
+                    <a class="work-link" href="./works/paronyan-vysokochtimye-poproshajki.html">Высокочтимые попрошайки</a>
+                    <span class="work-meta">1880–1881 · Сатирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Ядовитая комедия о наивном трапезундском купце Абисогом-аге, приехавшем в Константинополь жениться и окружённом армией напыщенных просителей-поэтов, врачей и священников.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alexander-shirvanzade">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Ширванзаде</h3>
+                  <p class="author-role">Мастер армянского социально-психологического романа · <span class="tabular">1858–1935</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Шемахи, открывший для армянской прозы мир бакинской нефти, крах патриархальной семьи и психологическую глубину характеров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-chaos-shirvanzade">
+                  <div class="work-row">
+                    <span class="work-code">АР-04.07</span>
+                    <a class="work-link" href="./works/shirvanzade-haos.html">Хаос</a>
+                    <span class="work-meta">1898 · Социальный роман</span>
+                  </div>
+                  <p class="work-summary">Семейная и промышленная драма вокруг наследства бакинского нефтепромышленника Маркоса Ага Алимяна: деньги, алчность, борьба братьев и поиск нравственной чистоты.</p>
+                </li>
+                <li class="work-item" id="work-namus-shirvanzade">
+                  <div class="work-row">
+                    <span class="work-code">АР-04.08</span>
+                    <a class="work-link" href="./works/shirvanzade-namus.html">Намус («Честь»)</a>
+                    <span class="work-meta">1885 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Трагическая история влюблённых Сейрана и Сусан, погубленных слепыми патриархальными предрассудками и ложно понятым кодексом «чести» («намус»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vahan-terian">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ваан Терьян</h3>
+                  <p class="author-role">Реформатор армянского стиха, мастер символизма · <span class="tabular">1885–1920</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Тончайший лирик XX века, создавший музыкальную культуру современного восточноармянского стиха и проникновенный цикл «Страна Наири».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-twilight-dreams-nairi">
+                  <div class="work-row">
+                    <span class="work-code">АР-04.09</span>
+                    <a class="work-link" href="./works/terian-grezy-sumerek.html">Грёзы сумерек и «Страна Наири»</a>
+                    <span class="work-meta">1908–1919 · Символистская лирика</span>
+                  </div>
+                  <p class="work-summary">От нежных акварелей меланхолии и осенней грусти к трагическим молитвам о растерзанной, но духовной «Стране Наири».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="am-western-avantgarde">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1900–1945</p>
+          <h2 class="section-title">Западноармянский расцвет, авангард и Егише Чаренц</h2>
+          <p class="section-desc">Поэзия Западной Армении перед трагедией 1915 года (Варужан и Сиаманто), бурный гений Егише Чаренца, лирические новеллы Акселя Бакунца и эпос Дереника Демирчяна.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-daniel-varoujan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Даниэл Варужан</h3>
+                  <p class="author-role">Титанический поэт Западной Армении и певец труда · <span class="tabular">1884–1915</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мощнейший голос константинопольско-себастийской поэзии начала XX века, погибший в годы Геноцида; воспел языческую силу природы и святость хлеба.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-song-of-bread">
+                  <div class="work-row">
+                    <span class="work-code">АР-05.01</span>
+                    <a class="work-link" href="./works/varoujan-pesn-hleba.html">Языческие песни и «Песнь хлеба»</a>
+                    <span class="work-meta">1912–1921 · Поэтические книги</span>
+                  </div>
+                  <p class="work-summary">Гимны солнцу, земледелию и деревенской пашне («Песнь хлеба»), изданные посмертно и ставшие реквиемом по цветущей культуре родных сёл.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-siamanto">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сиаманто (Атом Ярджанян)</h3>
+                  <p class="author-role">Мастер трагического экспрессионизма и гражданской поэзии · <span class="tabular">1878–1915</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Новатор свободного верлибра в западноармянской поэзии, чьи «Красные вести от друга» прозвучали потрясающим свидетельством трагедии 1909 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bloody-news-from-friend">
+                  <div class="work-row">
+                    <span class="work-code">АР-05.02</span>
+                    <a class="work-link" href="./works/siamanto-krasnye-vesti.html">Красные вести от друга моего</a>
+                    <span class="work-meta">1909 · Экспрессионистский поэтический цикл</span>
+                  </div>
+                  <p class="work-summary">Двенадцать огненных поэм о киликийской трагедии в Адане и непобедимом духе страдающего народа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yeghishe-charents">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Егише Чаренц</h3>
+                  <p class="author-role">Крупнейший армянский поэт-новатор XX века · <span class="tabular">1897–1937</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Карса, прошедший путь от символизма и футуризма до классической монументальности стиха о судьбе Армении и трагедии эпохи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sweet-armenia">
+                  <div class="work-row">
+                    <span class="work-code">АР-05.03</span>
+                    <a class="work-link" href="./works/charents-milaya-armeniya.html">Я люблю мою милую Армению («Ес им ануш Айастани»)</a>
+                    <span class="work-meta">1920 · Лирический гимн</span>
+                  </div>
+                  <p class="work-summary">Священное для каждого армянина стихотворение-клятва в любви к древнему языку, камням храмов, напевам Нарекаци и заснеженному Арарату.</p>
+                </li>
+                <li class="work-item" id="work-land-of-nairi">
+                  <div class="work-row">
+                    <span class="work-code">АР-05.04</span>
+                    <a class="work-link" href="./works/charents-strana-nairi.html">Страна Наири</a>
+                    <span class="work-meta">1922–1925 · Сатирико-трагический роман</span>
+                  </div>
+                  <p class="work-summary">Блистательный гоголевско-булгаковский роман о провинциальном Карсе времён Первой мировой войны — о мираже истории и крушении иллюзий обывателей.</p>
+                </li>
+                <li class="work-item" id="work-book-of-the-way">
+                  <div class="work-row">
+                    <span class="work-code">АР-05.05</span>
+                    <a class="work-link" href="./works/charents-kniga-puti.html">Книга пути</a>
+                    <span class="work-meta">1933 · Философско-историческая книга поэм</span>
+                  </div>
+                  <p class="work-summary">Итоговая поэтическая книга мастера: «Видение смерти», «Послание» с зашифрованным акростихом-заветом «О армянский народ, твоё единственное спасение — в твоём единстве».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-aksel-bakunts">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аксель Бакунц</h3>
+                  <p class="author-role">Непревзойдённый мастер армянской новеллы XX века · <span class="tabular">1899–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Гориса (Зангезур), автор удивительно поэтичных, сдержанных и пронзительных рассказов о горских селениях, природе и человеческом одиночестве.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dark-valley-alpine-violet">
+                  <div class="work-row">
+                    <span class="work-code">АР-05.06</span>
+                    <a class="work-link" href="./works/bakunts-mtnadzor-i-fialka.html">Тёмное ущелье («Мтнадзор») и «Альпийская фиалка»</a>
+                    <span class="work-meta">1927 · Цикл новелл</span>
+                  </div>
+                  <p class="work-summary">Жемчужины короткой прозы о суровой красоте леса Мтнадзор, безмолвной жизни крестьянки на каменистых склонах Какаваберда и хрупкой поэзии души.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-derenik-demirchyan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дереник Демирчян</h3>
+                  <p class="author-role">Классик исторического романа и сатирической драматургии · <span class="tabular">1877–1956</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель-энциклопедист из Ахалкалаки, создавший и самую любимую армянскую комедию, и величественный роман о Вардане Мамиконяне.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vardanank">
+                  <div class="work-row">
+                    <span class="work-code">АР-05.07</span>
+                    <a class="work-link" href="./works/demirchyan-vardanank.html">Вардананк</a>
+                    <span class="work-meta">1943–1946 · Исторический роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Монументальная фреска борьбы Армении в V веке, написанная в годы Второй мировой войны как гимн народному сплочению и воле к победе.</p>
+                </li>
+                <li class="work-item" id="work-brave-nazar">
+                  <div class="work-row">
+                    <span class="work-code">АР-05.08</span>
+                    <a class="work-link" href="./works/demirchyan-hrabryj-nazar.html">Храбрый Назар</a>
+                    <span class="work-meta">1923 · Сатирическая комедия-притча</span>
+                  </div>
+                  <p class="work-summary">Искромётная пьеса по народной сказке о том, как трусливый бездельник Назар, прихлопнувший одним махом тысячу мух, по воле случая и людской глупости становится царём.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="am-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1950–2000-е годы</p>
+          <h2 class="section-title">Поэзия памяти, проза Цмакута и литература Диаспоры</h2>
+          <p class="section-desc">Симфоническая поэма Паруйра Севака, философская проза Гранта Матевосяна, лирика Ованеса Шираза и Сильвы Капутикян, а также проза армянского Спюрка.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-paruyr-sevak">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Паруйр Севак</h3>
+                  <p class="author-role">Крупнейший поэт-мыслитель Армении второй половины XX века · <span class="tabular">1924–1971</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Интеллектуал, филолог и трибун, преобразивший армянский стих в полифоническую ораторию боли, любви и национального воскрешения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-unsilenceable-belfry">
+                  <div class="work-row">
+                    <span class="work-code">АР-06.01</span>
+                    <a class="work-link" href="./works/sevak-nesmolkaemaya-kolokolnya.html">Несмолкаемая колокольня</a>
+                    <span class="work-meta">1959 · Лиро-эпическая поэма-симфония</span>
+                  </div>
+                  <p class="work-summary">Монументальная поэма о жизни и трагической судьбе великого композитора Комитаса, ставшая поэтическим реквиемом и символом бессмертия армянской музыки и народа.</p>
+                </li>
+                <li class="work-item" id="work-let-there-be-light">
+                  <div class="work-row">
+                    <span class="work-code">АР-06.02</span>
+                    <a class="work-link" href="./works/sevak-da-budet-svet.html">Да будет свет</a>
+                    <span class="work-meta">1969 · Книга философской поэзии</span>
+                  </div>
+                  <p class="work-summary">Вершина зрелой лирики Севака — сложные, страстные размышления о человеке XX века, науке, любви и моральной ответственности слова.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hrant-matevosyan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Грант Матевосян</h3>
+                  <p class="author-role">Классик армянской прозы второй половины XX века · <span class="tabular">1935–2002</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Создатель художественной вселенной села Цмакут (Ахнидзор), тончайший психолог и мастер полифонического крестьянско-философского сказа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-we-and-our-mountains">
+                  <div class="work-row">
+                    <span class="work-code">АР-06.03</span>
+                    <a class="work-link" href="./works/matevosyan-my-i-nashi-gory.html">Мы и наши горы</a>
+                    <span class="work-meta">1962 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Мудрая, полная тонкого юмора и достоинства история четырёх пастухов из Антарамеча, зарезавших забредших чужих овец, и милицейского лейтенанта, пытающегося расследовать «преступление» посреди вечных гор.</p>
+                </li>
+                <li class="work-item" id="work-orange-herd">
+                  <div class="work-row">
+                    <span class="work-code">АР-06.04</span>
+                    <a class="work-link" href="./works/matevosyan-oranzhevyj-tabun.html">Оранжевый табун и «Мать едет женить сына»</a>
+                    <span class="work-meta">1970–1980-е · Повести и рассказы</span>
+                  </div>
+                  <p class="work-summary">Неповторимая, полная нежности и горькой правды проза о материнстве, связи земли и города и достоинстве маленького человека перед временем.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hovhannes-shiraz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ованес Шираз</h3>
+                  <p class="author-role">Народный лирик Арарата, материнской любви и фольклорной образности · <span class="tabular">1914–1984</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт из Гюмри, чьи вдохновенные строки о матери, роднике и горе Арарат вошли в народное предание ещё при жизни автора.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-armenian-dantean">
+                  <div class="work-row">
+                    <span class="work-code">АР-06.05</span>
+                    <a class="work-link" href="./works/shiraz-armyanskaya-dantova-poema.html">Армянская дантова поэма и «Лира Армении»</a>
+                    <span class="work-meta">1941–1965 · Поэма и лирика</span>
+                  </div>
+                  <p class="work-summary">От нежной любовной и материнской лирики («Весна», «Матери») до грандиозной поэмы памяти жертв 1915 года, десятилетиями передававшейся из уст в уста.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kostan-zarian">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Костан Зарян</h3>
+                  <p class="author-role">Мыслитель и крупнейший романист армянской диаспоры (Спюрка) · <span class="tabular">1885–1969</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Европейски образованный поэт, эссеист и философ, друг Пикассо и Унамуно, вернувшийся из странствий по миру в Армению.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ship-on-the-mountain">
+                  <div class="work-row">
+                    <span class="work-code">АР-06.06</span>
+                    <a class="work-link" href="./works/zarian-korabl-na-gore.html">Корабль на горе</a>
+                    <span class="work-meta">1943 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Поразительная аллегория: бывший капитан Ара Арьян перевозит настоящий морской пароход через скалы на озеро Севан в бурный 1920 год — символ надежды, не знающей преград.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-silva-kaputikyan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сильва Капутикян</h3>
+                  <p class="author-role">Классик армянской женской и гражданской поэзии XX века · <span class="tabular">1919–2006</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">«Первая поэтесса Армении», соединившая в чистых, искренних строках судьбу матери, любовь и верность родному слову.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-word-to-my-son">
+                  <div class="work-row">
+                    <span class="work-code">АР-06.07</span>
+                    <a class="work-link" href="./works/kaputikyan-slovo-k-synu.html">Слово к сыну и «Мои родные»</a>
+                    <span class="work-meta">1947–1961 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Знаменитый поэтический завет молодым поколениям: даже если забудешь всё на свете, не забудь материнское слово и древний язык своих гор.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание армянской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

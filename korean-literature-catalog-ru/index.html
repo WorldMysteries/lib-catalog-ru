@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог корейской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 30 писателей · 32 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог корейской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от «Самгук юса» и сиджо Юн Сондо до «Сказания о Хон Гильдоне», поэзии Ким Соволя и Юн Дончжу, эпопеи «Земля» Пак Кённи, Син Гёнсук и нобелевской прозы Хан Ган.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#kr-koryo-ancient">Раздел I: Древние хроники, хянга и лирика эпохи Корё</a>
+        <a href="#kr-joseon-classics">Раздел II: Эпоха Чосон: поэзия сиджо, каса и повести на хангыле</a>
+        <a href="#kr-modern-enlightenment">Раздел III: Колониальная эпоха: новый роман, новелла и лирика бунта</a>
+        <a href="#kr-postwar-division">Раздел IV: Эпоха разделения, экзистенциализм и эпопея «Тхочжи»</a>
+        <a href="#kr-turn-of-century">Раздел V: Поэзия «Десяти тысяч жизней» и проза рубежа XXI века</a>
+        <a href="#kr-nobel-contemporary">Раздел VI: Нобелевская вершина Хан Ган и новая корейская волна</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="kr-koryo-ancient">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · VII–XIV века</p>
+          <h2 class="section-title">Древние хроники, хянга и лирика эпохи Корё</h2>
+          <p class="section-desc">Истоки корейской словесности: древние мифы и песни «хянга» в своде «Самгук юса», государственная хроника «Самгук саги», поэзия на ханмуне и первые строфы сиджо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ilyon-samguk-yusa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ильён</h3>
+                  <p class="author-role">Буддийский наставник, сохранивший древнейшие мифы и песни хянга · <span class="tabular">1206–1289</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Настоятель эпохи Корё, собравший в едином своде устные предания об основателе Тангуне, сказки и четырнадцать бесценных древних песен «хянга».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-samguk-yusa">
+                  <div class="work-row">
+                    <span class="work-code">КР-01.01</span>
+                    <a class="work-link" href="./works/ilyon-samguk-yusa.html">Самгук юса («Забытые дела трёх государств»)</a>
+                    <span class="work-meta">ок. 1281 · Историко-литературный свод и фольклор</span>
+                  </div>
+                  <p class="work-summary">Сокровищница корейской мифологии и древней лирики: от сказания о небесном царевиче Хвануне и Тангуне до буддийских притч и лирических песен эпохи Силла.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kim-bu-sik">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ким Бу Сик</h3>
+                  <p class="author-role">Историк и государственный деятель эпохи Корё · <span class="tabular">1075–1151</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный-конфуцианец, возглавивший составление древнейшей сохранившейся официальной истории Когурё, Пэкче и Силла.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-samguk-sagi">
+                  <div class="work-row">
+                    <span class="work-code">КР-01.02</span>
+                    <a class="work-link" href="./works/kim-bu-sik-samguk-sagi.html">Самгук саги («Исторические записи трёх государств»)</a>
+                    <span class="work-meta">1145 · Классическая летопись и биографии</span>
+                  </div>
+                  <p class="work-summary">Пятидесятитомный памятник на ханмуне, в разделе «Жизнеописания» которого сохранились знаменитые новеллистические истории о верности, любви и героизме (например, о принце Ходоне и принцессе Накнан).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yi-gyubo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ли Гюбо</h3>
+                  <p class="author-role">Крупнейший поэт и эссеист эпохи Корё на ханмуне · <span class="tabular">1168–1241</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий мастер свободной поэтической мысли, создавший эпическую поэму об основателе Когурё и тысячи стихов о природе и простом человеке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-king-dongmyeong">
+                  <div class="work-row">
+                    <span class="work-code">КР-01.03</span>
+                    <a class="work-link" href="./works/li-gyubo-skazanie-o-tonmene.html">Сказание о государе Тонмёне и «Записки Пэгуна»</a>
+                    <span class="work-meta">ок. 1193–1241 · Эпическая поэма и эссе</span>
+                  </div>
+                  <p class="work-summary">Героическая поэма о Чумоне (Тонмёне) — легендарном предке корейских племён — и тонкие раздумья о природе поэтического вдохновения.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jeong-mong-ju">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чон Мончжу и Ли Сэк</h3>
+                  <p class="author-role">Мастера ранней классической строфы сиджо · <span class="tabular">XIV век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслители и поэты рубежа династий Корё и Чосон, закрепившие трёхстрочную музыкальную форму «сиджо» в золотом фонде корейской поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tansimga-sijo">
+                  <div class="work-row">
+                    <span class="work-code">КР-01.04</span>
+                    <a class="work-link" href="./works/jeong-mong-ju-tansimga.html">Песня верного сердца («Тансимга») и ранние сиджо</a>
+                    <span class="work-meta">кон. XIV века · Поэзия сиджо</span>
+                  </div>
+                  <p class="work-summary">Знаменитое трёхстишие о непоколебимой верности присяге даже ценой жизни на каменном мосту Сончжуккё.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="kr-joseon-classics">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · XV–XVIII века</p>
+          <h2 class="section-title">Эпоха Чосон: поэзия сиджо, каса и повести на хангыле</h2>
+          <p class="section-desc">Изобретение алфавита хангыль королём Седжоном открывает расцвет народной и высокой поэзии, первых романов на родном языке, фольклорных драм пхансори и сатиры «сирхак».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-jeong-cheol">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чон Чхоль (Сонган)</h3>
+                  <p class="author-role">Великий мастер лирической поэмы «каса» и стихов сиджо · <span class="tabular">1536–1593</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и сановник, поднявший корейский народный стих «каса» на уровень совершенной музыкальности и выразительности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wandering-kwandong">
+                  <div class="work-row">
+                    <span class="work-code">КР-02.01</span>
+                    <a class="work-link" href="./works/jeong-cheol-pejzazhi-kvandona.html">Речные и горные пейзажи Квандона («Квандон пёльгок»)</a>
+                    <span class="work-meta">1580 · Поэма-каса</span>
+                  </div>
+                  <p class="work-summary">Путевая лирическая поэма о путешествии губернатора к Алмазным горам Кымгансан и Восточному морю, прославляющая величие корейской природы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yun-seondo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юн Сондо (Косан)</h3>
+                  <p class="author-role">Непревзойдённый классик поэзии сиджо · <span class="tabular">1587–1671</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-отшельник острова Погильдо, очистивший корейскую поэзию до прозрачного созерцания смены времён года и гармонии человека с водой и горами.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fishermans-calendar">
+                  <div class="work-row">
+                    <span class="work-code">КР-02.02</span>
+                    <a class="work-link" href="./works/yun-seondo-vremena-goda-rybaka.html">Времена года рыбака («Обу сасиса»)</a>
+                    <span class="work-meta">1651 · Цикл из 40 сиджо</span>
+                  </div>
+                  <p class="work-summary">Четыре части по десять строф — весна, лето, осень и зима на воде с песнями гребцов, утренним туманом, жёлтой луной и первым снегом на соснах.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-heo-gyun">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хо Гюн</h3>
+                  <p class="author-role">Автор первого классического романа на алфавите хангыль · <span class="tabular">1569–1618</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Реформатор, мыслитель и поэт, бросивший вызов жёстким конфуцианским сословным перегородкам эпохи Чосон.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tale-of-hong-gildong">
+                  <div class="work-row">
+                    <span class="work-code">КР-02.03</span>
+                    <a class="work-link" href="./works/heo-gyun-hong-gildong.html">Сказание о Хон Гильдоне</a>
+                    <span class="work-meta">ок. 1612 · Приключенческо-социальный роман</span>
+                  </div>
+                  <p class="work-summary">Легендарная история «корейского Робин Гуда» — одарённого незаконнорождённого юноши, ставшего предводителем благородных разбойников и основателем справедливого острова Юльдо.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kim-man-jung">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ким Манчжун (Сопхо)</h3>
+                  <p class="author-role">Классик корейского философского романа XVII века · <span class="tabular">1637–1692</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Государственный деятель и писатель в изгнании, создавший на хангыле великий роман-притчу о бренности мирских желаний.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cloud-dream-of-nine">
+                  <div class="work-row">
+                    <span class="work-code">КР-02.04</span>
+                    <a class="work-link" href="./works/kim-man-jung-oblachnyj-son-devyati.html">Облачный сон девяти («Куунмон»)</a>
+                    <span class="work-meta">ок. 1687–1689 · Философский роман-сновидение</span>
+                  </div>
+                  <p class="work-summary">Юный буддийский монах Сончжин за грех минутного тщеславия рождается на земле блистательным вельможей Ян Сою с восемью прекрасными жёнами, чтобы проснуться и понять иллюзорность славы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-chunhyangjeon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Повесть о Чхунхян («Чхунхянчжон»)</h3>
+                  <p class="author-role">Главный шедевр народного эпоса пхансори и повести Чосон · <span class="tabular">XVIII век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Любимейшая классическая история Кореи, сложившаяся в репертуаре певцов-сказителей пхансори и в десятках рукописей на хангыле.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tale-of-chunhyang">
+                  <div class="work-row">
+                    <span class="work-code">КР-02.05</span>
+                    <a class="work-link" href="./works/anon-povest-o-chhunhyan.html">Повесть о верной Чхунхян</a>
+                    <span class="work-meta">XVIII век · Любовная повесть-пхансори</span>
+                  </div>
+                  <p class="work-summary">История тайного брака юной красавицы Чхунхян, дочери кисэн, с сыном наместника Ли Монрёном, который возвращается тайным королевским ревизором, чтобы спасти возлюбленную от жестокого судьи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-park-ji-won">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пак Чи Вон (Ёнам)</h3>
+                  <p class="author-role">Мыслитель школы «сирхак» («реальных наук») и сатирик · <span class="tabular">1737–1805</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий просветитель XVIII века, безжалостно высмеявший лицемерие, псевдоучёность и сословную спесь старого дворянства янбанов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-jehol-diary-tiger">
+                  <div class="work-row">
+                    <span class="work-code">КР-02.06</span>
+                    <a class="work-link" href="./works/park-ji-won-zhehejskij-dnevnik.html">Жэхэский дневник и «Повесть о янбане»</a>
+                    <span class="work-meta">1780 · Травелог и сатирические новеллы</span>
+                  </div>
+                  <p class="work-summary">Энциклопедические путевые заметки о Китае эпохи Цяньлуна и едкие новеллы («Тигр поучает»), где тигр стыдит ханжеских конфуцианских учёных.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="kr-modern-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1910–1945</p>
+          <h2 class="section-title">Колониальная эпоха: новый роман, новелла и лирика бунта</h2>
+          <p class="section-desc">Рождение современного романа у Ли Гвансу и Ём Сан Сопа, трагическая новелла Хён Джингона, авангард Ли Сана и бессмертная поэзия Ким Соволя и Юн Дончжу.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-yi-kwang-su">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ли Гвансу (Чхунвон)</h3>
+                  <p class="author-role">Автор первого современного корейского романа · <span class="tabular">1892–1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и просветитель, в 1917 году заложивший основы современного корейского разговорного повествования и психологической прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-heartless-mujeong">
+                  <div class="work-row">
+                    <span class="work-code">КР-03.01</span>
+                    <a class="work-link" href="./works/yi-kwang-su-besserdechie.html">Бессердечие («Муджон»)</a>
+                    <span class="work-meta">1917 · Роман</span>
+                  </div>
+                  <p class="work-summary">Драма молодого учителя Ли Хёнсика между традиционной невестой Пак Ёнчхэ и современной образованной Ким Сонхён — портрет Кореи на пороге нового века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yom-sang-seop">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ём Сан Соп</h3>
+                  <p class="author-role">Классик корейского реализма и семейной хроники · <span class="tabular">1897–1963</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер объективного психологического письма и социальной фрески Сеула 1920–1930-х годов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-three-generations">
+                  <div class="work-row">
+                    <span class="work-code">КР-03.02</span>
+                    <a class="work-link" href="./works/yom-sang-seop-tri-pokoleniya.html">Три поколения</a>
+                    <span class="work-meta">1931 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Панорама сеульской семьи Чо сквозь призму трёх поколений: старого консервативного деда, разочарованного отца и юного студента Токки в 1930-е годы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hyun-jin-geon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хён Джингон</h3>
+                  <p class="author-role">Мастер корейского реалистического рассказа XX века · <span class="tabular">1900–1943</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий новеллист, соединивший мопассановскую иронию судьбы с состраданием к сеульской бедноте.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-a-lucky-day">
+                  <div class="work-row">
+                    <span class="work-code">КР-03.03</span>
+                    <a class="work-link" href="./works/hyun-udachnyj-den.html">Удачный день</a>
+                    <span class="work-meta">1924 · Психологический рассказ</span>
+                  </div>
+                  <p class="work-summary">Трагический и пронзительный рассказ о сеульском рикше Ким Чхомчжи, которому целый дождливый день неслыханно везёт с заработком — но дома его ждёт немой холод беды.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kim-sowol">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ким Соволь</h3>
+                  <p class="author-role">Народный лирик Кореи XX века · <span class="tabular">1902–1934</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт из провинции Пхёнан, превративший традиционные ритмы корейской народной песни в шедевры любовной и скорбной лирики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-azaleas-kim-sowol">
+                  <div class="work-row">
+                    <span class="work-code">КР-03.04</span>
+                    <a class="work-link" href="./works/kim-sowol-azalii.html">Азалии («Чиндаллэ ккот»)</a>
+                    <span class="work-meta">1925 · Лирический сборник</span>
+                  </div>
+                  <p class="work-summary">Бессмертные стихи о любви, разлуке и горьком чувстве «хана» («Если ты уйдёшь от меня, охваченный скукой, я молча отпущу тебя и устелю твой путь лепестками азалий…»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yun-dong-ju">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юн Дончжу</h3>
+                  <p class="author-role">Поэт чистой совести и сопротивления духа · <span class="tabular">1917–1945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Молодой поэт, погибший в японской тюрьме за несколько месяцев до освобождения Кореи; его единственная книга стала духовным символом XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sky-wind-and-stars">
+                  <div class="work-row">
+                    <span class="work-code">КР-03.05</span>
+                    <a class="work-link" href="./works/yun-dong-ju-nebo-veter-zvezdy.html">Небо, ветер, звёзды и стихи («Пролог»)</a>
+                    <span class="work-meta">1941 (изд. 1948) · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Хрустальные по чистоте стихи о стремлении до последнего дня «не знать ни единого пятна стыда перед небом» и любви ко всему живому.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yi-sang">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ли Сан</h3>
+                  <p class="author-role">Гений корейского авангарда, модернизма и абсурда · <span class="tabular">1910–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Архитектор, художник и поэт-модернист, опередивший своё время в экспериментах со словом, геометрией и отчуждением человека в городе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wings-crows-eye-view">
+                  <div class="work-row">
+                    <span class="work-code">КР-03.06</span>
+                    <a class="work-link" href="./works/yi-sang-krylya.html">Крылья и «Вид с высоты вороньего полёта»</a>
+                    <span class="work-meta">1934–1936 · Модернистская новелла и авангардная поэзия</span>
+                  </div>
+                  <p class="work-summary">Завораживающий рассказ о запертом в комнате «бездельнике», который в полдень смотрит на суету Сеула с крыши универмага Мицукоси и мечтает расправить крылья.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="kr-postwar-division">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1945–1980-е годы</p>
+          <h2 class="section-title">Эпоха разделения, экзистенциализм и эпопея «Тхочжи»</h2>
+          <p class="section-desc">Трагедия Корейской войны и разделённого полуострова, философская проза «Площади» Чхве Ин Хуна, великая сага «Земля» Пак Кённи и проза индустриальной эпохи.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hwang-sun-won">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хван Сун Вон</h3>
+                  <p class="author-role">Непревзойдённый мастер корейского лирического рассказа · <span class="tabular">1915–2000</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Классик тонкой психологической прозы XX века, умевший передать трагедию войны и хрупкость первой любви в прозрачных, музыкальных новеллах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rain-shower-cranes">
+                  <div class="work-row">
+                    <span class="work-code">КР-04.01</span>
+                    <a class="work-link" href="./works/hwang-sun-won-liven-i-zhuravli.html">Ливень («Сонаги») и «Журавли»</a>
+                    <span class="work-meta">1953 · Лирические рассказы</span>
+                  </div>
+                  <p class="work-summary">Самая знаменитая в Корее история чистой детской дружбы и первой любви у ручья — и притча о двух друзьях детства по разные стороны 38-й параллели.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-choi-in-hun">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чхве Ин Хун</h3>
+                  <p class="author-role">Создатель интеллектуального и философского романа о разделении Кореи · <span class="tabular">1936–2018</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и романист, впервые подвергший сомнению обе враждующие идеологии — и капиталистический Юг, и тоталитарный Север.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-square-choi">
+                  <div class="work-row">
+                    <span class="work-code">КР-04.02</span>
+                    <a class="work-link" href="./works/choi-in-hun-ploschad.html">Площадь («Кванчжан»)</a>
+                    <span class="work-meta">1960 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Судьба студента-философа Ли Мёнчжуна, бежавшего с Юга на Север в поисках идеала, разочаровавшегося в обеих системах и выбравшего после плена нейтральный корабль в открытое море.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-park-kyong-ni">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пак Кённи</h3>
+                  <p class="author-role">Создательница великой национальной эпопеи «Земля» · <span class="tabular">1926–2008</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка, двадцать пять лет писавшая грандиозную сагу о полувеке корейской истории от крестьянских восстаний до освобождения 1945 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-toji-the-land">
+                  <div class="work-row">
+                    <span class="work-code">КР-04.03</span>
+                    <a class="work-link" href="./works/park-kyong-ni-zemlya-thochzhi.html">Земля («Тхочжи»)</a>
+                    <span class="work-meta">1969–1994 · Роман-эпопея в пяти частях</span>
+                  </div>
+                  <p class="work-summary">Грандиозная история знатного рода Чхве в селе Пхёнсари у реки Сомчжинган, судьбы несгибаемой наследницы Со Хи и сотен героев, проходящих через аннексию, изгнание в Маньчжурию и борьбу за достоинство.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cho-se-hui">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чо Се Хи</h3>
+                  <p class="author-role">Автор культового цикла о цене индустриального чуда Кореи · <span class="tabular">1942–2022</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, чья книга взаимосвязанных новелл стала настольной для целых поколений читателей и символом борьбы за человеческое достоинство рабочих.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dwarf-launches-little-ball">
+                  <div class="work-row">
+                    <span class="work-code">КР-04.04</span>
+                    <a class="work-link" href="./works/cho-se-hui-karlik-zapuskaet-myachik.html">Карлик запускает в небо мячик</a>
+                    <span class="work-meta">1978 · Цикл социально-поэтических новелл</span>
+                  </div>
+                  <p class="work-summary">Двенадцать пронзительных историй о семье бедного «карлика» Ким Буль-ли в сеульских трущобах, сносимых ради застройки мегаполиса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yi-mun-yol">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ли Мун Ёль</h3>
+                  <p class="author-role">Классик философско-аллегорической прозы конца XX века · <span class="tabular">род. 1948</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых читаемых мастеров корейской новеллы и исторического романа («Поэт», «Наш испорченный герой»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-our-twisted-hero">
+                  <div class="work-row">
+                    <span class="work-code">КР-04.05</span>
+                    <a class="work-link" href="./works/yi-mun-yol-nash-isporchennyj-geroj.html">Наш испорченный герой</a>
+                    <span class="work-meta">1987 · Повесть-притча</span>
+                  </div>
+                  <p class="work-summary">Аллегория авторитарной власти и конформизма в сельском школьном классе 1959 года: столкновение столичного отличника Хан Пён Тхэ и мелкого тирана-старосты Ом Сок Тэ.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="kr-turn-of-century">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1980–2010-е годы</p>
+          <h2 class="section-title">Поэзия «Десяти тысяч жизней» и проза рубежа XXI века</h2>
+          <p class="section-desc">Глобальное звучание корейской поэзии Ко Ына, масштабные исторические полотна Хван Сок Ёна, пронзительная семейная проза Син Гёнсук и урбанистический психологизм Ким Ён Ха.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ko-un">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ко Ын</h3>
+                  <p class="author-role">Выдающийся корейский поэт конца XX – начала XXI века · <span class="tabular">род. 1933</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший дзен-буддийский монах и поэт гражданского мужества, создавший грандиозную поэтическую галерею портретов каждого встреченного человека.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ten-thousand-lives">
+                  <div class="work-row">
+                    <span class="work-code">КР-05.01</span>
+                    <a class="work-link" href="./works/ko-un-desyat-tysyach-zhiznej.html">Десять тысяч жизней («Манинбо»)</a>
+                    <span class="work-meta">1986–2010 · Энциклопедическая поэтическая книга</span>
+                  </div>
+                  <p class="work-summary">Тридцатитомный свод из почти четырёх тысяч стихотворений-портретов — от деревенских плотников и сирот до исторических героев и стариков Кореи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-shin-kyung-sook">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Син Гёнсук</h3>
+                  <p class="author-role">Мастер психологической прозы памяти и семьи · <span class="tabular">род. 1963</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первая корейская писательница, завоевавшая Азиатскую литературную премию и мировое признание за глубоко человечный портрет уходящего поколения матерей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-please-look-after-mom">
+                  <div class="work-row">
+                    <span class="work-code">КР-05.02</span>
+                    <a class="work-link" href="./works/shin-proshu-pozabotsya-o-mame.html">Прошу, позаботься о маме</a>
+                    <span class="work-meta">2008 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Когда пожилая мать Пак Со Нё теряется в толпе сеульского вокзала, муж и взрослые дети, живущие в бешеном ритме нового мегаполиса, впервые вспоминают о её тайной жизни, жертвах и несказанной любви.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hwang-sok-yong">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хван Сок Ён</h3>
+                  <p class="author-role">Ведущий мастер социально-исторического корейского романа · <span class="tabular">род. 1943</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участник движения за демократию и летописец XX столетия, осмысливший войны, разделение и трудовую историю современной Кореи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-old-garden">
+                  <div class="work-row">
+                    <span class="work-code">КР-05.03</span>
+                    <a class="work-link" href="./works/hwang-sok-yong-staryj-sad.html">Старый сад и «Знакомые вещи»</a>
+                    <span class="work-meta">2000–2011 · Роман</span>
+                  </div>
+                  <p class="work-summary">История любви и памяти бывшего политзаключённого О Хён У, вышедшего на свободу спустя восемнадцать лет и читающего письма и картины умершей возлюбленной Юн Хи в старом доме Кальме.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kim-young-ha">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ким Ён Ха</h3>
+                  <p class="author-role">Мастер ироничного модернизма и психологического саспенса · <span class="tabular">род. 1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых остроумных и стилистически блестящих романистов современной Кореи, исследователь одиночества и хрупкости памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-memoir-of-a-murderer">
+                  <div class="work-row">
+                    <span class="work-code">КР-05.04</span>
+                    <a class="work-link" href="./works/kim-young-ha-dnevnik-ubijcy.html">Дневник убийцы и «Я имею право разрушить себя»</a>
+                    <span class="work-meta">1996–2013 · Психологические романы</span>
+                  </div>
+                  <p class="work-summary">Блистательный триллер о стареющем серийном убийце с болезнью Альцгеймера, который ведёт записи на грани исчезающей памяти, чтобы защитить приёмную дочь от нового маньяка.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="kr-nobel-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 2004–2020-е годы</p>
+          <h2 class="section-title">Нобелевская вершина Хан Ган и новая корейская волна</h2>
+          <p class="section-desc">Триумф современной корейской литературы на мировой сцене: поэтика хрупкости и исторической боли у нобелевского лауреата Хан Ган, магический реализм Чхон Мён Гвана и новая социальная проза.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-han-kang">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хан Ган</h3>
+                  <p class="author-role">Лауреат Нобелевской премии по литературе (2024) · <span class="tabular">род. 1970</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Автор ошеломляюще поэтической и беспощадно честной прозы о телесной уязвимости, исторической травме (восстание в Кванджу, события на Чеджу) и свете человеческого достоинства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-vegetarian">
+                  <div class="work-row">
+                    <span class="work-code">КР-06.01</span>
+                    <a class="work-link" href="./works/han-kang-vegetarianka.html">Вегетарианка</a>
+                    <span class="work-meta">2007 · Роман-триптих</span>
+                  </div>
+                  <p class="work-summary">Кроткая сеульская домохозяйка Ёнхе после кровавого ночного сна отказывается есть мясо — и этот тихий жест бунта против насилия раскалывает всю семью, превращая её тело в стремление стать деревом.</p>
+                </li>
+                <li class="work-item" id="work-human-acts">
+                  <div class="work-row">
+                    <span class="work-code">КР-06.02</span>
+                    <a class="work-link" href="./works/han-kang-chelovecheskie-postupki.html">Человеческие поступки</a>
+                    <span class="work-meta">2014 · Историко-поэтический роман</span>
+                  </div>
+                  <p class="work-summary">Многоголосая книга памяти о подавлении восстания в Кванджу в мае 1980 года — от лица пятнадцатилетнего школьника Тонхо, души погибшего друга, редактора и матери.</p>
+                </li>
+                <li class="work-item" id="work-we-do-not-part">
+                  <div class="work-row">
+                    <span class="work-code">КР-06.03</span>
+                    <a class="work-link" href="./works/han-kang-ya-ne-proschayus.html">Я не прощаюсь</a>
+                    <span class="work-meta">2021 · Роман</span>
+                  </div>
+                  <p class="work-summary">Сквозь метель на острове Чеджу писательница Кёнха отправляется спасать белую птичку своей подруги Инсон — и попадает в снежное сновидение о памяти трагедии 1948 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cheon-myeong-kwan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чхон Мён Гван</h3>
+                  <p class="author-role">Мастер корейского магического реализма и карнавального эпоса · <span class="tabular">род. 1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Киносценарист и романист, ворвавшийся в мировую литературу с блестящей семейно-мифологической эпопеей «Кит».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-whale-cheon">
+                  <div class="work-row">
+                    <span class="work-code">КР-06.04</span>
+                    <a class="work-link" href="./works/cheon-kit.html">Кит</a>
+                    <span class="work-meta">2004 · Магико-реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Безумная, красочная и трогательная сага о деревенской женщине Гымбок, построившей кинотеатр в виде гигантского кита, её великанше-дочери Чхунхи и головокружительной истории XX века Кореи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-park-min-gyu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пак Мин Гю</h3>
+                  <p class="author-role">Мастер гротеска, поп-мифологии и городской меланхолии · <span class="tabular">род. 1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Оригинальнейший стилист нового века, соединяющий юмор комиксов с щемящей нежностью к «аутсайдерам» эпохи гиперкапитализма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pavane-for-dead-princess">
+                  <div class="work-row">
+                    <span class="work-code">КР-06.05</span>
+                    <a class="work-link" href="./works/park-min-gyu-pavana.html">Павана для мёртвой принцессы и «Кастелла»</a>
+                    <span class="work-meta">2003–2009 · Роман и абсурдистские рассказы</span>
+                  </div>
+                  <p class="work-summary">Трогательная история любви некрасивой девушки, работающей в сеульском универмаге, и юноши с внешностью актёра в мире, одержимом культом глянца.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pyun-hye-young">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пён Хёён</h3>
+                  <p class="author-role">Мастер современного психологического триллера и гротеска · <span class="tabular">род. 1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат премии Ширли Джексон, исследующая хрупкость семейных связей и одиночество в лабиринтах современной жизни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-hole-pyun">
+                  <div class="work-row">
+                    <span class="work-code">КР-06.06</span>
+                    <a class="work-link" href="./works/pyun-dyra.html">Дыра</a>
+                    <span class="work-meta">2016 · Психологический триллер</span>
+                  </div>
+                  <p class="work-summary">Парализованный после автокатастрофы профессор О Ги остаётся на попечении свекрови, которая день за днём вскапывает яму в его любимом саду жены — напряжённая драма о вине и изоляции.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cho-nam-joo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чо Нам Джу</h3>
+                  <p class="author-role">Автор самого резонансного социального романа современной Кореи · <span class="tabular">род. 1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывшая телесценаристка, чья повесть о повседневном неравенстве вызвала общенациональную дискуссию и миллионные тиражи в Азии и Европе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kim-jiyoung-born-1982">
+                  <div class="work-row">
+                    <span class="work-code">КР-06.07</span>
+                    <a class="work-link" href="./works/cho-kim-chzhi-en-1982.html">Госпожа Ким Чжи Ён, рождённая в 1982 году</a>
+                    <span class="work-meta">2016 · Социальный роман</span>
+                  </div>
+                  <p class="work-summary">Хроника обычной жизни среднестатистической корейской женщины с самым распространённым именем поколения — от школьной скамьи и офиса до декрета и внезапного нервного срыва.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание корейской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
