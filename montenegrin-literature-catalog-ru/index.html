@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог черногорской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 23 писателей · 32 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог черногорской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Летописи попа Дуклянина и «Горного венца» Негоша до притч Марко Милянова, новелл Любиши, прозы Лалича и Булатовича и современных романов Николаидиса.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#me-duklja-petrovici">Раздел I: Дуклянская книжность и историография эпохи Петровичей</a>
+        <a href="#me-njegos-romanticism">Раздел II: Вершина романтизма и эпоха Негоша</a>
+        <a href="#me-ljubisa-miljanov">Раздел III: Приморский сказ и этика «чойства и юначества»</a>
+        <a href="#me-interwar-resistance">Раздел IV: Социальный реализм, лирика бунта и эпос XX века</a>
+        <a href="#me-modernism-grotesque">Раздел V: Гротеск, поэтика Санджака и европейский модернизм</a>
+        <a href="#me-contemporary">Раздел VI: Новая черногорская проза и XXI век</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="me-duklja-petrovici">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XII–XVIII века</p>
+          <h2 class="section-title">Дуклянская книжность и историография эпохи Петровичей</h2>
+          <p class="section-desc">От древнейшей адриатико-балканской хроники и первой южнославянской кириллической типографии на Ободе до посланий владык-правителей Цетине.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-priest-of-duklja">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Поп Дуклянин</h3>
+                  <p class="author-role">Анонимный летописец Барской архиепископии · <span class="tabular">XII век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель древнейшего письменного памятника черногорско-приморского ареала, соединившего исторические предания Дукли и Зета с романтической повестью о князе Владимире и Косаре.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-chronicle-priest-duklja">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-01.01</span>
+                    <a class="work-link" href="./works/dukljanin-letopis.html">Летопись попа Дуклянина (Барский родослов)</a>
+                    <span class="work-meta">ок. 1170 · Средневековая хроника</span>
+                  </div>
+                  <p class="work-summary">Свод преданий о древних правителях Дукли, Зета и Приморья, включающий знаменитую главу о святом князе Йоване Владимире и царевне Косаре.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-makarije-cetinje-press">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иеромонах Макарий (Типография Црноевичей)</h3>
+                  <p class="author-role">Первопечатник Цетиньской и Ободской типографии · <span class="tabular">кон. XV – нач. XVI в.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер печатного дела, по воле правителя Джураджа Црноевича выпустивший в 1494 году первую кириллическую инкунабулу южных славян.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-oktoih-prvoglasnik">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-01.02</span>
+                    <a class="work-link" href="./works/makarije-oktoih-1494.html">Октоих первогласник (Цетиньская печатная книга)</a>
+                    <span class="work-meta">1494 · Старопечатный памятник и предисловие</span>
+                  </div>
+                  <p class="work-summary">Богослужебная книга и издательские послесловия о создании первой государственной типографии южных славян в горах под Ловченом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vasilije-petrovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Владыка Василий Петрович</h3>
+                  <p class="author-role">Первый историк Черногории и прозаик XVIII века · <span class="tabular">1709–1766</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Черногорский митрополит и дипломат, издавший в Москве и Петербурге первую печатную историю своей земли и вдохновивший державные связи с Россией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-history-of-montenegro">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-01.03</span>
+                    <a class="work-link" href="./works/vasilije-istoriya-o-chernoj-gore.html">История о Черной Горе</a>
+                    <span class="work-meta">1754 · Исторический очерк и ода</span>
+                  </div>
+                  <p class="work-summary">Первая книга об истории, племенах, обычаях и борьбе горцев против Османской империи, завершённая стихотворным панегириком вольности.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-petar-i-petrovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Петар I Петрович (Святой Пётр Цетиньский)</h3>
+                  <p class="author-role">Мыслитель, миротворец и мастер эпистолярной прозы · <span class="tabular">1748–1830</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Объединитель черногорских племён, законодатель и автор вдохновенных посланий, сочетающих библейскую строгость с живым народным словом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-epistles-to-montenegrins">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-01.04</span>
+                    <a class="work-link" href="./works/petar-i-poslaniya.html">Послания черногорцам и приморцам</a>
+                    <span class="work-meta">1784–1830 · Эпистолярно-дидактическая проза</span>
+                  </div>
+                  <p class="work-summary">Нравственные и политические обращения к враждующим племенам с призывом отказаться от кровной мести ради единого права и чести.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="me-njegos-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1830–1880-е годы</p>
+          <h2 class="section-title">Вершина романтизма и эпоха Негоша</h2>
+          <p class="section-desc">Титаническая философская поэзия Петра II Петровича Негоша и патриотическая романтическая драматургия при цетиньском дворе.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-petar-ii-njegos-me">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Петар II Петрович Негош</h3>
+                  <p class="author-role">Владыка, философ и величайший поэт Черногории · <span class="tabular">1813–1851</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель эпохального масштаба, поднявший черногорскую народную героику на уровень мировой трагедии и космогонического эпоса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-me-mountain-wreath">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-02.01</span>
+                    <a class="work-link" href="./works/me-njegos-gornyj-venec.html">Горный венец</a>
+                    <span class="work-meta">1847 · Драматическая поэма</span>
+                  </div>
+                  <p class="work-summary">Философско-историческая драма о судьбе черногорцев начала XVIII века, раздумья владыки Данилы о долге, чести и цене свободы в суровых горах Ловчена.</p>
+                </li>
+                <li class="work-item" id="work-me-ray-microcosm">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-02.02</span>
+                    <a class="work-link" href="./works/me-njegos-luch-mikrokosma.html">Луч микрокосма</a>
+                    <span class="work-meta">1845 · Космогоническая поэма</span>
+                  </div>
+                  <p class="work-summary">Поэтическая песнь о небесном происхождении человеческой души, бунте Сатаны и стремлении духа вырваться из оков смертного тела к вечному свету.</p>
+                </li>
+                <li class="work-item" id="work-false-tsar-scepan">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-02.03</span>
+                    <a class="work-link" href="./works/me-njegos-stepan-malyj.html">Ложный царь Степан Малый</a>
+                    <span class="work-meta">1851 · Историческая драма в стихах</span>
+                  </div>
+                  <p class="work-summary">Пьеса о таинственном самозванце XVIII века, сумевшем на время объединить Черногорию и отразить походы могущественных империй.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nikola-i-petrovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Никола I Петрович Негош</h3>
+                  <p class="author-role">Князь, первый король и поэт-романтик Черногории · <span class="tabular">1841–1921</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Правитель-литератор, автор исторических драм, романтических поэм и знаменитой патриотической песни-гимна «Онамо, намо!».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-balkan-empress">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-02.04</span>
+                    <a class="work-link" href="./works/nikola-balkanskaya-carica.html">Балканская царица</a>
+                    <span class="work-meta">1884 · Историческая драма</span>
+                  </div>
+                  <p class="work-summary">Драма о падении средневековой Зета и семье последнего владыки Ивана Црноевича: любовь, измена Станиши и верность Даницы родной земле.</p>
+                </li>
+                <li class="work-item" id="work-onamo-namo">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-02.05</span>
+                    <a class="work-link" href="./works/nikola-onamo-namo.html">Туда, за горы! («Онамо, намо!»)</a>
+                    <span class="work-meta">1867 · Патриотическая ода</span>
+                  </div>
+                  <p class="work-summary">Знаменитое стихотворение, ставшее народным гимном эпохи черногорского княжества и королевства.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="me-ljubisa-miljanov">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · Вторая половина XIX – начало XX века</p>
+          <h2 class="section-title">Приморский сказ и этика «чойства и юначества»</h2>
+          <p class="section-desc">Рождение самобытной реалистической прозы Боки Которской и Черногории — новеллы Стефана Митрова Любиши и кодекс народной морали Марко Милянова.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-stefan-mitrov-ljubisa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стефан Митров Любиша</h3>
+                  <p class="author-role">Создатель черногорско-приморской классической новеллы · <span class="tabular">1824–1878</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Будвы и Паштровичей, блестящий стилист, перенёсший сочный язык приморских капитанов, пастухов и стариков в большую европейскую прозу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kanjos-macedonovic">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-03.01</span>
+                    <a class="work-link" href="./works/ljubisa-kanyosh-macedonovic.html">Повести черногорские и приморские («Каньош Мацедонович»)</a>
+                    <span class="work-meta">1875 · Сборник исторических новелл</span>
+                  </div>
+                  <p class="work-summary">Бессмертная новелла о маленьком, но смелом купце из Паштровичей, который побеждает в Венеции гиганта Фурлана и отвечает дожу: «Всяк со своей силой, да лучшим себя почитает!»</p>
+                </li>
+                <li class="work-item" id="work-vuk-dojcevic">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-03.02</span>
+                    <a class="work-link" href="./works/ljubisa-rasskazy-vuka-dojchevicha.html">Рассказы Вука Дойчевича</a>
+                    <span class="work-meta">1877–1879 · Цикл иронических сказов</span>
+                  </div>
+                  <p class="work-summary">Плутовской и философский цикл историй о старом путешественнике и хитроумном рассказчике, высмеивающем людские пороки и спесь.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-marko-miljanov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марко Милянов Попович</h3>
+                  <p class="author-role">Воевода племени Кучи, писатель и хранитель кодекса чести · <span class="tabular">1833–1901</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Легендарный полководец, выучившийся грамоте лишь после пятидесяти лет, чтобы записать примеры высшего нравственного мужества своего народа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-examples-of-humanity">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-03.03</span>
+                    <a class="work-link" href="./works/miljanov-primery-chojstva-i-yunachestva.html">Примеры честности и мужества («Примеры чойства и юначества»)</a>
+                    <span class="work-meta">1901 · Этическая документальная проза</span>
+                  </div>
+                  <p class="work-summary">Уникальная книга коротких исторических рассказов о великодушии к побеждённому врагу, верности слову и различии между храбростью и подлинной человечностью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-simo-matavulj">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Симо Матавуль</h3>
+                  <p class="author-role">Мастер реалистического очерка и приморской новеллы · <span class="tabular">1852–1908</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Преподаватель в Герцег-Нови и Цетине, оставивший яркую галерею черногорских характеров и бытовых зарисовок конца XIX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-from-montenegro-coast">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-03.04</span>
+                    <a class="work-link" href="./works/matavulj-iz-chernogorii-i-primorya.html">Из Черногории и Приморья</a>
+                    <span class="work-meta">1888–1889 · Сборник рассказов</span>
+                  </div>
+                  <p class="work-summary">Яркие новеллы о суровой жизни горцев, цетиньском быте и встрече патриархальных обычаев с новым временем.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="me-interwar-resistance">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1920–1960-е годы</p>
+          <h2 class="section-title">Социальный реализм, лирика бунта и эпос XX века</h2>
+          <p class="section-desc">Переход к современному роману, «социальная литература» Радована Зоговича и трагический эпос черногорских гор у Михайло Лалича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-risto-ratkovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ристо Раткович</h3>
+                  <p class="author-role">Пионер современного черногорского романа и поэт-сюрреалист · <span class="tabular">1903–1954</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Биело-Поле, автор первого модернистского романа в черногорской литературе и утончённой элегической лирики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nevidbog">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-04.01</span>
+                    <a class="work-link" href="./works/ratkovic-nevidbog.html">Невидимка («Невидбог»)</a>
+                    <span class="work-meta">1933 · Модернистский роман</span>
+                  </div>
+                  <p class="work-summary">История гибели патриархальной семьи Джуричей на берегах Лима и мучительных поисков нового смысла жизни в расколотом мире XX столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-radovan-zogovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Радован Зогович</h3>
+                  <p class="author-role">Крупнейший поэт черногорского сопротивления и гражданской лирики · <span class="tabular">1907–1986</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий мастер рифмованного и экспрессивного стиха, автор циклов о черногорском камне, борьбе и человеческом достоинстве.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-stubborn-stanzas">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-04.02</span>
+                    <a class="work-link" href="./works/zogovic-upryamye-strofy.html">Упрямые строфы</a>
+                    <span class="work-meta">1947 · Поэтический сборник</span>
+                  </div>
+                  <p class="work-summary">Суровая поэзия военных лет и послевоенного размышления — о горах, партизанских кострах и непреклонности перед неправдой.</p>
+                </li>
+                <li class="work-item" id="work-articulated-word">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-04.03</span>
+                    <a class="work-link" href="./works/zogovic-artikulirovannoe-slovo.html">Артикулированное слово</a>
+                    <span class="work-meta">1965 · Поэтический цикл</span>
+                  </div>
+                  <p class="work-summary">Зрелая лирика поэта после долгих лет опалы: размышление о языке, одиночестве и величии немого горного пейзажа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mihailo-lalic-me">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михайло Лалич</h3>
+                  <p class="author-role">Классик черногорского психологического эпоса XX века · <span class="tabular">1914–1992</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист из Васоевичей, создавший монументальную «военную фреску» черногорского севера о расколе, страхе и нравственном выживании.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-me-lelejska-gora">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-04.04</span>
+                    <a class="work-link" href="./works/me-lalic-lelejskaya-gora.html">Лелейская гора</a>
+                    <span class="work-meta">1957 · Роман</span>
+                  </div>
+                  <p class="work-summary">Одинокое скитание бойца Ладо Таёвича по туманным лесам и скалам Черногории, где встреча с собственным страхом оказывается страшнее вражеских облав.</p>
+                </li>
+                <li class="work-item" id="work-me-military-luck">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-04.05</span>
+                    <a class="work-link" href="./works/lalic-voennoe-schaste.html">Военное счастье</a>
+                    <span class="work-meta">1973 · Роман-исповедь</span>
+                  </div>
+                  <p class="work-summary">Иронически-горькая хроника черногорских офицеров и крестьян в водовороте балканских и мировых войн первой половины XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dusan-kostic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Душан Костич</h3>
+                  <p class="author-role">Лирик Лимской долины и черногорской природы · <span class="tabular">1917–1997</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и эссеист, воспевший тихую мелодию северных черногорских рек, садов и памяти детства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-deaf-cave">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-04.06</span>
+                    <a class="work-link" href="./works/kostic-gluhaya-peschera.html">Глухая пещера и лирика Лима</a>
+                    <span class="work-meta">1956 · Поэзия</span>
+                  </div>
+                  <p class="work-summary">Медитативные стихи о возвращении к истокам детства, шуме весеннего половодья и следах истории в горах.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="me-modernism-grotesque">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1955–1990-е годы</p>
+          <h2 class="section-title">Гротеск, поэтика Санджака и европейский модернизм</h2>
+          <p class="section-desc">Выход черногорской прозы на мировую арену: карнавальный гротеск Миодрага Булатовича, притчи Бранимира Шчепановича, хроники Чамиля Сиярича и богемная лирика Вито Николича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-miodrag-bulatovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Миодраг Булатович</h3>
+                  <p class="author-role">Мастер мирового гротеска и карнавальной антивоенной прозы · <span class="tabular">1930–1991</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик из Биело-Поле, переведённый на десятки языков; создал эксцентричный, фантасмагорический мир юродливых изгоев и антигероев.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-red-cock-flies-to-heaven">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-05.01</span>
+                    <a class="work-link" href="./works/bulatovic-krasnyj-petuh.html">Красный петух летит к небу</a>
+                    <span class="work-meta">1959 · Роман-гротеск</span>
+                  </div>
+                  <p class="work-summary">Один знойный день деревенской свадьбы в Бихоре, где безумный Мухарем отчаянно защищает своего красного петуха от жестокости толпы и равнодушного неба.</p>
+                </li>
+                <li class="work-item" id="work-hero-on-a-donkey">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-05.02</span>
+                    <a class="work-link" href="./works/bulatovic-geroj-na-osle.html">Герой на осле</a>
+                    <span class="work-meta">1967 · Сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Острая гротескная сатира на войну и героическую мифологию: черногорский трактирщик Грубан Малич объявляет собственную войну итальянским оккупантам.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-camil-sijaric">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чамиль Сиярич</h3>
+                  <p class="author-role">Мастер поэтической прозы и летописец Санджака и Бихора · <span class="tabular">1913–1989</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Выдающийся новеллист и романист, соединивший восточную орнаментальность, балканский фольклор и трагическую человеческую нежность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bihorci">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-05.03</span>
+                    <a class="work-link" href="./works/sijaric-bihorcy.html">Бихорцы</a>
+                    <span class="work-meta">1956 · Роман</span>
+                  </div>
+                  <p class="work-summary">Поэтическая хроника жизни забытого горного края Бихор на границе Черногории и Санджака между двумя мировыми войнами.</p>
+                </li>
+                <li class="work-item" id="work-konak-sijaric">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-05.04</span>
+                    <a class="work-link" href="./works/sijaric-konak.html">Конак</a>
+                    <span class="work-meta">1971 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Трагикомическая история богатого бея Лиман-аги и его «постоялого двора» в смутное время смены империй и обычаев.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-branimir-scepanovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бранимир Шчепанович</h3>
+                  <p class="author-role">Автор культовых экзистенциальных повестей-притч · <span class="tabular">1937–2020</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер предельно сжатой, напряжённой прозы о преследовании одиночки коллективной толпой и поиске подлинности перед смертью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mouth-full-of-earth">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-05.05</span>
+                    <a class="work-link" href="./works/scepanovic-rot-polnyj-zemli.html">Рот, полный земли</a>
+                    <span class="work-meta">1974 · Повесть-притча</span>
+                  </div>
+                  <p class="work-summary">Всемирно известная повесть о смертельно больном человеке, который уходит умирать в черногорские леса, но становится объектом безумной охоты случайных туристов и охотников.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vitomir-nikolic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Витомир (Вито) Николич</h3>
+                  <p class="author-role">Культовый лирик Никшича, поэт дорог и осенней печали · <span class="tabular">1934–1994</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Народный любимец черногорской поэзии XX века, чьи искренние, напевные стихи о бедности, журавлях и одиночестве знают наизусть.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-drums-vito-nikolic">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-05.06</span>
+                    <a class="work-link" href="./works/nikolic-barabany.html">Барабаны и Ночи со мной не ждите</a>
+                    <span class="work-meta">1962–1965 · Лирические сборники</span>
+                  </div>
+                  <p class="work-summary">Пронзительная исповедальная лирика поэта-скитальца: осенние дожди над Никшичем, братство бедняков и светлая тоска по несбывшемуся.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mirko-kovac">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мирко Ковач</h3>
+                  <p class="author-role">Классик южнославянской прозы памяти и трагической иронии · <span class="tabular">1938–2013</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер многослойной прозы, выросший на герцеговинско-черногорском пограничье и описавший распад патриархальных мифов и семейных судеб.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-door-to-the-womb">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-05.07</span>
+                    <a class="work-link" href="./works/kovac-dver-v-utrobu.html">Дверь в утробу</a>
+                    <span class="work-meta">1978 · Роман</span>
+                  </div>
+                  <p class="work-summary">Завораживающая семейная хроника на границе Черногории и Герцеговины, написанная от лица рассказчика в доме умалишённых и суровых карстовых деревень.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="me-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1990–2020-е годы</p>
+          <h2 class="section-title">Новая черногорская проза и XXI век</h2>
+          <p class="section-desc">Осмысление новейшей истории, городской Подгорицы и адриатического пограничья в произведениях современных черногорских романистов и поэтов.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-milorad-popovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Милорад Попович</h3>
+                  <p class="author-role">Поэт, эссеист и автор исторических романов · <span class="tabular">род. 1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат премии Негоша, воссоздавший в масштабной прозе драматические узлы черногорской истории XX столетия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-karnera">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-06.01</span>
+                    <a class="work-link" href="./works/popovic-karnera.html">Карнера</a>
+                    <span class="work-meta">2012 · Роман</span>
+                  </div>
+                  <p class="work-summary">Многоплановая сага о черногорской эмиграции, политических бурях Балкан и судьбах нескольких поколений в XX веке.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-zuvdija-hodzic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Зувдия Ходжич</h3>
+                  <p class="author-role">Мастер многокультурного романа Гусинья и Проклетия · <span class="tabular">род. 1943</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, художник и хранитель легенд севера Черногории, удостоенный престижной премии имени Меши Селимовича.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-davids-star-hodzic">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-06.02</span>
+                    <a class="work-link" href="./works/hodzic-zvezda-davida.html">Звезда Давида</a>
+                    <span class="work-meta">1993 · Роман</span>
+                  </div>
+                  <p class="work-summary">Тёплая и трагическая история переплетения судеб православных, мусульман и еврейского беженца Давида Шалтиэля в маленьком черногорском городке.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-balsa-brkovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Балша Бркович</h3>
+                  <p class="author-role">Летописец новой городской прозы Подгорицы · <span class="tabular">род. 1966</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист, новеллист и литературный критик, открывший для черногорской прозы XXI века урбанистический язык и тонкую иронию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-private-hall">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-06.03</span>
+                    <a class="work-link" href="./works/brkovic-chastnyj-zal.html">Частный зал</a>
+                    <span class="work-meta">2001 · Городской роман</span>
+                  </div>
+                  <p class="work-summary">Изящный роман о молодых жителях Подгорицы рубежа тысячелетий, играх памяти, кино, книгах и поиске собственного голоса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-andrej-nikolaidis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Андрей Николаидис</h3>
+                  <p class="author-role">Один из самых известных современных прозаиков Черногории · <span class="tabular">род. 1974</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат Литературной премии Европейского союза; автор лаконичных, философски острых романов об Адриатике, Улцине и распаде иллюзий.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-son-nikolaidis">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-06.04</span>
+                    <a class="work-link" href="./works/nikolaidis-syn.html">Сын</a>
+                    <span class="work-meta">2006 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Мрачная, афористичная повесть о сыне, навещающем умирающего отца в приморском Улцине и разбирающемся с наследием балканских войн и семейной вины.</p>
+                </li>
+                <li class="work-item" id="work-mimesis-nikolaidis">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-06.05</span>
+                    <a class="work-link" href="./works/nikolaidis-mimezis.html">Мимесис</a>
+                    <span class="work-meta">2003 · Роман-эссе</span>
+                  </div>
+                  <p class="work-summary">Язвительный и блестящий портрет балканской действительности рубежа 1990–2000-х годов в жанре интеллектуального травелога.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ognjen-spahic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Огнен Спахич</h3>
+                  <p class="author-role">Мастер современной психологической прозы и новеллы · <span class="tabular">род. 1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат премии имени Меши Селимовича и Литературной премии ЕС, автор тонких романов о человеческой уязвимости.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hansens-children">
+                  <div class="work-row">
+                    <span class="work-code">ЧГ-06.06</span>
+                    <a class="work-link" href="./works/spahic-deti-hansena.html">Дети Хансена</a>
+                    <span class="work-meta">2004 · Роман</span>
+                  </div>
+                  <p class="work-summary">Тревожный и глубоко гуманный роман о последних пациентах румынского лепрозория Тикилешти в декабре 1989 года — притча об изоляции и падении стен.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание черногорской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

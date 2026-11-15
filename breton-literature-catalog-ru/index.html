@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог бретонской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 29 писателей · 29 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог бретонской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от средневековых лэ и свода «Барзаз Брейз» до Шатобриана, Тристана Корбьера, Сегалена, движения «Гваларн», Анжелы Дюваль, Луи Гийу и Пьера-Жакеза Элиаса.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#br-medieval-barzhaz">Раздел I: Средневековые лэ, мистерии и эпос «Барзаз Брейз»</a>
+        <a href="#br-romanticism-nineteenth">Раздел II: Романтизм, поэзия океана и бретонская лирика XIX века</a>
+        <a href="#br-modern-bards-segalen">Раздел III: Символизм, авангард и поэзия дальних странствий</a>
+        <a href="#br-gwalarn-renaissance">Раздел IV: Движение «Гваларн» и расцвет бретоноязычной литературы</a>
+        <a href="#br-french-prose-midcentury">Раздел V: Бретонский роман XX века и память народа</a>
+        <a href="#br-contemporary">Раздел VI: Современная Бретань: два языка, океан и новые голоса</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="br-medieval-barzhaz">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XII–XIX века (устная традиция)</p>
+          <h2 class="section-title">Средневековые лэ, мистерии и эпос «Барзаз Брейз»</h2>
+          <p class="section-desc">Артуровские лэ древней Арморики, среднебретонские мистерии, а также великие собрания народных баллад-гверзов и преданий Ла Вильмарке и Люзеля.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-breton-lays">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бретонские лэ (Мария Французская и артуровский цикл)</h3>
+                  <p class="author-role">Древнейшие поэтические предания Кельтской Арморики · <span class="tabular">XII век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Стихотворные повести о рыцарях, феях, оборотнях и верной любви, пересказанные со слов бретонских менестрелей и ставшие колыбелью европейского куртуазного романа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lais-de-bretagne">
+                  <div class="work-row">
+                    <span class="work-code">БР-01.01</span>
+                    <a class="work-link" href="./works/bretonskie-le-zhimolost.html">Бретонские лэ («Жимолость», «Йонек» и «Бислкавре»)</a>
+                    <span class="work-meta">ок. 1170 · Рыцарские и волшебные лэ</span>
+                  </div>
+                  <p class="work-summary">Жемчужины кельтской фантазии — о тайном свидании Тристана и Изольды в лесу, об оборотне из Бретани и любви, побеждающей время и чары.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-middle-breton-mysteries">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Среднебретонские мистерии («Бухез Санта Нонн»)</h3>
+                  <p class="author-role">Памятники средневековой бретонской драматургии · <span class="tabular">XV–XVI века</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Народные стихотворные драмы с внутренней рифмой, разыгрывавшиеся на площадях и приходских дворах Корнуая, Леона и Трегора.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-buhez-santez-nonn">
+                  <div class="work-row">
+                    <span class="work-code">БР-01.02</span>
+                    <a class="work-link" href="./works/misteriya-svyatoj-nonny.html">Житие святой Нонны и «Мистерия Страстей»</a>
+                    <span class="work-meta">ок. 1450–1530 · Средневековая духовная драма</span>
+                  </div>
+                  <p class="work-summary">Древнейшие сохранившиеся пьесы на бретонском языке, соединившие общекельтские предания о матери святого Давида с живой народной сценой и сложным размером стиха.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-villemarque-barzhaz-breizh">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Теодор Эрсар де Ла Вильмарке</h3>
+                  <p class="author-role">Собиратель и творец «Барзаз Брейз» — главной книги бретонского возрождения · <span class="tabular">1815–1895</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Филолог и романтик из Кемперле, открывший Европе удивительную красоту бретонских народных баллад-гверзов и обрядовых песен-сон.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-barzhaz-breizh">
+                  <div class="work-row">
+                    <span class="work-code">БР-01.03</span>
+                    <a class="work-link" href="./works/la-vilmarke-barzaz-brejz.html">Барзаз Брейз («Песни Бретани»)</a>
+                    <span class="work-meta">1839 / 1845 · Эпико-фольклорный свод баллад</span>
+                  </div>
+                  <p class="work-summary">Легендарный сборник баллад о пророке Мерлине, короле Градлоне и затонувшем городе Ис, шуанах, морских битвах и крестьянских драмах Нижней Бретани.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-francois-marie-luzel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франсуа-Мари Люзель</h3>
+                  <p class="author-role">Подвижник точной фольклористики Нижней Бретани · <span class="tabular">1821–1895</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и учёный из Трегора, записавший с голоса крестьян и нищих певцов тысячи подлинных баллад и волшебных сказок без романтической правки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gwerziou-breiz-izel">
+                  <div class="work-row">
+                    <span class="work-code">БР-01.04</span>
+                    <a class="work-link" href="./works/lyuzel-gverzy-bretani.html">Гверзы и народные сказки Нижней Бретани</a>
+                    <span class="work-meta">1868–1887 · Народная поэзия и сказки</span>
+                  </div>
+                  <p class="work-summary">Трагические баллады о любви, кораблекрушениях и народных героях, сохранившие живое многоголосие деревенских вечеров XIX столетия.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="br-romanticism-nineteenth">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1800–1914</p>
+          <h2 class="section-title">Романтизм, поэзия океана и бретонская лирика XIX века</h2>
+          <p class="section-desc">От величия Шатобриана в замке Комбур и кельтской романтики Бризё до дерзкого бунта Тристана Корбьера, «Легенды о Смерти» Ле Браза и окопной лирики Каллока.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-chateaubriand">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франсуа-Рене де Шатобриан</h3>
+                  <p class="author-role">Родоначальник европейского романтизма, уроженец Сен-Мало · <span class="tabular">1768–1848</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бретонский дворянин, чья мрачная, бурная юность в замке Комбур среди болот и океанских ветров определила музыку всей французской и бретонской прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-memoires-doutre-tombe-combourg">
+                  <div class="work-row">
+                    <span class="work-code">БР-02.01</span>
+                    <a class="work-link" href="./works/shatobrian-zamogilnye-zapiski.html">Замогильные записки (Книги о Сен-Мало и Комбуре)</a>
+                    <span class="work-meta">1848–1850 · Романтическая автобиографическая проза</span>
+                  </div>
+                  <p class="work-summary">Бессмертные страницы о детстве под рёв волн Сен-Мало и осенних бурях в глухих башнях отцовского замка Комбур вместе с сестрой Люсиль.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-auguste-brizeux">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Огюст Бризё</h3>
+                  <p class="author-role">Первый певец сельской Бретани и лирик-двуязычник · <span class="tabular">1803–1858</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Лорьяна и друг Виньи, воспевший тихие долины Элле, можжевельник и чистоту первой любви в идиллиях и бретонских песнях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-marie-et-les-bretons">
+                  <div class="work-row">
+                    <span class="work-code">БР-02.02</span>
+                    <a class="work-link" href="./works/brizyo-mari-i-bretoncy.html">Мари и поэма «Бретонцы»</a>
+                    <span class="work-meta">1831–1845 · Лирическая и эпическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Трогательная поэма о юной любви среди зелёных лугов Арзано и величественный портрет нравов, труда и праздников бретонского народа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-emile-souvestre">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмиль Сувестр</h3>
+                  <p class="author-role">Писатель и этнограф, открывший Францию душу Бретани · <span class="tabular">1806–1854</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Морле, объединивший в повестях и очерках суровую поэзию рыбаков, древние поверья и гуманизм.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-les-derniers-bretons">
+                  <div class="work-row">
+                    <span class="work-code">БР-02.03</span>
+                    <a class="work-link" href="./works/suvestr-poslednie-bretoncy.html">Последние бретонцы и «Домашний очаг бретонцев»</a>
+                    <span class="work-meta">1836–1844 · Очерки нравов и народные повести</span>
+                  </div>
+                  <p class="work-summary">Живая картина уходящей старинной Бретани — её приходов, ярмарок, моряков и рассказчиков у вечернего огня.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tristan-corbiere">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тристан Корбьер</h3>
+                  <p class="author-role">Поэт-бунтарь из Морле, классик мировой лирики модерна · <span class="tabular">1845–1875</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из главных «проклятых поэтов» Верлена, создатель яростных, солёных и ироничных стихов о бретонских матросах, бурях Роскова и нищих паломниках.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-les-amours-jaunes">
+                  <div class="work-row">
+                    <span class="work-code">БР-02.04</span>
+                    <a class="work-link" href="./works/korber-zheltaya-lyubov.html">Жёлтая любовь («Арморика» и «Моряки»)</a>
+                    <span class="work-meta">1873 · Авангардная и маринистическая лирика</span>
+                  </div>
+                  <p class="work-summary">Резкая, саркастичная и полная скрытой нежности поэзия о суровой правде моря, капелле Святой Анны де ла Палю и упрямом духе Бретани.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-anatole-le-braz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анатоль Ле Браз</h3>
+                  <p class="author-role">«Волшебник кельтского слова», поэт и фольклорист · <span class="tabular">1859–1926</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный и прозаик из Трегора, собравший в бессмертной книге мистические поверья бретонцев о душе, океане и потустороннем мире.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-legende-de-la-mort">
+                  <div class="work-row">
+                    <span class="work-code">БР-02.05</span>
+                    <a class="work-link" href="./works/le-braz-legenda-o-smerti.html">Легенда о Смерти у бретонцев</a>
+                    <span class="work-meta">1893 · Этнографическая проза и предания</span>
+                  </div>
+                  <p class="work-summary">Завораживающее собрание народных рассказов об Анку — молчаливом вознице смерти на поскрипывающей повозке — и тенях утонувших моряков у берегов Уэссана.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jean-pierre-calloch">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жан-Пьер Каллок (Блеймор)</h3>
+                  <p class="author-role">Крупнейший бретоноязычный поэт начала XX века · <span class="tabular">1888–1917</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын рыбака с острова Груа, павший на фронте в 28 лет и оставивший глубочайшую духовную и антивоенную лирику на ванетском диалекте.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ar-en-deulin">
+                  <div class="work-row">
+                    <span class="work-code">БР-02.06</span>
+                    <a class="work-link" href="./works/kallok-na-kolenyah.html">На коленях («Ar en Deulin»)</a>
+                    <span class="work-meta">изд. 1921 · Религиозная и военная лирика</span>
+                  </div>
+                  <p class="work-summary">Молитвы и окопные стихи поэта-рыбака, обращённые к небу, родному острову Груа и истерзанной войной земле.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="br-modern-bards-segalen">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1890–1940</p>
+          <h2 class="section-title">Символизм, авангард и поэзия дальних странствий</h2>
+          <p class="section-desc">Творчество великих визионеров рубежа веков: уединённого поэта мыса Камаре Сен-Поль-Ру, путешественника Виктора Сегалена, квемперского мистика Макса Жакоба и Шарля Ле Гоффика.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-saint-pol-roux">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сен-Поль-Ру («Великолепный»)</h3>
+                  <p class="author-role">Предтеча сюрреализма и отшельник мыса Камаре · <span class="tabular">1861–1940</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-символист, поселившийся в стеклянном особняке-мануаре на краю полуострова Крозон, чтобы слушать «идиоритм» океана и воспевать радость бытия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-les-reposoirs-de-la-procession">
+                  <div class="work-row">
+                    <span class="work-code">БР-03.01</span>
+                    <a class="work-link" href="./works/sen-pol-ru-altari-shestviya.html">Алтари шествия и «Океанская поэма»</a>
+                    <span class="work-meta">1893–1907 · Символистская лирика в прозе</span>
+                  </div>
+                  <p class="work-summary">Роскошные образы бретонских скал, рыбацких сетей и солнечного света, вдохновившие Андре Бретона и весь французский авангард.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-victor-segalen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виктор Сегален</h3>
+                  <p class="author-role">Гениальный поэт и эссеист из Бреста · <span class="tabular">1878–1919</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Морской врач, археолог и писатель, родившийся в Бресте и превративший бретонскую жажду далей в поэтику «экзотизма» — благоговейного диалога с Иным.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-steles-les-immemoriaux">
+                  <div class="work-row">
+                    <span class="work-code">БР-03.02</span>
+                    <a class="work-link" href="./works/segalen-stely.html">Стелы («Stèles») и «Незапамятные»</a>
+                    <span class="work-meta">1907–1912 · Стихотворения в прозе и философский роман</span>
+                  </div>
+                  <p class="work-summary">Шедевр XX века — стихи в прозе, высеченные словно надписи на каменных плитах, о встрече с непознанным, уходящих культурах Океании и глубинах собственной памяти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-max-jacob">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Макс Жакоб</h3>
+                  <p class="author-role">Мастер поэзии в прозе и гротескной лирики, уроженец Кемпера · <span class="tabular">1876–1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Друг Пикассо и Аполлинера из Корнуая, соединивший озорной каламбур, трагизм и глубочайшее религиозное чувство, всегда возвращавшийся мыслью в родную Бретань.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-le-cornet-a-des">
+                  <div class="work-row">
+                    <span class="work-code">БР-03.03</span>
+                    <a class="work-link" href="./works/zhakob-kost-v-stakanchike.html">Кость в стаканчике («Le Cornet à dés») и «Улицы Кемпера»</a>
+                    <span class="work-meta">1917–1921 · Стихотворения в прозе</span>
+                  </div>
+                  <p class="work-summary">Фейерверк сновидческих миниатюр и пронзительных зарисовок старинных улочек Кемпера, кабачков и прибрежных церквей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-charles-le-goffic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шарль Ле Гоффик</h3>
+                  <p class="author-role">Академик, поэт и летописец бретонской истории и моря · <span class="tabular">1863–1932</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Ланьона и член Французской академии, посвятивший многотомное творчество культуре, морякам и пейзажам Трегора.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lame-bretonne">
+                  <div class="work-row">
+                    <span class="work-code">БР-03.04</span>
+                    <a class="work-link" href="./works/le-goffik-bretonskaya-dusha.html">Бретонская душа («L’Âme bretonne»)</a>
+                    <span class="work-meta">1902–1924 · Эссеистика и культурная проза</span>
+                  </div>
+                  <p class="work-summary">Панорама духа Бретани — от забытых островов и маяков до поэтов, бардов и повседневного мужества береговых жителей.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="br-gwalarn-renaissance">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1925–1965</p>
+          <h2 class="section-title">Движение «Гваларн» и расцвет бретоноязычной литературы</h2>
+          <p class="section-desc">Интеллектуальный прорыв литературы на современном бретонском языке вокруг журнала «Гваларн»: проза Ропарза Эмона и Жакеза Риу, роман Дрезена, поэзия Гланндура и Анжелы Дюваль.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-roparz-hemon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ропарз Эмон</h3>
+                  <p class="author-role">Главный реформатор бретонского языка и литературы XX века · <span class="tabular">1900–1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Основатель журнала «Gwalarn» («Северо-западный ветер»), поднявший бретоноязычную прозу, перевод и эссеистику на общеевропейский модернистский уровень.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mari-vorgan-an-ti-a-drizek">
+                  <div class="work-row">
+                    <span class="work-code">БР-04.01</span>
+                    <a class="work-link" href="./works/emon-mari-vorgan.html">Мари Ворган («Mari Vorgan») и «Трое из дома над рекой»</a>
+                    <span class="work-meta">1941–1962 · Психологический и приключенческий роман</span>
+                  </div>
+                  <p class="work-summary">Тонкая психологическая драма о верности и одиночестве у моря, а также образцовая проза на возрождённом едином литературном бретонском языке.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jakez-riou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жакез Риу</h3>
+                  <p class="author-role">Мастер бретонской новеллы чеховской глубины · <span class="tabular">1899–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и писатель из Лота, за свою короткую жизнь создавший классические рассказы о сельском Корнуае, полные сострадания и зоркой иронии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-geotenn-ar-werchez">
+                  <div class="work-row">
+                    <span class="work-code">БР-04.02</span>
+                    <a class="work-link" href="./works/riu-trava-devy-marii.html">Трава Девы Марии («Geotenn ar Werc’hez»)</a>
+                    <span class="work-meta">1934 · Сборник новелл</span>
+                  </div>
+                  <p class="work-summary">Трогательные и горькие истории из жизни бретонской деревни — о маленькой девочке, ищущей целебную траву для больной матери, бедных крестьянах и людском равнодушии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-youenn-drezen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йуэнн Дрезен</h3>
+                  <p class="author-role">Автор лучшего бретоноязычного романа XX столетия · <span class="tabular">1899–1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Пон-л’Аббе в земле Бигуден, создавший сочный, трагикомический и глубоко народный роман о родном крае.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-itron-varia-garmez">
+                  <div class="work-row">
+                    <span class="work-code">БР-04.03</span>
+                    <a class="work-link" href="./works/drezen-bogomater-karmelitanka.html">Богоматерь Кармелитанка («Itron Varia Garmez»)</a>
+                    <span class="work-meta">1941 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Суровая история маленького бретонского городка, художника Янна Мао и трагедии женской доли на фоне праздников, бедности и нетерпимости.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maodez-glanndour">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Маодез Гланндур (Лоеиз Ар Флок)</h3>
+                  <p class="author-role">Поэт-мистик и философ бретонской поэзии XX века · <span class="tabular">1916–1986</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Священник, поэт и основатель журнала «Al Liamm», привнёсший в бретонскую лирику космическую глубину, простоту и духовный свет.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-komzou-bez">
+                  <div class="work-row">
+                    <span class="work-code">БР-04.04</span>
+                    <a class="work-link" href="./works/glanndur-slova-tishiny.html">Слова тишины («Komzoù bez»)</a>
+                    <span class="work-meta">1949 · Философско-духовная лирика</span>
+                  </div>
+                  <p class="work-summary">Цикл утончённых стихов о созерцании природы, гранитных берегов, ветра и незримого присутствия вечности в повседневном мире.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-anjela-duval">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анжела Дюваль</h3>
+                  <p class="author-role">Крестьянка-поэтесса, символ живого духа Бретани · <span class="tabular">1905–1981</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Работавшая на маленькой ферме в Вьё-Марше поэтесса, чьи пронзительные, чистые стихи о природе, языке и судьбе народа стали национальной классикой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kan-an-douar">
+                  <div class="work-row">
+                    <span class="work-code">БР-04.05</span>
+                    <a class="work-link" href="./works/dyuval-pesn-zemli.html">Песнь земли («Kan an Douar»)</a>
+                    <span class="work-meta">1973 · Лирическая и гражданская поэзия</span>
+                  </div>
+                  <p class="work-summary">Вдохновенный гимн земле предков, птицам, дождю над рекой Легер и стойкости родного языка («У меня есть только песня, да и та проста…»).</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="br-french-prose-midcentury">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1930–1985</p>
+          <h2 class="section-title">Бретонский роман XX века и память народа</h2>
+          <p class="section-desc">Мощная плеяда бретонских прозаиков: роман Луи Гийу о Сен-Бриё, морская драма Анри Кеффелека, мемуарный шедевр Пьера-Жакеза Элиаса, литургии Ксавье Граля и Арман Робен.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-louis-guilloux">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луи Гийу</h3>
+                  <p class="author-role">Крупнейший бретонский романист XX века, друг Камю и Мальро · <span class="tabular">1899–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын сапожника из Сен-Бриё, создавший один из самых мощных антивоенных и социальных романов европейской литературы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-le-sang-noir">
+                  <div class="work-row">
+                    <span class="work-code">БР-05.01</span>
+                    <a class="work-link" href="./works/giju-chernaya-krov.html">Чёрная кровь («Le Sang noir»)</a>
+                    <span class="work-meta">1935 · Социально-философский роман</span>
+                  </div>
+                  <p class="work-summary">Один день 1917 года в бретонском городке Сен-Бриё: бунт, одиночество и трагикомический крах старого учителя философии Крипюра посреди военного лицемерия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-henri-queffelec">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анри Кеффелек</h3>
+                  <p class="author-role">Классик бретонской морской прозы, уроженец Бреста · <span class="tabular">1910–1992</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Певец суровых рыбаков, смотрителей маяков и прибрежных островов Ируазского моря.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-un-recteur-de-lile-de-sein">
+                  <div class="work-row">
+                    <span class="work-code">БР-05.02</span>
+                    <a class="work-link" href="./works/keffelek-svyashhennik-ostrova-sen.html">Священник острова Сен</a>
+                    <span class="work-meta">1944 · Морской психологический роман</span>
+                  </div>
+                  <p class="work-summary">История пономаря Томаса Гурвенека на суровом бесплодном острове Сен, где жители, оставшиеся без пастыря, избирают его своим духовным заступником перед бурей и нуждой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-per-jakez-helias">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пьер-Жакез Элиас</h3>
+                  <p class="author-role">Автор главной книги о традиционной Бретани, поэт и драматург · <span class="tabular">1914–1995</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Двуязычный писатель из Плузеве, написавший вначале по-бретонски, а затем по-французски мировой бестселлер о детстве в бедной семье землекопа Бигудена.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-le-cheval-dorgueil">
+                  <div class="work-row">
+                    <span class="work-code">БР-05.03</span>
+                    <a class="work-link" href="./works/elias-gordaya-loshad.html">Гордая лошадь («Le Cheval d’orgueil»)</a>
+                    <span class="work-meta">1975 · Мемуарно-этнографическая эпопея</span>
+                  </div>
+                  <p class="work-summary">У нас не было коня, кроме гордой лошади достоинства — тёплое, точное и светлое свидетельство о языке, ремёслах, сказках и чести старой крестьянской Бретани.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-xavier-grall">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ксавье Граль</h3>
+                  <p class="author-role">Пламенный поэт, эссеист и певец бунтарской Бретани · <span class="tabular">1930–1981</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Ландивизьо, ответивший Элиасу поэтическим манифестом «Неизвестный конь» и создавший пронзительные мистические поэмы и хроники.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-le-cheval-couche">
+                  <div class="work-row">
+                    <span class="work-code">БР-05.04</span>
+                    <a class="work-link" href="./works/gral-spyashhij-kon.html">Спящий конь («Le Cheval couché») и «Литургии Бретани»</a>
+                    <span class="work-meta">1977 · Поэтическая эссеистика и лирика</span>
+                  </div>
+                  <p class="work-summary">Страстный гимн живой, немузейной Бретани, её вечным бурям, поэтам, джазу и неутолимой жажде духовной свободы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-armand-robin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арман Робен</h3>
+                  <p class="author-role">Удивительный поэт-полиглот и бунтарь из Кот-д’Армора · <span class="tabular">1912–1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Крестьянский сын из Плугерневеля, знавший десятки языков (включая русский — переводил Есенина, Блока и Пастернака), мастер метафизической прозы и поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-le-temps-quil-fait">
+                  <div class="work-row">
+                    <span class="work-code">БР-05.05</span>
+                    <a class="work-link" href="./works/roben-kakaya-stoit-pogoda.html">Какая стоит погода («Le Temps qu’il fait») и «Моя жизнь в безмолвии»</a>
+                    <span class="work-meta">1942–1958 · Философский роман и поэзия</span>
+                  </div>
+                  <p class="work-summary">Лирическое воспоминание о бретонских дорогах детства и одиноком голосе радиоволн, сквозь который пробивается правда поэтического слова.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="br-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1975–2020-е годы</p>
+          <h2 class="section-title">Современная Бретань: два языка, океан и новые голоса</h2>
+          <p class="section-desc">Трансатлантический бриз песен Йуэнна Гвернига, бретонская проза Фанша Перу, драматизм Янна Кеффелека, лирика Ивона Ле Мена и острая современная проза Танги Вьеля.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-youenn-gwernig">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йуэнн Гверниг</h3>
+                  <p class="author-role">Трёхъязычный поэт и бард («Керуак из Бретани») · <span class="tabular">1925–2006</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Скаэра, уехавший на двенадцать лет в Нью-Йорк и друживший с Джеком Керуаком, прежде чем вернуть в Бретань живой дух дороги и народного возрождения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-an-drouiz-un-deiz">
+                  <div class="work-row">
+                    <span class="work-code">БР-06.01</span>
+                    <a class="work-link" href="./works/gvernig-pesni-dvuh-beregov.html">Песни двух берегов («An Drouiz»)</a>
+                    <span class="work-meta">1972–1982 · Билингвальная поэзия и песни</span>
+                  </div>
+                  <p class="work-summary">Стихи на бретонском, французском и английском о миграции, бродвейском шуме, ностальгии по родной реке Элле и братстве кельтских дорог.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fanch-peru">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фанш Перу</h3>
+                  <p class="author-role">Классик современной бретоноязычной новеллы и романа · <span class="tabular">1940–2023</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учитель, мэр и поэт из Трегора, создавший тёплую, ироничную и глубокую прозу о меняющейся сельской Бретани конца XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-teval-eo-an-deiz">
+                  <div class="work-row">
+                    <span class="work-code">БР-06.02</span>
+                    <a class="work-link" href="./works/peru-temen-nynche-den.html">Тёмен нынче день («Teñval eo an deiz») и «Жёлудь у порога»</a>
+                    <span class="work-meta">1985–1992 · Повести и рассказы</span>
+                  </div>
+                  <p class="work-summary">Жизнь простых людей Трегора — крестьян, ремесленников и мечтателей — на переломе эпох с их тихим юмором и стойкой человечностью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yann-queffelec">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Янн Кеффелек</h3>
+                  <p class="author-role">Лауреат Гонкуровской премии (1985), певец морской стихии · <span class="tabular">род. 1949</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын Анри Кеффелека, автор страстных, бурных романов о раненых душах, сиротстве, море и суровом притяжении берегов Бретани.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-les-noces-barbares">
+                  <div class="work-row">
+                    <span class="work-code">БР-06.03</span>
+                    <a class="work-link" href="./works/keffelek-varvarskaya-svadba.html">Варварская свадьба</a>
+                    <span class="work-meta">1985 · Психологический роман-драма</span>
+                  </div>
+                  <p class="work-summary">Душераздирающая история нелюбимого мальчика Людо, ищущего спасение от жестокости мира в тёмных трюмах выброшенного на мель корабля у берега Атлантики.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yvon-le-men">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ивон Ле Мен</h3>
+                  <p class="author-role">Ведущий бретонский поэт современности, лауреат Гонкуровской премии за поэзию · <span class="tabular">род. 1953</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Трегье и один из основателей фестиваля «Удивительные путешественники» в Сен-Мало, создатель ясной, светлой и человечной лирики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-un-peu-de-neige-dans-les-choses">
+                  <div class="work-row">
+                    <span class="work-code">БР-06.04</span>
+                    <a class="work-link" href="./works/le-men-nemnogo-snega.html">Немного снега в вещах и «Обитать в мире»</a>
+                    <span class="work-meta">1999–2019 · Современная лирика</span>
+                  </div>
+                  <p class="work-summary">Светлые, воздушные стихи о детстве у берегов Ла-Манша, словах матери, дожде и тихом чуде обычного человеческого дня.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tanguy-viel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Танги Вьель</h3>
+                  <p class="author-role">Один из лучших современных романистов Франции, уроженец Бреста · <span class="tabular">род. 1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер лаконичного, напряжённого психологического повествования о приморских городках Финистера и хрупком человеческом достоинстве.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-article-353-du-code-penal">
+                  <div class="work-row">
+                    <span class="work-code">БР-06.05</span>
+                    <a class="work-link" href="./works/vel-statya-353.html">Статья 353 Уголовного кодекса</a>
+                    <span class="work-meta">2017 · Психологический роман-монолог</span>
+                  </div>
+                  <p class="work-summary">Ночная исповедь простого рабочего с бретонского побережья Марсьяля Кермеля перед следователем после исчезновения жуликоватого застройщика в море.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание бретонской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
