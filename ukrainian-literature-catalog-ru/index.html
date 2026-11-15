@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог украинской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 27 писателей · 35 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог украинской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от барокко Сковороды и «Энеиды» Котляревского до «Кобзаря» Шевченко, И. Франко, Леси Украинки, Коцюбинского, «Города» Пидмогильного, Василя Стуса и Сергея Жадана.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#ua-baroque-skovoroda">Раздел I: Барокко, философия Сковороды и рождение новой словесности</a>
+        <a href="#ua-shevchenko-romanticism">Раздел II: Романтизм и эпоха Тараса Шевченко</a>
+        <a href="#ua-realism-theater">Раздел III: Классический реализм, исторический эпос и театр корифеев</a>
+        <a href="#ua-modernism">Раздел IV: Модернизм, импрессионизм и поэтика Леси Украинки</a>
+        <a href="#ua-avantgarde-1920s">Раздел V: «Расстрелянное возрождение», авангард и урбанистический роман</a>
+        <a href="#ua-contemporary">Раздел VI: Шестидесятники, поэзия стоицизма и современная проза</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="ua-baroque-skovoroda">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVII – начало XIX века</p>
+          <h2 class="section-title">Барокко, философия Сковороды и рождение новой словесности</h2>
+          <p class="section-desc">От полемической прозы барокко и мистических диалогов странствующего философа Григория Сковороды до бурлескной поэмы Ивана Котляревского на живом народном языке.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ivan-vyshensky">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Вышенский</h3>
+                  <p class="author-role">Выдающийся полемист и мастер барочной публицистики · <span class="tabular">ок. 1550 – ок. 1620</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Афонский монах из Галичины, превративший церковнославянские послания в огненную социальную сатиру и защиту человеческого достоинства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-epistles-from-athos">
+                  <div class="work-row">
+                    <span class="work-code">УК-01.01</span>
+                    <a class="work-link" href="./works/vyshensky-poslaniya-s-afona.html">Послания из Святой Горы Афонской</a>
+                    <span class="work-meta">1598–1614 · Полемическая проза и сатира</span>
+                  </div>
+                  <p class="work-summary">Страстные письма к соотечественникам, обличающие жадность, гордыню владык и духовное равнодушие ради правды Евангелия и живого слова.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hryhorii-skovoroda">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Григорий Сковорода</h3>
+                  <p class="author-role">Странствующий философ, поэт и баснописец барокко · <span class="tabular">1722–1794</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель, избравший путь добровольной бедности («Мир ловил меня, но не поймал»), автор учения о «сродном труде» и духовном самопознании.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kharkiv-fables">
+                  <div class="work-row">
+                    <span class="work-code">УК-01.02</span>
+                    <a class="work-link" href="./works/skovoroda-basni-harkovskie.html">Басни харьковские и «Сад божественных песен»</a>
+                    <span class="work-meta">1757–1774 · Философские басни и лирика</span>
+                  </div>
+                  <p class="work-summary">Тридцать басен с глубокими философскими «силами»-толкованиями и лирический цикл песен о внутреннем мире, благодарности и свободе от суеты.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ivan-kotliarevsky">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Котляревский</h3>
+                  <p class="author-role">Зачинатель новой украинской литературы · <span class="tabular">1769–1838</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Полтавский поэт и драматург, первым создавший блестящие художественные произведения целиком на живом украинском народном языке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-eneida-kotliarevsky">
+                  <div class="work-row">
+                    <span class="work-code">УК-01.03</span>
+                    <a class="work-link" href="./works/kotliarevsky-eneida.html">Энеида</a>
+                    <span class="work-meta">1798–1842 · Ироикомическая бурлескная поэма</span>
+                  </div>
+                  <p class="work-summary">Остроумная травестия поэмы Вергилия, где Эней и троянцы превращены в бравых запорожских казаков, открывшая энциклопедию народного быта, кухни, речи и юмора.</p>
+                </li>
+                <li class="work-item" id="work-natalka-poltavka">
+                  <div class="work-row">
+                    <span class="work-code">УК-01.04</span>
+                    <a class="work-link" href="./works/kotliarevsky-natalka-poltavka.html">Наталка Полтавка</a>
+                    <span class="work-meta">1819 · Музыкальная драма-комедия</span>
+                  </div>
+                  <p class="work-summary">Светлая пьеса о верности бедной девушки Наталки своему возлюбленному Петру, вдохнувшая жизнь в национальный украинский театр.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ua-shevchenko-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · Первая половина XIX века</p>
+          <h2 class="section-title">Романтизм и эпоха Тараса Шевченко</h2>
+          <p class="section-desc">Становление художественной прозы Квитки-Основьяненко, исторический роман Кулиша и могучий поэтический гений Тараса Шевченко.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hryhorii-kvitka-osnovianenko">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Григорий Квитка-Основьяненко</h3>
+                  <p class="author-role">Основоположник украинской художественной прозы · <span class="tabular">1778–1843</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Харьковский прозаик и драматург, доказавший выразительность народной речи как в сентиментальной повести, так и в едкой гоголевской сатире.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-witch-of-konotop">
+                  <div class="work-row">
+                    <span class="work-code">УК-02.01</span>
+                    <a class="work-link" href="./works/kvitka-konotopskaya-vedma.html">Конотопская ведьма</a>
+                    <span class="work-meta">1833 · Сатирико-фантастическая повесть</span>
+                  </div>
+                  <p class="work-summary">Блестящая гротескная повесть о глупом казацком сотнике Миките Забрёхе и хитром писаре Пистряке, устроивших «суд над ведьмами» вместо службы.</p>
+                </li>
+                <li class="work-item" id="work-marusia-kvitka">
+                  <div class="work-row">
+                    <span class="work-code">УК-02.02</span>
+                    <a class="work-link" href="./works/kvitka-marusya.html">Маруся</a>
+                    <span class="work-meta">1834 · Сентиментально-реалистическая повесть</span>
+                  </div>
+                  <p class="work-summary">Трогательная история чистой любви Маруси и Василя, открывшая традицию украинской лирической прозы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-taras-shevchenko">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тарас Шевченко</h3>
+                  <p class="author-role">Великий Кобзарь, национальный поэт и пророк украинской литературы · <span class="tabular">1814–1861</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Выкупленный из крепостной неволи художник и поэт, превративший «Кобзарь» в духовный стержень украинского слова, совести и свободы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kobzar-shevchenko">
+                  <div class="work-row">
+                    <span class="work-code">УК-02.03</span>
+                    <a class="work-link" href="./works/shevchenko-kobzar.html">Кобзарь («Завещание», «Катерина», «Гайдамаки»)</a>
+                    <span class="work-meta">1840–1860 · Сборник поэзии и поэм</span>
+                  </div>
+                  <p class="work-summary">Главная книга украинской поэзии: лирические баллады о женской доле, историческая эпопея Гайдаматчины и бессмертное «Завещание» («Як умру, то поховайте…»).</p>
+                </li>
+                <li class="work-item" id="work-dream-caucasus-shevchenko">
+                  <div class="work-row">
+                    <span class="work-code">УК-02.04</span>
+                    <a class="work-link" href="./works/shevchenko-son-i-kavkaz.html">Сон и «Кавказ»</a>
+                    <span class="work-meta">1844–1845 · Политико-философские поэмы</span>
+                  </div>
+                  <p class="work-summary">Огненные сатирические и пророческие поэмы периода «Трёх лет», обличающие имперский произвол и крепостное рабство.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-panteleimon-kulish">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пантелеймон Кулиш</h3>
+                  <p class="author-role">Автор первого украинского исторического романа и реформатор правописания · <span class="tabular">1819–1897</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Энциклопедист, переводчик Шекспира и Библии на украинский язык, исследователь казацкой эпохи Руины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-black-council">
+                  <div class="work-row">
+                    <span class="work-code">УК-02.05</span>
+                    <a class="work-link" href="./works/kulish-chernaya-rada.html">Чёрная рада</a>
+                    <span class="work-meta">1857 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Драматическая панорама 1663 года на Левобережной Украине: трагедия наказного гетмана Якима Сомко, демагогия Брюховецкого и путь молодого казака Петра Шраменко.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-marko-vovchok">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марко Вовчок</h3>
+                  <p class="author-role">Классик антикрепостнической новеллы · <span class="tabular">1833–1907</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мария Вилинская — блестящая писательница, получившая признание Тургенева и Шевченко за глубоко человечные «Народные рассказы».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-folk-tales-vovchok">
+                  <div class="work-row">
+                    <span class="work-code">УК-02.06</span>
+                    <a class="work-link" href="./works/vovchok-narodnye-rasskazy.html">Народные рассказы («Институтка», «Максим Гримач»)</a>
+                    <span class="work-meta">1857 · Цикл повестей и рассказов</span>
+                  </div>
+                  <p class="work-summary">Пронзительные рассказы от лица простых крестьянок о бесправии крепостных, протесте против жестокости господ и светлом чувстве человеческого достоинства.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ua-realism-theater">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · Вторая половина XIX века</p>
+          <h2 class="section-title">Классический реализм, исторический эпос и театр корифеев</h2>
+          <p class="section-desc">Социально-бытовые фрески Нечуя-Левицкого и Панаса Мирного, золотая эпоха украинского театра и титаническое наследие Ивана Франко.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ivan-nechuy-levytsky">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Нечуй-Левицкий</h3>
+                  <p class="author-role">Мастер народно-бытовой прозы и семейного юмора · <span class="tabular">1838–1918</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Киевский и черкасский бытописатель, создавший самую популярную и остроумную семейную хронику в украинской классике.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kaidash-family">
+                  <div class="work-row">
+                    <span class="work-code">УК-03.01</span>
+                    <a class="work-link" href="./works/nechuy-kajdasheva-semya.html">Кайдашева семья</a>
+                    <span class="work-meta">1879 · Сатирико-реалистическая повесть</span>
+                  </div>
+                  <p class="work-summary">Смешная и горькая история бесконечных ссор старого Омелька Кайдаша, его жены Маруси и невесток Мотри и Мелашки из-за кувшина, мотовила и злополучной груши.</p>
+                </li>
+                <li class="work-item" id="work-mykola-dzheria">
+                  <div class="work-row">
+                    <span class="work-code">УК-03.02</span>
+                    <a class="work-link" href="./works/nechuy-mikola-dzherya.html">Микола Джеря</a>
+                    <span class="work-meta">1878 · Социальная повесть</span>
+                  </div>
+                  <p class="work-summary">Судьба непокорного крепостного, бегущего от панского произвола в бессарабские плавни и рыболовецкие артели ради свободной жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-panas-myrny">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Панас Мирный</h3>
+                  <p class="author-role">Классик украинского социально-психологического романа · <span class="tabular">1849–1920</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Панас Рудченко — скромный полтавский казначей и великий романист, раскрывший сложную психологию бунта и социальной несправедливости.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-do-oxen-bellow">
+                  <div class="work-row">
+                    <span class="work-code">УК-03.03</span>
+                    <a class="work-link" href="./works/myrny-razve-revut-voly.html">Разве ревут волы, когда ясли полны?</a>
+                    <span class="work-meta">1875 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Написанная в соавторстве с братом Иваном Билыком эпопея о крестьянском сыне Чипке Варенике, которого обиды и ложь доводят от поиска правды до страшного разбоя.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ivan-karpenko-karyi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Карпенко-Карый</h3>
+                  <p class="author-role">Корифей украинского профессионального театра и драматург · <span class="tabular">1845–1907</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Иван Тобилевич — актёр, режиссёр и драматург, создавший классическую социальную трагикомедию о жадности и достоинстве.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-one-hundred-thousand">
+                  <div class="work-row">
+                    <span class="work-code">УК-03.04</span>
+                    <a class="work-link" href="./works/karpenko-sto-tysyach.html">Сто тысяч и «Хозяин»</a>
+                    <span class="work-meta">1889–1900 · Сатирические комедии</span>
+                  </div>
+                  <p class="work-summary">Острая комедия о богатом, но одержимом жаждой наживы крестьянине Герасиме Калитке, который решает купить фальшивые «сто тысяч» за мешок простой бумаги.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ivan-franko">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Франко</h3>
+                  <p class="author-role">«Каменяр», величайший писатель, поэт и мыслитель Галичины · <span class="tabular">1856–1916</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Титан украинской культуры рубежа XIX–XX веков, одинаково гениальный в поэзии («Моисей», «Увядшие листья»), исторической и социальной прозе и драме.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-withered-leaves-moses">
+                  <div class="work-row">
+                    <span class="work-code">УК-03.05</span>
+                    <a class="work-link" href="./works/franko-uvyadshie-listya-i-moisej.html">Увядшие листья и поэма «Моисей»</a>
+                    <span class="work-meta">1896–1905 · Лирическая драма и философская поэма</span>
+                  </div>
+                  <p class="work-summary">От пронзительного любовного дневника «Твоя красота — как холодный блеск» («Чого являєшся мені у сні…») до величественной библейской притчи о вожде и сомневающемся народе.</p>
+                </li>
+                <li class="work-item" id="work-zakhar-berkut">
+                  <div class="work-row">
+                    <span class="work-code">УК-03.06</span>
+                    <a class="work-link" href="./works/franko-zahar-berkut.html">Захар Беркут</a>
+                    <span class="work-meta">1883 · Историческая повесть</span>
+                  </div>
+                  <p class="work-summary">Героическое сказание XIII века о карпатской общине Тухольщины, которая под руководством мудрого старейшины Захара Беркута заманивает монгольскую орду в горную ловушку.</p>
+                </li>
+                <li class="work-item" id="work-stolen-happiness">
+                  <div class="work-row">
+                    <span class="work-code">УК-03.07</span>
+                    <a class="work-link" href="./works/franko-ukradennoe-schaste.html">Украденное счастье</a>
+                    <span class="work-meta">1893 · Психологическая драма</span>
+                  </div>
+                  <p class="work-summary">Любовный треугольник в прикарпатском селе — Анна, её муж Микола Задорожный и вернувшийся со службы жандарм Михайло Гурман.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ua-modernism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1890–1917</p>
+          <h2 class="section-title">Модернизм, импрессионизм и поэтика Леси Украинки</h2>
+          <p class="section-desc">Европейский прорыв украинского слова: философско-мифологический театр Леси Украинки, солнечный импрессионизм Коцюбинского и новеллы Василя Стефаника.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-lesia-ukrainka">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Леся Украинка</h3>
+                  <p class="author-role">Гений украинской поэзии и интеллектуально-символической драмы · <span class="tabular">1871–1913</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Лариса Косач — писательница непобедимого духа («Contra spem spero!»), обновившая мировую традицию поэтической драмы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-forest-song">
+                  <div class="work-row">
+                    <span class="work-code">УК-04.01</span>
+                    <a class="work-link" href="./works/ukrainka-lesnaya-pesnya.html">Лесная песня</a>
+                    <span class="work-meta">1911 · Драма-феерия</span>
+                  </div>
+                  <p class="work-summary">Волшебная волынская феерия о любви лесной мавки и деревенского юноши Лукаша — гимн гармонии искусства, природы и души, которая «имеет в сердце то, что не умирает».</p>
+                </li>
+                <li class="work-item" id="work-boyarynia-cassandra">
+                  <div class="work-row">
+                    <span class="work-code">УК-04.02</span>
+                    <a class="work-link" href="./works/ukrainka-boyarynya-i-kassandra.html">Боярыня и «Кассандра»</a>
+                    <span class="work-meta">1907–1910 · Философские драмы</span>
+                  </div>
+                  <p class="work-summary">Трагедия пророчицы Кассандры, которой никто не верит на пороге гибели Трои, и драма Оксаны, тоскующей по воле в чужом тереме XVII века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mykhailo-kotsiubynsky">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михайло Коцюбинский</h3>
+                  <p class="author-role">«Солнцепоклонник», мастер украинского импрессионизма · <span class="tabular">1864–1913</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Виртуоз ритмической и живописной прозы, соединивший тончайший психологизм с магией карпатского фольклора.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-shadows-of-forgotten-ancestors">
+                  <div class="work-row">
+                    <span class="work-code">УК-04.03</span>
+                    <a class="work-link" href="./works/kotsiubynsky-teni-zabytyh-predkov.html">Тени забытых предков</a>
+                    <span class="work-meta">1911 · Лирико-символическая повесть</span>
+                  </div>
+                  <p class="work-summary">История гуцульских Ромео и Джульетты — Ивана Палийчука и Марички Гутенюк — на фоне языческих духов, трембит, полонин и вечного шума Черемоша.</p>
+                </li>
+                <li class="work-item" id="work-intermezzo-kotsiubynsky">
+                  <div class="work-row">
+                    <span class="work-code">УК-04.04</span>
+                    <a class="work-link" href="./works/kotsiubynsky-intermezzo.html">Intermezzo и «Fata Morgana»</a>
+                    <span class="work-meta">1903–1910 · Импрессионистская проза</span>
+                  </div>
+                  <p class="work-summary">Музыкальная новелла-исповедь уставшего от людского горя художника, исцеляемого жаворонками, солнцем и ячменными полями — и снова возвращающегося к людям.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-olha-kobylianska">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ольга Кобылянская</h3>
+                  <p class="author-role">Классик буковинского неоромантизма и психологической прозы · <span class="tabular">1863–1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первая крупная представительница феминистско-интеллектуальной прозы Буковины, автор романа «Царевна» и трагедии «Земля».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-land-kobylianska">
+                  <div class="work-row">
+                    <span class="work-code">УК-04.05</span>
+                    <a class="work-link" href="./works/kobylianska-zemlya.html">Земля</a>
+                    <span class="work-meta">1902 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Библейская по размаху буковинская драма братоубийства: Савва Федорчук убивает брата Михайла ради права унаследовать отцовскую пашню.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vasyl-stefanyk">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Василь Стефаник</h3>
+                  <p class="author-role">Гений лаконичной экспрессионистской новеллы · <span class="tabular">1871–1936</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер «малой прозы» покутского села, в двух-трёх страницах умещавший целую шекспировскую трагедию крестьянской эмиграции и нужды.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-stone-cross-stefanyk">
+                  <div class="work-row">
+                    <span class="work-code">УК-04.06</span>
+                    <a class="work-link" href="./works/stefanyk-kamennyj-krest.html">Каменный крест и «Новость»</a>
+                    <span class="work-meta">1899–1900 · Экспрессионистские новеллы</span>
+                  </div>
+                  <p class="work-summary">Прощание старого галичанина Ивана Дидуха с родным полем и каменным крестом на взгорье перед отъездом всей семьи за океан в Канаду.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ua-avantgarde-1920s">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1920–1940-е годы</p>
+          <h2 class="section-title">«Расстрелянное возрождение», авангард и урбанистический роман</h2>
+          <p class="section-desc">Бурный художественный взрыв 1920-х годов: «солнечные кларнеты» Тычины, неоклассика Рыльского, новеллистика Хвылевого, городская проза Пидмогильного и драмы Кулиша.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-pavlo-tychyna">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Павло Тычина</h3>
+                  <p class="author-role">Новатор раннемодернистского стиха («кларнетизм») · <span class="tabular">1891–1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт с абсолютным музыкальным слухом, превративший первый сборник «Солнечные кларнеты» в одно из главных явлений европейской поэзии XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sunny-clarinets">
+                  <div class="work-row">
+                    <span class="work-code">УК-05.01</span>
+                    <a class="work-link" href="./works/tychyna-solnechnye-klarnety.html">Солнечные кларнеты</a>
+                    <span class="work-meta">1918 · Поэтический сборник</span>
+                  </div>
+                  <p class="work-summary">Симфония света, звона берёз, весенних ручьёв и тревожного предчувствия бури («Арфами, арфами…», «О, панно Инна…»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maksym-rylsky">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Максим Рыльский</h3>
+                  <p class="author-role">Глава киевских неоклассиков, поэт и блестящий переводчик · <span class="tabular">1895–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер сонета и октавы, сохранивший классическую ясность, соразмерность и любовь к европейской и античной культуре.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-under-autumn-stars">
+                  <div class="work-row">
+                    <span class="work-code">УК-05.02</span>
+                    <a class="work-link" href="./works/rylsky-pod-osennimi-zvezdami.html">Под осенними звёздами и «Розы и виноград»</a>
+                    <span class="work-meta">1918–1957 · Неоклассическая лирика</span>
+                  </div>
+                  <p class="work-summary">Ясные, гармоничные стихи о яблоневых садах, красоте мирового искусства и единстве созидательного труда и красоты («красивое и полезное»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mykola-khvylovy">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мыкола Хвылевой</h3>
+                  <p class="author-role">Лидер украинского прозаического Возрождения 1920-х годов · <span class="tabular">1893–1933</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Основатель ВАПЛИТЕ, мастер экспрессивной орнаментальной прозы и трагический участник литературной дискуссии о «психологической Европе».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-i-am-romance">
+                  <div class="work-row">
+                    <span class="work-code">УК-05.03</span>
+                    <a class="work-link" href="./works/khvylovy-ya-romantika.html">Я (Романтика) и «Синие этюды»</a>
+                    <span class="work-meta">1923–1924 · Экспрессионистские новеллы</span>
+                  </div>
+                  <p class="work-summary">Потрясающая по драматизму новелла о расколотой душе главы ЧК, который ради абстрактной «загорной коммуны» выносит смертный приговор собственной матери.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-valerian-pidmohylny">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Валерьян Пидмогильный</h3>
+                  <p class="author-role">Создатель украинского урбанистического и экзистенциального романа · <span class="tabular">1901–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выдающийся романист и переводчик Бальзака, Мопассана и Камю (по духу предвосхитивший европейский экзистенциализм), расстрелянный в Сандармохе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-city-pidmohylny">
+                  <div class="work-row">
+                    <span class="work-code">УК-05.04</span>
+                    <a class="work-link" href="./works/pidmohylny-gorod.html">Город</a>
+                    <span class="work-meta">1928 · Интеллектуальный урбанистический роман</span>
+                  </div>
+                  <p class="work-summary">История амбициозного юноши Степана Радченко, приехавшего из села покорять Киев 1920-х годов: путь от иллюзий и цинизма к пониманию города как сложного живого организма.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mykola-kulish">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мыкола Кулиш</h3>
+                  <p class="author-role">Гений украинской модернистской драмы XX века · <span class="tabular">1892–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Соратник режиссёра Леся Курбаса в театре «Березиль», создавший шедевры сатиры и трагедии («Народный Малахий», «Мина Мазайло»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-myna-mazailo">
+                  <div class="work-row">
+                    <span class="work-code">УК-05.05</span>
+                    <a class="work-link" href="./works/kulish-mina-mazajlo.html">Мина Мазайло и «Патетическая соната»</a>
+                    <span class="work-meta">1929 · Сатирическая и лирическая драмы</span>
+                  </div>
+                  <p class="work-summary">Блестящая комедия-фарс о харьковском служащем, мечтающем сменить фамилию на «Мазенин» ради карьеры, и полифоническая «Патетическая соната» о революционном Киеве.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alexander-dovzhenko">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Довженко</h3>
+                  <p class="author-role">Поэт кинематографа и создатель лирической киноповести · <span class="tabular">1894–1956</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мировой режиссёр («Земля») и проникновенный прозаик, соединивший черниговскую поэзию детства с эпическим размахом XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-enchanted-desna">
+                  <div class="work-row">
+                    <span class="work-code">УК-05.06</span>
+                    <a class="work-link" href="./works/dovzhenko-zacharovannaya-desna.html">Зачарованная Десна</a>
+                    <span class="work-meta">1956 · Лирическая автобиографическая повесть</span>
+                  </div>
+                  <p class="work-summary">Светлые, пронизанные запахом сенокоса и речной воды воспоминания о деде Семёне, матери, первом коне и сказочной красоте долины Десны.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ua-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1960–2010-е годы</p>
+          <h2 class="section-title">Шестидесятники, поэзия стоицизма и современная проза</h2>
+          <p class="section-desc">Поэтический ренессанс Лины Костенко и Василя Стуса, роман «Собор» Олеся Гончара, постмодернизм Андруховича, проза Забужко и Сергея Жадана.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-lina-kostenko">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лина Костенко</h3>
+                  <p class="author-role">Королева украинской поэзии, классик поколения шестидесятников · <span class="tabular">род. 1930</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтесса безупречного нравственного авторитета и историко-философской глубины, автор культового романа в стихах «Маруся Чурай».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-marusia-churai">
+                  <div class="work-row">
+                    <span class="work-code">УК-06.01</span>
+                    <a class="work-link" href="./works/kostenko-marusya-churaj.html">Маруся Чурай</a>
+                    <span class="work-meta">1979 · Исторический роман в стихах</span>
+                  </div>
+                  <p class="work-summary">Поэтическое полотно XVII века о легендарной полтавской певице и композиторе («Ой не ходи, Грицю…»), чьи песни сберегли живую душу народа сквозь войны и измены.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vasyl-stus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Василь Стус</h3>
+                  <p class="author-role">Поэт трагического стоицизма и метафизической свободы · <span class="tabular">1938–1985</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Гениальный лирик и диссидент, сопоставлявший украинскую поэзию с Рильке и Целаном, создавший свои лучшие строки в мордовских и пермских лагерях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-palimpsests-stus">
+                  <div class="work-row">
+                    <span class="work-code">УК-06.02</span>
+                    <a class="work-link" href="./works/stus-palimpsesty.html">Палимпсесты</a>
+                    <span class="work-meta">1971–1977 (изд. 1986) · Философская тюремная лирика</span>
+                  </div>
+                  <p class="work-summary">Вершина украинской поэзии XX века: диалог с собственной душой, Рильке, Сковородой и Украиной сквозь колючую проволоку неволи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-oles-honchar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Олесь Гончар</h3>
+                  <p class="author-role">Классик лирико-эпической прозы и хранитель культурной памяти · <span class="tabular">1918–1995</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор трилогии «Знаменосцы», романа в новеллах «Тронка» и запрещённого в 1968 году романа-предупреждения «Собор».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-cathedral-honchar">
+                  <div class="work-row">
+                    <span class="work-code">УК-06.03</span>
+                    <a class="work-link" href="./works/honchar-sobor.html">Собор</a>
+                    <span class="work-meta">1968 · Философско-социальный роман</span>
+                  </div>
+                  <p class="work-summary">История борьбы жителей приднепровского посёлка Зачиплянка за спасение старинного казацкого собора от сноса равнодушными карьеристами-«браконьерами душ».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yuri-andrukhovych">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юрий Андрухович</h3>
+                  <p class="author-role">Лидер украинского постмодернизма и карнавальной прозы · <span class="tabular">род. 1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сооснователь легендарной группы «Бу-Ба-Бу», эссеист и романист, открывший современную украинскую прозу европейскому читателю.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-moscoviad-perverzion">
+                  <div class="work-row">
+                    <span class="work-code">УК-06.04</span>
+                    <a class="work-link" href="./works/andrukhovych-moskoviada-i-perverziya.html">Московиада и «Перверзия»</a>
+                    <span class="work-meta">1993–1996 · Постмодернистские романы</span>
+                  </div>
+                  <p class="work-summary">Иронические, гротескные карнавалы Отто фон Ф. в лабиринтах Москвы 1991 года и мистические приключения Стаса Перфецкого в карнавальной Венеции.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-oksana-zabuzhko">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Оксана Забужко</h3>
+                  <p class="author-role">Ведущий голос современной украинской интеллектуальной прозы · <span class="tabular">род. 1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтесса, философ и автор мировых бестселлеров «Полевые исследования украинского секса» и «Музей заброшенных секретов».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fieldwork-in-ukrainian-sex">
+                  <div class="work-row">
+                    <span class="work-code">УК-06.05</span>
+                    <a class="work-link" href="./works/zabuzhko-polevye-issledovaniya.html">Полевые исследования украинского секса</a>
+                    <span class="work-meta">1996 · Интеллектуальный роман-исповедь</span>
+                  </div>
+                  <p class="work-summary">Исповедь украинской поэтессы в Америке о страсти, исторической травме, языке и попытке женщины освободиться от бремени вековой неволи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-serhiy-zhadan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сергей Жадан</h3>
+                  <p class="author-role">Самый переводимый современный украинский поэт и романист · <span class="tabular">род. 1974</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Летописец восточноукраинских степей и индустриальных городов, соединяющий жёсткую городскую ритмику с глубокой нежностью к людям.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-voroshilovgrad-zhadan">
+                  <div class="work-row">
+                    <span class="work-code">УК-06.06</span>
+                    <a class="work-link" href="./works/zhadan-voroshilovgrad.html">Ворошиловград</a>
+                    <span class="work-meta">2010 · Роман</span>
+                  </div>
+                  <p class="work-summary">Возвращение Германа в донбасскую степь, чтобы отстоять старую бензоколонку пропавшего брата против местных рейдеров — магический вестерн о памяти и дружбе.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание украинской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог шотландской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 21 писателей · 33 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог шотландской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от песен Роберта Бёрнса и исторического эпоса Вальтера Скотта до Стивенсона, Конан Дойла, Мюриэл Спарк и школы Глазго.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#sc-medieval-enlightenment">Раздел I: Позднее Средневековье и Шотландское Просвещение</a>
+        <a href="#sc-burns-scott">Раздел II: Лирика Бернса и исторический романтизм</a>
+        <a href="#sc-adventure-duality">Раздел III: Эпоха приключений, сказки и двойственности</a>
+        <a href="#sc-renaissance-twentieth">Раздел IV: Шотландское возрождение и проза XX века</a>
+        <a href="#sc-glasgow-postmodernism">Раздел V: Школа Глазго и постмодернизм</a>
+        <a href="#sc-contemporary-twentyfirst">Раздел VI: Современная проза и поэзия</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="sc-medieval-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1503–1791 годы</p>
+          <h2 class="section-title">Позднее Средневековье и Шотландское Просвещение</h2>
+          <p class="section-desc">От поэзии шотландских макаров при дворе Стюартов к прозе эпохи Просвещения, «Поэмам Оссиана» и знаменитой эдинбургской биографистике.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-dunbar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уильям Данбар</h3>
+                  <p class="author-role">Классик поэзии шотландских макаров · <span class="tabular">ок. 1460–1520</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Придворный поэт короля Якова IV, соединивший средневековую аллегорию, сатиру и музыкальное мастерство шотландского стиха.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-thistle-and-rose">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-01.01</span>
+                    <a class="work-link" href="./works/dunbar-chertopoloh-i-roza.html">Чертополох и Роза</a>
+                    <span class="work-meta">1503 · Аллегорическая поэма</span>
+                  </div>
+                  <p class="work-summary">Свадебная аллегория на брак короля Якова IV Шотландского и Маргариты Тюдор, в которой природа венчает союз двух королевств.</p>
+                </li>
+                <li class="work-item" id="work-dance-of-seven-deadly-sins">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-01.02</span>
+                    <a class="work-link" href="./works/dunbar-tanec-grehov.html">Танец семи смертных грехов</a>
+                    <span class="work-meta">1508 · Сатирическая поэма</span>
+                  </div>
+                  <p class="work-summary">Гротескное карнавальное видение, написанное накануне Великого поста — яркая картина средневекового сарказма и фольклора.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-smollett">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тобайас Смоллетт</h3>
+                  <p class="author-role">Мастер плутовского и эпистолярного романа Просвещения · <span class="tabular">1721–1771</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Шотландский врач и романист, чьи живые сатирические путешествия оказали огромное влияние на Диккенса и британскую прозу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-humphry-clinker">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-01.03</span>
+                    <a class="work-link" href="./works/smollett-hamfri-klinker.html">Путешествие Хамфри Клинкера</a>
+                    <span class="work-meta">1771 · Эпистолярный роман</span>
+                  </div>
+                  <p class="work-summary">Комическое путешествие ворчливого валлийского сквайра Мэттью Брэмбла и его родни по курортам Англии и гостеприимной Шотландии.</p>
+                </li>
+                <li class="work-item" id="work-roderick-random">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-01.04</span>
+                    <a class="work-link" href="./works/smollett-roderik-rendom.html">Приключения Родерика Рэндома</a>
+                    <span class="work-meta">1748 · Плутовской роман</span>
+                  </div>
+                  <p class="work-summary">Бурная одиссея молодого шотландца через Лондон, военный флот и далекие моря в поисках справедливости и состояния.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-macpherson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джеймс Макферсон</h3>
+                  <p class="author-role">Создатель «Поэм Оссиана» · <span class="tabular">1736–1796</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Шотландский поэт и собиратель гэльского фольклора, чьи «переводы» древнего барда Оссиана потрясли всю романтическую Европу от Гёте до Пушкина.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poems-of-ossian">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-01.05</span>
+                    <a class="work-link" href="./works/macpherson-poemy-ossiana.html">Поэмы Оссиана</a>
+                    <span class="work-meta">1765 · Героические песни в прозе</span>
+                  </div>
+                  <p class="work-summary">Элегические сказания о подвигах воинов Фингала и Оскара среди туманов, вересковых пустошей и шума северных морей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-boswell">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джеймс Босуэлл</h3>
+                  <p class="author-role">Классик мировой биографической литературы · <span class="tabular">1740–1795</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Эдинбургский юрист и дневниковед, превративший искусство биографии в живой, многоголосый литературный портрет эпохи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-life-of-samuel-johnson">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-01.06</span>
+                    <a class="work-link" href="./works/boswell-zhizn-dzhonsona.html">Жизнь Сэмюэла Джонсона</a>
+                    <span class="work-meta">1791 · Художественная биография</span>
+                  </div>
+                  <p class="work-summary">Блестяще записанные беседы, споры и путешествия по Гебридам с великим лексикографом и мудрецом XVIII века доктором Джонсоном.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sc-burns-scott">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1786–1832 годы</p>
+          <h2 class="section-title">Лирика Бернса и исторический романтизм</h2>
+          <p class="section-desc">Народная песня и свободолюбивая лирика Роберта Бёрнса, рождение европейского исторического романа у Вальтера Скотта и мрачная притча Джеймса Хогга.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-burns">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Роберт Бёрнс</h3>
+                  <p class="author-role">Национальный бард Шотландии · <span class="tabular">1759–1796</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-пахарь из Эршира, воспевший достоинство простого человека, радость дружбы, шотландскую природу и народную песню.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poems-chiefly-scottish">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-02.01</span>
+                    <a class="work-link" href="./works/burns-stihotvoreniya.html">Стихотворения преимущественно на шотландском диалекте</a>
+                    <span class="work-meta">1786 · Поэтический сборник</span>
+                  </div>
+                  <p class="work-summary">Знаменитое килмарнокское издание и последующие песни («Честная бедность», «В полях, под снегом и дождём», «В моей душе покоя нет», «Старая дружба»).</p>
+                </li>
+                <li class="work-item" id="work-tam-o-shanter">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-02.02</span>
+                    <a class="work-link" href="./works/burns-tem-oshenter.html">Тэм О’Шентер</a>
+                    <span class="work-meta">1790 · Юмористическая поэма</span>
+                  </div>
+                  <p class="work-summary">Бурная ночная скачка подвыпившего фермера Тэма мимо проклятой церкви Аллоуэй, где ведьмы затеяли пляску под волынку самого чёрта.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-walter-scott">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вальтер Скотт</h3>
+                  <p class="author-role">Создатель жанра исторического романа · <span class="tabular">1771–1832</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Эдинбургский юрист, поэт и романист, открывший мировой литературе драматизм истории как столкновения эпох и живых человеческих судеб.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ivanhoe">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-02.03</span>
+                    <a class="work-link" href="./works/scott-ayvengo.html">Айвенго</a>
+                    <span class="work-meta">1819 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Англия конца XII века: рыцарские турниры, вражда саксов и норманнов, благородный Уилфред Айвенго, Робин Гуд, Ребекка и король Ричард Львиное Сердце.</p>
+                </li>
+                <li class="work-item" id="work-waverley">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-02.04</span>
+                    <a class="work-link" href="./works/scott-ueverli.html">Уэверли, или Шестьдесят лет назад</a>
+                    <span class="work-meta">1814 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Первый классический исторический роман: молодой английский офицер Эдуард Уэверли оказывается в центре якобитского восстания 1745 года в горной Шотландии.</p>
+                </li>
+                <li class="work-item" id="work-rob-roy">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-02.05</span>
+                    <a class="work-link" href="./works/scott-rob-roy.html">Роб Рой</a>
+                    <span class="work-meta">1817 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Приключения Фрэнка Осбалдистона в Шотландии накануне восстания 1715 года и встреча с благородным горским разбойником Робом Роем Макгрегором.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hogg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джеймс Хогг</h3>
+                  <p class="author-role">«Эттрикский пастух», мастер психологической готики · <span class="tabular">1770–1835</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Друг Вальтера Скотта, создавший один из самых пугающих и глубоких романов о раздвоении личности и религиозном фанатизме.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-justified-sinner">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-02.06</span>
+                    <a class="work-link" href="./works/hogg-ispoved-greshnika.html">Частная исповедь и записки оправданного грешника</a>
+                    <span class="work-meta">1824 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Две противоречащие друг другу версии трагедии Роберта Рингхэма, которого загадочный двойник подталкивает к братоубийству.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sc-adventure-duality">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1858–1911 годы</p>
+          <h2 class="section-title">Эпоха приключений, сказки и двойственности</h2>
+          <p class="section-desc">Мировые шедевры Стивенсона, детектив Конан Дойла, волшебные миры Джорджа Макдональда, Джеймса Барри и Кеннета Грэма.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-stevenson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Роберт Льюис Стивенсон</h3>
+                  <p class="author-role">Классик приключенческого и психологического романа · <span class="tabular">1850–1894</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Эдинбурга, соединивший безупречную лёгкость слога с романтикой дальних плаваний и темой двойственной природы человека.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-treasure-island">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-03.01</span>
+                    <a class="work-link" href="./works/stevenson-ostrov-sokrovishch.html">Остров сокровищ</a>
+                    <span class="work-meta">1883 · Приключенческий роман</span>
+                  </div>
+                  <p class="work-summary">Эталонная история о карте капитана Флинта, шхуне «Испаньола», юном Джиме Хокинсе и харизматичном одноногом пирате Джоне Сильвере.</p>
+                </li>
+                <li class="work-item" id="work-jekyll-and-hyde">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-03.02</span>
+                    <a class="work-link" href="./works/stevenson-dzhekil-i-hayd.html">Странная история доктора Джекила и мистера Хайда</a>
+                    <span class="work-meta">1886 · Философско-готическая повесть</span>
+                  </div>
+                  <p class="work-summary">Лондонская притча о научном эксперименте почтенного врача Генри Джекила, отделившего своё тёмное «я» в облике жестокого Эдварда Хайда.</p>
+                </li>
+                <li class="work-item" id="work-kidnapped">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-03.03</span>
+                    <a class="work-link" href="./works/stevenson-pohishchenny.html">Похищенный</a>
+                    <span class="work-meta">1886 · Историко-приключенческий роман</span>
+                  </div>
+                  <p class="work-summary">Скитания юного Дэвида Бэлфура и отважного горца Алана Брека Стюарта по Шотландскому нагорью после кораблекрушения.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-conan-doyle">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Артур Конан Дойл</h3>
+                  <p class="author-role">Создатель Шерлока Холмса, классик детектива · <span class="tabular">1859–1930</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Эдинбурга и выпускник Эдинбургского университета, подаривший миру метод дедукции и эталон детективной новеллы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hound-of-the-baskervilles">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-03.04</span>
+                    <a class="work-link" href="./works/doyle-sobaka-baskerviley.html">Собака Баскервилей</a>
+                    <span class="work-meta">1902 · Детективный роман</span>
+                  </div>
+                  <p class="work-summary">Расследование Шерлока Холмса и доктора Ватсона на мрачных девонширских болотах вокруг древнего проклятия рода Баскервилей.</p>
+                </li>
+                <li class="work-item" id="work-study-in-scarlet">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-03.05</span>
+                    <a class="work-link" href="./works/doyle-etyud-v-bagrovyh-tonah.html">Этюд в багровых тонах</a>
+                    <span class="work-meta">1887 · Детективная повесть</span>
+                  </div>
+                  <p class="work-summary">Первое знакомство доктора Ватсона с Шерлоком Холмсом на Бейкер-стрит и первое совместное расследование загадочного убийства.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-barrie">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джеймс Мэтью Барри</h3>
+                  <p class="author-role">Драматург и сказочник, создатель Питера Пэна · <span class="tabular">1860–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Кирримьюра, подаривший мировой культуре образ вечного мальчика и острова Нетландия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-peter-pan">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-03.06</span>
+                    <a class="work-link" href="./works/barrie-piter-pen.html">Питер Пэн (Питер и Венди)</a>
+                    <span class="work-meta">1911 · Повесть-сказка</span>
+                  </div>
+                  <p class="work-summary">Полёт Венди, Джона и Майкла Дарлингов за мальчиком, не желающим взрослеть, к фее Динь-Динь и капитану Крюку.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-macdonald">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джордж Макдональд</h3>
+                  <p class="author-role">Первопроходец современного литературного фэнтези · <span class="tabular">1824–1905</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Шотландский поэт и сказочник, чьё творчество вдохновило Льюиса Кэрролла, К. С. Льюиса и Дж. Р. Р. Толкина.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-phantastes">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-03.07</span>
+                    <a class="work-link" href="./works/macdonald-fantastes.html">Фантастес</a>
+                    <span class="work-meta">1858 · Философская сказка-роман</span>
+                  </div>
+                  <p class="work-summary">Пробуждение молодого Анодоса в Волшебной стране, куда превращается его собственная спальня в день двадцать первого дня рождения.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sc-renaissance-twentieth">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1926–1961 годы</p>
+          <h2 class="section-title">Шотландское возрождение и проза XX века</h2>
+          <p class="section-desc">Возвращение языка скотс в поэзии Макдиармида, сельский эпос Льюиса Грассика Гиббона, социальные драмы Кронина и блестящая ирония Мюриэл Спарк.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-spark">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мюриэл Спарк</h3>
+                  <p class="author-role">Мастер интеллектуальной иронической прозы · <span class="tabular">1918–2006</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Эдинбурга, прославившаяся лаконичными, остроумными и нравственно точными романами о власти, времени и памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-miss-jean-brodie">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-04.01</span>
+                    <a class="work-link" href="./works/spark-miss-dzhin-brodi.html">Расцвет мисс Джин Броди</a>
+                    <span class="work-meta">1961 · Роман</span>
+                  </div>
+                  <p class="work-summary">Эдинбург 1930-х годов: харизматичная учительница школы Марша Блейн, её «избранная группа» девочек и цена духовного манипулирования.</p>
+                </li>
+                <li class="work-item" id="work-memento-mori">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-04.02</span>
+                    <a class="work-link" href="./works/spark-memento-mori.html">Memento Mori (Помни о смерти)</a>
+                    <span class="work-meta">1959 · Сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Загадочные телефонные звонки пожилым лондонцам с одним-единственным напоминанием: «Помни, что ты должен умереть».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cronin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арчибальд Джозеф Кронин</h3>
+                  <p class="author-role">Мастер социального и врачебного романа · <span class="tabular">1896–1981</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Шотландский врач и романист, создавший мощные драматические хроники о борьбе с провинциальным деспотизмом и верности призванию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hatters-castle">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-04.03</span>
+                    <a class="work-link" href="./works/cronin-zamok-broudi.html">Замок Броуди</a>
+                    <span class="work-meta">1931 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Трагедия семьи шляпника Джеймса Броуди в маленьком шотландском городке Ливенфорде — исследование гордыни и семейной тирании.</p>
+                </li>
+                <li class="work-item" id="work-the-citadel">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-04.04</span>
+                    <a class="work-link" href="./works/cronin-citadel.html">Цитадель</a>
+                    <span class="work-meta">1937 · Социальный роман</span>
+                  </div>
+                  <p class="work-summary">Путь молодого шотландского врача Эндрю Мэнсона от бедных шахтёрских посёлков Уэльса до модных лондонских кабинетов и возвращения к идеалам науки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gibbon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Льюис Грассик Гиббон</h3>
+                  <p class="author-role">Автор знаменитой «Шотландской трилогии» · <span class="tabular">1901–1935</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель поэтической прозы северо-восточной Шотландии, соединившей ритм народного говора с исторической драмой крестьянства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sunset-song">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-04.05</span>
+                    <a class="work-link" href="./works/gibbon-pesnya-zakata.html">Песня заката</a>
+                    <span class="work-meta">1932 · Лирический роман</span>
+                  </div>
+                  <p class="work-summary">Взросление Крис Гатри на ферме в Мернсе накануне Первой мировой войны — гимн земле и уходящей крестьянской Шотландии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-macdiarmid">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хью Макдиармид</h3>
+                  <p class="author-role">Лидер Шотландского литературного возрождения XX века · <span class="tabular">1892–1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-новатор, вернувший шотландскому языку (скотс) силу философского и модернистского высказывания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-drunk-man-looks-at-the-thistle">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-04.06</span>
+                    <a class="work-link" href="./works/macdiarmid-chertopoloh.html">Пьяный смотрит на чертополох</a>
+                    <span class="work-meta">1926 · Философская поэма</span>
+                  </div>
+                  <p class="work-summary">Монументальный ночной монолог на склоне холма о судьбе Шотландии, природе космоса, времени и человеческого духа.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sc-glasgow-postmodernism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1981–1994 годы</p>
+          <h2 class="section-title">Школа Глазго и постмодернизм</h2>
+          <p class="section-desc">Интеллектуальная фантасмагория Аласдера Грея, рабочий монолог Джеймса Келмана и дерзкая городская проза Ирвина Уэлша.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-gray">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аласдер Грей</h3>
+                  <p class="author-role">Писатель, художник и классик шотландского постмодернизма · <span class="tabular">1934–2019</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Глазго, объединивший реализм взросления, фантасмагорическую антиутопию и собственные книжные иллюстрации.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lanark">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-05.01</span>
+                    <a class="work-link" href="./works/gray-lanark.html">Ланарк: жизнь в четырёх книгах</a>
+                    <span class="work-meta">1981 · Роман-фантасмагория</span>
+                  </div>
+                  <p class="work-summary">Переплетение сурового послевоенного Глазго в судьбе художника Дункана Тоу и мрачного бессолнечного города Ансанка.</p>
+                </li>
+                <li class="work-item" id="work-poor-things">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-05.02</span>
+                    <a class="work-link" href="./works/gray-bednye-neschastnye.html">Бедные-несчастные</a>
+                    <span class="work-meta">1992 · Постмодернистский роман</span>
+                  </div>
+                  <p class="work-summary">Остроумная викторианская мистификация о Белле Бакстер, докторе Годвине Бакстере и свободе женщины в Глазго XIX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kelman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джеймс Келман</h3>
+                  <p class="author-role">Мастер потока сознания и лауреат Букеровской премии · <span class="tabular">род. 1946</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Глазго, придавший живой уличной речи шотландских рабочих статус высокой модернистской литературы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-how-late-it-was-how-late">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-05.03</span>
+                    <a class="work-link" href="./works/kelman-kak-zhdalos.html">До чего ж оно всё запоздало</a>
+                    <span class="work-meta">1994 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Букеровский роман о Сэмми Сэмюэлсе, потерявшем зрение в полицейском участке и пытающемся отстоять своё достоинство.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-welsh">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ирвин Уэлш</h3>
+                  <p class="author-role">Автор культовой эдинбургской прозы 1990-х · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из пригорода Лейт в Эдинбурге, передавший ритм и диалект молодёжной субкультуры конца XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-trainspotting">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-05.04</span>
+                    <a class="work-link" href="./works/welsh-na-igle.html">На игле (Trainspotting)</a>
+                    <span class="work-meta">1993 · Роман в новеллах</span>
+                  </div>
+                  <p class="work-summary">Жёсткая и честная хроника компании друзей из эдинбургского Лейта конца 1980-х годов и попытки Марка Рентона «выбрать жизнь».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sc-contemporary-twentyfirst">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1972–2016 годы</p>
+          <h2 class="section-title">Современная проза и поэзия</h2>
+          <p class="section-desc">Экспериментальная проза Али Смит, экологическая эссеистика и поэзия Кэтлин Джейми, сонеты Эдвина Моргана.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ali-smith">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Али Смит</h3>
+                  <p class="author-role">Ведущая романистка современной шотландской прозы · <span class="tabular">род. 1962</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Инвернесса, создательница знаменитого «Сезонного квартета» и романов о времени, искусстве и хрупкости человеческих связей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hotel-world">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-06.01</span>
+                    <a class="work-link" href="./works/smith-otel-mir.html">Отель «Мир»</a>
+                    <span class="work-meta">2001 · Роман</span>
+                  </div>
+                  <p class="work-summary">Пять женских голосов — горничная, бездомная, журналистка, администратор и призрак — переплетаются вокруг одной ночи в отеле.</p>
+                </li>
+                <li class="work-item" id="work-autumn-smith">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-06.02</span>
+                    <a class="work-link" href="./works/smith-osen.html">Осень</a>
+                    <span class="work-meta">2016 · Роман</span>
+                  </div>
+                  <p class="work-summary">Первая часть «Сезонного квартета»: нежная история многолетней дружбы молодой Элизабет и столетнего Дэниэла на фоне перемен современной Британии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jamie">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кэтлин Джейми</h3>
+                  <p class="author-role">Макар (национальный поэт) Шотландии · <span class="tabular">род. 1962</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтесса и эссеистка, пишущая о северных островах, птицах, береговой линии и незаметной поэзии повседневного мира.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-findings">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-06.03</span>
+                    <a class="work-link" href="./works/jamie-nahodki.html">Находки (Findings)</a>
+                    <span class="work-meta">2005 · Лирическая эссеистика</span>
+                  </div>
+                  <p class="work-summary">Наблюдения за природой и древностями Оркнейских островов, Внешних Гебрид и долины реки Тей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-morgan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдвин Морган</h3>
+                  <p class="author-role">Первый официальный поэт-макар Шотландии · <span class="tabular">1920–2010</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт из Глазго и переводчик, соединивший классический сонет с городской хроникой, научной фантастикой и конкретной поэзией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-glasgow-sonnets">
+                  <div class="work-row">
+                    <span class="work-code">ШТ-06.04</span>
+                    <a class="work-link" href="./works/morgan-sonety-glazgo.html">Сонеты Глазго</a>
+                    <span class="work-meta">1972 · Цикл из 10 сонетов</span>
+                  </div>
+                  <p class="work-summary">Суровый и сострадательный портрет индустриального Глазго начала 1970-х годов в строгой форме сонета.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание шотландской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

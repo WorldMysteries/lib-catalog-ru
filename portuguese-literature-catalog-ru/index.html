@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог португальской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 17 писателей · 26 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог португальской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от эпоса Камоэнса и романтизма Гаррета до реализма Эсы де Кейроша, гетеронимов Пессоа и прозы Жозе Сарамаго.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#pt-renaissance">Раздел I: Возрождение и эпоха Великих открытий</a>
+        <a href="#pt-baroque-enlightenment">Раздел II: Барокко и век Просвещения</a>
+        <a href="#pt-romanticism">Раздел III: Португальский романтизм</a>
+        <a href="#pt-realism-1870">Раздел IV: Реализм «Поколения 1870-х»</a>
+        <a href="#pt-modernism">Раздел V: Модернизм и лиссабонский авангард</a>
+        <a href="#pt-contemporary-classics">Раздел VI: Неореализм и проза второй половины XX века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="pt-renaissance">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1517–1601 годы</p>
+          <h2 class="section-title">Возрождение и эпоха Великих открытий</h2>
+          <p class="section-desc">Золотой век португальской словесности: мореплавание, героический эпос Камоэнса, народный театр Жила Висенте и лирика «саудаде».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-camoes">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луиш Ваш де Камоэнс</h3>
+                  <p class="author-role">Национальный поэт Португалии, автор «Лузиад» · <span class="tabular">1524–1580</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Величайший поэт португальского Возрождения, прославивший морской путь Васко да Гамы в Индию и поднявший португальский язык на высоту мировой классики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-os-lusiadas">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-01.01</span>
+                    <a class="work-link" href="./works/camoes-luziady.html">Лузиады</a>
+                    <span class="work-meta">1572 · Эпическая поэма в 10 песнях</span>
+                  </div>
+                  <p class="work-summary">Национальный героический эпос о плавании Васко да Гамы вокруг Африки в Индию, о славе португальских мореходов, любви Инеш де Каштру и мифологических битвах богов.</p>
+                </li>
+                <li class="work-item" id="work-rimas-camoes">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-01.02</span>
+                    <a class="work-link" href="./works/camoes-lirika-sonety.html">Лирика и сонеты</a>
+                    <span class="work-meta">1595 · Сборник сонетов и элегий</span>
+                  </div>
+                  <p class="work-summary">Любовная и философская лирика о переменчивости судьбы, горечи изгнания и природе любви — «огне, что жжёт незримо».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gil-vicente">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жил Висенте</h3>
+                  <p class="author-role">Основоположник португальского театра · <span class="tabular">ок. 1465–1536</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и драматург при дворе Мануэла I и Жуана III, соединивший средневековые мистерии с острой социальной сатирой Ренессанса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-auto-da-barca-do-inferno">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-01.03</span>
+                    <a class="work-link" href="./works/vicente-lodka-v-ad.html">Ауто о лодке в ад</a>
+                    <span class="work-meta">1517 · Сатирическая пьеса-моралите</span>
+                  </div>
+                  <p class="work-summary">Аллегорическая картина Страшного суда на берегу загробной реки, где Дьявол и Ангел встречают дворянина, ростовщика, судью, монаха и сапожника.</p>
+                </li>
+                <li class="work-item" id="work-farsa-de-ines-pereira">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-01.04</span>
+                    <a class="work-link" href="./works/vicente-ines-pereira.html">Фарс об Инеш Перейре</a>
+                    <span class="work-meta">1523 · Комедия</span>
+                  </div>
+                  <p class="work-summary">Остроумная пьеса на пословицу «лучше осёл, который меня везёт, чем конь, который сбрасывает» — о хитроумной девушке и выборе мужа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bernardim-ribeiro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бернардин Рибейру</h3>
+                  <p class="author-role">Мастер пасторальной прозы и поэтики саудаде · <span class="tabular">1482–1552</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель эпохи Возрождения, запечатлевший глубокое португальское чувство светлой грусти и тоски — «saudade».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-menina-e-moca">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-01.05</span>
+                    <a class="work-link" href="./works/ribeiro-menina-e-moca.html">История девушки, или Тоска (Menina e Moça)</a>
+                    <span class="work-meta">1554 · Лирический роман</span>
+                  </div>
+                  <p class="work-summary">Трогательный пасторальный роман о разлуке, памяти и уединении среди гор и долин, открывающий традицию португальской исповедальной прозы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pt-baroque-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1654–1805 годы</p>
+          <h2 class="section-title">Барокко и век Просвещения</h2>
+          <p class="section-desc">Искусство барочной проповеди, интеллектуальные трактаты и яркая предромантическая поэзия конца XVIII столетия.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-antonio-vieira">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Отец Антониу Виейра</h3>
+                  <p class="author-role">Великий оратор барокко и защитник прав индейцев · <span class="tabular">1608–1697</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Иезуит, дипломат и блестящий стилист, чьи проповеди в Лиссабоне и Бразилии считаются высшим образцом классической португальской прозы XVII века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sermao-de-santo-antonio">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-02.01</span>
+                    <a class="work-link" href="./works/vieira-propoved-rybam.html">Проповедь святого Антония рыбам</a>
+                    <span class="work-meta">1654 · Ораторская проза</span>
+                  </div>
+                  <p class="work-summary">Знаменитая аллегорическая проповедь, произнесённая в Мараньяне: обращаясь к морским рыбам, Виейра обличает жадность, гордыню и рабство.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bocage">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэл Мария Барбоза ду Бокаже</h3>
+                  <p class="author-role">Поэт позднего Просвещения и предромантизма · <span class="tabular">1765–1805</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лиссабонский поэт-импровизатор, соединивший строгий классический сонет с бурной романтической страстью и сатирой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sonetos-bocage">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-02.02</span>
+                    <a class="work-link" href="./works/bocage-sonety.html">Избранные сонеты и элегии</a>
+                    <span class="work-meta">1791 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Лирическая исповедь мятежного духа, предвосхитившая португальский романтизм XIX века.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pt-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1843–1871 годы</p>
+          <h2 class="section-title">Португальский романтизм</h2>
+          <p class="section-desc">Открытие народной традиции, рождение национальной исторической драмы, роман путешествий Гаррета и страстные романы Каштелу Бранку.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-almeida-garrett">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жуан Батишта да Силва Лейтан де Алмейда Гаррет</h3>
+                  <p class="author-role">Зачинатель романтизма и реформатор португальской прозы · <span class="tabular">1799–1854</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, драматург и государственный деятель, обновивший португальский театр и создавший свободную, живую повествовательную прозу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-viagens-na-minha-terra">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-03.01</span>
+                    <a class="work-link" href="./works/garrett-stranstviya.html">Странствия по моей земле</a>
+                    <span class="work-meta">1846 · Роман-путешествие</span>
+                  </div>
+                  <p class="work-summary">Дорожные заметки по долине Тежу от Лиссабона до Сантарена, в которые вплетена трагическая повесть о «девушке с соловьями» Жуанинье.</p>
+                </li>
+                <li class="work-item" id="work-frei-luis-de-sousa">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-03.02</span>
+                    <a class="work-link" href="./works/garrett-brat-luish-de-souza.html">Брат Луиш де Соуза</a>
+                    <span class="work-meta">1843 · Историческая драма</span>
+                  </div>
+                  <p class="work-summary">Трагедия семьи благородного Мануэла де Соузы, чьё спокойное счастье рушится после возвращения первого мужа Мадалены из плена.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-herculano">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алешандре Эркулану</h3>
+                  <p class="author-role">Историк и создатель португальского исторического романа · <span class="tabular">1810–1877</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выдающийся историк и романист, воскресивший эпоху ранней Португалии и борьбы за независимость в суровой романтической прозе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-eurico-o-presbitero">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-03.03</span>
+                    <a class="work-link" href="./works/herculano-euriku.html">Эурику-пресвитер</a>
+                    <span class="work-meta">1844 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Драма вестготского рыцаря и священника Эурику, разрывающегося между обетом безбрачия, любовью к Эрменгарде и битвой при Ковадонге.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-camilo-castelo-branco">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Камилу Каштелу Бранку</h3>
+                  <p class="author-role">Мастер страстного романтического романа · <span class="tabular">1825–1890</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Неистовый стилист и знаток богатейшего словаря северной Португалии, автор более пятидесяти романов о роковой любви.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-amor-de-perdicao">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-03.04</span>
+                    <a class="work-link" href="./works/castelo-branco-pogibshaya-lyubov.html">Погибшая любовь (Любовь, принесшая гибель)</a>
+                    <span class="work-meta">1862 · Роман</span>
+                  </div>
+                  <p class="work-summary">История Симана Ботелью и Терезы де Албукерке — португальских Ромео и Джульетты, чьи семьи ведут непримиримую вражду.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-julio-dinis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жулиу Диниш</h3>
+                  <p class="author-role">Певец провинциальной Португалии и переход к реализму · <span class="tabular">1839–1871</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач и романист из Порту, создавший тёплые, светлые романы о деревенской жизни, труде и гармонии человеческих отношений.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-as-pupilas-do-senhor-reitor">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-03.05</span>
+                    <a class="work-link" href="./works/dinis-vospitannicy-rektora.html">Воспитанницы господина ректора</a>
+                    <span class="work-meta">1867 · Роман</span>
+                  </div>
+                  <p class="work-summary">Поэтическая хроника португальской деревни Минью, где переплетаются судьбы двух сестёр Маргариды и Клары.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pt-realism-1870">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1875–1901 годы</p>
+          <h2 class="section-title">Реализм «Поколения 1870-х»</h2>
+          <p class="section-desc">Европейский расцвет португальского романа: блестящая ирония Эсы де Кейроша и философские сонеты Антеру де Кентала.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-eca-de-queiros">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жозе Мария Эса де Кейрош</h3>
+                  <p class="author-role">Крупнейший португальский романист XIX века · <span class="tabular">1845–1900</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Мастер европейского реализма и тонкой иронии, поставивший португальский роман в один ряд с прозой Флобера и Толстого.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-os-maias">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-04.01</span>
+                    <a class="work-link" href="./works/queiros-semeystvo-maya.html">Семейство Майя</a>
+                    <span class="work-meta">1888 · Роман</span>
+                  </div>
+                  <p class="work-summary">Грандиозный портрет аристократического Лиссабона конца XIX века и трагическая история Карлуша да Майя и Марии Эдуарды.</p>
+                </li>
+                <li class="work-item" id="work-o-crime-do-padre-amaro">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-04.02</span>
+                    <a class="work-link" href="./works/queiros-prestuplenie-padre-amaru.html">Преступление падре Амару</a>
+                    <span class="work-meta">1875 · Реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Острая социальная и психологическая драма о молодом священнике в провинциальном городе Лейрии, разрушившая идиллические мифы романтиков.</p>
+                </li>
+                <li class="work-item" id="work-a-cidade-e-as-serras">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-04.03</span>
+                    <a class="work-link" href="./works/queiros-gorod-i-gory.html">Город и горы</a>
+                    <span class="work-meta">1901 · Сатирико-лирический роман</span>
+                  </div>
+                  <p class="work-summary">Ироничная история пресыщенного парижского денди Жасинту, который, устав от «цивилизации» на Елисейских Полях, открывает подлинную радость в горах Португалии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-antero-de-quental">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антеру де Кентал</h3>
+                  <p class="author-role">Поэт-философ и духовный лидер «Поколения 1870-х» · <span class="tabular">1842–1891</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и поэт с Азорских островов, превративший португальский сонет в инструмент метафизического поиска.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sonetos-completos-quental">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-04.04</span>
+                    <a class="work-link" href="./works/quental-sonety.html">Полное собрание сонетов</a>
+                    <span class="work-meta">1886 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Духовная автобиография в сонетах — от бунтарского пафоса молодости к тихому созерцанию вечности.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pt-modernism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1913–1935 годы</p>
+          <h2 class="section-title">Модернизм и лиссабонский авангард</h2>
+          <p class="section-desc">Революция журнала «Орфей», феномен гетеронимов Фернандо Пессоа, исповедальная проза Са-Карнейру и лирика Флорбелы Эшпанки.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-fernando-pessoa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фернандо Пессоа</h3>
+                  <p class="author-role">Главный поэт португальского модернизма, создатель гетеронимов · <span class="tabular">1888–1935</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Уникальный поэт и мыслитель XX века, писавший от имени десятков вымышленных авторов — Алберту Каэйру, Рикарду Рейса, Алвару де Кампуша и Бернарду Соареша.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-livro-do-desassossego">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-05.01</span>
+                    <a class="work-link" href="./works/pessoa-kniga-nepokoya.html">Книга непокоя</a>
+                    <span class="work-meta">1913–1935 · Фрагментарная проза (Бернарду Соареш)</span>
+                  </div>
+                  <p class="work-summary">Личная вселенная скромного лиссабонского помощника бухгалтера с улицы Доурадореш: размышления о снах, дожде, одиночестве и призрачности «я».</p>
+                </li>
+                <li class="work-item" id="work-mensagem">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-05.02</span>
+                    <a class="work-link" href="./works/pessoa-poslanie.html">Послание</a>
+                    <span class="work-meta">1934 · Символическая поэма-цикл</span>
+                  </div>
+                  <p class="work-summary">Единственная прижизненная книга Пессоа на португальском языке — мистическая история Португалии от Улисса и королей до Пятой Империи духа.</p>
+                </li>
+                <li class="work-item" id="work-guardador-de-rebanhos">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-05.03</span>
+                    <a class="work-link" href="./works/pessoa-hranitel-stad.html">Хранитель стад (Алберту Каэйру)</a>
+                    <span class="work-meta">1914 · Цикл стихов</span>
+                  </div>
+                  <p class="work-summary">Ясная пасторальная философия главного «учителя» всех гетеронимов: видеть вещи такими, какие они есть, без метафизических домыслов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sa-carneiro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мариу де Са-Карнейру</h3>
+                  <p class="author-role">Поэт и прозаик журнала «Орфей» · <span class="tabular">1890–1916</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ближайший друг Пессоа, трагический модернист, соединивший парижскую богему с тревожным расщеплением личности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-confissao-de-lucio">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-05.04</span>
+                    <a class="work-link" href="./works/sa-carneiro-ispoved-lusiu.html">Исповедь Лусиу</a>
+                    <span class="work-meta">1914 · Фантастическая повесть</span>
+                  </div>
+                  <p class="work-summary">Загадочная повесть о дружбе двух поэтов в Париже и Лиссабоне, таинственной Марте и преступлении на грани сна и яви.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-florbela-espanca">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Флорбела Эшпанка</h3>
+                  <p class="author-role">Выдающаяся португальская поэтесса XX века · <span class="tabular">1894–1930</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер пылкого, трагического и предельно искреннего сонета о любви, свободе женщины и родном Алентежу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-charneca-em-flor">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-05.05</span>
+                    <a class="work-link" href="./works/espanca-cvetushchaya-pustosh.html">Цветущая пустошь (Харита, сестра Саудаде)</a>
+                    <span class="work-meta">1931 · Сборник сонетов</span>
+                  </div>
+                  <p class="work-summary">Вершина лирики Эшпанки — сонеты о полноте жизни, страсти и неразрывной связи со степями Алентежу.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pt-contemporary-classics">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1944–1996 годы</p>
+          <h2 class="section-title">Неореализм и проза второй половины XX века</h2>
+          <p class="section-desc">Мировое признание современной португальской литературы: притчи Нобелевского лауреата Жозе Сарамаго, полифония Лобу Антунеша и светлая поэзия Софии де Меллу.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-saramago">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жозе Сарамаго</h3>
+                  <p class="author-role">Лауреат Нобелевской премии по литературе 1998 года · <span class="tabular">1922–2010</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Один из величайших романистов конца XX века, создавший неповторимый ритм устного сказа и философские притчи о власти, вере и совести.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-memorial-do-convento">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-06.01</span>
+                    <a class="work-link" href="./works/saramago-vospominaniya-o-monastyre.html">Воспоминания о монастыре</a>
+                    <span class="work-meta">1982 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Португалия XVIII века: строительство грандиозного монастыря в Мафре, любовь однорукого солдата Балтазара и ясновидящей Блимунды, строящих летающую «Пассаролу».</p>
+                </li>
+                <li class="work-item" id="work-ensaio-sobre-a-cegueira">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-06.02</span>
+                    <a class="work-link" href="./works/saramago-slepota.html">Слепота</a>
+                    <span class="work-meta">1995 · Роман-притча</span>
+                  </div>
+                  <p class="work-summary">Внезапная эпидемия «белой слепоты» в безымянном городе, проверяющая на прочность человеческое достоинство и сострадание.</p>
+                </li>
+                <li class="work-item" id="work-ano-da-morte-de-ricardo-reis">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-06.03</span>
+                    <a class="work-link" href="./works/saramago-god-smerti-rikardo-reysa.html">Год смерти Рикардо Рейса</a>
+                    <span class="work-meta">1984 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Гетероним Фернандо Пессоа — врач и поэт Рикарду Рейс — возвращается из Бразилии в дождливый Лиссабон 1936 года и беседует с тенью самого Пессоа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lobo-antunes">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антониу Лобу Антунеш</h3>
+                  <p class="author-role">Мастер полифонического психологического романа · <span class="tabular">род. 1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач-психиатр и один из самых влиятельных португальских прозаиков, исследовавший память колониальных войн и историю Португалии XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-os-cus-de-judas">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-06.04</span>
+                    <a class="work-link" href="./works/antunes-yudol.html">Юдоль (Слон на краю света)</a>
+                    <span class="work-meta">1979 · Роман-монолог</span>
+                  </div>
+                  <p class="work-summary">Ночная исповедь военного врача, вернувшегося в Лиссабон из Анголы, о памяти, травме и крушении империи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sophia-andresen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">София де Меллу Брейнер Андресен</h3>
+                  <p class="author-role">Поэтесса света, моря и античной чистоты слова · <span class="tabular">1919–2004</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первая женщина, удостоенная премии Камоэнса; её стихи и рассказы наполнены кристальной ясностью Атлантики и Средиземноморья.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dia-do-mar">
+                  <div class="work-row">
+                    <span class="work-code">ПТ-06.05</span>
+                    <a class="work-link" href="./works/andresen-den-morya.html">Коралловый день (День моря)</a>
+                    <span class="work-meta">1947 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Лирика, в которой шум океана, белый камень и тишина рассвета становятся мерой правды и красоты.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание португальской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
