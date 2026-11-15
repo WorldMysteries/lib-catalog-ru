@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог итальянской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 37 писателей · 40 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог итальянской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Данте, Петрарки, Боккаччо и Возрождения Ариосто до Мандзони, Леопарди, Пиранделло, Лампедузы, Примо Леви, Итало Кальвино, Умберто Эко и Элены Ферранте.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#it-trecento-crowns">Раздел I: Рождение итальянского языка и «Три венца» Треченто</a>
+        <a href="#it-renaissance-baroque">Раздел II: Возрождение и барокко: эпос, мысль и сказка</a>
+        <a href="#it-enlightenment-romanticism">Раздел III: Просвещение, театр и эпоха Рисорджименто</a>
+        <a href="#it-verismo-modern-shift">Раздел IV: Веризм, декаданс и переворот в прозе и театре</a>
+        <a href="#it-hermeticism-neorealism">Раздел V: Герметическая поэзия, память и неореализм XX века</a>
+        <a href="#it-postmodern-contemporary">Раздел VI: Интеллектуальный роман, постмодернизм и проза XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="it-trecento-crowns">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIII–XIV века</p>
+          <h2 class="section-title">Рождение итальянского языка и «Три венца» Треченто</h2>
+          <p class="section-desc">От первых поэтических гимнов Франциска Ассизского и школы «Сладостного нового стиля» к вершинам мировой литературы — Данте Алигьери, Франческо Петрарке и Джованни Боккаччо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-francis-cavalcanti">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франциск Ассизский и Гвидо Кавальканти</h3>
+                  <p class="author-role">Первооткрыватели поэзии на народном итальянском языке · <span class="tabular">1181–1300</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Умбрийский святой, сложивший древнейший памятник итальянской поэзии, и флорентийский лирик, учитель и друг Данте в кружке «Dolce Stil Novo».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cantico-delle-creature">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-01.01</span>
+                    <a class="work-link" href="./works/francisk-gimn-bratu-solncu.html">Гимн творениям («Песнь брату Солнцу») и канцоны любви</a>
+                    <span class="work-meta">ок. 1225–1295 · Духовная и куртуазная лирика</span>
+                  </div>
+                  <p class="work-summary">Светлое благодарение природе — Солнцу, Луне, Воде и Огню — и философская лирика флорентийских поэтов о благородстве человеческого сердца.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dante-alighieri">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Данте Алигьери</h3>
+                  <p class="author-role">«Верховный поэт» Италии, творец единого литературного языка · <span class="tabular">1265–1321</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Флорентийский изгнанник, мыслитель и поэт, воздвигший грандиозную готическую вселенную Средневековья и порог Возрождения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-divina-commedia">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-01.02</span>
+                    <a class="work-link" href="./works/dante-bozhestvennaya-komediya.html">Божественная комедия</a>
+                    <span class="work-meta">1308–1321 · Философско-аллегорическая поэма</span>
+                  </div>
+                  <p class="work-summary">Странствие души сквозь девять кругов Ада, уступы Чистилища и небесные сферы Рая в сопровождении Вергилия и Беатриче — энциклопедия человеческих страстей и судеб.</p>
+                </li>
+                <li class="work-item" id="work-vita-nuova">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-01.03</span>
+                    <a class="work-link" href="./works/dante-novaya-zhizn.html">Новая жизнь («Vita Nuova»)</a>
+                    <span class="work-meta">ок. 1293 · Лирическая автобиография в стихах и прозе</span>
+                  </div>
+                  <p class="work-summary">Трепетный дневник юной любви к Беатриче Портинари — от первой встречи во Флоренции до преображения земного чувства в путеводный небесный свет.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-francesco-petrarca">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франческо Петрарка</h3>
+                  <p class="author-role">Основоположник европейского гуманизма и мастер сонета · <span class="tabular">1304–1374</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный-филолог и поэт-лауреат, открывший внутреннюю противоречивость души современного человека в бессмертных стихах к Лауре.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-il-canzoniere">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-01.04</span>
+                    <a class="work-link" href="./works/petrarka-kniga-pesen.html">Книга песен («Il Canzoniere»)</a>
+                    <span class="work-meta">1336–1374 · Сонеты и канцоны</span>
+                  </div>
+                  <p class="work-summary">Триста шестьдесят шесть стихотворений «На жизнь» и «На смерть мадонны Лауры» — вершина европейской любовной лирики, породившая многовековую традицию петраркизма.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-giovanni-boccaccio">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джованни Боккаччо</h3>
+                  <p class="author-role">Создатель классической итальянской новеллы и прозы Возрождения · <span class="tabular">1313–1375</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Друг Петрарки и первый комментатор Данте, утвердивший в «Декамероне» полноту земной жизни, остроумие, смех и достоинство человеческой природы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-decameron">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-01.05</span>
+                    <a class="work-link" href="./works/bokkachcho-dekameron.html">Декамерон</a>
+                    <span class="work-meta">1349–1353 · Цикл из ста новелл</span>
+                  </div>
+                  <p class="work-summary">Десять юношей и девушек, укрывшихся от флорентийской чумы 1348 года на загородной вилле, десять дней рассказывают истории о любви, хитрости, удаче и благородстве.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="it-renaissance-baroque">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · XV–XVII века</p>
+          <h2 class="section-title">Возрождение и барокко: эпос, мысль и сказка</h2>
+          <p class="section-desc">Гармония Ренессанса при дворах Медичи и Эсте, рыцарская фантазия Ариосто и Тассо, политический реализм Макиавелли и неаполитанский фольклорный барокко Базиле.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-poliziano-medici">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анджело Полициано и Лоренцо Медичи</h3>
+                  <p class="author-role">Мастера флорентийского Кватроченто · <span class="tabular">1449–1494</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-гуманист Полициано и правитель Флоренции Лоренцо Великолепный, воспевшие радость цветущей юности и скоротечность земной красоты.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-stanze-trionfo-di-bacco">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-02.01</span>
+                    <a class="work-link" href="./works/policiano-medichi-stansy.html">Стансы на турнир и «Триумф Вакха и Ариадны»</a>
+                    <span class="work-meta">1475–1490 · Ренессансная поэма и карнавальные песни</span>
+                  </div>
+                  <p class="work-summary">Ослепительная живописность тосканской весны в октавах Полициано и знаменитый карнавальный призыв Медичи: «Кто хочет быть счастлив — будь им сегодня!»</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ludovico-ariosto">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лудовико Ариосто</h3>
+                  <p class="author-role">Величайший поэт Высокого Возрождения · <span class="tabular">1474–1533</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Придворный поэт Феррары, создавший изящную, ироническую и головокружительную поэму о рыцарях Карла Великого, любви и лунном безумии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-orlando-furioso">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-02.02</span>
+                    <a class="work-link" href="./works/ariosto-neistovyj-roland.html">Неистовый Роланд («Orlando furioso»)</a>
+                    <span class="work-meta">1516–1532 · Рыцарская поэма в октавах</span>
+                  </div>
+                  <p class="work-summary">Вихрь приключений на земле и в небе — от безумия паладина Роланда из-за прекрасной Анджелики до полёта Астольфа на гиппогрифе на Луну за утерянным разумом героя.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-niccolo-machiavelli">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Никколо Макиавелли</h3>
+                  <p class="author-role">Основоположник современной политической философии и ренессансной комедии · <span class="tabular">1469–1527</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Флорентийский государственный секретарь, трезво изучивший механику власти в трактатах и блестяще высмеявший людские пороки на театральной сцене.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-il-principe-mandragola">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-02.03</span>
+                    <a class="work-link" href="./works/makiavelli-gosudar-i-mandragora.html">Государь и комедия «Мандрагора»</a>
+                    <span class="work-meta">1513–1518 · Политический трактат и ренессансная комедия</span>
+                  </div>
+                  <p class="work-summary">Бесстрашный анализ искусства управления государством на переломе эпох и самая остроумная комедия итальянского Возрождения о пронырливом влюблённом Каллимако.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-torquato-tasso">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Торквато Тассо</h3>
+                  <p class="author-role">Трагический поэт Позднего Возрождения и предтеча барокко · <span class="tabular">1544–1595</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Гений музыкальной меланхолии и внутреннего разлада, чья поэма о Крестовом походе очаровывала Пушкина, Байрона и Гёте.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gerusalemme-liberata">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-02.04</span>
+                    <a class="work-link" href="./works/tasso-osvobozhdennyj-ierusalim.html">Освобождённый Иерусалим</a>
+                    <span class="work-meta">1575 / изд. 1581 · Героико-романтическая поэма</span>
+                  </div>
+                  <p class="work-summary">Поэтический эпос о походе Годфруа Бульонского и любви крестоносца Танкреда к воинственной сарацинке Клоринде, полный волшебных садов Армиды и высокой скорби.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-giambattista-basile">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джамбаттиста Базиле</h3>
+                  <p class="author-role">Первооткрыватель европейской авторской сказки · <span class="tabular">ок. 1566–1632</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Неаполитанский поэт эпохи барокко, записавший на сочном неаполитанском языке древнейшие версии «Золушки», «Спящей красавицы» и «Кота в сапогах».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lo-cunto-de-li-cunti">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-02.05</span>
+                    <a class="work-link" href="./works/bazile-skazka-skazok.html">Сказка сказок («Пентамерон»)</a>
+                    <span class="work-meta">изд. 1634–1636 · Барочный сборник волшебных сказок</span>
+                  </div>
+                  <p class="work-summary">Пятьдесят искромётных, причудливых и красочных историй, рассказанных за пять дней неаполитанским народным языком в духе «Декамерона».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="it-enlightenment-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · XVIII–XIX века</p>
+          <h2 class="section-title">Просвещение, театр и эпоха Рисорджименто</h2>
+          <p class="section-desc">Венецианская сцена Карло Гольдони и Карло Гоцци, предромантизм Фосколо, великий исторический роман Мандзони, скорбная лирика Леопарди и «Пиноккио» Коллоди.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-carlo-goldoni">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карло Гольдони</h3>
+                  <p class="author-role">Реформатор итальянского театра и автор бессмертных комедий · <span class="tabular">1707–1793</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Венецианский драматург, сменивший застывшие маски комедии дель арте на живые человеческие характеры, бытовой юмор и обаяние народа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-servitore-di-due-padroni">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-03.01</span>
+                    <a class="work-link" href="./works/goldoni-sluga-dvuh-gospod.html">Слуга двух господ и «Трактирщица»</a>
+                    <span class="work-meta">1745–1752 · Комедии характеров</span>
+                  </div>
+                  <p class="work-summary">Неистощимые выдумки голодного и находчивого Труффальдино из Бергамо и блистательная победа умной флорентийской хозяйки Мирандолины над упрямым кавалером.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carlo-gozzi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карло Гоцци</h3>
+                  <p class="author-role">Мастер театральной сказки («фьябы») · <span class="tabular">1720–1806</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Венецианский граф, защитивший поэзию вымысла, масок Труффальдино и Панталоне и восточной экзотики в волшебных пьесах для сцены.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-turandot-tre-melarance">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-03.02</span>
+                    <a class="work-link" href="./works/gocci-turandot-i-apelsiny.html">Любовь к трём апельсинам и «Турандот»</a>
+                    <span class="work-meta">1761–1762 · Театральные сказки (фьябы)</span>
+                  </div>
+                  <p class="work-summary">Волшебная ирония о меланхолическом принце Тарталье и драматическая притча о гордой пекинской царевне, загадывающей женихам три смертельные загадки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ugo-foscolo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уго Фосколо</h3>
+                  <p class="author-role">Поэт-бунтарь, связующее звено классицизма и романтизма · <span class="tabular">1778–1827</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Воин, патриот и изгнанник ионического происхождения, создавший первый современный итальянский роман в письмах и великую элегическую поэму.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ultime-lettere-jacopo-ortis">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-03.03</span>
+                    <a class="work-link" href="./works/foskolo-pisma-yakopo-ortisa.html">Последние письма Якопо Ортиса и поэма «Гробницы»</a>
+                    <span class="work-meta">1802–1807 · Эпистолярный роман и поэма</span>
+                  </div>
+                  <p class="work-summary">Страстный крик сердца о безнадёжной любви к Терезе и утрате свободы Венеции, а также величественный гимн бессмертию памяти великих предков во Флоренции.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alessandro-manzoni">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алессандро Мандзони</h3>
+                  <p class="author-role">Автор главного итальянского романа XIX века · <span class="tabular">1785–1873</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Миланский романист и мыслитель эпохи Рисорджименто, утвердивший тосканское наречие в качестве образца современной итальянской прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-i-promessi-sposi">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-03.04</span>
+                    <a class="work-link" href="./works/mandzoni-obruchennye.html">Обручённые («I promessi sposi»)</a>
+                    <span class="work-meta">1827 / 1840 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">История скромных ткачей Ренцо и Лючии с берегов озера Комо в XVII веке: разлучённые произволом феодала, хлебным бунтом и страшной чумой в Милане, они обретают друг друга через веру и милосердие.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-giacomo-leopardi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джакомо Леопарди</h3>
+                  <p class="author-role">Величайший поэт итальянского романтизма и философский лирик · <span class="tabular">1798–1837</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Затворник из Реканати, в стихах невероятной чистоты и скорбного мужества задавший вечные вопросы о бесконечности, природе и братстве людей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-canti-operette-morali">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-03.05</span>
+                    <a class="work-link" href="./works/leopardi-pesni-i-beskonechnost.html">Песни («Бесконечность», «Дрок») и «Нравственные очерки»</a>
+                    <span class="work-meta">1819–1836 · Философская лирика и диалоги</span>
+                  </div>
+                  <p class="work-summary">От пронзительного созерцания безбрежности за живой изгородью холма до предсмертного гимна скромному жёлтому цветку дрока на склонах Везувия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carlo-collodi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карло Коллоди (Карло Лоренцини)</h3>
+                  <p class="author-role">Создатель самой знаменитой детской книги Италии · <span class="tabular">1826–1890</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Флорентийский журналист и сатирик, подаривший миру историю деревянного мальчишки, мечтающего стать настоящим человеком.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-avventure-di-pinocchio">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-03.06</span>
+                    <a class="work-link" href="./works/kollodi-priklyucheniya-pinokkio.html">Приключения Пиноккио. История деревянной куклы</a>
+                    <span class="work-meta">1883 · Философская сказочная повесть</span>
+                  </div>
+                  <p class="work-summary">Опасные и смешные испытания легкомысленного Пиноккио — от Лисы и Кота до Страны развлечений и чрева страшной Акулы — на пути к доброте и совести.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="it-verismo-modern-shift">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1870–1930</p>
+          <h2 class="section-title">Веризм, декаданс и переворот в прозе и театре</h2>
+          <p class="section-desc">Сицилийский веризм Джованни Верги, эстетизм д’Аннунцио, поэзия Пасколи и великий модернистский перелом у Итало Звево и Луиджи Пиранделло.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-giovanni-verga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джованни Верга</h3>
+                  <p class="author-role">Глава итальянского веризма, летописец Сицилии · <span class="tabular">1840–1922</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Катании, показавший трагедию бедных рыбаков и крестьян Сицилии через бесстрастный хор деревенской речи без авторской фальши.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-i-malavoglia">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-04.01</span>
+                    <a class="work-link" href="./works/verga-semya-malavolya.html">Семья Малаволья и «Сельская честь»</a>
+                    <span class="work-meta">1880–1881 · Веристский роман и сицилийские новеллы</span>
+                  </div>
+                  <p class="work-summary">Крушение трудолюбивой семьи рыбаков Ачи-Треццы, пытающихся спасти старый «Дом у мушмулы» и барку «Провидение» от нищеты, бури и корысти мира.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gabriele-dannunzio">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Габриэле д’Аннунцио</h3>
+                  <p class="author-role">Главный поэт и прозаик итальянского декаданса и символизма · <span class="tabular">1863–1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блистательный эстет из Пескары, превративший язык в роскошную симфонию чувств, мрамора, сосновых лесов и морского ветра.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-il-piacere-alcyone">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-04.02</span>
+                    <a class="work-link" href="./works/dannuncio-naslazhdenie-i-alciona.html">Наслаждение и книга стихов «Альциона» («Дождь в сосновом лесу»)</a>
+                    <span class="work-meta">1889–1903 · Роман декаданса и музыкальная лирика</span>
+                  </div>
+                  <p class="work-summary">Портрет утончённого римского денди графа Андреа Сперелли и вершина звукописи итальянского XX века — паническое слияние любви с дождём в тосканском лесу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-giovanni-pascoli">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джованни Пасколи</h3>
+                  <p class="author-role">Поэт «внутреннего ребёнка» и тихой сельской вселенной · <span class="tabular">1855–1912</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын убитого управляющего из Романьи, открывший итальянской поэзии XX века хрупкие детали природы, память детства и голоса простых вещей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-myricae-canti-di-castelvecchio">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-04.03</span>
+                    <a class="work-link" href="./works/paskoli-miriki.html">Мирики («Тамариски») и «Песни Кастельвеккьо»</a>
+                    <span class="work-meta">1891–1903 · Импрессионистическая лирика</span>
+                  </div>
+                  <p class="work-summary">Тонкие зарисовки ласточкиного гнезда, вечернего колокола, грозы и неизжитой детской боли — «поэтика малого и незаметного».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-italo-svevo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Итало Звево (Этторе Шмиц)</h3>
+                  <p class="author-role">Пионер европейского психоаналитического романа, триестинский друг Джойса · <span class="tabular">1861–1928</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Купец из многоязычного Триеста, открытый для мировой литературы Джеймсом Джойсом и Эудженио Монтале и ставший предтечей современного иронического героя.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-coscienza-di-zeno">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-04.04</span>
+                    <a class="work-link" href="./works/zvevo-samopoznanie-dzeno.html">Самопознание Дзено</a>
+                    <span class="work-meta">1923 · Психоаналитический иронический роман</span>
+                  </div>
+                  <p class="work-summary">Искренняя и лукавая исповедь триестинского чудака Дзено Козини для психоаналитика — о «последней сигарете», смешных ошибках в браке, торговле и человеческом самообмане.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-luigi-pirandello">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луиджи Пиранделло</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1934), реформатор мировой драмы · <span class="tabular">1867–1936</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сицилийский драматург и новеллист, разрушивший «четвёртую стену» театра и показавший драму человека, запертого в масках чужих представлений.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sei-personaggi-mattia-pascal">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-04.05</span>
+                    <a class="work-link" href="./works/pirandello-shest-personazhej.html">Шесть персонажей в поисках автора и «Покойный Маттиа Паскаль»</a>
+                    <span class="work-meta">1904 / 1921 · «Театр в театре» и философский роман</span>
+                  </div>
+                  <p class="work-summary">Брошенные автором вымышленные герои вторгаются на репетицию в театр, требуя прожить их страшную семейную драму, а Маттиа Паскаль дважды пытается сбежать от собственного паспорта.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="it-hermeticism-neorealism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1920–1975</p>
+          <h2 class="section-title">Герметическая поэзия, память и неореализм XX века</h2>
+          <p class="section-desc">Великие поэты-нобелиаты Монтале и Квазимодо, аскеза Унгаретти, сицилийский шедевр Лампедузы, проза Моравиа, Павезе, Моранте, Пазолини, Буццати и свидетельство Примо Леви.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-giuseppe-ungaretti">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джузеппе Унгаретти</h3>
+                  <p class="author-role">Обновитель итальянского стиха XX века, мастер поэтической паузы · <span class="tabular">1888–1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Родившийся в Александрии поэт-солдат Первой мировой войны, очистивший слово от риторики до ослепительной вспышки тишины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lallegria-il-porto-sepolto">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.01</span>
+                    <a class="work-link" href="./works/ungaretti-pogrebennyj-port.html">Погребённый порт и «Радость кораблекрушений»</a>
+                    <span class="work-meta">1916–1931 · Авангардная и герметическая лирика</span>
+                  </div>
+                  <p class="work-summary">Кратчайшие окопные стихи из Карсо («Мгновенно озаряюсь / необъятностью»), где два-три слова открывают бездну жизни, смерти и братства.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eugenio-montale">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эудженио Монтале</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1975), голос стоической поэзии XX века · <span class="tabular">1896–1981</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт Лигурийского побережья, противопоставивший тоталитаризму и пустоте «сухое» слово скал, полудня и верности памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ossi-di-seppia">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.02</span>
+                    <a class="work-link" href="./works/montale-panciri-karakaticy.html">Панцири каракатицы и «Буря и прочее»</a>
+                    <span class="work-meta">1925–1956 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Блистательная лигурийская поэзия («Полдень бледный и задумчивый у раскалённой стены сада…») о мужестве не обольщаться ложными ответами.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-salvatore-quasimodo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сальваторе Квазимодо</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1959), певец Сицилии и гражданской боли · <span class="tabular">1901–1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Инженер и поэт из Модики, прошедший путь от герметического созерцания одиночества к суровой поэзии антифашистского Сопротивления.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ed-e-subito-sera">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.03</span>
+                    <a class="work-link" href="./works/kvazimodo-i-srazu-vecher.html">И сразу вечер («Ed è subito sera»)</a>
+                    <span class="work-meta">1942 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Трёхстрочная формула человеческой судьбы — «Каждый стоит один на сердце земли, пронзённый лучом солнца: и сразу вечер» — и стихи о войне и Сицилии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alberto-moravia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альберто Моравиа</h3>
+                  <p class="author-role">Классик итальянского реалистического и психологического романа XX века · <span class="tabular">1907–1990</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Римский прозаик и публицист, с ранних лет обнаживший духовное равнодушие буржуазного мира и психологию конформизма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gli-indifferenti-il-conformista">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.04</span>
+                    <a class="work-link" href="./works/moravia-ravnodushnye-i-konformist.html">Равнодушные и «Конформист» («Чочара»)</a>
+                    <span class="work-meta">1929–1957 · Социально-психологические романы</span>
+                  </div>
+                  <p class="work-summary">Анатомия душевного оцепенения семьи Арденго и трагедия Марчелло Клеричи, мечтавшего стать «как все» и продавшего совесть фашистскому режиму.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cesare-pavese">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Чезаре Павезе</h3>
+                  <p class="author-role">Выдающийся поэт и прозаик Пьемонта, переводчик американской литературы · <span class="tabular">1908–1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер лирической, лаконичной прозы о пьемонтских холмах Ланге, одиночестве возвращения и мифах детства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-luna-e-i-falo">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.05</span>
+                    <a class="work-link" href="./works/paveze-luna-i-kostry.html">Луна и костры и дневник «Ремесло жить»</a>
+                    <span class="work-meta">1950–1952 · Лирический роман и дневники</span>
+                  </div>
+                  <p class="work-summary">Возвращение разбогатевшего в Америке подкидыша Ангуиллы в родную пьемонтскую долину после войны — чтобы понять, что прежней деревни и юности уже нет.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-elsa-morante">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эльза Моранте</h3>
+                  <p class="author-role">Одна из крупнейших итальянских романисток XX столетия · <span class="tabular">1912–1985</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Римская писательница страстного, сострадательного эпического дара, защищавшая мир детей, бедняков и всех «малых» перед лицом большой истории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-storia-lisola-di-arturo">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.06</span>
+                    <a class="work-link" href="./works/morante-istoriya.html">История («La Storia») и «Остров Артуро»</a>
+                    <span class="work-meta">1957 / 1974 · Эпико-трагические романы</span>
+                  </div>
+                  <p class="work-summary">Душераздирающая судьба школьной учительницы Иды Рамундо и её маленького сына Узеппе в оккупированном и послевоенном Риме на фоне «скандала Истории, длящейся десять тысяч лет».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tomasi-di-lampedusa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джузеппе Томази ди Лампедуза</h3>
+                  <p class="author-role">Автор самого прославленного итальянского романа XX века · <span class="tabular">1896–1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сицилийский князь-эрудит, написавший в конце жизни единственную, ослепительную книгу о закате аристократии и природе перемен.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-il-gattopardo">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.07</span>
+                    <a class="work-link" href="./works/lampedusa-leopard.html">Леопард («Il Gattopardo»)</a>
+                    <span class="work-meta">изд. 1958 · Историко-философский роман</span>
+                  </div>
+                  <p class="work-summary">Высадка Гарибальди на Сицилии в 1860 году глазами мудрого и усталого астронома князя Фабрицио ди Салины — с бессмертной формулой Танкреди: «Чтобы всё осталось по-прежнему, всё должно измениться».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-primo-levi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Примо Леви</h3>
+                  <p class="author-role">Учёный-химик и величайший свидетель человечности XX века · <span class="tabular">1919–1987</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Туринский писатель, прошедший Освенцим и нашедший предельно ясные, спокойные и неопровержимые слова о достоинстве человека, труде и памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-se-questo-e-un-uomo">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.08</span>
+                    <a class="work-link" href="./works/levi-chelovek-li-eto.html">Человек ли это? и «Периодическая система»</a>
+                    <span class="work-meta">1947 / 1975 · Документальная и философско-мемуарная проза</span>
+                  </div>
+                  <p class="work-summary">Спокойное и страшное свидетельство о выживании в лагере благодаря памяти строк Данте об Одиссее и двадцать одна глава о жизни туринского химика сквозь свойства элементов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pier-paolo-pasolini">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пьер Паоло Пазолини</h3>
+                  <p class="author-role">Поэт, романист, публицист и великий кинорежиссёр · <span class="tabular">1922–1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Неистовый пророк послевоенной Италии, оплакавший исчезновение подлинного народного и крестьянского мира под натиском общества потребления.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ragazzi-di-vita-le-ceneri-di-gramsci">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.09</span>
+                    <a class="work-link" href="./works/pazolini-shpana-i-pepel-gramshi.html">Шпана («Ragazzi di vita») и поэма «Пепел Грамши»</a>
+                    <span class="work-meta">1955–1957 · Неореалистический роман и гражданская поэзия</span>
+                  </div>
+                  <p class="work-summary">Живая, горькая правда римских рабочих окраин-боргат на жаргоне улиц и пронзительный диалог на некатолическом кладбище Рима между страстью к народу и разумом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dino-buzzati">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дино Буццати</h3>
+                  <p class="author-role">Мастер итальянского магического реализма и философской притчи · <span class="tabular">1906–1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист миланской «Коррьере делла Сера», превративший томительное ожидание чуда и бег времени в завораживающую метафору человеческой судьбы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-il-deserto-dei-tartari">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-05.10</span>
+                    <a class="work-link" href="./works/buccati-tatarskaya-pustynya.html">Татарская пустыня</a>
+                    <span class="work-meta">1940 · Философско-аллегорический роман</span>
+                  </div>
+                  <p class="work-summary">Молодой лейтенант Джованни Дрого приезжает на далёкую северную границу в крепость Бастиани и проводит всю жизнь в ожидании врага из пустыни, который приходит лишь в час смерти.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="it-postmodern-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1960–2010-е годы</p>
+          <h2 class="section-title">Интеллектуальный роман, постмодернизм и проза XXI века</h2>
+          <p class="section-desc">Мировое влияние современной итальянской литературы: комбинаторная магия Итало Кальвино, детективы совести Шаши, эрудиция Умберто Эко, голос Табукки, Барикко и Элены Ферранте.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-italo-calvino">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Итало Кальвино</h3>
+                  <p class="author-role">Волшебник и архитектор мировой постмодернистской прозы · <span class="tabular">1923–1985</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Редактор туринского издательства «Эйнауди», соединивший лёгкость народной сказки, астрономию, семиотику и любовь к самому процессу чтения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-se-una-notte-dinverno-citta-invisibili">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-06.01</span>
+                    <a class="work-link" href="./works/kalvino-zimnej-nochyu-putnik.html">Если однажды зимней ночью путник и «Невидимые города»</a>
+                    <span class="work-meta">1972 / 1979 · Метароман и философские новеллы</span>
+                  </div>
+                  <p class="work-summary">Десять обрывающихся начал разных романов, сплетающихся в приключение Читателя и Читательницы, и поэтические беседы Марко Поло с ханом Хубилаем о пятидесяти пяти воображаемых городах.</p>
+                </li>
+                <li class="work-item" id="work-il-barone-rampante">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-06.02</span>
+                    <a class="work-link" href="./works/kalvino-baron-na-dereve.html">Наши предки («Барон на дереве»)</a>
+                    <span class="work-meta">1957 · Философско-приключенческая трилогия</span>
+                  </div>
+                  <p class="work-summary">Двенадцатилетний лигурийский барон Козимо Пьоваско ди Рондо в знак протеста залезает на каменный дуб в 1767 году и всю жизнь проживает в кронах деревьев, не сходя на землю.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-leonardo-sciascia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Леонардо Шаша</h3>
+                  <p class="author-role">Мастер интеллектуального расследования и совести Сицилии · <span class="tabular">1921–1989</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учитель и мыслитель из Ракальмуто, превративший детективный сюжет о мафии и власти в суровое исследование истины в духе Вольтера и Мандзони.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-il-giorno-della-civetta">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-06.03</span>
+                    <a class="work-link" href="./works/shasha-den-sovy.html">День совы («Il giorno della civetta»)</a>
+                    <span class="work-meta">1961 · Социально-философский детектив</span>
+                  </div>
+                  <p class="work-summary">Честный капитан карабинеров Беллоди с Севера пытается расследовать убийство на сицилийской площади, сталкиваясь с нерушимой стеной молчания — омертой и высшей политикой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-umberto-eco">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Умберто Эко</h3>
+                  <p class="author-role">Семиотик, медиевист и всемирно известный романист · <span class="tabular">1932–2016</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Профессор Болонского университета, показавший, что глубочайшая средневековая и философская эрудиция может стать захватывающим детективом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-il-nome-della-rosa">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-06.04</span>
+                    <a class="work-link" href="./works/eko-imya-rozy.html">Имя розы</a>
+                    <span class="work-meta">1980 · Историко-философский детектив</span>
+                  </div>
+                  <p class="work-summary">Ноябрь 1327 года: францисканец Вильгельм Баскервильский и послушник Адсон расследуют цепь загадочных смертей в итальянском аббатстве вокруг потайного лабиринта библиотеки и запрещённой книги Аристотеля о смехе.</p>
+                </li>
+                <li class="work-item" id="work-il-pendolo-di-foucault">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-06.05</span>
+                    <a class="work-link" href="./works/eko-mayatnik-fuko.html">Маятник Фуко</a>
+                    <span class="work-meta">1988 · Интеллектуальный роман-мистификация</span>
+                  </div>
+                  <p class="work-summary">Трое миланских редакторов ради шутки сочиняют компьютерный «План» тамплиерского мирового заговора — и с ужасом обнаруживают, что их вымысел начинает оживать.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-antonio-tabucchi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антонио Табукки</h3>
+                  <p class="author-role">Мастер европейской прозы, переводчик Пессоа · <span class="tabular">1943–2012</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Пизанский романист и знаток Португалии, прославившийся тонкой и человечной книгой о пробуждении гражданской совести перед лицом диктатуры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sostiene-pereira">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-06.06</span>
+                    <a class="work-link" href="./works/tabukki-utverzhdaet-perejra.html">Утверждает Перейра</a>
+                    <span class="work-meta">1994 · Психолого-политический роман</span>
+                  </div>
+                  <p class="work-summary">Пожилой, робкий редактор раздела культуры лиссабонской газеты летом 1938 года в эпоху Салазара обретает мужество сказать правду благодаря встрече с молодым журналистом Монтейру Росси.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alessandro-baricco">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алессандро Барикко</h3>
+                  <p class="author-role">Поэт современной итальянской прозы, музыкальный критик и драматург · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Туринский писатель завораживающей ритмической краткости, превративший прозу в камерную музыку для голоса, воды и тишины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-seta-novecento">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-06.07</span>
+                    <a class="work-link" href="./works/barikko-shelk-i-1900.html">Шёлк и «1900-й (Легенда о пианисте)»</a>
+                    <span class="work-meta">1994–1996 · Лирический роман и театральный монолог</span>
+                  </div>
+                  <p class="work-summary">Четыре путешествия французского торговца Эрве Жонкура в закрытую Японию XIX века за греной шелкопряда и молчаливая любовь к таинственной женщине, а также судьба гениального пианиста, ни разу не сошедшего с океанского лайнера.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-elena-ferrante">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Элена Ферранте</h3>
+                  <p class="author-role">Самый читаемый итальянский автор XXI века · <span class="tabular">кон. XX – нач. XXI в.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Загадочная неаполитанская писательница, создавшая великую сагу о женской дружбе, бедности, образовании и яростной силе послевоенного Неаполя.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lamica-geniale">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-06.08</span>
+                    <a class="work-link" href="./works/ferrante-moya-genialnaya-podruga.html">Моя гениальная подруга («Неаполитанский квартет»)</a>
+                    <span class="work-meta">2011–2014 · Роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Шесть десятилетий соперничества и неразрывной привязанности Лену Греко и блестящей, мятежной Лилы Черулло — от пыльного двора Неаполя 1950-х до Италии XXI века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-paolo-giordano">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Паоло Джордано</h3>
+                  <p class="author-role">Яркий голос нового поколения итальянской прозы, лауреат премии Стрега · <span class="tabular">род. 1982</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Физик-теоретик и романист из Турина, соединивший математическую точность метафор с тонким психологизмом о хрупкости близости в современном мире.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-solitudine-dei-numeri-primi">
+                  <div class="work-row">
+                    <span class="work-code">ИТ-06.09</span>
+                    <a class="work-link" href="./works/dzhordano-odinochestvo-prostyh-chisel.html">Одиночество простых чисел</a>
+                    <span class="work-meta">2008 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">История Аличе и Маттиа, словно чисел-близнецов в математике: они стоят почти рядом, разделённые лишь одним чётным числом, не дающим им по-настоящему коснуться друг друга.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание итальянской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
