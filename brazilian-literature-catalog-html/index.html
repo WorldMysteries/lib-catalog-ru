@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог бразильской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 33 писателей · 36 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог бразильской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от романтизма Аленкара, иронии Машаду де Ассиса и «Сертанов» Эуклидеса да Куньи до Друммонда, Грасилиану Рамоса, Жоржи Амаду, Гимарайнса Розы, Клариси Лиспектор и Итамара Виейры Жуниора.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#bra-baroque-romanticism">Раздел I: Колониальное барокко, романтизм и индианизм</a>
+        <a href="#bra-machado-realism">Раздел II: Реализм, сертаны и гений Машаду де Ассиса</a>
+        <a href="#bra-modernism-1922">Раздел III: Неделя современного искусства (1922) и великая поэзия</a>
+        <a href="#bra-regional-golden-age">Раздел IV: Золотой век романа: Северо-Восток и Юг Бразилии</a>
+        <a href="#bra-rosa-lispector-avantgarde">Раздел V: Метафизика языка: Гимарайнс Роза, Клариси Лиспектор и вторая половина XX века</a>
+        <a href="#bra-contemporary">Раздел VI: Новая проза, музыка слова и Бразилия XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="bra-baroque-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVII–XIX века</p>
+          <h2 class="section-title">Колониальное барокко, романтизм и индианизм</h2>
+          <p class="section-desc">От сатирического барокко Баии и аркадийской лирики Оуру-Прету к романтическому открытию тропической природы у Гонсалвеса Диаса, индианизму Аленкара и аболиционистским поэмам Кастро Алвеса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-matos-gonzaga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Грегорио де Матос и Томас Антонио Гонзага</h3>
+                  <p class="author-role">Вершины бразильского барокко и аркадизма XVIII века · <span class="tabular">1636–1810</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Остроязычный поэт Салвадора Грегорио де Матос («Адские уста») и поэт-заговорщик из Минас-Жерайса Гонзага, воспевший возлюбленную Марлию в застенках.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-marilia-de-dirceu-poesias">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-01.01</span>
+                    <a class="work-link" href="./works/matos-gonzaga-marliya.html">Марлия из Дирсеу и барочные сатиры Баии</a>
+                    <span class="work-meta">1680–1792 · Барочная сатира и пасторальная лирика</span>
+                  </div>
+                  <p class="work-summary">Язвительные сонеты о нравах колониального Салвадора и нежные лиры Гонзаги о мечте о тихом домике и любви, написанные в предчувствии ссылки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-goncalves-dias">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антонио Гонсалвес Диас</h3>
+                  <p class="author-role">Первый национальный поэт бразильского романтизма · <span class="tabular">1823–1864</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-лирик из Мараньяна, подаривший стране самое знаменитое стихотворение о тоске по пальмам и небу родины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-primeiros-cantos-cancao-do-exilio">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-01.02</span>
+                    <a class="work-link" href="./works/gonsalves-dias-pesn-izgnaniya.html">Первые песни («Песнь изгнания» и «И-Жука-Пирама»)</a>
+                    <span class="work-meta">1846–1851 · Романтическая лирика и поэма</span>
+                  </div>
+                  <p class="work-summary">Неувядающие строки о тоске по родным пальмам, где поёт птица сабия, и героическая поэма о благородстве индейского воина тупи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-de-alencar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жозе де Аленкар</h3>
+                  <p class="author-role">Патриарх бразильского романа, создатель национального мифа · <span class="tabular">1829–1877</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и политик из Сеары, заложивший три направления бразильской прозы — индианистское, городское и региональное.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-iracema-o-guarani">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-01.03</span>
+                    <a class="work-link" href="./works/alenkar-irasema-i-guarani.html">Ирасема и «Гуарани»</a>
+                    <span class="work-meta">1857 / 1865 · Поэтические романы-легенды</span>
+                  </div>
+                  <p class="work-summary">Трагическая и нежная легенда о любви девы-табажары Ирасемы («медовые уста») к португальцу Мартину — поэтический миф о рождении нового бразильского народа Сеары.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-castro-alves">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антонио де Кастро Алвес</h3>
+                  <p class="author-role">«Поэт рабов», громогласный голос аболиционизма · <span class="tabular">1847–1871</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Умерший в 24 года поэт из Баии, чьи пламенные оды против рабства сотрясали театры и площади всей Бразильской империи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-navio-negreiro-espumas-flutuantes">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-01.04</span>
+                    <a class="work-link" href="./works/kastro-alves-korabl-nevolnikov.html">Корабль невольников и «Плывущая пена»</a>
+                    <span class="work-meta">1868–1870 · Гражданская и романтическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Потрясающее обличение трюмов работоргового судна посреди Атлантики и страстная лирика свободы, ускорившая отмену рабства в Бразилии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-antonio-de-almeida">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэл Антонио де Алмейда</h3>
+                  <p class="author-role">Первооткрыватель городского бытового романа Рио-де-Жанейро · <span class="tabular">1831–1861</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач и журналист, предвосхитивший реализм озорной книгой о проделках, праздниках и бедных кварталах старого Рио.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-memorias-de-um-sargento-de-milicias">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-01.05</span>
+                    <a class="work-link" href="./works/almejda-vospominaniya-serzhanta.html">Воспоминания сержанта милиции</a>
+                    <span class="work-meta">1854 · Плутовской роман нравов</span>
+                  </div>
+                  <p class="work-summary">Беспутные похождения Леонардо-сына среди уличных цирюльников, свадеб, шествий и ссор в Рио-де-Жанейро времён короля Жуана VI.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="bra-machado-realism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1880–1920</p>
+          <h2 class="section-title">Реализм, сертаны и гений Машаду де Ассиса</h2>
+          <p class="section-desc">Интеллектуальный взлёт бразильской прозы на рубеже веков: иронические шедевры Машаду де Ассиса, натурализм «Трущобы», трагический эпос «Сертаны» Эуклидеса да Куньи и сатира Лимы Баррето.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-machado-de-assis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жуакин Мария Машаду де Ассис</h3>
+                  <p class="author-role">Величайший писатель Бразилии, классик мировой иронической прозы · <span class="tabular">1839–1908</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Внук освобождённых рабов и основатель Бразильской академии литературы, опередивший модернизм XX века виртуозной игрой с ненадёжным рассказчиком и психологической глубиной.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-memorias-postumas-bras-cubas">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-02.01</span>
+                    <a class="work-link" href="./works/mashadu-zapiski-brasa-kubasa.html">Посмертные записки Браса Кубаса</a>
+                    <span class="work-meta">1881 · Философско-иронический роман</span>
+                  </div>
+                  <p class="work-summary">«Книга, посвящённая первому червю, который сгрыз холодную плоть моего трупа»: блистательная, язвительная исповедь покойного аристократа о тщеславии, любви и пустоте земного успеха.</p>
+                </li>
+                <li class="work-item" id="work-dom-casmurro">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-02.02</span>
+                    <a class="work-link" href="./works/mashadu-don-kasmurru.html">Дон Касмурру</a>
+                    <span class="work-meta">1899 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Одной из самых знаменитых загадок мировой литературы остаётся вопрос: действительно ли Капиту с «глазами цвета прилива» изменила угрюмому рассказчику Бенту Сантьяго, или ревность исказила его память?</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-aluisio-azevedo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алуизио Азеведо</h3>
+                  <p class="author-role">Глава бразильского натурализма · <span class="tabular">1857–1913</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Художник-карикатурист и романист, показавший социальный котёл Рио-де-Жанейро конца XIX века — страсти, труд и борьбу за выживание в бедных дворах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-o-cortico">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-02.03</span>
+                    <a class="work-link" href="./works/azevedo-trushhoba.html">Трущоба («O Cortiço»)</a>
+                    <span class="work-meta">1890 · Социально-натуралистический роман</span>
+                  </div>
+                  <p class="work-summary">Коллективный портрет огромного доходного двора в Рио, где прачки, португальцы-лавочники, невольники и музыканты сливаются в единый кипящий организм под тропическим солнцем.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-raul-pompeia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Раул Помпейя</h3>
+                  <p class="author-role">Мастер импрессионистского психологического романа · <span class="tabular">1863–1895</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Тонкий и ранимый стилист, запечатлевший жестокий мир закрытого мужского пансиона как уменьшенную модель всего общества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-o-ateneu">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-02.04</span>
+                    <a class="work-link" href="./works/pompejya-ateneu.html">Атенеу («O Ateneu»)</a>
+                    <span class="work-meta">1888 · Психологический роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Воспоминания Сержиу о годах в престижном интернате Рио-де-Жанейро: «Ты встретишь там целый мир!» — столкновении детской нежности с лицемерием, жестокостью и пламенем бунта.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-euclides-da-cunha">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эуклидес да Кунья</h3>
+                  <p class="author-role">Создатель великой документально-эпической книги о глубинной Бразилии · <span class="tabular">1866–1909</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Военный инженер и корреспондент, потрясённый трагедией уничтожения крестьянской общины Канудус в засушливых сертанах Баии в 1897 году.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-os-sertoes">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-02.05</span>
+                    <a class="work-link" href="./works/kunya-sertany.html">Сертаны («Os Sertões»)</a>
+                    <span class="work-meta">1902 · Историко-эпическая проза и очерк</span>
+                  </div>
+                  <p class="work-summary">Монументальная трилогия «Земля — Человек — Борьба» о восстании мессианского проповедника Антонио Консельейру и отчаянной обороне четырёх тысяч хижин против регулярной армии республики.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lima-barreto">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Афонсу Энрикес де Лима Баррето</h3>
+                  <p class="author-role">Ярчайший сатирик и защитник окраин Рио начала XX века · <span class="tabular">1881–1922</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Трагический мастер живого просторечия, высмеявший бюрократию, ложный патриотизм и расовые предрассудки Первой республики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-triste-fim-de-policarpo-quaresma">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-02.06</span>
+                    <a class="work-link" href="./works/barreto-konec-polikarpo-kuaresmy.html">Печальный конец Поликарпо Куаресмы</a>
+                    <span class="work-meta">1911 / 1915 · Сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Трогательная и горькая история донкихотствующего чиновника-мечтателя, пытающегося сделать язык тупи государственным, возродить сельское хозяйство и спасти республику ценой собственной гибели.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="bra-modernism-1922">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1920–1960</p>
+          <h2 class="section-title">Неделя современного искусства (1922) и великая поэзия</h2>
+          <p class="section-desc">Культурная революция Сан-Паулу и Рио: фольклорный эпос Мариу де Андраде, антропофагия Освалда де Андраде, верлибры Бандейры, философская лирика Друммонда, Сесилии Мейрелес и Мелу Нету.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mario-de-andrade">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мариу де Андраде</h3>
+                  <p class="author-role">Духовный вождь бразильского модернизма, поэт, музыковед и фольклорист · <span class="tabular">1893–1945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Энциклопедист из Сан-Паулу, соединивший авангард с мифами Амазонии и народным языком всей Бразилии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-macunaima">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-03.01</span>
+                    <a class="work-link" href="./works/andrade-makunaima.html">Макунаима, герой без всякого характера</a>
+                    <span class="work-meta">1928 · Рапсодия-роман и мифологический гротеск</span>
+                  </div>
+                  <p class="work-summary">Головокружительные приключения ленивого и лукавого индейского богатыря Макунаимы от дебрей Амазонки до промышленного Сан-Паулу в поисках потерянного амулета Муиракитан.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-oswald-de-andrade">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Освалд де Андраде</h3>
+                  <p class="author-role">Провокатор и теоретик «Манифеста Антропофагии» · <span class="tabular">1890–1954</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий авангардист, провозгласивший право бразильской культуры творчески «поглощать и переваривать» любые мировые влияния.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-memorias-sentimentais-joao-miramar">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-03.02</span>
+                    <a class="work-link" href="./works/andrade-o-zhuan-miramar.html">Манифест Антропофагии и «Сентиментальные мемуары Жуана Мирамара»</a>
+                    <span class="work-meta">1924–1928 · Авангардная проза и манифесты</span>
+                  </div>
+                  <p class="work-summary">Телеграфные монтажные фрагменты путешествий, любви и иронии («Тупи иль не тупи — вот в чём вопрос!»), освободившие бразильскую прозу от тяжёлой риторики.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-bandeira">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэл Бандейра</h3>
+                  <p class="author-role">«Святой Иоанн Креститель бразильского модернизма» · <span class="tabular">1886–1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт Ресифи и Рио, превративший повседневную разговорную интонацию, болезнь и тихую нежность детства в чистую музыку стиха.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-libertinagem-vou-me-embora-pasargada">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-03.03</span>
+                    <a class="work-link" href="./works/bandejra-ya-uezzhayu-v-pasargadu.html">Свобода («Я уезжаю в Пасаргаду»)</a>
+                    <span class="work-meta">1930 · Модернистская лирика</span>
+                  </div>
+                  <p class="work-summary">Неувядающая поэзия свободы — мечта о воображаемом древнем городе Пасаргаде, где «я — друг короля», и о поэзии обычных уличных голосов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carlos-drummond-de-andrade">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карлос Друммонд де Андраде</h3>
+                  <p class="author-role">Величайший поэт Бразилии XX века · <span class="tabular">1902–1987</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Скромный служащий из горной Итабиры в Минас-Жерайсе, чей сдержанный, ироничный и глубоко трагический голос выразил совесть и одиночество современного человека.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-a-rosa-do-povo">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-03.04</span>
+                    <a class="work-link" href="./works/drummond-roza-naroda.html">Роза народа и стихи «Посреди дороги»</a>
+                    <span class="work-meta">1928–1945 · Философская и гражданская лирика</span>
+                  </div>
+                  <p class="work-summary">От шокировавшего всех в 1928 году «Посреди дороги лежал камень…» к великому военному сборнику надежды о том, как сквозь асфальт мрачного века пробивается скромный цветок.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cecilia-meireles">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сесилия Мейрелес</h3>
+                  <p class="author-role">Крупнейшая поэтесса Бразилии, мастер музыкальной и философской лирики · <span class="tabular">1901–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Педагог, журналистка и знаток Востока из Рио-де-Жанейро, воспевшая хрупкость мгновения и восстание за свободу XVIII века в Минас-Жерайсе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-romanceiro-da-inconfidencia">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-03.05</span>
+                    <a class="work-link" href="./works/mejreles-romansero-inkonfidensii.html">Романсеро Инконфиденсии и «Путешествие»</a>
+                    <span class="work-meta">1939 / 1953 · Историко-лирический цикл романсов</span>
+                  </div>
+                  <p class="work-summary">Восемьдесят пять музыкальных романсов о золотых горах Оуру-Прету, любви и гибели заговорщиков 1789 года во главе с Тирадентисом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cabral-de-melo-neto-moraes">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жуан Кабрал де Мелу Нету (и Винисиус де Мораес)</h3>
+                  <p class="author-role">Поэты суровой геометрии слова и музыкальной души Бразилии · <span class="tabular">1913–1999</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат премии Камоэнса Мелу Нету, отточивший сухой стих «камня и ножа» о Северо-Востоке, и лирик-дипломат Винисиус де Мораес — автор «Сонета верности» и босса-новы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-morte-e-vida-severina">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-03.06</span>
+                    <a class="work-link" href="./works/melu-netu-smert-i-zhizn-severino.html">Смерть и жизнь Северино и «Сонет верности»</a>
+                    <span class="work-meta">1946–1955 · Поэма-мистерия и любовная лирика</span>
+                  </div>
+                  <p class="work-summary">Скитания бедного крестьянина Северино из засушливой глубинки Пернамбуку к морю в Ресифи, где рождение ребёнка в хижине на сваях отвечает жизни утверждением чуда.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="bra-regional-golden-age">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1930–1975</p>
+          <h2 class="section-title">Золотой век романа: Северо-Восток и Юг Бразилии</h2>
+          <p class="section-desc">Великая социальная проза 1930-х: засуха и молчание в «Сухих жизнях» Грасилиану Рамоса, красочный эпос Баии Жоржи Амаду, хроники гаучо Эрику Вериссиму, Рашел де Кейрос и Линс ду Рего.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-graciliano-ramos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Грасилиану Рамос</h3>
+                  <p class="author-role">Мастер сурового психологического реализма, «бразильский Чехов и Камю» · <span class="tabular">1892–1953</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Алагоаса, очистивший прозу от лишних слов до сухого, пронзительного крика о человеческом достоинстве бедняков сертана.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vidas-secas">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-04.01</span>
+                    <a class="work-link" href="./works/ramos-suhie-zhizni.html">Сухие жизни («Vidas Secas»)</a>
+                    <span class="work-meta">1938 · Социально-психологический роман в новеллах</span>
+                  </div>
+                  <p class="work-summary">Скитания молчаливого пастуха Фабиано, его жены Витории, двоих сыновей и верной собачки Балейи по выжженной земле Северо-Востока в поисках воды, крова и человеческих слов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rachel-de-queiroz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рашел де Кейрос</h3>
+                  <p class="author-role">Первая женщина — член Бразильской академии литературы · <span class="tabular">1910–2003</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница и журналистка из Сеары, в 19 лет написавшая один из самых ярких романов о великой засухе 1915 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-o-quinze">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-04.02</span>
+                    <a class="work-link" href="./works/kejros-pyatnadcatyj-god.html">Тридцатый год («Пятнадцатый год» — «O Quinze»)</a>
+                    <span class="work-meta">1930 · Региональный социальный роман</span>
+                  </div>
+                  <p class="work-summary">Параллельные судьбы образованной учительницы Консейсан и изгнанной засухой семьи крестьянина Шико Бенто на дорогах Сеары к лагерям беженцев в Форталезе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jorge-amado">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жоржи Амаду</h3>
+                  <p class="author-role">Всемирно известный певец Баии, какао и бразильского народа · <span class="tabular">1912–2001</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Ильеуса, соединивший в страстных и солнечных романах бунт беспризорников, магию кандомбле, юмор улиц Салвадора и гимн свободной радости жизни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-capitaes-da-areia-gabriela">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-04.03</span>
+                    <a class="work-link" href="./works/amadu-kapitany-peska-i-gabriela.html">Капитаны песка и «Габриэла, гвоздика и корица»</a>
+                    <span class="work-meta">1937 / 1958 · Социальный и лирико-юмористический романы</span>
+                  </div>
+                  <p class="work-summary">Трогательная судьба банды беспризорников Педро Пули на причалах Баии и весёлая, пряная история любви сирийца Насиба к свободолюбивой красавице Габриэле в городке Ильеус.</p>
+                </li>
+                <li class="work-item" id="work-dona-flor-e-seus-dois-maridos">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-04.04</span>
+                    <a class="work-link" href="./works/amadu-dona-flor.html">Дона Флор и два её мужа</a>
+                    <span class="work-meta">1966 · Фантастико-сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Несравненная баианская комедия о кулинарке доне Флор, выбирающей между солидным аптекарем Теодоро и вернувшимся с того света беспутным, очаровательным призраком Вадиньо.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-erico-verissimo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрику Вериссиму</h3>
+                  <p class="author-role">Создатель великой семейной саги юга Бразилии · <span class="tabular">1905–1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Риу-Гранди-ду-Сул, написавший монументальную двухсотлетнюю историю южнобразильской границы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-o-tempo-e-o-vento">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-04.05</span>
+                    <a class="work-link" href="./works/verissimu-vremya-i-veter.html">Время и ветер («Континент»)</a>
+                    <span class="work-meta">1949–1962 · Исторический роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Два века войн, любви и стойкости рода Терра и Камбара в городке Санта-Фе — с незабываемым образом женщины Аны Терры, пережившей все бури века под вой ветра минуано.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-lins-do-rego">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жозе Линс ду Рего</h3>
+                  <p class="author-role">Классик «Цикла сахарного тростника» · <span class="tabular">1901–1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Параибы, воссоздавший с лирической теплотой уходящий патриархальный мир старых сахарных заводов-энженьо.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-menino-de-engenho-fogo-morto">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-04.06</span>
+                    <a class="work-link" href="./works/lins-du-rego-malchik-s-trostnika.html">Мальчик с сахарного тростника и «Потухший очаг»</a>
+                    <span class="work-meta">1932 / 1943 · Лирический и социально-психологический романы</span>
+                  </div>
+                  <p class="work-summary">Детство Карлиньоса на дедовской плантации в долине Параибы и трагикомическая история разорения упрямого шорника мастера Жозе Амаро и полковника Лулы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="bra-rosa-lispector-avantgarde">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1945–1985</p>
+          <h2 class="section-title">Метафизика языка: Гимарайнс Роза, Клариси Лиспектор и вторая половина XX века</h2>
+          <p class="section-desc">Философский и стилистический переворот: барочный эпос Гимарайнса Розы, экзистенциальная интуиция Клариси Лиспектор, проза Лижии Фагундес Теллес, Фонсеки и Радуана Нассара.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-joao-guimaraes-rosa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жуан Гимарайнс Роза</h3>
+                  <p class="author-role">«Бразильский Джойс», творец великого философского эпоса сертана · <span class="tabular">1908–1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сельский врач и дипломат-полиглот из Минас-Жерайса, пересоздавший португальский язык ради метафизической истории любви, добра, зла и судьбы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-grande-sertao-veredas">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-05.01</span>
+                    <a class="work-link" href="./works/gimarajns-roza-bolshoj-sertan.html">Большой сертан: тропы («Grande Sertão: Veredas»)</a>
+                    <span class="work-meta">1956 · Философский роман-монолог</span>
+                  </div>
+                  <p class="work-summary">Бесконечная, завораживающая исповедь старого бандита-жагунсо Риобалду о схватках в зарослях Минас-Жерайса, сделке с дьяволом и роковой любви к таинственному товарищу по оружию Диодорину.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-clarice-lispector">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Клариси Лиспектор</h3>
+                  <p class="author-role">Самая загадочная и влиятельная писательница Латинской Америки XX века · <span class="tabular">1920–1977</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка подольского местечка Чечельник, выросшая в Ресифи и Рио, превратившая мимолётные озарения сознания в магическую, гипнотическую прозу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-a-hora-da-estrela-paixao-gh">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-05.02</span>
+                    <a class="work-link" href="./works/lispektor-chas-zvezdy.html">Час звезды и «Страсть по Г. Х.»</a>
+                    <span class="work-meta">1964 / 1977 · Экзистенциальные повести</span>
+                  </div>
+                  <p class="work-summary">Щемящая история кроткой, почти невидимой машинистки из Алагоаса Макабеи в огромном Рио-де-Жанейро и мистический монолог женщины в пустой комнате перед лицом первобытной материи мира.</p>
+                </li>
+                <li class="work-item" id="work-perto-do-coracao-selvagem">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-05.03</span>
+                    <a class="work-link" href="./works/lispektor-blizko-k-dikomu-serdcu.html">Близко к дикому сердцу</a>
+                    <span class="work-meta">1943 · Модернистский психологический роман</span>
+                  </div>
+                  <p class="work-summary">Ошеломивший критику дебют 23-летней писательницы — внутренний мир мятежной Жоаны от странного детства до поиска собственной свободы вне брака.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lygia-fagundes-telles">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лижия Фагундес Теллес</h3>
+                  <p class="author-role">«Первая дама бразильской литературы», лауреат премии Камоэнса · <span class="tabular">1918–2022</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер изящной, тревожной психологической новеллы и романа из Сан-Паулу, запечатлевшая душу молодёжи эпохи военной диктатуры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-as-meninas-ciranda-de-pedra">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-05.04</span>
+                    <a class="work-link" href="./works/fagundes-telles-devushki.html">Девушки («As Meninas») и «Каменный хоровод»</a>
+                    <span class="work-meta">1954 / 1973 · Психологические романы</span>
+                  </div>
+                  <p class="work-summary">Трое совсем разных студенток в католическом пансионе Сан-Паулу начала 1970-х — аристократка Лорена, бунтарка Лия и отчаянная Ана Клара — между любовью, подпольем и страхом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-autran-dourado-nelida-pinon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аутрану Доураду и Нелида Пиньон</h3>
+                  <p class="author-role">Лауреаты премии Камоэнса, мастера барочной прозы и семейных саг · <span class="tabular">1926–2022</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Хранитель тайн старых городков Минас-Жерайса Доураду и Нелида Пиньон — первая женщина-президент Бразильской академии литературы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-opera-dos-mortos-republica-sonhos">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-05.05</span>
+                    <a class="work-link" href="./works/douradu-opera-mertvyh.html">Опера мёртвых и «Республика мечтаний»</a>
+                    <span class="work-meta">1967 / 1984 · Барочно-психологический и семейный романы</span>
+                  </div>
+                  <p class="work-summary">Трагическая одиссея остановившихся часов и одинокой Розалины в особняке Минас-Жерайса и многопоколенная хроника галисийского иммигранта Мадруги в Рио-де-Жанейро.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rubem-fonseca">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рубен Фонсека</h3>
+                  <p class="author-role">Реформатор городской прозы, мастер бразильского нуара и новеллы · <span class="tabular">1925–2020</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший комиссар полиции в Рио, привнёсший в литературу жёсткий, кинематографический ритм мегаполиса, контраст фавел и элиты и блестящую иронию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-feliz-ano-novo-grande-arte">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-05.06</span>
+                    <a class="work-link" href="./works/fonseka-bolshoe-iskusstvo.html">С Новым годом и «Большое искусство»</a>
+                    <span class="work-meta">1975 / 1983 · Криминальная новелла и интеллектуальный нуар</span>
+                  </div>
+                  <p class="work-summary">Запрещённый военной цензурой сборник беспощадных рассказов о насилии большого города и знаменитый детектив об адвокате Мандраке и искусстве фехтования ножом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-raduan-nassar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Радуан Нассар</h3>
+                  <p class="author-role">Лауреат премии Камоэнса (2016), автор двух пронзительных шедевров · <span class="tabular">род. 1935</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель ливанского происхождения, оставивший литературу ради фермерства и вернувший языку библейскую плотность, страсть и музыкальность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lavoura-arcaica">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-05.07</span>
+                    <a class="work-link" href="./works/nassar-arhaicheskaya-pashnya.html">Архаическая пашня («Lavoura Arcaica»)</a>
+                    <span class="work-meta">1975 · Поэтическая психологическая притча</span>
+                  </div>
+                  <p class="work-summary">Переосмысление притчи о блудном сыне Андре, сбежавшем из-под суровой патриархальной власти отца и запретной страсти к сестре Ане на тихой бразильской ферме.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="bra-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1985–2020-е годы</p>
+          <h2 class="section-title">Новая проза, музыка слова и Бразилия XXI века</h2>
+          <p class="section-desc">Многоголосие современной Бразилии: музыкальная проза Шику Буарки, амазонская сага Милтона Хатума, юмор Скляра, феномен Пауло Коэльо, Бернарду Карвалью и триумф «Кривого плуга».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-chico-buarque">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шику Буарки</h3>
+                  <p class="author-role">Лауреат премии Камоэнса (2019), великий поэт-песенник и романист · <span class="tabular">род. 1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Культовая фигура бразильской культуры, автор тонких, элегантных и психологически напряжённых романов о памяти, двойниках и истории Рио.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-budapeste-leite-derramado">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-06.01</span>
+                    <a class="work-link" href="./works/buarki-budapesht-i-moloko.html">Будапешт и «Молоко пролитое»</a>
+                    <span class="work-meta">2003 / 2009 · Интеллектуально-психологические романы</span>
+                  </div>
+                  <p class="work-summary">История бразильского «литературного негра» Жозе Косты, очарованного загадочным венгерским языком на берегах Дуная, и столетняя исповедь умирающего патриарха Эулалио д’Ассунсана.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-milton-hatoum">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Милтон Хатум</h3>
+                  <p class="author-role">Главный романист современной Амазонии · <span class="tabular">род. 1952</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Архитектор и писатель из Манауса, запечатлевший экзотический, влажный и полный тайн мир амазонских портов и ливанских семейных саг.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dois-irmaos">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-06.02</span>
+                    <a class="work-link" href="./works/hatum-dva-brata.html">Два брата («Dois Irmãos»)</a>
+                    <span class="work-meta">2000 · Семейная драма-роман</span>
+                  </div>
+                  <p class="work-summary">Трагическое соперничество близнецов Якуба и Омара в доме ливанских переселенцев в Манаусе середины XX века, рассказанное сыном служанки-индеанки Домингис.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-moacyr-scliar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Моасир Скляр</h3>
+                  <p class="author-role">Мастер притчи, юмора и волшебного вымысла юга Бразилии · <span class="tabular">1937–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач из Порту-Алегри, создавший удивительный сплав еврейской фольклорной мудрости, истории гаучо и лёгкого фантастического гротеска.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-o-centauro-no-jardim">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-06.03</span>
+                    <a class="work-link" href="./works/sklyar-kentavr-v-sadu.html">Кентавр в саду</a>
+                    <span class="work-meta">1980 · Роман-притча в традициях магического реализма</span>
+                  </div>
+                  <p class="work-summary">Необычная судьба Гуэдалы, родившегося кентавром на ферме переселенцев в Риу-Гранди-ду-Сул — аллегория инаковости, любви и поиска своего места в мире.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-paulo-coelho">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пауло Коэльо</h3>
+                  <p class="author-role">Самый переводимый современный писатель Бразилии · <span class="tabular">род. 1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Рио-де-Жанейро и член Бразильской академии литературы, подаривший миллионам читателей мира притчу о следовании «Своей Судьбе».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-o-alquimista">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-06.04</span>
+                    <a class="work-link" href="./works/koelo-alhimik.html">Алхимик</a>
+                    <span class="work-meta">1988 · Философская роман-притча</span>
+                  </div>
+                  <p class="work-summary">Путешествие андалузского пастуха Сантьяго через Гибралтар и пески Сахары к египетским пирамидам за сокровищем — открывающее, что весь мир помогает тому, кто идёт за мечтой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bernardo-carvalho">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бернарду Карвалью</h3>
+                  <p class="author-role">Ведущий интеллектуальный романист современной Бразилии · <span class="tabular">род. 1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Рио, соединивший журналистское расследование, тайны антропологии и метафизический саспенс о границе факта и вымысла.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nove-noites">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-06.05</span>
+                    <a class="work-link" href="./works/karvalyu-devyat-nochej.html">Девять ночей («Nove Noites»)</a>
+                    <span class="work-meta">2002 · Документально-философский метароман</span>
+                  </div>
+                  <p class="work-summary">Поиски разгадки загадочного самоубийства молодого американского антрополога Бьюэлла Куэйна среди индейцев крао в 1939 году в глубине Токантинса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-itamar-vieira-junior">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Итамар Виейра Жуниор</h3>
+                  <p class="author-role">Главный феномен новой бразильской прозы XXI века · <span class="tabular">род. 1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Географ и этнолог из Салвадора-да-Баия, вернувший современной литературе эпическое дыхание сертанов и голос потомков киломбу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-torto-arado">
+                  <div class="work-row">
+                    <span class="work-code">БЗ-06.06</span>
+                    <a class="work-link" href="./works/viejra-zhunior-krivoj-plug.html">Кривой плуг («Torto Arado»)</a>
+                    <span class="work-meta">2019 · Социально-мифологический роман</span>
+                  </div>
+                  <p class="work-summary">История сестёр Бибианы и Белонизии с фазенды Агуа-Негра в глубинке Баии: после несчастного случая со старинным ножом в детстве одна становится голосом другой в борьбе за землю предков.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание бразильской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

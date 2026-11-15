@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог перуанской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 29 писателей · 32 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог перуанской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Инки Гарсиласо де ла Веги и «Перуанских преданий» Пальмы до Сесара Вальехо, Сиро Алегрии, Хосе Марии Аргедаса, Хулио Рамона Рибейро, Марио Варгаса Льосы и Бланки Варелы.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#pe-inca-chronicles">Раздел I: Наследие инков, хроники Конкисты и вице-королевство Перу</a>
+        <a href="#pe-republic-tradiciones">Раздел II: Республиканское становление и «Перуанские предания»</a>
+        <a href="#pe-vallejo-vanguard">Раздел III: Символизм, авангард и гений Сесара Вальехо</a>
+        <a href="#pe-indigenismo-andes">Раздел IV: Андский мир и расцвет индихенистской прозы</a>
+        <a href="#pe-lima-urban-boom">Раздел V: Поколение 1950-х, городская Лима и триумф Варгаса Льосы</a>
+        <a href="#pe-contemporary">Раздел VI: Память, Анды и новая перуанская проза XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="pe-inca-chronicles">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XV–XVIII века</p>
+          <h2 class="section-title">Наследие инков, хроники Конкисты и вице-королевство Перу</h2>
+          <p class="section-desc">Устная поэзия и театр кечуа, великие хроники метиса Инки Гарсиласо де ла Веги и Гуамана Помы де Айялы, а также барочная поэзия Лимы XVII столетия.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-quechua-ollantay">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Древняя поэзия кечуа и драма «Апу Ольянтай»</h3>
+                  <p class="author-role">Памятники андской словесности на языке руна сими (кечуа) · <span class="tabular">XV–XVIII века</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Гимны солнцу и плодородию «хайльи», лирические песни тоски «харауи» и знаменитая колониальная драма на инкский сюжет о любви полководца к царевне.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-apu-ollantay-quechua-hymns">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.01</span>
+                    <a class="work-link" href="./works/kechua-apu-olyantaj.html">Апу Ольянтай и гимны инков («Хайльи» и «Харауи»)</a>
+                    <span class="work-meta">рук. XVIII в. · Стихотворная драма и андская лирика</span>
+                  </div>
+                  <p class="work-summary">Трагикомическая история мятежного военачальника Ольянтая, восставшего против сурового верховного инки Пачакутека ради любви к его дочери Куси Койльюр («Сияющей Звезде»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-inca-garcilaso-de-la-vega">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Инка Гарсиласо де ла Вега</h3>
+                  <p class="author-role">Первый великий писатель Перу и классик испаноязычного Возрождения · <span class="tabular">1539–1616</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын испанского конкистадора и инкской принцессы из Куско, создавший пронизанную ностальгией и гуманизмом панораму погибшей империи инков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-comentarios-reales-de-los-incas">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.02</span>
+                    <a class="work-link" href="./works/garsi-laso-istoriya-inkov.html">Подлинные комментарии об инках («История государства инков»)</a>
+                    <span class="work-meta">1609–1617 · Историко-философская хроника</span>
+                  </div>
+                  <p class="work-summary">Рассказанное с глубокой любовью к материнскому роду описание Куско, дорог, террас, астрономии, поэзии и законов Тауантинсуйу — памятник встречи двух миров.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-guaman-poma-de-ayala">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фелипе Гуаман Пома де Айяла</h3>
+                  <p class="author-role">Коренной андский летописец и защитник индейцев · <span class="tabular">ок. 1534 – ок. 1615</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Происходивший из знатного рода Уануко и Аякучо мыслитель, тридцать лет собиравший свидетельства о судьбе перуанских общин после испанского завоевания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nueva-coronica-y-buen-gobierno">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.03</span>
+                    <a class="work-link" href="./works/guaman-poma-novaya-hronika.html">Первая новая хроника и доброе правление</a>
+                    <span class="work-meta">1615 · Иллюстрированная хроника-послание</span>
+                  </div>
+                  <p class="work-summary">Уникальная рукопись на 1200 страниц с четырьмя сотнями рисунков — смелое обращение к испанскому королю с обличением колониальных злоупотреблений и требованием правды.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-caviedes-amarilis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан дель Валье-и-Кавьедес и Амарилис</h3>
+                  <p class="author-role">Вершины поэзии колониальной Лимы и Уануко · <span class="tabular">XVII век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Таинственная перуанская поэтесса Амарилис, очаровавшая Лопе де Вегу, и беспощадный сатирик уличной Лимы Кавьедес.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-diente-del-parnaso-epistola">
+                  <div class="work-row">
+                    <span class="work-code">ПР-01.04</span>
+                    <a class="work-link" href="./works/kavedes-zub-parnasa.html">Зуб Парнаса и «Послание Амарилис к Белисардо»</a>
+                    <span class="work-meta">1621 / 1689 · Барочная сатира и любовно-философская лирика</span>
+                  </div>
+                  <p class="work-summary">Изысканная «Песнь-послание» из андского Уануко о платонической любви и язвительные стихи лимского торговца-поэта о шарлатанах, врачах и лицемерии столичного света.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pe-republic-tradiciones">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1830–1910</p>
+          <h2 class="section-title">Республиканское становление и «Перуанские предания»</h2>
+          <p class="section-desc">Рождение особого жанра «преданий» Рикардо Пальмы, первый антикрепостнический роман Клоринды Матто де Турнер, бунтарская проза Гонсалеса Прады и модернизм Чокано.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ricardo-palma">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рикардо Пальма</h3>
+                  <p class="author-role">Создатель жанра «перуанских преданий», хранитель Национальной библиотеки · <span class="tabular">1833–1919</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий стилист из Лимы, спасший библиотеку после Тихоокеанской войны («библиотекарь-нищий») и запечатлевший четыре века перуанской истории в коротких остроумных новеллах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tradiciones-peruanas">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.01</span>
+                    <a class="work-link" href="./works/palma-peruanskie-predaniya.html">Перуанские предания («Tradiciones peruanas»)</a>
+                    <span class="work-meta">1872–1910 · Историко-юмористические новеллы-анекдоты</span>
+                  </div>
+                  <p class="work-summary">Свыше четырёхсот блестящих миниатюр на стыке истории и легенды — об инкских сокровищах, вице-королях, дерзких монахах, актрисе Ла-Перричоли и Симоне Боливаре.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-clorinda-matto-de-turner">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Клоринда Матто де Турнер</h3>
+                  <p class="author-role">Пионер индихенистского и социального романа Латинской Америки · <span class="tabular">1852–1909</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница и журналистка из Куско, бесстрашно выступившая против произвола провинциальных властей, судей и духовенства в андских сёлах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-aves-sin-nido">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.02</span>
+                    <a class="work-link" href="./works/matto-de-turner-pticy-bez-gnezda.html">Птицы без гнезда («Aves sin nido»)</a>
+                    <span class="work-meta">1889 · Социально-романтический роман</span>
+                  </div>
+                  <p class="work-summary">Борьба интеллигентной семьи Марин за спасение индейцев далёкого горного городка Кильяк, раскрывающая трагическую тайну происхождения влюблённых Маргариты и Мануэля.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-gonzalez-prada">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Гонсалес Прада</h3>
+                  <p class="author-role">Главный философский трибун и реформатор перуанского стиха · <span class="tabular">1844–1918</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Радикальный мыслитель и поэт, призвавший Перу освободиться от колониальных предрассудков и создавший смелые строфические эксперименты — предшественники модернизма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pajinas-libres-horas-de-lucha">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.03</span>
+                    <a class="work-link" href="./works/gonsales-prada-svobodnye-stranicy.html">Свободные страницы и «Часы борьбы»</a>
+                    <span class="work-meta">1894–1908 · Публицистическая эссеистика и поэзия</span>
+                  </div>
+                  <p class="work-summary">Огненная проза о нравственном обновлении нации после поражения в войне («Старики — в могилу, молодые — за дело!») и защита прав коренного населения Анда.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-santos-chocano">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Сантос Чокано</h3>
+                  <p class="author-role">«Поэт Америки», мастер звучного перуанского модернизма · <span class="tabular">1875–1934</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Соперник Рубена Дарио по размаху одического стиха, воспевший Анды, Амазонку, инкские руины и страсти Нового Света.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-alma-america">
+                  <div class="work-row">
+                    <span class="work-code">ПР-02.04</span>
+                    <a class="work-link" href="./works/chokano-dusha-ameriki.html">Душа Америки («Alma América»)</a>
+                    <span class="work-meta">1906 · Эпико-модернистская поэзия</span>
+                  </div>
+                  <p class="work-summary">Поэтическая фреска Нового Света от снежных вершин Кордильер и серебряных лун над Титикакой до бурной истории континента.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pe-vallejo-vanguard">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1910–1940</p>
+          <h2 class="section-title">Символизм, авангард и гений Сесара Вальехо</h2>
+          <p class="section-desc">Поэтическая революция Перу: таинственный символизм Эгурена, креольская нежность Вальделомара, мировой прорыв «Трильсе» Сесара Вальехо, мысль Мариатеги и сюрреализм Сесара Моро.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-jose-maria-eguren">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Мария Эгурен</h3>
+                  <p class="author-role">Первый чистый символист Перу и мастер сновидческой лирики · <span class="tabular">1874–1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Застенчивый поэт и фотограф-миниатюрист из Барранко, создавший волшебный мир королей в красном, призрачных кораблей и музыкальных теней.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-simbolicas-cancion-de-las-figuras">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.01</span>
+                    <a class="work-link" href="./works/eguren-simvolika.html">Символика и «Песнь фигур»</a>
+                    <span class="work-meta">1911–1916 · Символистская лирика</span>
+                  </div>
+                  <p class="work-summary">Таинственные, как сны детства, стихи («Красные короли», «Лошадь мёртвых», «Девочка с синей лампой»), открывшие перуанскую поэзию XX веку.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-abraham-valdelomar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Абраам Вальделомар («Граф Лемос»)</h3>
+                  <p class="author-role">Основатель журнала «Колонида» и мастер современной перуанской новеллы · <span class="tabular">1888–1919</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ослепительный денди Лимы и певец приморского городка Писко, открывший поэзию тихого провинциального детства на берегу Тихого океана.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-caballero-carmelo">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.02</span>
+                    <a class="work-link" href="./works/valdelomar-rycar-karmelo.html">Рыцарь Кармело и «Айва с нашей улицы»</a>
+                    <span class="work-meta">1918 · Лирические новеллы</span>
+                  </div>
+                  <p class="work-summary">Пронзительный рассказ о старом благородном бойцовом петухе Кармело, который выходит на свой последний поединок, оставляя семье тепло детского воспоминания о Писко.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cesar-vallejo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сесар Вальехо</h3>
+                  <p class="author-role">Один из величайших поэтов XX века, обновитель испанского поэтического языка · <span class="tabular">1892–1938</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из андского селения Сантьяго-де-Чуко, испытавший несправедливую тюрьму и нищету Парижа, чтобы выразить боль всего человечества с невиданной языковой мощью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-heraldos-negros-trilce">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.03</span>
+                    <a class="work-link" href="./works/valeho-chernye-geroldy-i-trilse.html">Чёрные герольды и «Трильсе» («Trilce»)</a>
+                    <span class="work-meta">1918 / 1922 · Авангардная и метафизическая поэзия</span>
+                  </div>
+                  <p class="work-summary">От трагического вопроса «Бывают в жизни такие удары — я не знаю…» к дерзкому взрыву синтаксиса, неологизмов и андской тоски по матери и дому в сборнике «Трильсе».</p>
+                </li>
+                <li class="work-item" id="work-poemas-humanos-tungsteno">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.04</span>
+                    <a class="work-link" href="./works/valeho-chelovecheskie-stihi.html">Человеческие стихи и роман «Вольфрам»</a>
+                    <span class="work-meta">1931 / изд. 1939 · Экзистенциально-гражданская поэзия и социальный роман</span>
+                  </div>
+                  <p class="work-summary">Парижская лирика о «Чёрном камне на белом камне», солидарности с испанской республикой («Испания, да минует меня чаша сия») и суровая правда о рудниках в Андах.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-carlos-mariategui">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Карлос Мариатеги</h3>
+                  <p class="author-role">Выдающийся мыслитель Латинской Америки и основатель журнала «Амаута» · <span class="tabular">1894–1930</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист-самоучка и литературный критик, объединивший на страницах «Амауты» авангардное искусство, индихенизм и оригинальную латиноамериканскую философию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-siete-ensayos-realidad-peruana">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.05</span>
+                    <a class="work-link" href="./works/mariategi-sem-ocherkov.html">Семь очерков истолкования перуанской действительности</a>
+                    <span class="work-meta">1928 · Философская и литературно-критическая эссеистика</span>
+                  </div>
+                  <p class="work-summary">Фундаментальное исследование истории, земли, общины инков и путей национальной литературы от Гарсиласо и Пальмы до Вальехо и Эгурена.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-moro-westphalen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сесар Моро и Эмилио Адольфо Вестфален</h3>
+                  <p class="author-role">Мастера перуанского сюрреализма · <span class="tabular">1903–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Друг Бретона поэт и художник Сесар Моро и тончайший поэт тишины и «отмены смерти» Вестфален, сохранённый в памяти нескольких поколений.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-tortuga-ecuestre-abolicion-muerte">
+                  <div class="work-row">
+                    <span class="work-code">ПР-03.06</span>
+                    <a class="work-link" href="./works/moro-vestfalen-otmena-smerti.html">Конная черепаха и «Отмена смерти»</a>
+                    <span class="work-meta">1935–1938 · Сюрреалистическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Ослепительная игра страсти и сновидений Сесара Моро и кристальные поэмы Вестфалена о море, любви и преодолении границы исчезновения.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pe-indigenismo-andes">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1935–1970</p>
+          <h2 class="section-title">Андский мир и расцвет индихенистской прозы</h2>
+          <p class="section-desc">Поэтический и трагический эпос перуанских гор: великая сага о сельской общине Сиро Алегрии, проза на грани испанского и кечуа Хосе Марии Аргедаса, Скорса и Савалета.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ciro-alegria">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сиро Алегрия</h3>
+                  <p class="author-role">Классик андского эпоса, певец общин северных Кордильер · <span class="tabular">1909–1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Сартина в департаменте Ла-Либертад, ученик Сесара Вальехо в школе Трухильо, воспевший упорство и достоинство горных крестьян.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-mundo-es-ancho-y-ajeno">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.01</span>
+                    <a class="work-link" href="./works/alegriya-v-bolshom-i-chuzhdom-mire.html">В большом и чуждом мире («El mundo es ancho y ajeno»)</a>
+                    <span class="work-meta">1941 · Социально-эпический роман</span>
+                  </div>
+                  <p class="work-summary">Драматическая борьба мудрого старосты Росендо Маки и общины Руми за родную землю против алчного помещика дона Альваро Аменабара — между горами, судами, тюрьмой и сельвой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-maria-arguedas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Мария Аргедас</h3>
+                  <p class="author-role">Гений двуязычной души Перу, великий певец мира кечуа · <span class="tabular">1911–1969</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Этнограф и романист, выросший среди индейцев Апуримака и переплавивший синтаксис кечуа в поразительный, музыкальный испанский язык.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-rios-profundos">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.02</span>
+                    <a class="work-link" href="./works/argedas-glubokie-reki.html">Глубокие реки («Los ríos profundos»)</a>
+                    <span class="work-meta">1958 · Лирико-автобиографический роман</span>
+                  </div>
+                  <p class="work-summary">Восприятие подростком Эрнесто интерната в Абанкае, древних камней Куско, магического волчка «сумпайлью», музыки уайно и бунта простых женщин-чичерас на фоне великой реки Пачачаки.</p>
+                </li>
+                <li class="work-item" id="work-yawar-fiesta-zorros">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.03</span>
+                    <a class="work-link" href="./works/argedas-krovavyj-prazdnik.html">Кровавый праздник и «Лис сверху и лис снизу»</a>
+                    <span class="work-meta">1941 / изд. 1971 · Андский и полифонический романы</span>
+                  </div>
+                  <p class="work-summary">Столкновение андского обряда корриды с кондором в Пукио и предсмертный роман-дневник о встрече горцев-переселенцев с океанским портом Чимботе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-scorza">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Скорса</h3>
+                  <p class="author-role">Мастер «магической баллады» о крестьянских восстаниях в Андах · <span class="tabular">1928–1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и романист, превративший реальные восстания пастухов Серро-де-Паско 1950–1960-х годов в пятитомный эпос «Тихая война».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-redoble-por-rancas">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.04</span>
+                    <a class="work-link" href="./works/skorsa-traur-nad-rankasom.html">Траурный барабан над Ранкасом</a>
+                    <span class="work-meta">1970 · Балладно-исторический роман</span>
+                  </div>
+                  <p class="work-summary">Невероятный поединок крестьян селения Ранкас во главе с неуловимым Эктором Чаконом против колючей проволоки горнорудной корпорации, шагающей через горы и озёра.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-zavaleta-vargas-vicuna">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карлос Эдуардо Савалета и Элеодоро Варгас Викунья</h3>
+                  <p class="author-role">Обновители «неонуаристического» и андского рассказа 1950-х · <span class="tabular">1924–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастера, соединившие сельскую и провинциальную реальность Перу с техникой Фолкнера, Джойса и Хемингуэя.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-cristo-villas-nahuin">
+                  <div class="work-row">
+                    <span class="work-code">ПР-04.05</span>
+                    <a class="work-link" href="./works/savaleta-kristos-vilyas.html">Наин («Ñahuín») и «Кристо Вильяс»</a>
+                    <span class="work-meta">1953–1955 · Новеллистика «неоиндихенизма»</span>
+                  </div>
+                  <p class="work-summary">Поэтические зарисовки души горного края Акабамбы и драматические новеллы о маленьких городах Сьерры, вступающих в современный мир.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pe-lima-urban-boom">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1950–1995</p>
+          <h2 class="section-title">Поколение 1950-х, городская Лима и триумф Варгаса Льосы</h2>
+          <p class="section-desc">Открытие многомиллионной туманной Лимы: шедевры малой прозы Рибейро, нобелевские вершины Марио Варгаса Льосы, нежная ирония Брайса Эченике, поэзия Бланки Варелы и Сиснероса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-julio-ramon-ribeyro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хулио Рамон Рибейро</h3>
+                  <p class="author-role">Один из лучших мастеров рассказа всей Латинской Америки · <span class="tabular">1929–1994</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лимский чеховец, подаривший голос скромным клеркам, бедным мальчикам и несбывшимся мечтателям туманной Лимы и Парижа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-palabra-del-mudo">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.01</span>
+                    <a class="work-link" href="./works/ribejro-slovo-nemogo.html">Слово немого («Стервятники без перьев» и «Чужестранец Сильвио»)</a>
+                    <span class="work-meta">1955–1977 · Цикл психологических новелл</span>
+                  </div>
+                  <p class="work-summary">Щемящие, сдержанные истории о двух братьях Эфраине и Энрике, ищущих объедки на городской свалке для дедовой свиньи, и об иллюзиях «маленького человека» Лимы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mario-vargas-llosa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марио Варгас Льоса</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (2010), титан мирового романа · <span class="tabular">1936–2025</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Арекипы и классик латиноамериканского бума, создавший сложнейшую полифоническую архитектуру романа о власти, свободе, казарме и искусстве рассказа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-ciudad-y-los-perros">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.02</span>
+                    <a class="work-link" href="./works/vargas-losa-gorod-i-psy.html">Город и псы («La ciudad y los perros»)</a>
+                    <span class="work-meta">1963 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Жестокая правда военного училища Леонсио Прадо в Лиме: история «Поэта» Альберто, «Раба» Араны и бунтаря Ягуара как беспощадное зеркало перуанского общества.</p>
+                </li>
+                <li class="work-item" id="work-conversacion-en-la-catedral">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.03</span>
+                    <a class="work-link" href="./works/vargas-losa-razgovor-v-sobore.html">Разговор в «Соборе» и «Праздник Козла»</a>
+                    <span class="work-meta">1969 / 2000 · Полифонический политический роман</span>
+                  </div>
+                  <p class="work-summary">Четырёхчасовая беседа журналиста Сантьяго Савалы с шофёром Амбросио в дешёвой забегаловке о том, «в какой именно момент Перу пошло прахом», и шедевр о природе диктатуры.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alfredo-bryce-echenique">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альфредо Брайс Эченике</h3>
+                  <p class="author-role">Мастер нежной самоиронии, ностальгии и устного ритма прозы · <span class="tabular">род. 1939</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист из старой лимской семьи, взглянувший на уходящий блеск столичной аристократии глазами любящего, ранимого и наблюдательного ребёнка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-un-mundo-para-julius">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.04</span>
+                    <a class="work-link" href="./works/brajs-echenike-mir-dlya-dzhuliusa.html">Мир для Джулиуса («Un mundo para Julius»)</a>
+                    <span class="work-meta">1970 · Лирико-сатирический роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Детство маленького Джулиуса во дворце на проспекте Салаверри в Лиме 1950-х, где мальчик больше тянется к добрым слугам и садовнику, чем к пустому блеску светской элиты.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-blanca-varela">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бланка Варела</h3>
+                  <p class="author-role">Величайшая поэтесса Перу XX века, лауреат премии королевы Софии · <span class="tabular">1926–2009</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Подруга Октавио Паса и художников «поколения 50-х», создавшая аскетичную, суровую и пронзительно честную поэзию телесности, боли и материнства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ese-puerto-existe-canto-villano">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.05</span>
+                    <a class="work-link" href="./works/varela-etot-port-sushhestvuet.html">Этот порт существует и «Простая песнь»</a>
+                    <span class="work-meta">1959–1978 · Философско-экзистенциальная лирика</span>
+                  </div>
+                  <p class="work-summary">Свободная от всякой сентиментальности лирика побережья Супе и Лимы — о хрупкости бытия, тишине и стойком достоинстве взгляда без иллюзий.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-reynoso-congrains">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Освальдо Рейносо и Энрике Конграинс</h3>
+                  <p class="author-role">Первооткрыватели уличной речи и окраин («барриадас») Лимы · <span class="tabular">1931–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатели, впервые выведшие в большую литературу бунтующих подростков бедных кварталов и живой городской сленг Перу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-inocentes-no-una-sino-muchas">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.06</span>
+                    <a class="work-link" href="./works/rejnoso-nevinnye.html">Невинные и «Ни одного на этой земле»</a>
+                    <span class="work-meta">1957–1961 · Городские рассказы и повести</span>
+                  </div>
+                  <p class="work-summary">Электрическая музыка первых рок-пластинок, бильярдные на площади Сан-Мартин и суровая жизнь лимских окраин глазами юношей 1950-х годов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-heraud-cisneros">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хавьер Эро и Антонио Сиснерос</h3>
+                  <p class="author-role">Ведущие голоса «Поколения 1960-х» перуанской поэзии · <span class="tabular">1942–2012</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Проживший 21 год светлый лирик Хавьер Эро («Я — река») и лауреат премии Пабло Неруды и «Каса де лас Америкас» Антонио Сиснерос.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-rio-comentarios-reales">
+                  <div class="work-row">
+                    <span class="work-code">ПР-05.07</span>
+                    <a class="work-link" href="./works/ero-sisneros-reka-i-hronika-limy.html">Река («El río») и «Хроника Лимы»</a>
+                    <span class="work-meta">1960–1968 · Лирическая и иронико-разговорная поэзия</span>
+                  </div>
+                  <p class="work-summary">Хрустальная поэма Эро о течении воды как метафоре молодости и остроумные, полные исторического скепсиса стихи Сиснероса о Лиме, тумане и человеческом тепле.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pe-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1995–2020-е годы</p>
+          <h2 class="section-title">Память, Анды и новая перуанская проза XXI века</h2>
+          <p class="section-desc">Осмысление тревожной истории конца XX века и расцвет новой прозы Перу: романы Сантьяго Ронкальоли и Алонсо Куэто, документальный поиск Ренато Сиснероса, Даниэль Аларкон, Габриэла Винер и Клаудия Саласар.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-santiago-roncagliolo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сантьяго Ронкальоли</h3>
+                  <p class="author-role">Один из лидеров новой перуанской прозы, лауреат премии «Альфагуара» · <span class="tabular">род. 1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и сценарист из Лимы, с напряжением политического триллера исследующий раны внутреннего конфликта 1980–1990-х годов в Перу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-abril-rojo">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.01</span>
+                    <a class="work-link" href="./works/ronkaloli-aprelskaya-krov.html">Апрельская кровь («Abril rojo»)</a>
+                    <span class="work-meta">2006 · Политико-психологический триллер</span>
+                  </div>
+                  <p class="work-summary">Накануне Страстной недели 2000 года педантичный прокурор Феликс Чакальтана приезжает в Аякучо расследовать ритуальное убийство — и попадает в лабиринт страха и недавней войны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alonso-cueto">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алонсо Куэто</h3>
+                  <p class="author-role">Мастер современного перуанского психологического романа · <span class="tabular">род. 1954</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и профессор из Лимы, автор десятков романов о вине, прощении и тайнах, связывающих побережье с андскими провинциями.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-hora-azul">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.02</span>
+                    <a class="work-link" href="./works/kueto-sinij-chas.html">Синий час («La hora azul»)</a>
+                    <span class="work-meta">2005 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Успешный лимский адвокат Адриан Ормаче после смерти отца узнаёт о тайной связи военного врача с плененной девушкой Мириам из Аякучо и отправляется искать её сквозь призраки 1980-х.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-renato-cisneros">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ренато Сиснерос</h3>
+                  <p class="author-role">Автор главной семейно-исторической исповеди нового Перу · <span class="tabular">род. 1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист, поэт и романист (сын поэта Антонио Сиснероса), смело соединивший семейное расследование с политической историей страны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-distancia-que-nos-separa">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.03</span>
+                    <a class="work-link" href="./works/sisneros-rasstoyanie-mezhdu-nami.html">Расстояние между нами</a>
+                    <span class="work-meta">2015 · Автобиографический роман-расследование</span>
+                  </div>
+                  <p class="work-summary">Сын пытается разгадать противоречивую фигуру своего отца — грозного генерала Луиса Федерико Сиснероса («Эль Гаучо») — между домашней нежностью и суровой историей диктатур.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-daniel-alarcon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Даниэль Аларкон</h3>
+                  <p class="author-role">Двуязычный перуано-американский мастер романа и новеллы · <span class="tabular">род. 1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Родившийся в Лиме писатель и создатель знаменитого радиопроекта «Radio Ambulante», пишущий об андских мегаполисах, миграции и иллюзиях юности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lost-city-radio-at-night-we-walk">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.04</span>
+                    <a class="work-link" href="./works/alarkon-poteryannyj-gorod-radio.html">Потерянный город радио и «Ночью мы ходим кругами»</a>
+                    <span class="work-meta">2007 / 2013 · Политический и психологический романы</span>
+                  </div>
+                  <p class="work-summary">Одинокая радиоведущая Норма вечерами зачитывает имена пропавших без вести в безымянном южноамериканском городе после гражданской войны, пока не приходит мальчик из сельвы с неожиданным списком.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gabriela-wiener">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Габриэла Винер</h3>
+                  <p class="author-role">Яркий мастер современной хроники и автофикшна · <span class="tabular">род. 1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналистка и писательница из Лимы, смело исследующая тему идентичности, метисации, памяти предков и антиколониального взгляда.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-huaco-retrato">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.05</span>
+                    <a class="work-link" href="./works/viner-portret-uako.html">Портрет-уако («Huaco retrato»)</a>
+                    <span class="work-meta">2021 · Документальный автофикшн-роман</span>
+                  </div>
+                  <p class="work-summary">Вызванное визитом в парижский музей Набережной Бранли расследование истории своего прадеда — европейского путешественника Шарля Винера, вывозившего сокровища инков и увёзшего мальчика Хуана.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-claudia-salazar-jimenez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Клаудия Саласар Хименес</h3>
+                  <p class="author-role">Ведущая современная перуанская романистка, лауреат премии «Las Américas» · <span class="tabular">род. 1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Лимы, привнёсшая пронзительный женский многоголосый взгляд на новейшую трагическую историю Анда.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-sangre-de-la-aurora">
+                  <div class="work-row">
+                    <span class="work-code">ПР-06.06</span>
+                    <a class="work-link" href="./works/salasar-krov-zari.html">Кровь зари («La sangre de la aurora»)</a>
+                    <span class="work-meta">2013 · Полифонический роман</span>
+                  </div>
+                  <p class="work-summary">Три женские судьбы в Перу 1980–1990-х годов — столичная журналистка, крестьянка из Анда и девушка-повстанка — переплетаются на руинах гражданского противостояния.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание перуанской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
