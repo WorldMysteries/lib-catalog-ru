@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог белорусской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#">Untold Archive</a>
+      <div class="header-stats">6 разделов · 26 писателей · 36 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог белорусской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Скорины и «Песни о зубре» Гусовского до Янки Купалы, Якуба Коласа, Максима Богдановича, Василя Быкова, Владимира Короткевича и Светланы Алексиевич.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#by-ancient-renaissance">Раздел I: Древняя книжность, Возрождение и барокко</a>
+        <a href="#by-nineteenth-century">Раздел II: Становление новой литературы и романтизм XIX века</a>
+        <a href="#by-nasha-niva">Раздел III: Эпоха «Нашей Нивы» и золотые классики возрождения</a>
+        <a href="#by-interwar-midcentury">Раздел IV: Социальный эпос, сатира и Полесская хроника</a>
+        <a href="#by-prose-of-memory">Раздел V: Военная проза совести и исторический романтизм</a>
+        <a href="#by-contemporary">Раздел VI: Поэзия конца XX века, Нобелевский голос и новая проза</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="by-ancient-renaissance">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XII–XVIII века</p>
+          <h2 class="section-title">Древняя книжность, Возрождение и барокко</h2>
+          <p class="section-desc">От торжественной риторики Кирилла Туровского и первопечатного гуманизма Франциска Скорины до новолатинской поэмы Николая Гусовского и барокко Симеона Полоцкого.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-kirill-turovsky">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кирилл Туровский</h3>
+                  <p class="author-role">«Златоуст» древней земли Полесья, мастер притчи и слова · <span class="tabular">ок. 1130 – ок. 1182</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и ритор XII века, превративший церковные «Слова» в утончённые художественные притчи о весне природы и пробуждении человеческой души.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-words-and-parable">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-01.01</span>
+                    <a class="work-link" href="./works/turovsky-slova-i-pritcha.html">Слова и притча о человеческой душе и теле</a>
+                    <span class="work-meta">XII век · Торжественное красноречие и притча</span>
+                  </div>
+                  <p class="work-summary">Высокопоэтические поучения о гармонии мира, совести и ответственности человека, написанные образным, ритмически выверенным языком.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-francysk-skaryna">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франциск Скорина</h3>
+                  <p class="author-role">Восточнославянский первопечатник, гуманист и просветитель · <span class="tabular">ок. 1490 – ок. 1551</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Полоцка и доктор медицины Падуанского университета, напечатавший в Праге и Вильне первые книги для простых людей на понятном старобелорусском языке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-prefaces-to-bible">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-01.02</span>
+                    <a class="work-link" href="./works/skaryna-predisloviya-k-biblii.html">Предисловия к Библии Русской</a>
+                    <span class="work-meta">1517–1519 · Ренессансная публицистика и поэтические фрагменты</span>
+                  </div>
+                  <p class="work-summary">Программные авторские предисловия и послесловия полоцкого гуманиста о ценности знаний, уважении к родному краю и просвещении народа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mikola-husouski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Николай Гусовский</h3>
+                  <p class="author-role">Поэт-гуманист белорусского Возрождения · <span class="tabular">ок. 1470 – после 1533</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель шедевра ренессансной новолатинской поэзии, воспевший природу, пущи и характер родного края для читателей Европы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-song-of-the-bison">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-01.03</span>
+                    <a class="work-link" href="./works/husouski-pesn-o-zubre.html">Песнь о зубре</a>
+                    <span class="work-meta">1523 · Ренессансная поэма</span>
+                  </div>
+                  <p class="work-summary">Выдающаяся поэма, написанная в Риме: величественный портрет могучего хозяина лесных пущ — зубра — перерастает в гимн миру, культуре труда и родной земле.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-simeon-polotsky">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Симеон Полоцкий</h3>
+                  <p class="author-role">Выдающийся поэт и драматург восточнославянского барокко · <span class="tabular">1629–1680</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Самуил Петровский-Ситнианович — воспитанник полоцкой школы и выпускник Могилянской коллегии, автор энциклопедических стихотворных сводов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vertograd-mnogocvetny">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-01.04</span>
+                    <a class="work-link" href="./works/polotsky-vertograd-mnogocvetnyj.html">Вертоград многоцветный и «Рифмологион»</a>
+                    <span class="work-meta">1678–1680 · Барочная поэтическая энциклопедия</span>
+                  </div>
+                  <p class="work-summary">Огромный алфавитный свод силлабических стихов-притч, сатир и моральных наставлений, положивший начало профессиональной книжной поэзии и школьному театру.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="by-nineteenth-century">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · XIX век</p>
+          <h2 class="section-title">Становление новой литературы и романтизм XIX века</h2>
+          <p class="section-desc">Мистические предания севера Беларуси у Яна Барщевского, рождение национального театра у Дунина-Марцинкевича и гражданский призыв Франтишка Богушевича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-jan-barszczewski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ян Барщевский</h3>
+                  <p class="author-role">Классик белорусской романтической фантастики · <span class="tabular">1794–1851</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и прозаик с берегов озера Нещердо, превративший народные поверья, легенды о ведьмаках и рассказы путников в захватывающую книгу готических новелл.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-szlachcic-zawalnia">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-02.01</span>
+                    <a class="work-link" href="./works/barszczewski-shlyahtich-zavalnya.html">Шляхтич Завальня, или Беларусь в фантастических повествованиях</a>
+                    <span class="work-meta">1844–1846 · Цикл романтических новелл</span>
+                  </div>
+                  <p class="work-summary">В зимнюю метель добрый шляхтич Завальня зажигает свечу на окне для заблудших путников, а в благодарность слушает жуткие и поэтичные истории о Белой Сороке, Чернокнижнике и озёрных духах.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vincent-dunin-marcinkiewicz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Викентий Дунин-Марцинкевич</h3>
+                  <p class="author-role">Основоположник новой белорусской драматургии · <span class="tabular">1808–1884</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Драматург и поэт, создавший первый оперно-драматический спектакль на белорусском языке и бессмертный фарс о чиновничьем произволе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pinsk-gentry">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-02.02</span>
+                    <a class="work-link" href="./works/dunin-marcinkiewicz-pinskaya-shlyahta.html">Пинская шляхта</a>
+                    <span class="work-meta">1866 · Сатирическая комедия-фарс</span>
+                  </div>
+                  <p class="work-summary">Остроумнейший водевиль о ссоре двух чванливых пинских шляхтичей Липского и Протасовицкого, которых с блеском и выгодой мирит продажный становой пристав Крючков.</p>
+                </li>
+                <li class="work-item" id="work-idyll-sjalyanka">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-02.03</span>
+                    <a class="work-link" href="./works/dunin-marcinkiewicz-selyanka.html">Идиллия («Селянка»)</a>
+                    <span class="work-meta">1846 · Комическая опера-водевиль</span>
+                  </div>
+                  <p class="work-summary">Пьеса, ставшая точкой отсчёта современного белорусского театра, с живыми диалогами крестьян и мелодичными народными песнями.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-francisak-bahusevic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франтишек Богушевич</h3>
+                  <p class="author-role">Классик реализма и «будитель» белорусского слова · <span class="tabular">1840–1900</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Адвокат «крестьянских прав», поэт и публицист, чьи знаменитые строки в предисловии к «Дудке белорусской» сформулировали кредо национальной культуры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-belarusian-pipe">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-02.04</span>
+                    <a class="work-link" href="./works/bahusevic-dudka-belorusskaya.html">Дудка белорусская и «Смычок белорусский»</a>
+                    <span class="work-meta">1891–1894 · Сборники поэзии и рассказов</span>
+                  </div>
+                  <p class="work-summary">Стихи и баллады о жизни простого пахаря, социальной несправедливости суда и призыв не стыдиться и не отрекаться от родного языка предков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-adam-hurynovich">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Адам Гуринович</h3>
+                  <p class="author-role">Поэт-демократ, фольклорист и переводчик · <span class="tabular">1869–1894</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Талантливый лирик и собиратель народных песен конца XIX века, подготовивший почву для поколения «Нашей Нивы».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poems-hurynovich">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-02.05</span>
+                    <a class="work-link" href="./works/hurynovich-stihi.html">Стихи и фольклорные записи</a>
+                    <span class="work-meta">1890-е · Гражданская и лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Искренние стихотворения о судьбе крестьянина и трудной дороге просвещения на переломе столетий.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="by-nasha-niva">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1906–1925</p>
+          <h2 class="section-title">Эпоха «Нашей Нивы» и золотые классики возрождения</h2>
+          <p class="section-desc">Три великие вершины белорусской классики — народный пафос Янки Купалы, эпическая «Новая земля» Якуба Коласа и утончённый лиризм Максима Богдановича, а также проза Горецкого.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-yanka-kupala">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Янка Купала</h3>
+                  <p class="author-role">Народный поэт, драматург и духовный символ Беларуси · <span class="tabular">1882–1942</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Иван Луцевич — певец «мужыцкай долі», автор великих романтических поэм, острых сатирических комедий и драматических шедевров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zhaleika-kurgan">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-03.01</span>
+                    <a class="work-link" href="./works/kupala-zhalejka-i-kurgan.html">Жалейка и поэма «Курган»</a>
+                    <span class="work-meta">1908–1910 · Лирика и романтическая поэма</span>
+                  </div>
+                  <p class="work-summary">Стих-гимн свободе творца («А кто там идёт?»), нежная любовь к родной природе и легендарная поэма о слепом гусляре, отказавшемся петь льстивую песню для жестокого князя.</p>
+                </li>
+                <li class="work-item" id="work-paulinka-kupala">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-03.02</span>
+                    <a class="work-link" href="./works/kupala-pavlinka.html">Павлинка</a>
+                    <span class="work-meta">1912 · Народная комедия</span>
+                  </div>
+                  <p class="work-summary">Любимейшая белорусская комедия о находчивой девушке Павлинке, которая вопреки спесивому отцу Степану Криницкому выбирает честного учителя Якима Сороку.</p>
+                </li>
+                <li class="work-item" id="work-tuteishyja-kupala">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-03.03</span>
+                    <a class="work-link" href="./works/kupala-tutejshyya.html">Тутэйшыя («Здешние»)</a>
+                    <span class="work-meta">1922 · Трагикомический фарс</span>
+                  </div>
+                  <p class="work-summary">Язвительная, пророческая сатира о приспособленце Никите Зносаке, меняющем паспорта, языки и портреты на стене при каждой смене оккупационных властей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yakub-kolas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Якуб Колас</h3>
+                  <p class="author-role">Народный поэт, автор великого белорусского эпоса · <span class="tabular">1882–1956</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Константин Мицкевич — певец неманских лесов и Полесья, создавший «энциклопедию жизни белорусского крестьянства» и монументальную прозаическую трилогию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-new-land">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-03.04</span>
+                    <a class="work-link" href="./works/kolas-novaya-zemlya.html">Новая земля</a>
+                    <span class="work-meta">1911–1923 · Лиро-эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Величественное, тёплое повествование о лесниках Михале и дядьке Антоне и их заветной мечте — купить собственный клочок свободной земли, чтобы «самим себе панами стать».</p>
+                </li>
+                <li class="work-item" id="work-symon-muzyka">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-03.05</span>
+                    <a class="work-link" href="./works/kolas-symon-muzykant.html">Сымон-музыкант</a>
+                    <span class="work-meta">1918–1925 · Философская поэма</span>
+                  </div>
+                  <p class="work-summary">Романтическая история бедного одарённого скрипача Сымона и его любви к немой красавице Ганне — гимн преобразующей силе народного искусства.</p>
+                </li>
+                <li class="work-item" id="work-on-the-crossroads">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-03.06</span>
+                    <a class="work-link" href="./works/kolas-na-rosstanyah.html">На росстанях</a>
+                    <span class="work-meta">1923–1955 · Роман-трилогия</span>
+                  </div>
+                  <p class="work-summary">Эпическая панорама жизни Полесья начала XX века глазами молодого сельского учителя Андрея Лобановича на перепутье истории.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maksim-bahdanovich">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Максим Богданович</h3>
+                  <p class="author-role">Классик тончайшей лирики и сонета, реформатор стиха · <span class="tabular">1891–1917</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Умерший в 25 лет в Ялте гений белорусской поэзии, за одну книгу прижизненных стихов поднявший национальную лирику на уровень мирового символизма и парнасской точности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vianok-bahdanovich">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-03.07</span>
+                    <a class="work-link" href="./works/bahdanovich-venok.html">Венок («Слуцкие ткачихи», «Погоня», «Романс»)</a>
+                    <span class="work-meta">1913 · Книга стихотворений</span>
+                  </div>
+                  <p class="work-summary">Единственный прижизненный сборник поэта: безупречные сонеты, триолеты, рондо, лирика звёздного неба и бессмертные «Слуцкие ткачихи», вплетающие родной василёк в золотой персидский узор.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ciotka-pashkevich">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тётка (Элоиза Пашкевич)</h3>
+                  <p class="author-role">Поэтесса, прозаик и просветительница · <span class="tabular">1876–1916</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первая крупная белорусская поэтесса нового времени, автор знаменитой «Первой читанки для деток-белорусов» и пламенной лирики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-belarusian-violin">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-03.08</span>
+                    <a class="work-link" href="./works/ciotka-skripka-belorusskaya.html">Скрипка белорусская и «Крест на свободу»</a>
+                    <span class="work-meta">1906 · Лирика и проза</span>
+                  </div>
+                  <p class="work-summary">Ранние революционные и гуманистические стихи, разбудившие веру в женское достоинство и просвещение.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maksim-harecki">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Максим Горецкий</h3>
+                  <p class="author-role">Пионер белорусской психологической и интеллектуальной прозы · <span class="tabular">1893–1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер философской повести, создатель первой истории белорусской литературы и тончайшего романа о расколе души интеллигента.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-two-souls-harecki">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-03.09</span>
+                    <a class="work-link" href="./works/harecki-dve-dushi.html">Две души</a>
+                    <span class="work-meta">1919 · Философско-психологическая повесть</span>
+                  </div>
+                  <p class="work-summary">История офицера Игната Абдзираловича, разрывающегося между аристократическим прошлым, народной правдой и трагическим переломом 1917 года.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="by-interwar-midcentury">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1925–1960-е годы</p>
+          <h2 class="section-title">Социальный эпос, сатира и Полесская хроника</h2>
+          <p class="section-desc">Экзистенциальный психологизм Кузьмы Чорного, острая комедиография Кондрата Крапивы, военные баллады Аркадия Кулешова и эпос Ивана Мележа.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-kuzma-chorny">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кузьма Чорный</h3>
+                  <p class="author-role">Выдающийся романист-психолог белорусской прозы XX века · <span class="tabular">1900–1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Николай Романовский — мастер глубоких романов о нравственном испытании человека в бурях войн и репрессий, чей стиль сравнивают с Достоевским и Фолкнером.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-search-for-future">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-04.01</span>
+                    <a class="work-link" href="./works/chorny-poiski-buduschego.html">Поиски будущего и «Млечный путь»</a>
+                    <span class="work-meta">1943–1944 · Философско-психологические романы</span>
+                  </div>
+                  <p class="work-summary">Написанные в годы войны на одном дыхании романы о человечности среди ужаса разрухи, памяти, вине и тихом возрождении совести.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kandrat-krapiva">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кондрат Крапива</h3>
+                  <p class="author-role">Классик белорусской сатиры, басни и драматургии · <span class="tabular">1896–1991</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер острого народного слова и разоблачительной комедии, создавший бессмертные сатирические типы карьеристов и псевдоучёных.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-he-who-laughs-last">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-04.02</span>
+                    <a class="work-link" href="./works/krapiva-kto-smeetsya-poslednim.html">Кто смеётся последним</a>
+                    <span class="work-meta">1939 · Сатирическая комедия</span>
+                  </div>
+                  <p class="work-summary">Остроумная пьеса о директоре научного института Горлохватском, который делает карьеру на подхалимаже и краденой славе, и проницательном доносчике Зелкине.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-arkadz-kuleshov">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аркадий Кулешов</h3>
+                  <p class="author-role">Народный поэт, мастер лиро-эпической поэмы · <span class="tabular">1914–1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых ярких лириков военного и послевоенного поколений, автор пронзительных баллад о фронтовом братстве и дороге.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-brigade-banner">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-04.03</span>
+                    <a class="work-link" href="./works/kuleshov-znamya-brigady.html">Знамя бригады</a>
+                    <span class="work-meta">1943 · Лиро-эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Суровая и человечная поэма об отступлении лета 1941 года, боевом товариществе Алеся Рыбки и спасении спасённого знамени сквозь оккупированные леса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ivan-melezh">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Мележ</h3>
+                  <p class="author-role">Мастер эпического романа Полесья · <span class="tabular">1921–1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель монументальной «Полесской хроники», показавший драму коллективизации и любви в глухой полесской деревне Курени без прикрас и с огромной любовью к людям.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-people-on-the-marsh">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-04.04</span>
+                    <a class="work-link" href="./works/melezh-lyudi-na-bolote.html">Люди на болоте («Полесская хроника»)</a>
+                    <span class="work-meta">1961 · Эпический роман</span>
+                  </div>
+                  <p class="work-summary">Трагическая история любви гордой и красивой Ганны Чернушки и бедного Василя Дятлика на фоне строительства гати через полесские топи и ломки старого крестьянского мира.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="by-prose-of-memory">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1960–1980-е годы</p>
+          <h2 class="section-title">Военная проза совести и исторический романтизм</h2>
+          <p class="section-desc">Мировое признание белорусской прозы: нравственные притчи Василя Быкова, исторические детективы и эпосы Владимира Короткевича, документальный набат Алеся Адамовича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-vasil-bykau">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Василь Быков</h3>
+                  <p class="author-role">Мировой классик психологической и нравственной военной прозы · <span class="tabular">1924–2003</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Писатель-фронтовик, превративший суровую реальность войны в напряжённые экзистенциальные притчи о совести, выборе и цене человечности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sotnikov-bykau">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-05.01</span>
+                    <a class="work-link" href="./works/bykau-sotnikov.html">Сотников</a>
+                    <span class="work-meta">1970 · Философско-психологическая повесть</span>
+                  </div>
+                  <p class="work-summary">Два партизана — больной, принципиальный Сотников и сильный, практичный Рыбак — попадают в плен к полицаям; перед лицом смерти один остаётся человеком, а другой шаг за шагом падает в предательство.</p>
+                </li>
+                <li class="work-item" id="work-alpine-ballad">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-05.02</span>
+                    <a class="work-link" href="./works/bykau-alpijskaya-ballada.html">Альпийская баллада</a>
+                    <span class="work-meta">1963 · Лирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Три дня побега в Альпах белорусского пленного солдата Ивана Терешки и итальянки Джулии — три дня светлой любви и свободы наперекор смерти.</p>
+                </li>
+                <li class="work-item" id="work-sign-of-misfortune">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-05.03</span>
+                    <a class="work-link" href="./works/bykau-znak-bedy.html">Знак беды</a>
+                    <span class="work-meta">1982 · Повесть-трагедия</span>
+                  </div>
+                  <p class="work-summary">История пожилых хуторян Степаниды и Петрока Богатько на Голгофе оккупации и памяти о раскулачивании, заканчивающаяся непокорённым костром протеста.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uladzimir-karatkevich">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Владимир Короткевич</h3>
+                  <p class="author-role">Классик белорусского исторического романтизма и детектива · <span class="tabular">1930–1984</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Романист, поэт и эссеист, открывший читателям гордую, рыцарскую и загадочную историю Беларуси — от замковых тайн до восстания 1863 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-king-stakhs-wild-hunt">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-05.04</span>
+                    <a class="work-link" href="./works/karatkevich-dikaya-ohota-korolya-staha.html">Дикая охота короля Стаха</a>
+                    <span class="work-meta">1964 · Историко-готический детектив</span>
+                  </div>
+                  <p class="work-summary">Молодой этнограф Андрей Белорецкий в 1888 году попадает в занесённый метелью замок Болотные Ели, где древнее проклятие «дикой охоты» преследует последнюю наследницу рода Яновских.</p>
+                </li>
+                <li class="work-item" id="work-ears-under-your-sickle">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-05.05</span>
+                    <a class="work-link" href="./works/karatkevich-kolosya-pod-serpom.html">Колосья под серпом твоим</a>
+                    <span class="work-meta">1965 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Величественная фреска Беларуси середины XIX века накануне восстания 1863 года: взросление юного Алеся Загорского, дружба с Кастусём Калиновским и выбор чести.</p>
+                </li>
+                <li class="work-item" id="work-black-castle-alshansky">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-05.06</span>
+                    <a class="work-link" href="./works/karatkevich-chernyj-zamok-olshanskij.html">Чёрный замок Ольшанский</a>
+                    <span class="work-meta">1979 · Историко-детективный роман</span>
+                  </div>
+                  <p class="work-summary">Писатель Антон Космич расшифровывает старинный шифр XVII века из Евангелия, чтобы раскрыть тайну похищенной казны, подземелий Ольшан и нераскрытых преступлений XX столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ales-adamovich">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алесь Адамович</h3>
+                  <p class="author-role">Создатель художественно-документальной «сверхлитературы» памяти · <span class="tabular">1927–1994</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, публицист и сценарист («Иди и смотри»), соединивший живые голоса свидетелей сожжённых деревень и блокады с мощной прозой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-khatyn-story">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-05.07</span>
+                    <a class="work-link" href="./works/adamovich-hatynskaya-povest.html">Хатынская повесть (и «Я из огненной деревни»)</a>
+                    <span class="work-meta">1971–1977 · Документально-художественная повесть</span>
+                  </div>
+                  <p class="work-summary">Исповедь слепого партизана Флориана Гайшуна и книга живых свидетельств уцелевших жителей сожжённых белорусских деревень.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yanka-bryl">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Янка Брыль</h3>
+                  <p class="author-role">Мастер лирической прозы и поэтической миниатюры · <span class="tabular">1917–2006</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Утончённый стилист из Западной Беларуси, автор глубоко человечного романа-воспоминания «Птицы и гнёзда» и знаменитых «миниатюр из записной книжки».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-birds-and-nests">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-05.08</span>
+                    <a class="work-link" href="./works/bryl-pticy-i-gnezda.html">Птицы и гнёзда</a>
+                    <span class="work-meta">1964 · Лирический роман</span>
+                  </div>
+                  <p class="work-summary">Автобиографическая история Алеся Руневича — от службы в польской армии в сентябре 1939 года и немецкого плена до возвращения домой и обретения голоса писателя.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="by-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1970–2010-е годы</p>
+          <h2 class="section-title">Поэзия конца XX века, Нобелевский голос и новая проза</h2>
+          <p class="section-desc">Поэтическая стихия Рыгора Бородулина и Нила Гилевича, полифония Нобелевского лауреата Светланы Алексиевич и смелые романы Виктора Мартиновича и Альгерда Бахаревича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ryhor-baradulin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рыгор Бородулин</h3>
+                  <p class="author-role">Народный поэт Беларуси, виртуоз метафоры и ушачского слова · <span class="tabular">1935–2014</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Последний народный поэт Беларуси, номинированный на Нобелевскую премию за духовную поэзию; мастер неистощимого словесного богатства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gospel-from-mother-ksty">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-06.01</span>
+                    <a class="work-link" href="./works/baradulin-evangelie-ot-mamy.html">Евангелие от мамы и «Ксты»</a>
+                    <span class="work-meta">1995–2005 · Философско-духовная лирика</span>
+                  </div>
+                  <p class="work-summary">Глубокие, молитвенные стихи памяти матери Акулины Андреевны, в которых ушачский говор и евангельский свет сливаются воедино.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nil-hilevich">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Нил Гилевич</h3>
+                  <p class="author-role">Народный поэт, автор первого белорусского романа в стихах · <span class="tabular">1931–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер песенной лирики, переводчик южнославянской поэзии и создатель любимого романа «Родные дети».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-native-children">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-06.02</span>
+                    <a class="work-link" href="./works/hilevich-rodnye-deti.html">Родные дети («Родныя дзеці»)</a>
+                    <span class="work-meta">1985 · Роман в стихах</span>
+                  </div>
+                  <p class="work-summary">Тёплая, ироничная и мудрая панорама жизни одной белорусской деревни и судьбы деревенской семьи, чьи дети разлетелись по городам.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-svetlana-alexievich">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Светлана Алексиевич</h3>
+                  <p class="author-role">Лауреат Нобелевской премии по литературе (2015) · <span class="tabular">род. 1948</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Создатель жанра «романа голосов», запечатлевшая в художественно-документальных книгах внутреннюю историю человека в катастрофах XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-unwomanly-face-of-war">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-06.03</span>
+                    <a class="work-link" href="./works/alexievich-u-vojny-ne-zhenskoe-lico.html">У войны не женское лицо</a>
+                    <span class="work-meta">1985 · Художественно-документальный роман голосов</span>
+                  </div>
+                  <p class="work-summary">Сотни живых, потрясающих исповедей женщин-фронтовичек — санинструкторов, снайперов, лётчиц и прачек — открывших правду о войне вне парадных мифов.</p>
+                </li>
+                <li class="work-item" id="work-chernobyl-prayer">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-06.04</span>
+                    <a class="work-link" href="./works/alexievich-chernobylskaya-molitva.html">Чернобыльская молитва</a>
+                    <span class="work-meta">1997 · Хроника будущего</span>
+                  </div>
+                  <p class="work-summary">Книга-свидетельство о катастрофе 1986 года глазами ликвидаторов, вдов пожарных, переселенцев и детей Зоны — размышление о новой эпохе человечества.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-viktor-martinovich">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виктор Мартинович</h3>
+                  <p class="author-role">Ведущий автор современной белорусской антиутопии и городской прозы · <span class="tabular">род. 1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Искусствовед и романист, чьи книги («Паранойя», «Мова», «Революция») стали знаковыми явлениями современной русско- и белорусскоязычной прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mova-martinovich">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-06.05</span>
+                    <a class="work-link" href="./works/martinovich-mova.html">Мова</a>
+                    <span class="work-meta">2014 · Лингвистический нуар и антиутопия</span>
+                  </div>
+                  <p class="work-summary">В Минске будущего, ставшем частью огромного Союза, запрещённый белорусский язык превращается в таинственный «наркотик слова» со свитками классиков вместо доз.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alhierd-bacharevic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альгерд Бахаревич</h3>
+                  <p class="author-role">Крупнейший современный романист-интеллектуал и эссеист Беларуси · <span class="tabular">род. 1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, поэт и переводчик, создавший масштабную постмодернистскую эпопею о языке, памяти и Восточной Европе XXI века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dogs-of-europe">
+                  <div class="work-row">
+                    <span class="work-code">БЛ-06.06</span>
+                    <a class="work-link" href="./works/bacharevic-sobaki-evropy.html">Собаки Европы</a>
+                    <span class="work-meta">2017 · Роман-полифония в шести историях</span>
+                  </div>
+                  <p class="work-summary">Многослойное путешествие от вымышленного языка «бальбута» и минских окраин 1990-х к антиутопическому «Российскому Рейху» середины XXI века.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание белорусской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

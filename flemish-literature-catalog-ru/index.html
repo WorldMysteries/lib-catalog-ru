@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог фламандской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#">Untold Archive</a>
+      <div class="header-stats">6 разделов · 21 писателей · 32 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог фламандской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от средневековой мистики Хадевейх и «Льва Фландрии» Консианса до Гвидо Гезелле, Виллема Элсхота, Хьюго Клауса и современной прозы.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#fl-medieval-mystics">Раздел I: Средневековая мистика и городской эпос Фландрии</a>
+        <a href="#fl-romanticism">Раздел II: Фламандский романтизм и национальное пробуждение</a>
+        <a href="#fl-van-nu-en-straks">Раздел III: Натурализм и кружок «Ныне и впредь»</a>
+        <a href="#fl-expressionism-interwar">Раздел IV: Авангард, экспрессионизм и проза 1920–1940-х годов</a>
+        <a href="#fl-postwar-modernism">Раздел V: Послевоенный роман и магический реализм</a>
+        <a href="#fl-contemporary">Раздел VI: Современная фламандская проза и лирика</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="fl-medieval-mystics">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1170–1495 годы</p>
+          <h2 class="section-title">Средневековая мистика и городской эпос Фландрии</h2>
+          <p class="section-desc">Истоки нидерландскоязычной словесности в средневековой Фландрии и Брабанте: рыцарская поэзия, женская любовная мистика Хадевейх, дидактика Марланта и знаменитый животный эпос.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hadewijch">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хадевейх Антверпенская</h3>
+                  <p class="author-role">Выдающаяся фламандская поэтесса-мистик · <span class="tabular">XIII век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бегинка из Брабанта, создавшая страстную лирику о духовной Любви (Minne), соединившую трубадурскую поэтику с глубоким мистическим опытом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-visions-and-poems">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-01.01</span>
+                    <a class="work-link" href="./works/hadewijch-videniya-i-stihi.html">Видения и строфические стихи</a>
+                    <span class="work-meta">ок. 1240 · Мистическая лирика и проза</span>
+                  </div>
+                  <p class="work-summary">Книга четырнадцати видений и сорока пяти строфических песен о поиске единства души с бесконечной Любовью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maerlant">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Якоб ван Марлант</h3>
+                  <p class="author-role">«Отец всех фламандских поэтов» Средневековья · <span class="tabular">ок. 1230–1300</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Энциклопедист и поэт из Западной Фландрии, перешедший от рыцарских романов к просветительским стихотворным хроникам на родном языке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-spieghel-historiael">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-01.02</span>
+                    <a class="work-link" href="./works/maerlant-zercalo-istorii.html">Зерцало истории (Spieghel Historiael)</a>
+                    <span class="work-meta">1288 · Всемирная стихотворная хроника</span>
+                  </div>
+                  <p class="work-summary">Грандиозная энциклопедия мировой истории, написанная по заказу графа Флориса V как руководство по мудрому правлению.</p>
+                </li>
+                <li class="work-item" id="work-der-naturen-bloeme">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-01.03</span>
+                    <a class="work-link" href="./works/maerlant-cvet-prirody.html">Цвет природы (Зерцало природы)</a>
+                    <span class="work-meta">1270 · Дидактическая поэма</span>
+                  </div>
+                  <p class="work-summary">Первая на нидерландском языке естественно-научная поэма о зверях, птицах, морях, травах и камнях.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ruusbroec">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ян ван Рюйсбрук</h3>
+                  <p class="author-role">Мастер фламандской мистической прозы · <span class="tabular">1293–1381</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Священник из Брюсселя и основатель обители Грунендаль, чьи трактаты заложили фундамент нидерландской философской прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-brulocht">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-01.04</span>
+                    <a class="work-link" href="./works/ruusbroec-duhovny-brak.html">Украшение духовного брака</a>
+                    <span class="work-meta">ок. 1340 · Философский трактат</span>
+                  </div>
+                  <p class="work-summary">Три ступени внутреннего пути человека — деятельная жизнь, жизнь стремления и созерцательное единство.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-reynard-anonym">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фламандский городской эпос и моралите</h3>
+                  <p class="author-role">Народно-городская классика Фландрии и Брабанта · <span class="tabular">XIII–XV века</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Анонимные шедевры средневекового Гента, Брюгге и Антверпена, вошедшие в золотой фонд европейской словесности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-van-den-vos-reynaerde">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-01.05</span>
+                    <a class="work-link" href="./works/flanders-lis-reynard.html">О Лисе Рейнарде</a>
+                    <span class="work-meta">ок. 1260 · Сатирическая поэма</span>
+                  </div>
+                  <p class="work-summary">Блестящая фламандская сатира на суд короля льва Нобеля, где хитрый Лис Рейнард из Малпертюиса переигрывает алчных вельмож.</p>
+                </li>
+                <li class="work-item" id="work-elckerlijc">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-01.06</span>
+                    <a class="work-link" href="./works/flanders-elkerleyk.html">Элкерлейк (Всякий человек)</a>
+                    <span class="work-meta">ок. 1495 · Пьеса-моралите</span>
+                  </div>
+                  <p class="work-summary">Знаменитая драма о том, как в час последнего отчёта от человека отступают Богатство и Дружба, и лишь Добрые Дела идут с ним до конца.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fl-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1838–1893 годы</p>
+          <h2 class="section-title">Фламандский романтизм и национальное пробуждение</h2>
+          <p class="section-desc">Возрождение фламандской словесности в XIX веке: исторический роман Хендрика Консианса («он научил свой народ читать») и чистая лирика Гвидо Гезелле.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-conscience">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хендрик Консианс</h3>
+                  <p class="author-role">Создатель современного фламандского романа · <span class="tabular">1812–1883</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Антверпена, возродивший интерес к родному слову исторической эпопеей и тёплыми бытовыми повестями.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-de-leeuw-van-vlaenderen">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-02.01</span>
+                    <a class="work-link" href="./works/conscience-lev-flamdrii.html">Лев Фландрии</a>
+                    <span class="work-meta">1838 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Героическая хроника восстания фламандских городов и битвы золотых шпор при Кортрейке в 1302 году под предводительством Яна Брейделя и Питера де Конинка.</p>
+                </li>
+                <li class="work-item" id="work-de-arme-edelman">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-02.02</span>
+                    <a class="work-link" href="./works/conscience-nishchiy-dvoryanin.html">Нищий дворянин</a>
+                    <span class="work-meta">1851 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Трогательная история обедневшего помещика де Влирбека, сохраняющего достоинство и самоотверженную любовь к дочери Леноре.</p>
+                </li>
+                <li class="work-item" id="work-de-loteling">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-02.03</span>
+                    <a class="work-link" href="./works/conscience-rekrut.html">Рекрут</a>
+                    <span class="work-meta">1850 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Поэтичный рассказ о сельском юноше Яне Браме, ослепшем на военной службе, и верной любви девушки Трин.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gezelle">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гвидо Гезелле</h3>
+                  <p class="author-role">Величайший фламандский поэт XIX века · <span class="tabular">1830–1899</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Священник и поэт из Брюгге, обновивший поэзию живым западнофламандским звучанием, музыкальностью и созерцанием природы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tijdkrans">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-02.04</span>
+                    <a class="work-link" href="./works/gezelle-venec-vremeni.html">Венец времени</a>
+                    <span class="work-meta">1893 · Поэтический сборник</span>
+                  </div>
+                  <p class="work-summary">Лирический календарь времён года, ветра, листвы и тихого благоговения перед красотой мира.</p>
+                </li>
+                <li class="work-item" id="work-kerkhofblommen">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-02.05</span>
+                    <a class="work-link" href="./works/gezelle-kladbishchenskie-cvety.html">Кладбищенские цветы</a>
+                    <span class="work-meta">1858 · Лирический цикл</span>
+                  </div>
+                  <p class="work-summary">Ранняя книга элегических стихов и прозаических зарисовок, открывшая новую эру в фламандской поэзии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rodenbach">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альбрехт Роденбах</h3>
+                  <p class="author-role">Романтический поэт и драматург студентского движения · <span class="tabular">1856–1880</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Талантливый поэт из Руселаре, проживший всего двадцать три года и оставивший глубокий след в фламандской лирике и драме.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gudrun">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-02.06</span>
+                    <a class="work-link" href="./works/rodenbach-gudryun.html">Гудрюн</a>
+                    <span class="work-meta">1882 · Историческая драма в стихах</span>
+                  </div>
+                  <p class="work-summary">Посмертно изданная драма по мотивам северного эпоса о верности, море и испытаниях чести.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fl-van-nu-en-straks">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1893–1914 годы</p>
+          <h2 class="section-title">Натурализм и кружок «Ныне и впредь»</h2>
+          <p class="section-desc">Выход фламандской литературы на общеевропейский уровень в журнале «Van Nu en Straks»: эпика крестьянского труда Стрёвелса, проза Бёйссе и символизм Ван де Вустейне.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-streuvels">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стрейн Стрёвелс (Франк Латор)</h3>
+                  <p class="author-role">Мастер эпического романа о фламандской земле · <span class="tabular">1871–1969</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Племянник Гвидо Гезелле, создавший монументальные полотна о человеке перед лицом стихии, урожая и смены поколений.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-de-vlaschaard">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-03.01</span>
+                    <a class="work-link" href="./works/streuvels-lnyanoe-pole.html">Льняное поле (De Vlaschaard)</a>
+                    <span class="work-meta">1907 · Роман</span>
+                  </div>
+                  <p class="work-summary">Эпический конфликт сурового крестьянина Вермёлена и его молодого сына Луи на фоне цикла посева, цветения и жатвы льна.</p>
+                </li>
+                <li class="work-item" id="work-lenteleven">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-03.02</span>
+                    <a class="work-link" href="./works/streuvels-vesennyaya-zhizn.html">Весенняя жизнь (Lenteleven)</a>
+                    <span class="work-meta">1899 · Сборник новелл</span>
+                  </div>
+                  <p class="work-summary">Психологические зарисовки о тихих радостях и горестях сельских жителей Западной Фландрии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-buysse">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сирил Бёйссе</h3>
+                  <p class="author-role">Ведущий мастер фламандского натурализма · <span class="tabular">1859–1932</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист и драматург из Восточной Фландрии, смело показавший социальное неравенство и нравы деревни без романтической идеализации.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-het-recht-van-den-sterkste">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-03.03</span>
+                    <a class="work-link" href="./works/buysse-pravo-silnogo.html">Право сильного</a>
+                    <span class="work-meta">1893 · Натуралистический роман</span>
+                  </div>
+                  <p class="work-summary">Суровая история столкновения бедности, произвола и борьбы за выживание в старой фламандской деревне.</p>
+                </li>
+                <li class="work-item" id="work-het-leven-van-rozeke-van-dalen">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-03.04</span>
+                    <a class="work-link" href="./works/buysse-rozeke-van-dalen.html">Жизнь Розеке ван Дален</a>
+                    <span class="work-meta">1906 · Роман</span>
+                  </div>
+                  <p class="work-summary">История стойкой и человечной женщины, проходящей через жизненные испытания в сельской Фландрии начала XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-van-de-woestijne">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карел ван де Вустейне</h3>
+                  <p class="author-role">Крупнейший поэт-символист Фландрии · <span class="tabular">1878–1929</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Гента, создатель утончённой, меланхолической поэзии и критики, вдохновивший художников Латемской школы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-het-vaderhuis">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-03.05</span>
+                    <a class="work-link" href="./works/woestijne-otchiy-dom.html">Отчий дом</a>
+                    <span class="work-meta">1903 · Сборник стихов</span>
+                  </div>
+                  <p class="work-summary">Музыкальная лирика воспоминаний о тихих садах Гента, осени, одиночестве и духовных поисках.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fl-expressionism-interwar">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1916–1946 годы</p>
+          <h2 class="section-title">Авангард, экспрессионизм и проза 1920–1940-х годов</h2>
+          <p class="section-desc">Типографский авангард Паула ван Остайена, радостная живописность Феликса Тиммерманса и острая сатирическая точность Виллема Элсхота.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-elsschot">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виллем Элсхот (Альфонс Де Риддер)</h3>
+                  <p class="author-role">Классик лаконичной иронической прозы · <span class="tabular">1882–1960</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Антверпенский рекламщик и писатель, прославившийся кристально чистым, трезвым стилем без лишних украшений и глубоким сочувствием к маленькому человеку.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kaas">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-04.01</span>
+                    <a class="work-link" href="./works/elsschot-syr.html">Сыр (Kaas)</a>
+                    <span class="work-meta">1933 · Сатирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Трагикомическая история скромного антверпенского клерка Франса Лаарманса, мечтающего стать крупным коммерсантом и получающего двадцать тонн голландского сыра.</p>
+                </li>
+                <li class="work-item" id="work-lijmen-het-been">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-04.02</span>
+                    <a class="work-link" href="./works/elsschot-obrabotka.html">Обработка (Lijmen)</a>
+                    <span class="work-meta">1924 · Сатирический роман</span>
+                  </div>
+                  <p class="work-summary">История циничного издателя рекламных альманахов Боормана и его наивного ученика Лаарманса.</p>
+                </li>
+                <li class="work-item" id="work-het-dwaallicht">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-04.03</span>
+                    <a class="work-link" href="./works/elsschot-bluzhdayushchiy-ogonek.html">Блуждающий огонёк</a>
+                    <span class="work-meta">1946 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Тёплое ночное путешествие стареющего Лаарманса и трёх афганских матросов по дождливому портовому Антверпену в поисках таинственной Марии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-timmermans">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Феликс Тиммерманс</h3>
+                  <p class="author-role">Певец радости жизни и народной Фландрии · <span class="tabular">1886–1947</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и художник из Лира, воплотивший в прозе фламандский дух полотен Питера Брейгеля и Яна Стена.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pallieter">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-04.04</span>
+                    <a class="work-link" href="./works/timmermans-palliter.html">Паллитер</a>
+                    <span class="work-meta">1916 · Лирический роман</span>
+                  </div>
+                  <p class="work-summary">Гимн солнечной жизни, краскам речной долины Нете и беспечному жизнелюбию обаятельного чудака Паллитера.</p>
+                </li>
+                <li class="work-item" id="work-pieter-bruegel">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-04.05</span>
+                    <a class="work-link" href="./works/timmermans-piter-breygel.html">Питер Брейгель</a>
+                    <span class="work-meta">1928 · Биографический роман</span>
+                  </div>
+                  <p class="work-summary">Живописное повествование о судьбе великого фламандского мастера, его скитаниях среди крестьян и поиске правды искусства.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-van-ostaijen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Паул ван Остайен</h3>
+                  <p class="author-role">Главный поэт фламандского авангарда и экспрессионизма · <span class="tabular">1896–1928</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт из Антверпена, превративший страницу книги в звучащую визуальную партитуру ритмической типографики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bezette-stad">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-04.06</span>
+                    <a class="work-link" href="./works/ostaijen-okkupirovanny-gorod.html">Оккупированный город (Bezette Stad)</a>
+                    <span class="work-meta">1921 · Экспрессионистская поэма</span>
+                  </div>
+                  <p class="work-summary">Авангардная визуально-ритмическая панорама Антверпена в годы Первой мировой войны — от гула канонад до огней мюзик-холлов.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fl-postwar-modernism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1947–1983 годы</p>
+          <h2 class="section-title">Послевоенный роман и магический реализм</h2>
+          <p class="section-desc">Эпос XX века Хьюго Клауса, социальная проза Луи Паула Боона и утончённый фламандский магический реализм Хуберта Лампо и Йохана Дайсне.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-claus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хьюго Клаус</h3>
+                  <p class="author-role">Крупнейший фламандский писатель XX века · <span class="tabular">1929–2008</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист, поэт, драматург и режиссёр из Брюгге, создавший главную панораму Фландрии середины XX столетия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-het-verdriet-van-belgie">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-05.01</span>
+                    <a class="work-link" href="./works/claus-gore-belgii.html">Горе Бельгии (Скорбь Бельгии)</a>
+                    <span class="work-meta">1983 · Роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">История взросления Луи Сейнаве в монастырском пансионе и фламандском городке накануне, во время и после Второй мировой войны.</p>
+                </li>
+                <li class="work-item" id="work-de-metsiers">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-05.02</span>
+                    <a class="work-link" href="./works/claus-ohota-na-utok.html">Охота на уток (De Metsiers)</a>
+                    <span class="work-meta">1950 · Роман</span>
+                  </div>
+                  <p class="work-summary">Яркий дебют двадцатилетнего Клауса — полифоническая сельская драма, написанная под влиянием Фолкнера.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-boon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луи Паул Боон</h3>
+                  <p class="author-role">Новатор социальной и экспериментальной прозы · <span class="tabular">1912–1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Алста, соединивший судьбы рабочих текстильных фабрик со смелым коллажным построением романа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-de-kapellekensbaan">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-05.03</span>
+                    <a class="work-link" href="./works/boon-doroga-s-chasovney.html">Дорога с часовней (De Kapellekensbaan)</a>
+                    <span class="work-meta">1953 · Экспериментальный роман</span>
+                  </div>
+                  <p class="work-summary">Многослойная история юной Ондине на рубеже XIX–XX веков, перебиваемая спорами друзей-писателей в послевоенном Алсте и легендой о Лисе Рейнарде.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lampo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуберт Лампо</h3>
+                  <p class="author-role">Классик фламандского магического реализма · <span class="tabular">1920–2006</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Антверпенский прозаик, открывший в будничных улицах фламандских городов присутствие древнего мифа и тайны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-joachim-stiller">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-05.04</span>
+                    <a class="work-link" href="./works/lampo-ioahim-stiller.html">Пришествие Иоахима Стиллера</a>
+                    <span class="work-meta">1960 · Магический реализм</span>
+                  </div>
+                  <p class="work-summary">Журналист Фрек Гроневаут сталкивается в Антверпене с загадочными письмами и следами человека по имени Иоахим Стиллер.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-daisne">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йохан Дайсне (Херман Тейс)</h3>
+                  <p class="author-role">Теоретик и мастер магического реализма · <span class="tabular">1912–1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и романист из Гента, соединявший строгость реальности со сновидческим миром воспоминаний и кино.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-man-die-zijn-haar-kort-liet-knippen">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-05.05</span>
+                    <a class="work-link" href="./works/daisne-chelovek-ostrig-volosy.html">Человек, который остриг себе волосы</a>
+                    <span class="work-meta">1947 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Исповедальный монолог учителя Говерта Майнсхаута о несбывшейся любви к ученице Фране и хрупкой грани между рассудком и сном.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fl-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1989–2015 годы</p>
+          <h2 class="section-title">Современная фламандская проза и лирика</h2>
+          <p class="section-desc">Современный расцвет фламандской словесности: семейная память у Эрвина Мортьера, драматическая проза Тома Лануа, романы Кристин Хеммерехтс и поэзия Леонарда Ноленса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mortier">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрвин Мортьер</h3>
+                  <p class="author-role">Стилист современной фламандской прозы · <span class="tabular">род. 1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Восточной Фландрии, знаменитый богатой метафорикой и тонким исследованием семейной памяти XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-marcel">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-06.01</span>
+                    <a class="work-link" href="./works/mortier-marsel.html">Марсель</a>
+                    <span class="work-meta">1999 · Роман</span>
+                  </div>
+                  <p class="work-summary">Мальчик наводит порядок в комоде бабушки и по старым фотографиям открывает замалчиваемую историю двоюродного дяди Марселя.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lanoye">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Том Лануа</h3>
+                  <p class="author-role">Романист, поэт и драматург · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых ярких и читаемых современных фламандских авторов, соединяющий сатиру, страсть и острую социальную наблюдательность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sprakeloos">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-06.02</span>
+                    <a class="work-link" href="./works/lanoye-bezyazykiy.html">Безъязыкий (Язык слёз)</a>
+                    <span class="work-meta">2009 · Автобиографический роман</span>
+                  </div>
+                  <p class="work-summary">Пронзительная книга о матери писателя, бывшей актрисе-любительнице, потерявшей дар речи после инсульта, и о силе слова.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hemmerechts">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристин Хеммерехтс</h3>
+                  <p class="author-role">Ведущая фламандская романистка и эссеистка · <span class="tabular">род. 1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Брюсселя, исследующая человеческие привязанности, телесность, утрату и женские судьбы в современной Бельгии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-brede-heupen">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-06.03</span>
+                    <a class="work-link" href="./works/hemmerechts-shirokie-bedra.html">Широкие бёдра</a>
+                    <span class="work-meta">1989 · Роман</span>
+                  </div>
+                  <p class="work-summary">Тонкий психологический портрет женщины, балансирующей между семейной ответственностью и жаждой внутренней свободы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nolens">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Леонард Ноленс</h3>
+                  <p class="author-role">Крупнейший фламандский поэт конца XX — начала XXI века · <span class="tabular">род. 1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат Нидерландской литературной премии, автор лирических дневников и глубокой интимной поэзии о языке и любви.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hart-tegen-hart">
+                  <div class="work-row">
+                    <span class="work-code">ФЛ-06.04</span>
+                    <a class="work-link" href="./works/nolens-serdce-protiv-serdca.html">Сердце против сердца</a>
+                    <span class="work-meta">1991 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Стихи о внутреннем диалоге человека, тишине письма и верности родному фламандскому слову.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание фламандской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
