@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог голландской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 21 писателей · 29 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог голландской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Эразма Роттердамского и Золотого века Вондела до «Макса Хавелара» Мултатули, Луи Куперуса, «Большой тройки» XX века и Сейса Нотебоома.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#nl-golden-age">Раздел I: Гуманизм и Золотой век Республики</a>
+        <a href="#nl-enlightenment-multatuli">Раздел II: Просвещение и проза XIX века</a>
+        <a href="#nl-tachtigers">Раздел III: Движение «Восьмидесятников» и реализм рубежа веков</a>
+        <a href="#nl-interwar-modernism">Раздел IV: Проза 1910–1940-х годов и «Новая деловитость»</a>
+        <a href="#nl-big-three">Раздел V: «Большая тройка» послевоенной прозы</a>
+        <a href="#nl-contemporary">Раздел VI: Космополитическая и современная проза</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="nl-golden-age">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1511–1679 годы</p>
+          <h2 class="section-title">Гуманизм и Золотой век Республики</h2>
+          <p class="section-desc">От европейского гуманизма Эразма Роттердамского к расцвету высокой драмы, лирики и комедии Амстердамского Золотого века XVII столетия.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-erasmus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эразм Роттердамский</h3>
+                  <p class="author-role">Крупнейший гуманист Северного Возрождения · <span class="tabular">1466–1536</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Роттердама, мыслитель и блестящий сатирик, чья книга о человеческом безумии стала одним из самых читаемых произведений Европы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-laus-stultitiae">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-01.01</span>
+                    <a class="work-link" href="./works/erasmus-pohvala-gluposti.html">Похвала глупости</a>
+                    <span class="work-meta">1511 · Сатирическая декламация</span>
+                  </div>
+                  <p class="work-summary">Монолог богини Глупости (Мории), с остроумной иронией обличающей схоластику, корыстолюбие, тщеславие монархов, учёных и клириков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vondel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йост ван ден Вондел</h3>
+                  <p class="author-role">«Принц поэтов» нидерландского Золотого века · <span class="tabular">1587–1679</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Величайший поэт и драматург Амстердама XVII века, автор величественных трагедий, открывавших здание первого городского театра.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lucifer">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-01.02</span>
+                    <a class="work-link" href="./works/vondel-lyucifer.html">Люцифер</a>
+                    <span class="work-meta">1654 · Трагедия в стихах</span>
+                  </div>
+                  <p class="work-summary">Монументальная драма о гордыне и падении архангела Люцифера, предвосхитившая «Потерянный рай» Джона Мильтона.</p>
+                </li>
+                <li class="work-item" id="work-gijsbrecht-van-aemstel">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-01.03</span>
+                    <a class="work-link" href="./works/vondel-geysbreht.html">Гейсбрехт Амстелский</a>
+                    <span class="work-meta">1637 · Историческая трагедия</span>
+                  </div>
+                  <p class="work-summary">Пьеса о средневековой осаде и падении Амстердама в рождественскую ночь — традиционное новогоднее представление голландской сцены.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hooft">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Питер Корнелисзон Хофт</h3>
+                  <p class="author-role">Поэт, историк и глава Мёйденского кружка · <span class="tabular">1581–1647</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Амстердамский патриций, перенёсший изящество итальянского Возрождения в голландскую лирику и создавший классическую прозу истории Нидерландов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-granida">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-01.04</span>
+                    <a class="work-link" href="./works/hooft-granida.html">Гранида</a>
+                    <span class="work-meta">1615 · Пасторальная драма</span>
+                  </div>
+                  <p class="work-summary">Изысканная ренессансная пастораль о любви персидской принцессы Граниды и простого пастуха Даифило.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bredero">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гербранд Адриансзон Бредеро</h3>
+                  <p class="author-role">Мастер живой амстердамской комедии и песен · <span class="tabular">1585–1618</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и драматург, перенёсший на сцену сочный разговорный говор старых амстердамских улиц и каналов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-spaanse-brabander">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-01.05</span>
+                    <a class="work-link" href="./works/bredero-ispanskiy-brabantce.html">Испанский брабантце</a>
+                    <span class="work-meta">1617 · Комедия</span>
+                  </div>
+                  <p class="work-summary">Колоритная сатира на хвастливого аристократа Иеролимо из Антверпена и пронырливого слугу Роббеколя на шумных рынках Амстердама.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nl-enlightenment-multatuli">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1782–1860 годы</p>
+          <h2 class="section-title">Просвещение и проза XIX века</h2>
+          <p class="section-desc">От первого голландского эпистолярного романа Волф и Декен и юмора «Камеры-обскуры» до взрывной антиколониальной сатиры Мултатули.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-multatuli">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мултатули (Эдуард Даувес Деккер)</h3>
+                  <p class="author-role">Реформатор голландской прозы и сатирик · <span class="tabular">1820–1887</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший колониальный чиновник на Яве, создавший самую знаменитую книгу Нидерландов XIX века в защиту угнетённых и против бюрократического лицемерия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-max-havelaar">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-02.01</span>
+                    <a class="work-link" href="./works/multatuli-maks-havelar.html">Макс Хавелар, или Кофейные аукционы Нидерландского торгового общества</a>
+                    <span class="work-meta">1860 · Сатирико-публицистический роман</span>
+                  </div>
+                  <p class="work-summary">Блестящее противопоставление самодовольного амстердамского кофейного маклера Дрогстоппеля и трагической судьбы идеалиста Макса Хавелара в Голландской Ост-Индии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-wolff-deken">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бетье Волф и Агье Декен</h3>
+                  <p class="author-role">Создательницы современного нидерландского романа · <span class="tabular">1738–1804</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Творческий союз двух писательниц эпохи Просвещения, подаривший голландской литературе живой психологический эпистолярный роман.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sara-burgerhart">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-02.02</span>
+                    <a class="work-link" href="./works/wolff-sara-byurgerhart.html">История девицы Сары Бюргерхарт</a>
+                    <span class="work-meta">1782 · Роман в письмах</span>
+                  </div>
+                  <p class="work-summary">Живая переписка озорной, умной и независимой девушки Сары, открывающей мир любви, дружбы и здравого смысла в Голландии XVIII века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hildebrand">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Николас Бетс (Хильдебранд)</h3>
+                  <p class="author-role">Мастер голландского юмористического очерка · <span class="tabular">1814–1903</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лейденский студент-теолог и поэт, под псевдонимом Хильдебранд создавший классическую книгу бытовых портретов XIX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-camera-obscura">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-02.03</span>
+                    <a class="work-link" href="./works/hildebrand-kamera-obskura.html">Камера-обскура</a>
+                    <span class="work-meta">1839 · Сборник очерков и рассказов</span>
+                  </div>
+                  <p class="work-summary">Меткие и добродушные зарисовки голландской жизни эпохи бидермейера — от семьи Стастеок до незабываемого дяди Кегеля.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nl-tachtigers">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1885–1906 годы</p>
+          <h2 class="section-title">Движение «Восьмидесятников» и реализм рубежа веков</h2>
+          <p class="section-desc">Художественное обновление 1880-х годов: тончайший психологизм Луи Куперуса, сказочная проза ван Эдена и поэтическая революция «Нового путеводителя».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-couperus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луи Куперус</h3>
+                  <p class="author-role">Крупнейший голландский романист рубежа XIX–XX веков · <span class="tabular">1863–1923</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Певец Гааги и утончённый психолог, запечатлевший закат буржуазно-аристократического мира, рок семейных тайн и дух колониальной эпохи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-eline-vere">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-03.01</span>
+                    <a class="work-link" href="./works/couperus-eline-vere.html">Элине Вере</a>
+                    <span class="work-meta">1889 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Трагическая история чувствительной гаагской девушки Элине Вере, ищущей идеальной любви и задыхающейся в условностях светского круга.</p>
+                </li>
+                <li class="work-item" id="work-van-oude-menschen">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-03.02</span>
+                    <a class="work-link" href="./works/couperus-o-staryh-lyudyah.html">О старых людях и вещах, которые проходят</a>
+                    <span class="work-meta">1906 · Роман</span>
+                  </div>
+                  <p class="work-summary">Шедевр Куперуса о девяностолетних супругах в Гааге, связанных общим давним преступлением на Яве, которое до сих пор тяготеет над всей семьёй.</p>
+                </li>
+                <li class="work-item" id="work-de-stille-kracht">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-03.03</span>
+                    <a class="work-link" href="./works/couperus-tihaya-sila.html">Тихая сила</a>
+                    <span class="work-meta">1900 · Роман</span>
+                  </div>
+                  <p class="work-summary">Столкновение рационального голландского резидента ван Аудейка с таинственной, неуловимой «тихой силой» яванской культуры.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-van-eeden">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фредерик ван Эден</h3>
+                  <p class="author-role">Писатель, поэт и психиатр, автор «Маленького Йоханнеса» · <span class="tabular">1860–1932</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из основателей журнала «Де Ньиве Гидс», создавший поэтичную аллегорическую сказку о взрослении души.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-de-kleine-johannes">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-03.04</span>
+                    <a class="work-link" href="./works/eeden-malenkiy-yohannes.html">Маленький Йоханнес</a>
+                    <span class="work-meta">1887 · Философская сказка</span>
+                  </div>
+                  <p class="work-summary">Путешествие мальчика Йоханнеса со стрекозой Виндеке через мир природы, снов и науки к состраданию людям.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gorter">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Герман Гортер</h3>
+                  <p class="author-role">Мастер голландского поэтического импрессионизма · <span class="tabular">1864–1927</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, открывший «Восьмидесятников» солнечной и музыкальной поэмой о весне и недолговечности красоты.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mei">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-03.05</span>
+                    <a class="work-link" href="./works/gorter-may.html">Май</a>
+                    <span class="work-meta">1889 · Лирическая поэма</span>
+                  </div>
+                  <p class="work-summary">Три песни о юной девушке Май, дочери приливов и облаков, и её коротком земном расцвете среди голландских дюн.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nl-interwar-modernism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1915–1950 годы</p>
+          <h2 class="section-title">Проза 1910–1940-х годов и «Новая деловитость»</h2>
+          <p class="section-desc">Мечтательная ирония Несцио, строгая архитектоника романов Бордевейка, психологическая проза Симона Вестдейка и поэзия Нейхофа.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-bordewijk">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фердинанд Бордевейк</h3>
+                  <p class="author-role">Мастер стиля «новой деловитости» и романа о Роттердаме · <span class="tabular">1884–1965</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Гаагский юрист и писатель, создавший сжатую, холодновато-точную и мощную прозу о воле, городе и судьбе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-karakter">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-04.01</span>
+                    <a class="work-link" href="./works/bordewijk-harakter.html">Характер</a>
+                    <span class="work-meta">1938 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Противостояние упорного юноши Якоба Виллема Катадрёффе и его безжалостного отца — судебного пристава Древерхавена — на улицах довоенного Роттердама.</p>
+                </li>
+                <li class="work-item" id="work-bint">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-04.02</span>
+                    <a class="work-link" href="./works/bordewijk-bint.html">Бинт (Bint)</a>
+                    <span class="work-meta">1934 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Лаконичная история сурового директора гимназии Бинта, требующего от «адского класса» железной дисциплины и закалки духа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nescio">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Несцио (Ян Хендрик Фредерик Грёнло)</h3>
+                  <p class="author-role">Культовый мастер коротких повестей об Амстердаме · <span class="tabular">1882–1961</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Амстердамский служащий, под латинским псевдонимом «Не знаю» создавший три небольшие повести о молодости, идеалах и тоске по бесконечному.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-titaantjes">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-04.03</span>
+                    <a class="work-link" href="./works/nescio-titanchiki.html">Титанчики (Titaantjes)</a>
+                    <span class="work-meta">1915 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Горько-нежная история пятерых амстердамских мечтателей, собиравшихся перевернуть мир и ставших обычными клерками и семьянинами.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vestdijk">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Симон Вестдейк</h3>
+                  <p class="author-role">«Демон голландской литературы», автор 52 романов · <span class="tabular">1898–1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Энциклопедически образованный врач, критик и романист, исследовавший детство, музыку, страх и внутреннюю жизнь с редкой глубиной.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-de-koperen-tuin">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-04.04</span>
+                    <a class="work-link" href="./works/vestdijk-medny-sad.html">Медный сад</a>
+                    <span class="work-meta">1950 · Роман</span>
+                  </div>
+                  <p class="work-summary">Поэтическая история первой любви юного Нолта Рислинга к Триксы Кёйпер на фоне провинциального оркестра и оперы «Кармен».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nijhoff">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мартинус Нейхоф</h3>
+                  <p class="author-role">Ключевой голландский поэт-модернист XX века · <span class="tabular">1894–1953</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и переводчик из Гааги, соединивший классическую строгость сонета с загадкой современного города и речи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nieuwe-gedichten">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-04.05</span>
+                    <a class="work-link" href="./works/nijhoff-awater.html">Новые стихи (Аватер)</a>
+                    <span class="work-meta">1934 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Знаменитый сборник со знаменитой поэмой «Аватер» — путешествием по ночным улицам за таинственным двойником-бухгалтером.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nl-big-three">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1947–1992 годы</p>
+          <h2 class="section-title">«Большая тройка» послевоенной прозы</h2>
+          <p class="section-desc">Три титана нидерландской литературы второй половины XX века — Виллем Фредерик Херманс, Герард Реве и Харри Мулиш, определившие современный голландский роман.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mulisch">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Харри Мулиш</h3>
+                  <p class="author-role">Автор философского и мифологического романа XX века · <span class="tabular">1927–2010</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Харлема и Амстердама, соединявший историю Второй мировой войны, мистику и грандиозные философские конструкции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ontdekking-van-de-hemel">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-05.01</span>
+                    <a class="work-link" href="./works/mulisch-otkrytie-nebes.html">Открытие небес</a>
+                    <span class="work-meta">1992 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Грандиозная история дружбы астронома Макса Делиуса и политика Оно Квиста, за которой с небес наблюдают ангелы, решившие вернуть Скрижали Завета.</p>
+                </li>
+                <li class="work-item" id="work-de-aanslag">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-05.02</span>
+                    <a class="work-link" href="./works/mulisch-pokushenie.html">Покушение</a>
+                    <span class="work-meta">1982 · Роман</span>
+                  </div>
+                  <p class="work-summary">Один январский вечер 1945 года в оккупированном Харлеме, изменивший всю дальнейшую жизнь Антона Стейнвейка.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hermans">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виллем Фредерик Херманс</h3>
+                  <p class="author-role">Мастер сурового скепсиса и психологического триллера · <span class="tabular">1921–1995</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Амстердама, геологический ученик и безжалостный критик человеческих иллюзий о героизме и знании.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-donkere-kamer-van-damokles">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-05.03</span>
+                    <a class="work-link" href="./works/hermans-temnaya-komnata-damokla.html">Тёмная комната Дамокла</a>
+                    <span class="work-meta">1958 · Роман</span>
+                  </div>
+                  <p class="work-summary">Загадочная история скромного торговца табаком Генри Осеваудта и его неуловимого двойника Дорбека в годы Сопротивления и послевоенного суда.</p>
+                </li>
+                <li class="work-item" id="work-nooit-meer-slapen">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-05.04</span>
+                    <a class="work-link" href="./works/hermans-bolshe-ne-spat.html">Больше не спать</a>
+                    <span class="work-meta">1966 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Экспедиция молодого голландского геолога Альфреда Иссендорфа по безлюдной тундре Северной Норвегии в поисках метеоритного кратера.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-reve">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Герард Реве</h3>
+                  <p class="author-role">Основоположник послевоенного голландского романа · <span class="tabular">1923–2006</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Стилист горького юмора, гротеска и одиночества, перевернувший голландскую прозу 1947 года романом о десяти днях амстердамской скуки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-de-avonden">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-05.05</span>
+                    <a class="work-link" href="./works/reve-vechera.html">Вечера (Зимняя история)</a>
+                    <span class="work-meta">1947 · Роман</span>
+                  </div>
+                  <p class="work-summary">Десять последних вечеров декабря 1946 года в жизни двадцатитрехлетнего Фритса ван Эгтерса, наблюдающего за бытом своих пожилых родителей.</p>
+                </li>
+                <li class="work-item" id="work-de-vierde-man">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-05.06</span>
+                    <a class="work-link" href="./works/reve-chetverty-muzhchina.html">Четвёртый мужчина</a>
+                    <span class="work-meta">1981 · Роман-мистификация</span>
+                  </div>
+                  <p class="work-summary">Ироничная и тревожная история писателя Герарда, попавшего в сети роковой красавицы-парикмахерши, чьи трое бывших мужей погибли при странных обстоятельствах.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="nl-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1948–2009 годы</p>
+          <h2 class="section-title">Космополитическая и современная проза</h2>
+          <p class="section-desc">Путешествия во времени и пространстве Сейса Нотебоома, индонезийская память Хеллы Хаассе и острые семейные драмы XXI века.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-nooteboom">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сейс Нотебоом</h3>
+                  <p class="author-role">Классик европейского романа-эссе и путевой прозы · <span class="tabular">род. 1933</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Гааги, поэт и путешественник, соединяющий в своих романах историю, философию времени и пристальный взгляд на культуру Европы и Японии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rituelen">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-06.01</span>
+                    <a class="work-link" href="./works/nooteboom-ritualy.html">Ритуалы</a>
+                    <span class="work-meta">1980 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Три портрета одиночества и отношения ко времени — амстердамского денди Инни Винтропа и двух эксцентричных Тадса — отца и сына.</p>
+                </li>
+                <li class="work-item" id="work-het-volgende-verhaal">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-06.02</span>
+                    <a class="work-link" href="./works/nooteboom-sleduyushchaya-istoriya.html">Следующая история</a>
+                    <span class="work-meta">1991 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Амстердамский учитель латыни Герман Мюссерт засыпает у себя дома, а просыпается в том же самом номере лиссабонской гостиницы, где любил двадцать лет назад.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-haasse">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хелла Хаассе</h3>
+                  <p class="author-role">«Гранд-дама» нидерландской литературы · <span class="tabular">1918–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница, родившаяся в Батавии (Джакарте), создавшая классические книги о колониальном детстве и европейской истории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-oeroeg">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-06.03</span>
+                    <a class="work-link" href="./works/haasse-urug.html">Уруг</a>
+                    <span class="work-meta">1948 · Повесть</span>
+                  </div>
+                  <p class="work-summary">История дружбы голландского мальчика и яванского сверстника Уруга на чайных плантациях, разведённых историей по разные стороны границы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-koch">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Херман Кох</h3>
+                  <p class="author-role">Мастер остросюжетной психологической сатиры · <span class="tabular">род. 1953</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и актёр, чьи книги о моральных компромиссах благополучных семей переведены на десятки языков мира.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-het-diner">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-06.04</span>
+                    <a class="work-link" href="./works/koch-uzhin.html">Ужин</a>
+                    <span class="work-meta">2009 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Две благополучные супружеские пары встречаются в дорогом ресторане, чтобы за сменой блюд решить, как скрыть преступление своих сыновей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-grunberg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Арнон Грюнберг</h3>
+                  <p class="author-role">Один из ведущих прозаиков современной Голландии · <span class="tabular">род. 1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Амстердамский писатель и эссеист, соединяющий чёрный юмор с беспощадным исследованием современного общества и семейных иллюзий.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tirza">
+                  <div class="work-row">
+                    <span class="work-code">ГЛ-06.05</span>
+                    <a class="work-link" href="./works/grunberg-tirza.html">Тирза</a>
+                    <span class="work-meta">2006 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Драма амстердамского редактора Йоргена Хофмеестера, чья чрезмерная опека над любимой дочерью оборачивается трагедией.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание голландской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

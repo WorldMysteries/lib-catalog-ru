@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог греческой литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 23 писателей · 32 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог греческой литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от эпоса Гомера и трагедий Софокла до Византии, александрийской лирики Кавафиса, прозы Казандзакиса и нобелевской поэзии Сефериса и Элитиса.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#gr-archaic-epic">Раздел I: Архаическая Греция: эпос и лирика</a>
+        <a href="#gr-classical-drama">Раздел II: Классические Афины: трагедия и комедия</a>
+        <a href="#gr-philosophy-hellenism">Раздел III: Философская проза, история и античный роман</a>
+        <a href="#gr-byzantine-crete">Раздел IV: Византийский эпос и Критское Возрождение</a>
+        <a href="#gr-modern-awakening">Раздел V: Новая греческая литература и рубеж XIX–XX веков</a>
+        <a href="#gr-nobel-twentieth">Раздел VI: Нобелевские вершины и поэзия XX века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="gr-archaic-epic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · VIII–V века до н. э.</p>
+          <h2 class="section-title">Архаическая Греция: эпос и лирика</h2>
+          <p class="section-desc">Фундамент всей европейской словесности: героические поэмы Гомера, космогония и крестьянская дидактика Гесиода, лесбосская лирика Сапфо и торжественные оды Пиндара.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-homer">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гомер</h3>
+                  <p class="author-role">Легендарный древнегреческий поэт-аэд · <span class="tabular">VIII век до н. э.</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Создатель двух величайших эпических поэм древности, определивших мировую традицию героического эпоса, драматургии и приключенческого романа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-iliad">
+                  <div class="work-row">
+                    <span class="work-code">ГР-01.01</span>
+                    <a class="work-link" href="./works/homer-iliada.html">Илиада</a>
+                    <span class="work-meta">ок. VIII в. до н. э. · Героическая поэма</span>
+                  </div>
+                  <p class="work-summary">Десятый год Троянской войны: гнев Ахиллеса, гибель Патрокла, прощание Гектора с Андромахой и поединок героев у стен Илиона.</p>
+                </li>
+                <li class="work-item" id="work-odyssey">
+                  <div class="work-row">
+                    <span class="work-code">ГР-01.02</span>
+                    <a class="work-link" href="./works/homer-odisseya.html">Одиссея</a>
+                    <span class="work-meta">ок. VIII в. до н. э. · Эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Десятилетние морские странствия хитроумного царя Итаки Одиссея мимо циклопа Полифема, сирен и Калипсо домой к верной Пенелопе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hesiod">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гесиод</h3>
+                  <p class="author-role">Первый исторически достоверный поэт Европы, мастер дидактического эпоса · <span class="tabular">VIII–VII вв. до н. э.</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт из Беотии, систематизировавший греческие мифы о происхождении богов и воспевший честный земледельческий труд.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-theogony">
+                  <div class="work-row">
+                    <span class="work-code">ГР-01.03</span>
+                    <a class="work-link" href="./works/hesiod-teogoniya.html">Теогония</a>
+                    <span class="work-meta">ок. 700 до н. э. · Мифологическая поэма</span>
+                  </div>
+                  <p class="work-summary">Происхождение мира из Хаоса, смена поколений богов от Урана и Кроноса к победе олимпийцев во главе с Зевсом.</p>
+                </li>
+                <li class="work-item" id="work-works-and-days">
+                  <div class="work-row">
+                    <span class="work-code">ГР-01.04</span>
+                    <a class="work-link" href="./works/hesiod-trudy-i-dni.html">Труды и дни</a>
+                    <span class="work-meta">ок. 700 до н. э. · Дидактическая поэма</span>
+                  </div>
+                  <p class="work-summary">Поэма-наставление брату Персу о смене пяти веков человечества (от Золотого к Железному), справедливости и календаре полевых работ.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sappho">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сапфо (Сафо)</h3>
+                  <p class="author-role">«Десятая муза», мастер античной монодической лирики · <span class="tabular">ок. 630–570 до н. э.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтесса с острова Лесбос, обессмертившая тончайшие оттенки любви, ревности, красоты и расставания в «сапфической строфе».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sappho-lyrics">
+                  <div class="work-row">
+                    <span class="work-code">ГР-01.05</span>
+                    <a class="work-link" href="./works/sappho-gimn-afrodite.html">Гимн Афродите и лирические фрагменты</a>
+                    <span class="work-meta">ок. 600 до н. э. · Лирика</span>
+                  </div>
+                  <p class="work-summary">Знаменитая ода к богине любви и уцелевшие строфы о звёздной ночи, садах Лесбоса и внутреннем пламени чувства.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pindar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пиндар</h3>
+                  <p class="author-role">Величайший мастер древнегреческой хоровой лирики · <span class="tabular">ок. 518–438 до н. э.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Фиванский поэт, воспевший победителей Олимпийских, Пифийских, Немейских и Истмийских игр в возвышенных гимнах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-epinikia">
+                  <div class="work-row">
+                    <span class="work-code">ГР-01.06</span>
+                    <a class="work-link" href="./works/pindar-ody.html">Олимпийские и Пифийские оды (Эпиникии)</a>
+                    <span class="work-meta">V в. до н. э. · Торжественные оды</span>
+                  </div>
+                  <p class="work-summary">Возвышенные песни славы атлетам, соединяющие спортивный подвиг с древними мифами и размышлением о судьбе смертных.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="gr-classical-drama">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · V век до н. э.</p>
+          <h2 class="section-title">Классические Афины: трагедия и комедия</h2>
+          <p class="section-desc">Золотой век афинского театра Диониса: три великих трагика Эсхил, Софокл и Еврипид и блестящий мастер политической комедии Аристофан.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-aeschylus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эсхил</h3>
+                  <p class="author-role">«Отец трагедии», участник Марафона и Саламина · <span class="tabular">ок. 525–456 до н. э.</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Первый из великих афинских трагиков, введший второго актёра и поднявший на сцену тему рока, справедливости и гражданского суда.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-oresteia">
+                  <div class="work-row">
+                    <span class="work-code">ГР-02.01</span>
+                    <a class="work-link" href="./works/aeschylus-oresteya.html">Орестея (Агамемнон · Хоэфоры · Эвмениды)</a>
+                    <span class="work-meta">458 до н. э. · Трагическая трилогия</span>
+                  </div>
+                  <p class="work-summary">Единственная дошедшая целиком античная трилогия: возвращение Агамемнона из Трои, месть Ореста и переход от кровной мести к суду Афинского ареопага.</p>
+                </li>
+                <li class="work-item" id="work-prometheus-bound">
+                  <div class="work-row">
+                    <span class="work-code">ГР-02.02</span>
+                    <a class="work-link" href="./works/aeschylus-prometey.html">Прометей прикованный</a>
+                    <span class="work-meta">V в. до н. э. · Трагедия</span>
+                  </div>
+                  <p class="work-summary">Трагедия титана Прометея, похитившего огонь для смертных и несломленного перед угрозами Зевса на скалах Скифии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sophocles">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Софокл</h3>
+                  <p class="author-role">Мастер совершенной трагической композиции · <span class="tabular">ок. 496–406 до н. э.</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Афинский драматург, добавивший третьего актёра и создавший эталонные характеры трагического выбора и мужества перед лицом рока.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-oedipus-rex">
+                  <div class="work-row">
+                    <span class="work-code">ГР-02.03</span>
+                    <a class="work-link" href="./works/sophocles-car-edip.html">Царь Эдип</a>
+                    <span class="work-meta">ок. 429 до н. э. · Трагедия</span>
+                  </div>
+                  <p class="work-summary">Фиванский царь Эдип расследует тайну гибели своего предшественника Лая, не подозревая, что приговор навлечён им на самого себя.</p>
+                </li>
+                <li class="work-item" id="work-antigone">
+                  <div class="work-row">
+                    <span class="work-code">ГР-02.04</span>
+                    <a class="work-link" href="./works/sophocles-antigona.html">Антигона</a>
+                    <span class="work-meta">441 до н. э. · Трагедия</span>
+                  </div>
+                  <p class="work-summary">Столкновение вечного неписаного закона совести в поступке Антигоны, похоронившей брата Полиника, и государственного указа царя Креонта.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-euripides">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Еврипид</h3>
+                  <p class="author-role">Трагик человеческих страстей и психологии · <span class="tabular">ок. 480–406 до н. э.</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Самый «современный» из афинских трагиков, раскрывший внутренние бури ревности, отчаяния и сомнения в богах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-medea">
+                  <div class="work-row">
+                    <span class="work-code">ГР-02.05</span>
+                    <a class="work-link" href="./works/euripides-medeya.html">Медея</a>
+                    <span class="work-meta">431 до н. э. · Трагедия</span>
+                  </div>
+                  <p class="work-summary">Страшная месть колхидской царевны Медеи изменившему ей Ясону в Коринфе.</p>
+                </li>
+                <li class="work-item" id="work-bacchae">
+                  <div class="work-row">
+                    <span class="work-code">ГР-02.06</span>
+                    <a class="work-link" href="./works/euripides-vakhanki.html">Вакханки</a>
+                    <span class="work-meta">405 до н. э. · Трагедия</span>
+                  </div>
+                  <p class="work-summary">Гибель фиванского царя Пенфея, отвергшего власть бога Диониса и стихийное безумие его культа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-aristophanes">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аристофан</h3>
+                  <p class="author-role">«Отец комедии», мастер политической сатиры · <span class="tabular">ок. 446–386 до н. э.</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Афинский комедиограф, беспощадно осмеивавший демагогов, бессмысленные войны, модных софистов и литературную напыщенность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lysistrata">
+                  <div class="work-row">
+                    <span class="work-code">ГР-02.07</span>
+                    <a class="work-link" href="./works/aristophanes-lisistrata.html">Лисистрата</a>
+                    <span class="work-meta">411 до н. э. · Комедия</span>
+                  </div>
+                  <p class="work-summary">Женщины Афин и Спарты под руководством Лисистраты захватывают Акрополь и объявляют забастовку, чтобы заставить мужчин прекратить Пелопоннесскую войну.</p>
+                </li>
+                <li class="work-item" id="work-frogs">
+                  <div class="work-row">
+                    <span class="work-code">ГР-02.08</span>
+                    <a class="work-link" href="./works/aristophanes-lyagushki.html">Лягушки</a>
+                    <span class="work-meta">405 до н. э. · Комедия</span>
+                  </div>
+                  <p class="work-summary">Бог театра Дионис спускается в Аид, чтобы вернуть в Афины лучшего трагика — Эсхила или Еврипида.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="gr-philosophy-hellenism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · V в. до н. э. – III в. н. э.</p>
+          <h2 class="section-title">Философская проза, история и античный роман</h2>
+          <p class="section-desc">Историография Геродота, драматические диалоги Платона, теория искусства Аристотеля, сатира Лукиана и пасторальный роман эллинизма.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-herodotus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Геродот Галикарнасский</h3>
+                  <p class="author-role">«Отец истории» и мастер новеллистического рассказа · <span class="tabular">ок. 484–425 до н. э.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Путешественник и первый великий историк Античности, описавший Египет, Скифию, Персию и победу греков в Греко-персидских войнах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-histories">
+                  <div class="work-row">
+                    <span class="work-code">ГР-03.01</span>
+                    <a class="work-link" href="./works/herodotus-istoriya.html">История (в девяти книгах)</a>
+                    <span class="work-meta">ок. 430 до н. э. · Историческая проза</span>
+                  </div>
+                  <p class="work-summary">Рассказ о столкновении эллинского мира с персидской державой — от царя Крёза и Скифии до Марафона, Фермопил и Саламина.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-plato">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Платон</h3>
+                  <p class="author-role">Философ и создатель художественного диалога · <span class="tabular">427–347 до н. э.</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Ученик Сократа и основатель Афинской Академии, превративший философскую беседу в высокий литературный жанр.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-symposium">
+                  <div class="work-row">
+                    <span class="work-code">ГР-03.02</span>
+                    <a class="work-link" href="./works/plato-pir.html">Пир</a>
+                    <span class="work-meta">ок. 385 до н. э. · Философский диалог</span>
+                  </div>
+                  <p class="work-summary">Беседа афинских мудрецов и поэтов за праздничной трапезой у Агафона о природе Эроса, красоты и стремления души к бессмертию.</p>
+                </li>
+                <li class="work-item" id="work-apology-republic">
+                  <div class="work-row">
+                    <span class="work-code">ГР-03.03</span>
+                    <a class="work-link" href="./works/plato-gosudarstvo.html">Апология Сократа · Государство</a>
+                    <span class="work-meta">IV в. до н. э. · Философская проза</span>
+                  </div>
+                  <p class="work-summary">Защитная речь Сократа на суде и знаменитый трактат об идеальном полисе и притче о пещере.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-longus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лонг</h3>
+                  <p class="author-role">Классик позднего античного пасторального романа · <span class="tabular">II–III вв. н. э.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Греческий писатель императорской эпохи, создавший самую поэтичную античную повесть о первой любви на лоне природы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-daphnis-and-chloe">
+                  <div class="work-row">
+                    <span class="work-code">ГР-03.04</span>
+                    <a class="work-link" href="./works/longus-dafnis-i-hloya.html">Дафнис и Хлоя</a>
+                    <span class="work-meta">ок. II–III в. н. э. · Пасторальный роман</span>
+                  </div>
+                  <p class="work-summary">История двух подкидышей на острове Лесбос, выросших среди пастухов и постепенно открывающих чувство любви под смены времён года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lucian">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лукиан из Самосаты</h3>
+                  <p class="author-role">Мастер античной сатиры и менипповой пародии · <span class="tabular">ок. 120–180 н. э.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий греческий стилист II века, осмеявший суеверия, лжепророков и небылицы древних путешественников.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-true-history">
+                  <div class="work-row">
+                    <span class="work-code">ГР-03.05</span>
+                    <a class="work-link" href="./works/lucian-pravdivaya-istoriya.html">Правдивая история · Разговоры богов</a>
+                    <span class="work-meta">II в. н. э. · Сатирическая фантастика</span>
+                  </div>
+                  <p class="work-summary">Пародия на фантастические рассказы древних авторов: путешествие на Луну, битва с обитателями Солнца и жизнь внутри гигантского кита.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="gr-byzantine-crete">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · XI–XVII века</p>
+          <h2 class="section-title">Византийский эпос и Критское Возрождение</h2>
+          <p class="section-desc">Героический эпос византийских пограничников «Дигенис Акрит», историография Анны Комниной и вершина критского Ренессанса — поэма «Эротокритос».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-digenes-akritas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Византийский героический эпос</h3>
+                  <p class="author-role">Народно-героическая традиция греческого Средневековья · <span class="tabular">XI–XII века</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Устно-книжный цикл сказаний о доблестных стражах восточных рубежей Византии (акритах).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-digenes-akritas-work">
+                  <div class="work-row">
+                    <span class="work-code">ГР-04.01</span>
+                    <a class="work-link" href="./works/byzantine-digenis-akrit.html">Дигенис Акрит</a>
+                    <span class="work-meta">XII век · Героическая поэма</span>
+                  </div>
+                  <p class="work-summary">Подвиги, любовь и дворец на берегу Евфрата славного героя Василия Дигениса, рождённого от союза сирийского эмира и византийской аристократки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-anna-komnene">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анна Комнина</h3>
+                  <p class="author-role">Первая крупная женщина-историк Европы · <span class="tabular">1083–1153</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Византийская царевна, дочь императора Алексея I Комнина, оставившая блестящую литературную хронику эпохи Крестовых походов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-alexiad">
+                  <div class="work-row">
+                    <span class="work-code">ГР-04.02</span>
+                    <a class="work-link" href="./works/komnina-aleksiada.html">Алексиада</a>
+                    <span class="work-meta">1148 · Историческая проза</span>
+                  </div>
+                  <p class="work-summary">Пятнадцать книг о правлении императора Алексея I Комнина, дипломатии Константинополя и встрече Византии с крестоносцами.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kornaros">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вицендзос Корнарос</h3>
+                  <p class="author-role">Вершина греческого Критского Возрождения · <span class="tabular">1553–1613</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт с Крита, написавший любимейшую народную поэму Новой Греции на живом критском диалекте.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-erotokritos">
+                  <div class="work-row">
+                    <span class="work-code">ГР-04.03</span>
+                    <a class="work-link" href="./works/kornaros-erotokritos.html">Эротокритос</a>
+                    <span class="work-meta">ок. 1600 · Рыцарский роман в стихах</span>
+                  </div>
+                  <p class="work-summary">Десять тысяч стихов о любви придворного юноши Эротокритоса к афинской царевне Аретусе, испытаниях разлуки и победе верности.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="gr-modern-awakening">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1823–1955 годы</p>
+          <h2 class="section-title">Новая греческая литература и рубеж XIX–XX веков</h2>
+          <p class="section-desc">От гимна освобождения Дионисиоса Соломоса и суровой островной прозы Пападиамандиса к александрийской лирике Кавафиса и романам Казандзакиса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-cavafy">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Константинос Кавафис</h3>
+                  <p class="author-role">Один из величайших поэтов XX века · <span class="tabular">1863–1933</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Греческий поэт из Александрии Египетской, соединивший память об эллинизме, тонкую историческую иронию и интимную лирику в лаконичных стихах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cavafy-poems">
+                  <div class="work-row">
+                    <span class="work-code">ГР-05.01</span>
+                    <a class="work-link" href="./works/kavafis-stihotvoreniya.html">Стихотворения («Итака», «В ожидании варваров»)</a>
+                    <span class="work-meta">1911 · Лирика</span>
+                  </div>
+                  <p class="work-summary">Шедевры философской поэзии о пути как истинной награде жизни («Итака») и об обществе, ищущем спасения во внешнем враге.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kazantzakis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Никос Казандзакис</h3>
+                  <p class="author-role">Крупнейший греческий романист XX века · <span class="tabular">1883–1957</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Крита, философ и путешественник, создавший страстные романы о жизненной свободе, вере и духе человека.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zorba-the-greek">
+                  <div class="work-row">
+                    <span class="work-code">ГР-05.02</span>
+                    <a class="work-link" href="./works/kazantzakis-grek-zorba.html">Грек Зорба (Житие и деяния Алексиса Зорбы)</a>
+                    <span class="work-meta">1946 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Встреча книжного интеллигента и стихийного мудреца Алексиса Зорбы на Крите, выражающего саму радость бытия через музыку сантури и танец.</p>
+                </li>
+                <li class="work-item" id="work-last-temptation">
+                  <div class="work-row">
+                    <span class="work-code">ГР-05.03</span>
+                    <a class="work-link" href="./works/kazantzakis-poslednee-iskushenie.html">Последнее искушение Христа</a>
+                    <span class="work-meta">1955 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Драматическое художественное исследование внутренней борьбы между земным счастьем и крестным призванием.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-papadiamantis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александрос Пападиамандис</h3>
+                  <p class="author-role">Классик греческой реалистической повести · <span class="tabular">1851–1911</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер поэтического реализма с острова Скиатос, запечатлевший суровую жизнь эгейских островов и глубину народной души.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fonissa">
+                  <div class="work-row">
+                    <span class="work-code">ГР-05.04</span>
+                    <a class="work-link" href="./works/papadiamantis-fonissa.html">Убийца (Фонисса)</a>
+                    <span class="work-meta">1903 · Социально-психологическая повесть</span>
+                  </div>
+                  <p class="work-summary">Трагическая история старухи Франгоянну, чей помрачённый ум решает «освободить» новорождённых девочек от нищеты и бесправия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-solomos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дионисиос Соломос</h3>
+                  <p class="author-role">Национальный поэт Новой Греции · <span class="tabular">1798–1857</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Закинфа, утвердивший живой народный язык (димотику) в высокой поэзии и написавший национальный гимн Греции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hymn-to-liberty">
+                  <div class="work-row">
+                    <span class="work-code">ГР-05.05</span>
+                    <a class="work-link" href="./works/solomos-gimn-svobode.html">Гимн свободе · Свободные осаждённые</a>
+                    <span class="work-meta">1823 · Гражданская поэзия</span>
+                  </div>
+                  <p class="work-summary">Поэмы, вдохновлённые Греческой революцией и героической обороной Месолонгиона.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="gr-nobel-twentieth">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1935–1975 годы</p>
+          <h2 class="section-title">Нобелевские вершины и поэзия XX века</h2>
+          <p class="section-desc">Поколение 1930-х годов: два греческих лауреата Нобелевской премии — Йоргос Сеферис и Одиссеас Элитис, гражданская лирика Янниса Рицоса и проза Дидо Сотириу.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-seferis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йоргос Сеферис</h3>
+                  <p class="author-role">Первый греческий лауреат Нобелевской премии (1963) · <span class="tabular">1900–1971</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, эссеист и дипломат, соединивший трагедию малоазийского изгнания и голос древних мраморов с современной европейской поэтикой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mythistorema">
+                  <div class="work-row">
+                    <span class="work-code">ГР-06.01</span>
+                    <a class="work-link" href="./works/seferis-mifistoriya.html">Мифистория</a>
+                    <span class="work-meta">1935 · Поэма-цикл</span>
+                  </div>
+                  <p class="work-summary">Двадцать четыре фрагмента о странствии, памяти, сломанных статуях и тоске по утраченной родине сквозь миф об аргонавтах и Одиссее.</p>
+                </li>
+                <li class="work-item" id="work-logbook">
+                  <div class="work-row">
+                    <span class="work-code">ГР-06.02</span>
+                    <a class="work-link" href="./works/seferis-dnevnik-paluby.html">Дневник палубы</a>
+                    <span class="work-meta">1940 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Военные и морские стихи, включая знаменитое «Царь Асины» — о пустоте за золотой маской древнего микенского вождя.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-elytis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Одиссеас Элитис</h3>
+                  <p class="author-role">Поэт Эгейского света, лауреат Нобелевской премии (1979) · <span class="tabular">1911–1996</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Певец солнца, моря, белого известняка Эгейских островов и духовного сопротивления через красоту и свет.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-axion-esti">
+                  <div class="work-row">
+                    <span class="work-code">ГР-06.03</span>
+                    <a class="work-link" href="./works/elytis-dostoyno-est.html">Достойно есть (Axion Esti)</a>
+                    <span class="work-meta">1959 · Лирическая оратория</span>
+                  </div>
+                  <p class="work-summary">Монументальная поэма из трёх частей («Книга Бытия», «Страсти», «Слава»), объединяющая греческую историю XX века с ритмами византийской литургии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ritsos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Яннис Рицос</h3>
+                  <p class="author-role">Выдающийся поэт греческого Сопротивления и трагической лирики · <span class="tabular">1909–1990</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых плодовитых и человечных поэтов XX века, чьи монодрамы и стихи переложены на музыку Микисом Теодоракисом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-moonlight-sonata">
+                  <div class="work-row">
+                    <span class="work-code">ГР-06.04</span>
+                    <a class="work-link" href="./works/ritsos-lunnaya-sonata.html">Лунная соната</a>
+                    <span class="work-meta">1956 · Драматическая поэма-монолог</span>
+                  </div>
+                  <p class="work-summary">Трогательный монолог стареющей женщины в лунном свете на веранде старого афинского дома — об одиночестве, ушедшем времени и достоинстве.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sotiriou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дидо Сотириу</h3>
+                  <p class="author-role">Классик малоазийской прозы XX века · <span class="tabular">1909–2004</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка и журналистка, создавшая самую пронзительную греческую книгу о мирной жизни и трагедии изгнания из Малой Азии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-matomena-chomata">
+                  <div class="work-row">
+                    <span class="work-code">ГР-06.05</span>
+                    <a class="work-link" href="./works/sotiriou-okrovavlennye-zemli.html">Окровавленные земли</a>
+                    <span class="work-meta">1962 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Исповедь крестьянина Манолиса Аксиотиса из окрестностей Эфеса о дружбе греков и турок, войне 1919–1922 годов и утрате родного дома.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание греческой литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

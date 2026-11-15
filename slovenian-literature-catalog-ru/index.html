@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог словенской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 25 писателей · 32 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог словенской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от первых печатных книг Приможа Трубара и сонетов Франце Прешерна до модерна Ивана Цанкара, авангарда Косовела и прозы Драго Янчара.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#sl-reformation-enlightenment">Раздел I: Реформация и зарождение словенского слова</a>
+        <a href="#sl-romanticism">Раздел II: Романтизм и эпоха Франце Прешерна</a>
+        <a href="#sl-realism">Раздел III: Реализм, народный эпос и исторический роман</a>
+        <a href="#sl-moderna">Раздел IV: Словенский модерн (Moderna)</a>
+        <a href="#sl-avantgarde-social">Раздел V: Экспрессионизм, авангард и социальная проза</a>
+        <a href="#sl-contemporary">Раздел VI: Современная поэзия и проза XX–XXI веков</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="sl-reformation-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVI–XVIII века</p>
+          <h2 class="section-title">Реформация и зарождение словенского слова</h2>
+          <p class="section-desc">От первых печатных книг на словенском языке в эпоху Реформации и полного перевода Библии до светского театра и лирики Просвещения.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-primoz-trubar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Примож Трубар</h3>
+                  <p class="author-role">Первопечатник и «отец словенской письменности» · <span class="tabular">1508–1586</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Протестантский реформатор и просветитель, издавший первые книги на словенском языке и заложивший нормы единой литературной речи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-catechismus-abecedarium">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-01.01</span>
+                    <a class="work-link" href="./works/trubar-katehizis-i-abecedarij.html">Катехизис и Абецедарий</a>
+                    <span class="work-meta">1550 · Просветительский букварь и трактат</span>
+                  </div>
+                  <p class="work-summary">Первые две печатные книги на словенском языке, изданные в Тюбингене: основы грамоты, молитвы и обращение к «любезным словенцам».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jurij-dalmatin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Юрий Далматин</h3>
+                  <p class="author-role">Переводчик первой полной словенской Библии · <span class="tabular">ок. 1547–1589</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ученик Приможа Трубара, создавший монументальный перевод Ветхого и Нового Завета, ставший опорой словенского литературного канона.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-slovenian-bible">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-01.02</span>
+                    <a class="work-link" href="./works/dalmatin-bibliya-1584.html">Библия (Виттенбергское издание)</a>
+                    <span class="work-meta">1584 · Священный перевод и лингвистический памятник</span>
+                  </div>
+                  <p class="work-summary">Первый полный перевод Священного Писания на словенский язык, объединивший разные наречия в стройную письменную традицию.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-anton-tomaz-linhart">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антон Томаж Линхарт</h3>
+                  <p class="author-role">Основоположник словенского светского театра и историограф · <span class="tabular">1756–1795</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Просветитель и драматург из кружка Жиги Цойса, перенёсший европейскую комедию характеров в краинскую действительность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-maticek-gets-married">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-01.03</span>
+                    <a class="work-link" href="./works/linhart-zhenitba-maticheka.html">Женитьба Матичека</a>
+                    <span class="work-meta">1790 · Комедия</span>
+                  </div>
+                  <p class="work-summary">Свободная переработка пьесы Бомарше: находчивый словенский слуга Матичек защищает свою невесту и честь от притязаний барона Налески.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-valentin-vodnik">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Валентин Водник</h3>
+                  <p class="author-role">Поэт Просвещения, лексикограф и первый словенский журналист · <span class="tabular">1758–1819</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор первых светских стихотворных сборников, вдохновлённых народной песней и альпийской природой, издатель газеты «Люблянские новости».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poems-for-pastime">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-01.04</span>
+                    <a class="work-link" href="./works/vodnik-stihi-dlya-zabavy.html">Стихи для забавы (Драмоле и оды)</a>
+                    <span class="work-meta">1806 · Сборник стихотворений</span>
+                  </div>
+                  <p class="work-summary">Лирический сборник, воспевающий родные горы, честный труд и пробуждение национального самосознания на пороге XIX столетия.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sl-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · Первая половина XIX века</p>
+          <h2 class="section-title">Романтизм и эпоха Франце Прешерна</h2>
+          <p class="section-desc">Золотой век словенской поэзии: превращение национального языка в совершенный инструмент европейского романтизма и высокой лирики.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-france-preseren">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франце Прешерн</h3>
+                  <p class="author-role">Величайший национальный поэт Словении, мастер сонета · <span class="tabular">1800–1849</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Вершина словенского романтизма, соединивший строгие романские поэтические формы с драматической судьбой маленького народа и любовью к Юлии Примиц.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-wreath-of-sonnets">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-02.01</span>
+                    <a class="work-link" href="./works/preseren-venok-sonetov.html">Венок сонетов</a>
+                    <span class="work-meta">1834 · Цикл сонетов (магистрал)</span>
+                  </div>
+                  <p class="work-summary">Четырнадцать взаимосвязанных сонетов и завершающий магистрал, где любовная лирика неразрывно переплетается с судьбой словенской музы и родины.</p>
+                </li>
+                <li class="work-item" id="work-baptism-on-the-savica">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-02.02</span>
+                    <a class="work-link" href="./works/preseren-kreschenie-pri-savice.html">Крещение при Савице</a>
+                    <span class="work-meta">1836 · Историко-романтическая поэма</span>
+                  </div>
+                  <p class="work-summary">Эпическая поэма о последнем языческом вожде Чртомире, его трагическом поражении у водопада Савица и мучительном выборе между верой предков и новой эпохой.</p>
+                </li>
+                <li class="work-item" id="work-zdravljica">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-02.03</span>
+                    <a class="work-link" href="./works/preseren-zdravica.html">Здравица</a>
+                    <span class="work-meta">1844 · Гражданская лирика и фигурная строфа</span>
+                  </div>
+                  <p class="work-summary">Торжественная застольная песня братства всех народов, написанная в виде винных бокалов и ставшая государственным гимном Словении.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-janez-trdina">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Янез Трдина</h3>
+                  <p class="author-role">Мастер историко-фольклорной прозы и этнограф · <span class="tabular">1830–1905</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный и рассказчик, собравший народные предания Нижней Крайны в выразительную художественную летопись крестьянского воображения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tales-of-gorjanci">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-02.04</span>
+                    <a class="work-link" href="./works/trdina-skazki-o-goryancah.html">Сказки и повести о Горянцах</a>
+                    <span class="work-meta">1882–1888 · Цикл фольклорных повестей</span>
+                  </div>
+                  <p class="work-summary">Собрание поэтических преданий о лесных духах, разбойниках, чудесных источниках и древней мудрости горного хребта Горянцы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sl-realism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · Вторая половина XIX века</p>
+          <h2 class="section-title">Реализм, народный эпос и исторический роман</h2>
+          <p class="section-desc">Становление словенской романистики, программная борьба за народную прозу и классические полотна о прошлом и крестьянском достоинстве.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-fran-levstik">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фран Левстик</h3>
+                  <p class="author-role">Писатель, критик и реформатор словенской прозы · <span class="tabular">1831–1887</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Идеолог реализма («Путешествие из Литии в Чатеж»), создавший культовый образ словенского народного богатыря.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-martin-krpan">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-03.01</span>
+                    <a class="work-link" href="./works/levstik-martin-krpan.html">Мартин Крпан с Верха</a>
+                    <span class="work-meta">1858 · Повесть-притча</span>
+                  </div>
+                  <p class="work-summary">Ироническая и героическая повесть о могучем контрабандисте соли Мартине Крпане, который в одиночку спасает Вену от грозного великана Брдавса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-josip-jurcic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йосип Юрчич</h3>
+                  <p class="author-role">Автор первого словенского романа · <span class="tabular">1844–1881</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и романист, открывший традицию большой национальной прозы с романтическими и реалистическими мотивами.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-tenth-brother">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-03.02</span>
+                    <a class="work-link" href="./works/jurcic-desyatyj-brat.html">Десятый брат</a>
+                    <span class="work-meta">1866 · Роман</span>
+                  </div>
+                  <p class="work-summary">Первый роман в истории словенской литературы: тайна поместья Слеменицы, отверженный странник Мартьян и история любви среди сословных предрассудков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ivan-tavcar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Тавчар</h3>
+                  <p class="author-role">Классик исторического и лирического романа, мэр Любляны · <span class="tabular">1851–1923</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Выдающийся мастер эпической прозы, запечатлевший драмы контрреформации и поэзию крестьянской любви в предгорьях Шкофья-Локи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-visoko-chronicle">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-03.03</span>
+                    <a class="work-link" href="./works/tavcar-hronika-iz-visokogo.html">Хроника из Високого</a>
+                    <span class="work-meta">1919 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Суровая семейная летопись XVII века о религиозных гонениях, ведьмовских процессах, вине рода Каланов и искуплении на земле Високого.</p>
+                </li>
+                <li class="work-item" id="work-flowers-in-autumn">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-03.04</span>
+                    <a class="work-link" href="./works/tavcar-cvety-v-osennyuyu-poru.html">Цветы в осеннюю пору</a>
+                    <span class="work-meta">1917 · Лирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Трогательная история поздней любви городского адвоката Янеза и деревенской девушки Меты среди горных лугов Полянской долины.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-simon-gregorcic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Симон Грегорчич</h3>
+                  <p class="author-role">«Соловей с Сочи», лирик Приморья · <span class="tabular">1844–1906</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и священник из долины реки Соча, соединивший мелодичный элегизм с пророческим патриотическим чувством.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-to-the-soca">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-03.05</span>
+                    <a class="work-link" href="./works/gregorcic-k-soche.html">К Соче (из книги «Стихотворения»)</a>
+                    <span class="work-meta">1882 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Прославленная ода-пророчество изумрудной альпийской реке Соче, которой суждено увидеть кровавые бури за свободу родного края.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-anton-askerc">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антон Ашкерц</h3>
+                  <p class="author-role">Мастер эпической и социальной баллады · <span class="tabular">1856–1912</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-бунтарь, порвавший с духовным саном и перенёсший центр тяжести словенской поэзии к историческим драмам и острой сатире.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ballads-and-romances">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-03.06</span>
+                    <a class="work-link" href="./works/askerc-ballady-i-romansy.html">Баллады и романсы</a>
+                    <span class="work-meta">1890 · Сборник баллад</span>
+                  </div>
+                  <p class="work-summary">Мощные стихотворные повествования о крестьянских восстаниях, бунтарях прошлого и моральном протесте против лицемерия власти.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sl-moderna">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1899–1918</p>
+          <h2 class="section-title">Словенский модерн (Moderna)</h2>
+          <p class="section-desc">Художественная революция рубежа веков: символизм, импрессионизм, психологическая глубина прозы и великая драматургия Ивана Цанкара.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ivan-cankar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иван Цанкар</h3>
+                  <p class="author-role">Классик словенской прозы, драматургии и модерна · <span class="tabular">1876–1918</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Центральная фигура словенской литературы XX века, мастер едкой социальной сатиры, трагического символизма и исповедального лиризма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bailiff-jernej">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-04.01</span>
+                    <a class="work-link" href="./works/cankar-batrak-ernej.html">Батрак Ерней и его право</a>
+                    <span class="work-meta">1907 · Социально-философская повесть</span>
+                  </div>
+                  <p class="work-summary">Библейская по силе притча о старом работнике Ернее, сорок лет строившем чужую усадьбу и тщетно ищущем правды у судей, властей и императора в Вене.</p>
+                </li>
+                <li class="work-item" id="work-on-the-slope">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-04.02</span>
+                    <a class="work-link" href="./works/cankar-na-sklone.html">На склоне (На кланце)</a>
+                    <span class="work-meta">1902 · Роман</span>
+                  </div>
+                  <p class="work-summary">Трагическая история матери Францки, всю жизнь бегущей за уходящим светом надежды среди нищеты люблянских окраин.</p>
+                </li>
+                <li class="work-item" id="work-scandal-in-st-florian">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-04.03</span>
+                    <a class="work-link" href="./works/cankar-skandal-svyatogo-floriana.html">Скандал в долине Святого Флориана</a>
+                    <span class="work-meta">1908 · Сатирическая драма-фарс</span>
+                  </div>
+                  <p class="work-summary">Едкая гротескная пьеса о лицемерных обывателях, перед которыми внезапно является дерзкий художник Пётр и призрак отверженного поэта.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-oton-zupancic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Отон Жупанчич</h3>
+                  <p class="author-role">Ведущий поэт словенского модерна и символист · <span class="tabular">1878–1949</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Мастер свободного ритма и музыкального стиха, соединивший витальную радость жизни с тревогой за историческую судьбу Словении.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-goblet-of-intoxication">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-04.04</span>
+                    <a class="work-link" href="./works/zupancic-chasha-opyaneniya.html">Чаша опьянения</a>
+                    <span class="work-meta">1899 · Сборник стихотворений</span>
+                  </div>
+                  <p class="work-summary">Манифест словенского модерна: освобождение стиха от академических рамок, полнота чувств и гимн преображающей силе искусства.</p>
+                </li>
+                <li class="work-item" id="work-duma">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-04.05</span>
+                    <a class="work-link" href="./works/zupancic-duma.html">Дума</a>
+                    <span class="work-meta">1908 · Гражданская поэма</span>
+                  </div>
+                  <p class="work-summary">Полифоническое размышление о разрыве между красотой родной земли и судьбой миллионов словенцев, уезжающих на заработки в Америку и города Европы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dragotin-kette">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Драготин Кетте</h3>
+                  <p class="author-role">Лирик света, импрессионизма и предчувствия · <span class="tabular">1876–1899</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Рано ушедший гений словенского модерна, оставивший тончайшую любовную и пейзажную лирику хрустальной ясности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kette-poezije">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-04.06</span>
+                    <a class="work-link" href="./works/kette-poezii.html">Поэзии (цикл «На площади»)</a>
+                    <span class="work-meta">1900 · Лирический цикл</span>
+                  </div>
+                  <p class="work-summary">Посмертное собрание стихов о любви, вечерних фонарях Любляны, детской непосредственности и тихом примирении с вечностью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-josip-murn">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йосип Мурн-Александров</h3>
+                  <p class="author-role">Поэт-импрессионист и певец крестьянской меланхолии · <span class="tabular">1879–1901</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из четырёх столпов словенского модерна, открывший интимную, сдержанную поэтику одиночества и неброской красоты земли.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-songs-and-romances">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-04.07</span>
+                    <a class="work-link" href="./works/murn-pesni-i-romansy.html">Песни и романсы</a>
+                    <span class="work-meta">1903 · Посмертный сборник лирики</span>
+                  </div>
+                  <p class="work-summary">Тонкие элегии осенних полей, туманов над болотами Барья и тихой солидарности с безвестными пахарями.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sl-avantgarde-social">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1920–1960</p>
+          <h2 class="section-title">Экспрессионизм, авангард и социальная проза</h2>
+          <p class="section-desc">Трагический авангард карстского пространства, каринтийский эпос выживания, философия сопротивления и антивоенный экзистенциализм.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-srecko-kosovel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сречко Косовел</h3>
+                  <p class="author-role">Гений словенского экспрессионизма и конструктивизма · <span class="tabular">1904–1926</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Провидец с каменистого плато Карст, за двадцать два года жизни создавший поразительные авангардные коллажи о гибели и обновлении Европы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-integrali">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-05.01</span>
+                    <a class="work-link" href="./works/kosovel-integraly.html">Интегралы</a>
+                    <span class="work-meta">1926 (изд. 1967) · Конструктивистская поэзия</span>
+                  </div>
+                  <p class="work-summary">Революционный поэтический цикл «консов» — математических символов, газетных выкриков и сосновых ветров Карста перед лицом кризиса цивилизации.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-prezihov-voranc">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Прежихов Воранц</h3>
+                  <p class="author-role">Мастер каринтийского социального реализма · <span class="tabular">1893–1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ловро Кухар — писатель-самоучка и политический скиталец, создавший суровый, скульптурный эпос о бедняках Каринтии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-samorastniki">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-05.02</span>
+                    <a class="work-link" href="./works/voranc-samorodki.html">Самородки</a>
+                    <span class="work-meta">1940 · Цикл новелл</span>
+                  </div>
+                  <p class="work-summary">Восемь драматических историй о несгибаемых людях каринтийских гор, среди которых «Дички» о батрачке Мете и её незаконнорождённых детях.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ciril-kosmac">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Цирил Космач</h3>
+                  <p class="author-role">Новеллист приморской памяти и гуманистического сопротивления · <span class="tabular">1910–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер психологической новеллы и лирической прозы, соединивший мотивы родной Толминщины с опытом антифашистской борьбы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ballad-of-trumpet">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-05.03</span>
+                    <a class="work-link" href="./works/kosmac-ballada-o-trubache.html">Баллада о трубаче и облачке</a>
+                    <span class="work-meta">1956 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Старый крестьянин Темникар в зимнюю рождественскую ночь идёт по глубокому снегу предупредить раненых партизан о засаде, превращая страх в тихий подвиг.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-edvard-kocbek">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдвард Коцбек</h3>
+                  <p class="author-role">Поэт, философ-персоналист и моральный свидетель эпохи · <span class="tabular">1904–1981</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из глубочайших мыслителей Словении XX века, исследовавший трагедию свободы, совести и вины в годы войны и послевоенного строя.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fear-and-courage">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-05.04</span>
+                    <a class="work-link" href="./works/kocbek-strah-i-muzhestvo.html">Страх и мужество</a>
+                    <span class="work-meta">1951 · Цикл новелл</span>
+                  </div>
+                  <p class="work-summary">Четыре психологически беспощадные повести о нравственных парадоксах партизанской войны, предательстве и цене человеческого выбора.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vitomil-zupan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Витомил Зупан</h3>
+                  <p class="author-role">Экзистенциальный романист, драматург и нонконформист · <span class="tabular">1914–1987</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель бурной судьбы — моряк, партизан и узник лагерей, принесший в словенскую прозу раскованную витальность и полифонию памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-minuet-for-guitar">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-05.05</span>
+                    <a class="work-link" href="./works/zupan-menuet-dlya-gitary.html">Менуэт для гитары (на 25 выстрелов)</a>
+                    <span class="work-meta">1975 · Роман</span>
+                  </div>
+                  <p class="work-summary">Исповедальный роман-диалог бывшего словенского партизана Якоба Берка и немецкого офицера Биттера, спустя тридцать лет встречающихся на пляже в Испании.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sl-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1960–2010-е годы</p>
+          <h2 class="section-title">Современная поэзия и проза XX–XXI веков</h2>
+          <p class="section-desc">Мировое признание словенской словесности: авангардная поэтика Томажа Шаламуна, память о лагерях Бориса Пахора, исторические романы Драго Янчара и новая проза.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-tomaz-salamun">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томаж Шаламун</h3>
+                  <p class="author-role">Реформатор словенского и европейского авангардного стиха · <span class="tabular">1941–2014</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор более тридцати книг стихов, превративший словенскую поэзию в дерзкую игру ассоциаций, метафор и освобождённого синтаксиса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poker-1966">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-06.01</span>
+                    <a class="work-link" href="./works/salamun-poker.html">Покер</a>
+                    <span class="work-meta">1966 · Авангардная поэзия</span>
+                  </div>
+                  <p class="work-summary">Дебютный сборник-взрыв, разрушивший табу социалистического реализма и открывший эпоху свободного сюрреалистического голоса в Словении.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-boris-pahor">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Борис Пахор</h3>
+                  <p class="author-role">Триестский словенский прозаик, летописец памяти XX века · <span class="tabular">1913–2022</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Классик словенской литературы Италии, прошедший концлагеря Нацвейлер-Штрутгоф и Дахау и ставший одним из главных голосов европейской литературы свидетельства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-necropolis-pahor">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-06.02</span>
+                    <a class="work-link" href="./works/pahor-nekropol.html">Некрополь</a>
+                    <span class="work-meta">1967 · Автобиографический роман-свидетельство</span>
+                  </div>
+                  <p class="work-summary">Медленное возвращение рассказчика спустя двадцать лет в бывший лагерь в Эльзасе: острая проза о хрупкости человеческого достоинства и языке как спасении.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-drago-jancar">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Драго Янчар</h3>
+                  <p class="author-role">Ведущий современный словенский романист, эссеист и драматург · <span class="tabular">род. 1948</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Самый переводимый современный прозаик Словении, исследующий столкновение частного человека с безличными жерновами центральноевропейской истории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-galley-slave">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-06.03</span>
+                    <a class="work-link" href="./works/jancar-katorzhnik.html">Каторжник</a>
+                    <span class="work-meta">1978 · Историко-философский роман</span>
+                  </div>
+                  <p class="work-summary">Одиссея бродячего школяра Йоханнеса Ота по охваченной чумой, инквизицией и страхом Центральной Европе XVII века.</p>
+                </li>
+                <li class="work-item" id="work-i-saw-her-that-night">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-06.04</span>
+                    <a class="work-link" href="./works/jancar-etoj-nochyu-ya-eyo-videl.html">Этой ночью я её видел</a>
+                    <span class="work-meta">2010 · Роман</span>
+                  </div>
+                  <p class="work-summary">История загадочного исчезновения молодой женщины Вероники Зарник в 1944 году, рассказанная голосами пяти разных людей: от сербского офицера до экономки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ales-debeljak">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алеш Дебеляк</h3>
+                  <p class="author-role">Поэт, эссеист и культуролог поколения рубежа независимости · <span class="tabular">1961–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор утончённой медитативной лирики и эссе о Центральной Европе, соединяющий меланхолию старых городов с аналитической строгостью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dictionary-of-silence">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-06.05</span>
+                    <a class="work-link" href="./works/debeljak-slovar-tishiny.html">Словарь тишины</a>
+                    <span class="work-meta">1987 · Сборник стихотворений</span>
+                  </div>
+                  <p class="work-summary">Тонкие четырестишия и созерцательные фрагменты о языке памяти, тени уходящей империи и тишине между словами.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-goran-vojnovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Горан Войнович</h3>
+                  <p class="author-role">Романист и кинорежиссёр новой городской Словении · <span class="tabular">род. 1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых ярких авторов XXI века, трижды удостоенный премии «Кресник» за прозу о постъюгославской памяти и идентичности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-yugoslavia-my-fatherland">
+                  <div class="work-row">
+                    <span class="work-code">СЛ-06.06</span>
+                    <a class="work-link" href="./works/vojnovic-yugoslaviya-moya-rodina.html">Югославия, моя родина</a>
+                    <span class="work-meta">2012 · Роман</span>
+                  </div>
+                  <p class="work-summary">Поиски сыном отца — бывшего офицера ЮНА, считавшегося погибшим, — превращаются в болезненное путешествие через руины общей страны и семейной тайны.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание словенской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
