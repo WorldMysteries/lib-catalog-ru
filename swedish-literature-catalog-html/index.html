@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог шведской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 36 писателей · 38 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог шведской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от песен Бельмана и «Саги о Фритьофе» до Августа Стриндберга, Сельмы Лагерлёф, поэзии Эдит Сёдергран и Тумаса Транстрёмера, Астрид Линдгрен, Вильгельма Муберга, скандинавского нуара и Фредрика Бакмана.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#se-baroque-romanticism">Раздел I: От барокко и Просвещения к романтизму XIX века</a>
+        <a href="#se-strindberg-lagerlof">Раздел II: Август Стриндберг, Сельма Лагерлёф и рубеж веков</a>
+        <a href="#se-modernism-midcentury">Раздел III: Модернизм, рабочие писатели и поэзия середины XX века</a>
+        <a href="#se-people-lindgren-crime">Раздел IV: Эпопеи о народе, сказки Астрид Линдгрен и шведский детектив</a>
+        <a href="#se-transtromer-enqvist">Раздел V: Поэзия Тумаса Транстрёмера и интеллектуальный роман конца XX века</a>
+        <a href="#se-noir-contemporary">Раздел VI: Скандинавский нуар и новейшая шведская литература XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="se-baroque-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVII–XIX века</p>
+          <h2 class="section-title">От барокко и Просвещения к романтизму XIX века</h2>
+          <p class="section-desc">От «отца шведской поэзии» Георга Шернъельма и застольно-философской поэзии Карла Микаэля Бельмана к «Саге о Фритьофе» Тегнера, романтическим прозрениям Альмквиста и социальному роману Фредрики Бремер.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-georg-stiernhielm">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Георг Шернъельм</h3>
+                  <p class="author-role">«Отец шведской поэзии», поэт и энциклопедист эпохи барокко · <span class="tabular">1598–1672</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный, филолог и первый президент Коллегии древностей, утвердивший шведский язык в качестве равноправного языка высокой европейской поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hercules-stiernhielm">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-01.01</span>
+                    <a class="work-link" href="./works/shernielm-gerkules.html">Геркулес («Hercules»)</a>
+                    <span class="work-meta">1658 · Аллегорическая гекзаметрическая поэма</span>
+                  </div>
+                  <p class="work-summary">Юный Геркулес стоит на распутье между соблазнительной Госпожой Наслаждение и суровой Госпожой Добродетель, избирая труд, честь и вечную славу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carl-michael-bellman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карл Микаэль Бельман</h3>
+                  <p class="author-role">Гений шведской поэзии и песни XVIII века, стокгольмский Орфей · <span class="tabular">1740–1795</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Придворный секретарь при короле Густаве III, превративший таверны, улочки и причалы Стокгольма в светлый, музыкальный театр жизни и хрупкой красоты.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fredmans-epistlar">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-01.02</span>
+                    <a class="work-link" href="./works/belman-poslaniya-fredmana.html">Послания Фредмана («Fredmans epistlar»)</a>
+                    <span class="work-meta">1790 · Цикл поэтических песен и пасторалей</span>
+                  </div>
+                  <p class="work-summary">Восемьдесят два бессмертных стихотворных послания с мелодиями о часовщике-бродяге Фредмане, красавице Улле Винблад и весёлых завсегдатаях стокгольмских кабачков перед лицом смерти и быстротечности времени.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-esaias-tegner">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эсайас Тегнер</h3>
+                  <p class="author-role">Главный поэт шведского национального романтизма, автор «Саги о Фритьофе» · <span class="tabular">1782–1846</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор греческого языка в Лунде и епископ Векшё, переосмысливший древнеисландскую сагу в двадцати четырёх песнях, прославивших шведский романтизм в Европе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-frithiofs-saga">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-01.03</span>
+                    <a class="work-link" href="./works/tegner-saga-o-fritofe.html">Сага о Фритьофе («Frithiofs saga»)</a>
+                    <span class="work-meta">1825 · Романтическая поэма-цикл</span>
+                  </div>
+                  <p class="work-summary">История любви храброго викинга Фритьофа и прекрасной Ингеборги, проходящая через вражду братьев, морские бури, изгнание и христианское примирение.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-erik-gustaf-geijer">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрик Густав Гейер</h3>
+                  <p class="author-role">Поэт, историк и основатель «Готского союза» · <span class="tabular">1783–1847</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Универсальный мыслитель эпохи романтизма из Уппсалы, соединивший народную песню, историческую науку и образ сурового скандинавского духа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vikingen-geijer">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-01.04</span>
+                    <a class="work-link" href="./works/gejer-viking.html">Викинг («Vikingen») и «Свободный бонд»</a>
+                    <span class="work-meta">1811 · Романтическая баллада</span>
+                  </div>
+                  <p class="work-summary">Знаменитые романтические стихотворения, возродившие в шведской культуре образ северного морехода и свободного крестьянина-одальбонда.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carl-jonas-love-almqvist">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карл Юнас Луве Альмквист</h3>
+                  <p class="author-role">Самый загадочный и смелый прозаик XIX века, предтеча модернизма · <span class="tabular">1793–1866</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, педагог, композитор и беглый изгнанник, создавший гигантский свод «Книги шиповника» и вызвавший бурю повестью о свободном союзе без церковного брака.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-det-gar-an-tornrosens-bok">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-01.05</span>
+                    <a class="work-link" href="./works/almkvist-ne-tak-li.html">Не так ли? («Det går an») и «Книга шиповника»</a>
+                    <span class="work-meta">1839 · Реалистическая повесть и романтический цикл</span>
+                  </div>
+                  <p class="work-summary">Во время пароходного путешествия из Стокгольма в Лидчёпинг сержант Альберт и независимая мастерица Сара Видебек решают жить вместе на равных без юридической и имущественной кабалы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fredrika-bremer">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фредрика Бремер</h3>
+                  <p class="author-role">Основоположница шведского реалистического романа и женской эмансипации · <span class="tabular">1801–1865</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка и путешественница, чьи книги о семье, свободе личности и правах женщин принесли шведской прозе широкую известность в Европе и Америке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hertha">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-01.06</span>
+                    <a class="work-link" href="./works/bremer-gerta.html">Герта («Hertha»)</a>
+                    <span class="work-meta">1856 · Социальный роман</span>
+                  </div>
+                  <p class="work-summary">Программный роман о молодой женщине, отстаивающей право на образование, труд и совершеннолетие вопреки патриархальной опеке — книга, повлиявшая на изменение законов Швеции.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="se-strindberg-lagerlof">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1879–1915</p>
+          <h2 class="section-title">Август Стриндберг, Сельма Лагерлёф и рубеж веков</h2>
+          <p class="section-desc">Современный прорыв «Красной комнаты» и камерного театра Стриндберга, нобелевская сага Сельмы Лагерлёф, вермландская лирика Густава Фрёдинга и утончённый психологизм Яльмара Сёдерберга.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-august-strindberg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Август Стриндберг</h3>
+                  <p class="author-role">Титан шведской литературы, реформатор мировой драматургии и прозы · <span class="tabular">1849–1912</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Драматург, романист, живописец и полемист, прошедший от беспощадного натурализма к предвосхищению экспрессионизма и театра абсурда.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-roda-rummet">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-02.01</span>
+                    <a class="work-link" href="./works/strindberg-krasnaya-komnata.html">Красная комната («Röda rummet»)</a>
+                    <span class="work-meta">1879 · Сатирико-реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Живой портрет стокгольмской богемы, журналистов, актёров и продажных чиновников глазами молодого идеалиста Арвида Фалька — книга, с которой начинается современная шведская проза.</p>
+                </li>
+                <li class="work-item" id="work-froken-julie-spoksonaten">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-02.02</span>
+                    <a class="work-link" href="./works/strindberg-freken-yuliya.html">Фрёкен Юлия («Fröken Julie») и «Соната призраков»</a>
+                    <span class="work-meta">1888 / 1907 · Натуралистическая трагедия и камерная драма</span>
+                  </div>
+                  <p class="work-summary">Схватка полов и сословий в иванову ночь между графиней Юлией и лакеем Жаном, а также призрачный мир стокгольмского дома в поздней драматургии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-selma-lagerlof">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сельма Лагерлёф</h3>
+                  <p class="author-role">Первая женщина — лауреат Нобелевской премии по литературе (1909) · <span class="tabular">1858–1940</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Сказочница и эпопеист из Вермланда, соединившая устные предания родного края с глубоким нравственным гуманизмом и магической ясностью повествования.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gosta-berlings-saga">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-02.03</span>
+                    <a class="work-link" href="./works/lagerlef-saga-o-jeste-berlinge.html">Сага о Йёсте Берлинге («Gösta Berlings saga»)</a>
+                    <span class="work-meta">1891 · Неоромантический роман-легенда</span>
+                  </div>
+                  <p class="work-summary">История изгнанного пастора Йёсты Берлинга и двенадцати весёлых кавалеров усадьбы Экебю в зимнем Вермланде 1820-х годов — вихрь музыки, страсти, греха и искупления.</p>
+                </li>
+                <li class="work-item" id="work-nils-holgersson">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-02.04</span>
+                    <a class="work-link" href="./works/lagerlef-puteshestvie-nilsa.html">Чудесное путешествие Нильса с дикими гусями («Nils Holgerssons underbara resa»)</a>
+                    <span class="work-meta">1906–1907 · Волшебная географическая сказка-эпос</span>
+                  </div>
+                  <p class="work-summary">Заколдованный гномом озорной мальчик Нильс летит на спине гуся Мартина со стаей дикой Акки Кебнекайсе от южной Сконе до Лапландии, учась доброте и познавая всю Швецию.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-verner-von-heidenstam">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вернер фон Хейденстам</h3>
+                  <p class="author-role">Глава неоромантизма 1890-х, лауреат Нобелевской премии (1916) · <span class="tabular">1859–1940</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и исторический романист, воспевший красоту прошлого, трагический героизм и величие простых солдат в эпоху великих испытаний.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-karolinerna">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-02.05</span>
+                    <a class="work-link" href="./works/hejdenstam-voiny-karla-xii.html">Воины Карла XII («Karolinerna»)</a>
+                    <span class="work-meta">1897–1898 · Исторический цикл новелл</span>
+                  </div>
+                  <p class="work-summary">Художественная хроника Северной войны и похода Карла XII глазами простых каролинцев — исследование мужества, верности и трагедии имперского заката.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gustaf-froding">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Густав Фрёдинг</h3>
+                  <p class="author-role">Самый музыкальный и народный лирик шведской поэзии · <span class="tabular">1860–1911</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Вермланда, соединивший народный говор, юмор, сострадание к обездоленным и трагическую хрупкость собственного разума.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-guitarr-och-dragharmonika">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-02.06</span>
+                    <a class="work-link" href="./works/freding-gitara-i-garmonika.html">Гитара и гармоника («Guitarr och dragharmonika»)</a>
+                    <span class="work-meta">1891 · Лирический сборник</span>
+                  </div>
+                  <p class="work-summary">Стихотворения, ставшие песнями на всю Швецию: вермландские сельские зарисовки, юмор и пронзительные раздумья о любви и милосердии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-erik-axel-karlfeldt">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрик Аксель Карлфельдт</h3>
+                  <p class="author-role">Певец Даларны, лауреат Нобелевской премии по литературе (1931) · <span class="tabular">1864–1931</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и многолетний секретарь Шведской академии, превративший библейские мотивы крестьянской живописи Даларны и природу в пышную лирику.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hosthorn">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-02.07</span>
+                    <a class="work-link" href="./works/karlfeldt-osennij-rog.html">Осенний рог («Hösthorn») и «Сад Фридолина»</a>
+                    <span class="work-meta">1901 / 1927 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Сочные строфы о смене времён года, крестьянском календаре Даларны, барочной игре слов и светлом принятии осени жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hjalmar-soderberg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Яльмар Сёдерберг</h3>
+                  <p class="author-role">Мастер отточенного стокгольмского стиля и психологической скептической прозы · <span class="tabular">1869–1941</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Стокгольмский эссеист, романист и новеллист («Историйки»), чей лаконичный, ироничный и кристально ясный слог остаётся эталоном шведской прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-doktor-glas">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-02.08</span>
+                    <a class="work-link" href="./works/sederberg-doktor-glas.html">Доктор Глас («Doktor Glas»)</a>
+                    <span class="work-meta">1905 · Психологический роман-дневник</span>
+                  </div>
+                  <p class="work-summary">Уединённый стокгольмский врач в своём дневнике шаг за шагом решается на «убийство из сострадания» ненавистного пастора Грегориуса ради спасения его молодой жены.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="se-modernism-midcentury">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1916–1956</p>
+          <h2 class="section-title">Модернизм, рабочие писатели и поэзия середины XX века</h2>
+          <p class="section-desc">Поэтическая революция Эдит Сёдергран и Гуннара Экелёфа, философские притчи Пера Лагерквиста, антиутопия Карин Бойе и нобелевские шедевры Эйвинда Юнсона и Харри Мартинсона.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-edith-sodergran">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдит Сёдергран</h3>
+                  <p class="author-role">Первооткрывательница всего шведоязычного поэтического модернизма · <span class="tabular">1892–1923</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Шведоязычная поэтесса из Карелии (Райвола), учившаяся в Петербурге в Петришуле; её свободный стих и визионерская смелость преобразили всю скандинавскую поэзию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dikter-landet-som-icke-ar">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-03.01</span>
+                    <a class="work-link" href="./works/sedergran-zemlya-kotoroj-net.html">Стихотворения («Dikter») и «Земля, которой нет»</a>
+                    <span class="work-meta">1916 / 1925 · Модернистская лирика</span>
+                  </div>
+                  <p class="work-summary">Ослепительный прорыв от девической интимности к экстатическим видениям «Земли, которой нет» — диалогу поэта с звёздами, нищетой и надвигающейся смертью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-par-lagerkvist">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пер Лагерквист</h3>
+                  <p class="author-role">Лауреат Нобелевской премии 1951 года, мастер философской притчи о добре и зле · <span class="tabular">1891–1974</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, драматург и романист из Векшё, с библейской строгостью и ясностью исследовавший природу человеческой совести, тирании и богоискательства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dvargen-barabbas">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-03.02</span>
+                    <a class="work-link" href="./works/lagerkvist-karlik-varavva.html">Карлик («Dvärgen») и «Варавва» («Barabbas»)</a>
+                    <span class="work-meta">1944 / 1950 · Философские романы-притчи</span>
+                  </div>
+                  <p class="work-summary">Дневник злобного придворного карлика при дворе эпохи Возрождения как аллегория фашистского зла в человеке и история разбойника Вараввы, отпущенного вместо Христа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-karin-boye">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карин Бойе</h3>
+                  <p class="author-role">Классик модернистской лирики и автор великой шведской антиутопии «Каллокаин» · <span class="tabular">1900–1941</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтесса круга журнала «Spektrum», переводчица Т. С. Элиота и автор романа, предвосхитившего «1984» Оруэлла.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kallocain">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-03.03</span>
+                    <a class="work-link" href="./works/boje-kallokain.html">Каллокаин («Kallocain»)</a>
+                    <span class="work-meta">1940 · Роман-антиутопия</span>
+                  </div>
+                  <p class="work-summary">Учёный Лео Калль в тоталитарном Мировом Государстве изобретает сыворотку правды, заставляющую граждан выдавать самые тайные мысли — и открывает в них неуничтожимую искру свободы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eyvind-johnson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эйвинд Юнсон</h3>
+                  <p class="author-role">Рабочий-самоучка с крайнего севера, лауреат Нобелевской премии (1974) · <span class="tabular">1900–1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из Норрботтена, соединивший автобиографический эпос о бедной юности («Роман об Улофе») с античной и средневековой притчей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-strändernas-svall">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-03.04</span>
+                    <a class="work-link" href="./works/yunson-priboj-i-berega.html">Прибой и берега («Strändernas svall»)</a>
+                    <span class="work-meta">1946 · Философско-мифологический роман</span>
+                  </div>
+                  <p class="work-summary">Переосмысление гомеровской «Одиссеи» сразу после Второй мировой войны: усталый Одиссей возвращается на Итаку, зная, что насилие порождает лишь новое насилие.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-harry-martinson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Харри Мартинсон</h3>
+                  <p class="author-role">Поэт-моряк, мастер натурфилософской прозы и Нобелевский лауреат (1974) · <span class="tabular">1904–1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сирота из Блекинге и бывший кочегар на океанских судах, создавший космическую поэму-реквием «Аниара» о человечестве в эпоху ядерной угрозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-aniara">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-03.05</span>
+                    <a class="work-link" href="./works/martinson-aniara.html">Аниара («Aniara»)</a>
+                    <span class="work-meta">1956 · Фантастическая поэма в 103 песнях</span>
+                  </div>
+                  <p class="work-summary">Огромный космический корабль с беженцами с отравленной Земли сбивается с курса на Марс и вечно несёт пассажиров в пустоту Вселенной под светом живой машины памяти Мимы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gunnar-ekelof">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гуннар Экелёф</h3>
+                  <p class="author-role">Крупнейший шведский поэт-визионер XX века, соединивший сюрреализм и Восток · <span class="tabular">1907–1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и знаток восточной мистики, прошедший путь от сюрреалистического бунта «Поздно на земле» к византийско-курдской трилогии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sent-pa-jorden-diwan">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-03.06</span>
+                    <a class="work-link" href="./works/ekelef-pozdno-na-zemle.html">Поздно на земле («Sent på jorden») и «Диван о правителе Эмгиона»</a>
+                    <span class="work-meta">1932 / 1965 · Сюрреалистическая и философская поэзия</span>
+                  </div>
+                  <p class="work-summary">Революционная «книга самоубийства» 1932 года и великая поздняя поэма о слепом византийском князе, обращённая к Деве Ничто и чистому состраданию.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="se-people-lindgren-crime">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1945–1980</p>
+          <h2 class="section-title">Эпопеи о народе, сказки Астрид Линдгрен и шведский детектив</h2>
+          <p class="section-desc">Великая тетралогия Вильгельма Муберга об эмигрантах, мировая детская классика Астрид Линдгрен, трагизм Стига Дагермана, стокгольмская сага Фогельстрёма и рождение шведского полицейского романа у Шёвалль и Валё.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-vilhelm-moberg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вильгельм Муберг</h3>
+                  <p class="author-role">Автор главной шведской национальной эпопеи XX века · <span class="tabular">1898–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын солдата из Смоланда, запечатлевший в четырёх романах великое переселение бедных шведских крестьян в Америку в XIX веке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-utvandrarna">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-04.01</span>
+                    <a class="work-link" href="./works/muberg-emigranty.html">Эмигранты («Utvandrarna»)</a>
+                    <span class="work-meta">1949–1959 · Историческая романная тетралогия</span>
+                  </div>
+                  <p class="work-summary">Карл-Оскар и Кристина из бесплодного прихода Людеро пересекают Атлантику на бриге «Шарлотта» ради плодородных земель у озера Ки-Чи-Сага в Миннесоте.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-astrid-lindgren">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Астрид Линдгрен</h3>
+                  <p class="author-role">Всемирно любимая сказочница, защитница детства и свободы личности · <span class="tabular">1907–2002</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Виммербю, подарившая мировой литературе Пеппи Длинныйчулок, Малыша и Карлсона, Эмиля из Лённеберги и «Братьев Львиное Сердце».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pippi-langstrump-broderna-lejonhjarta">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-04.02</span>
+                    <a class="work-link" href="./works/lindgren-peppi-bratya.html">Пеппи Длинныйчулок и «Братья Львиное Сердце»</a>
+                    <span class="work-meta">1945 / 1973 · Детско-философские повести</span>
+                  </div>
+                  <p class="work-summary">От дерзкой, доброй и непобедимой девочки с виллы «Курица» до потрясающей сказочной притчи о стране Нангияла, мужестве маленького Сухарика и победе над страхом смерти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-stig-dagerman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стиг Дагерман</h3>
+                  <p class="author-role">Ярчайший голос «сороковников», мастер экзистенциальной прозы страха и вины · <span class="tabular">1923–1954</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист-анархист и прозаик с метеоритной судьбой, за пять лет написавший вершины послевоенного шведского романа и репортажа («Немецкая осень»).</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ormen-de-domdas-o">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-04.03</span>
+                    <a class="work-link" href="./works/dagerman-zmeya.html">Змея («Ormen») и «Остров обречённых»</a>
+                    <span class="work-meta">1945 / 1946 · Экзистенциальные романы</span>
+                  </div>
+                  <p class="work-summary">Семь потерпевших кораблекрушение на раскалённом скалистом острове со слепыми ящерицами и белыми птицами оказываются наедине с ужасом вины и безысходности.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sara-lidman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сара Лидман</h3>
+                  <p class="author-role">Великий голос шведского Севера (Вестерботтена) и антиколониальной совести · <span class="tabular">1923–2004</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выросла в деревне Мисстреск, создав сочный, библейски ритмичный язык прозы северных лесов и легендарный «Железнодорожный эпос».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tjardalen">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-04.04</span>
+                    <a class="work-link" href="./works/lidman-degtyarnaya-dolina.html">Дегтярная долина («Tjärdalen»)</a>
+                    <span class="work-meta">1953 · Сельский социально-нравственный роман</span>
+                  </div>
+                  <p class="work-summary">Крестьянин Нильс строит смолокурню ради долга, а её внезапное разорение становится нравственным испытанием солидарности и жадности для всей деревни Экстреск.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-per-anders-fogelstrom">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пер Андерс Фогельстрём</h3>
+                  <p class="author-role">Главный летописец Стокгольма и рабочих кварталов Сёдермальма · <span class="tabular">1917–1998</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и знаток столичной истории, проследивший в пятитомном «Стокгольмском цикле» становление современного города и рабочего движения за сто лет.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mina-drommars-stad">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-04.05</span>
+                    <a class="work-link" href="./works/fogelstrem-gorod-moej-mechty.html">Город моей мечты («Mina drömmars stad»)</a>
+                    <span class="work-meta">1960 · Исторический городской роман</span>
+                  </div>
+                  <p class="work-summary">Пятнадцатилетний Хеннинг Нильссон в 1860 году пешком приходит в Стокгольм за лучшей долей и вместе с женой Лоттен переживает тяжёлый, но гордый труд городских низов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sjowall-wahloo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Май Шёвалль и Пер Валё</h3>
+                  <p class="author-role">Родоначальники «скандинавского нуара» и социального полицейского романа · <span class="tabular">1935–2020 / 1926–1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Творческий союз, превративший детектив в точное социологическое зеркало шведского «государства всеобщего благоденствия».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-roseanna">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-04.06</span>
+                    <a class="work-link" href="./works/shevall-vale-rozanna.html">Розанна («Roseanna») и цикл о Мартине Беке</a>
+                    <span class="work-meta">1965 · Социальный детективный роман</span>
+                  </div>
+                  <p class="work-summary">Обыденная, кропотливая работа комиссара Мартина Бека над делом неопознанной девушки из шлюза канала Гёта стала образцом для всей мировой криминальной прозы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="se-transtromer-enqvist">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1958–2005</p>
+          <h2 class="section-title">Поэзия Тумаса Транстрёмера и интеллектуальный роман конца XX века</h2>
+          <p class="section-desc">Хрустальные метафоры Нобелевского лауреата Тумаса Транстрёмера, историческая проза Пера Улова Энквиста, мистический реализм Торгни Линдгрена и Ларса Густафссона, а также «Происшествие у воды» Черстин Экман.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-tomas-transtromer">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тумас Транстрёмер</h3>
+                  <p class="author-role">Крупнейший шведский поэт современности, лауреат Нобелевской премии (2011) · <span class="tabular">1931–2015</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Психолог в колонии для несовершеннолетних и пианист, продолжавший сочинять лаконичные хокку даже после перенесённого инсульта и утраты речи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ostersjoar-den-stora-gatan">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-05.01</span>
+                    <a class="work-link" href="./works/transtryomer-baltijskie-morya.html">Балтийские моря («Östersjöar») и «Великая загадка»</a>
+                    <span class="work-meta">1974 / 2004 · Философская лирика и хокку</span>
+                  </div>
+                  <p class="work-summary">Пронзительно точные образы шхер, соснового леса, музыки Шуберта и тихих мгновений, в которых соприкасаются история, природа и потаённая глубина души.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-per-olov-enquist">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пер Улов Энквист</h3>
+                  <p class="author-role">Классик документально-исторического романа и драматургии XX–XXI веков · <span class="tabular">1934–2020</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из религиозной северной семьи в Хьёггбёле, исследовавший тайны истории, тела и веры в романах «Пятая зима магнетизёра» и «Визит лейб-медика».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-livlakarens-besok">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-05.02</span>
+                    <a class="work-link" href="./works/enkvist-vizit-lejb-medika.html">Визит лейб-медика («Livläkarens besök»)</a>
+                    <span class="work-meta">1999 · Историко-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Драма немецкого врача-просветителя Иоганна Фридриха Струэнзе при дворе безумного датского короля Кристиана VII и его роковой страсти к королеве Каролине Матильде.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lars-gustafsson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ларс Густафссон</h3>
+                  <p class="author-role">Поэт, философ и мастер интеллектуального романа («Трещины в стене») · <span class="tabular">1936–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Вестероса и профессор философии, соединивший ясность научного вопроса с поэтической нежностью к вестманландскому лесу и осам.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-en-biodlares-dod">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-05.03</span>
+                    <a class="work-link" href="./works/gustafsson-smert-pchelovoda.html">Смерть пчеловода («En biodlares död»)</a>
+                    <span class="work-meta">1978 · Философская повесть</span>
+                  </div>
+                  <p class="work-summary">Смертельно больной бывший учитель Ларс Вестин в домике среди весенних лесов отказывается вскрыть письмо с диагнозом, обретая в дневниках свободу от страха и боли.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-torgny-lindgren">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Торгни Линдгрен</h3>
+                  <p class="author-role">Мастер северной библейской притчи и чёрного юмора · <span class="tabular">1938–2017</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и член Шведской академии из Вестерботтена, преобразивший суровую нищету северных хуторов в завораживающие притчи о добре, мести и вере.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ormens-vag-pa-halleberget">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-05.04</span>
+                    <a class="work-link" href="./works/lindgren-put-zmeya-na-skale.html">Путь змея на скале («Ormens väg på hälleberget») и «Шмелиный мёд»</a>
+                    <span class="work-meta">1982 / 1995 · Роман-притча</span>
+                  </div>
+                  <p class="work-summary">Трагический монолог-молитва крестьянина Йохана о безжалостном лавочнике Карлссоне, отнимающем за долги последний надел и честь семьи в Вестерботтене XIX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kerstin-ekman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Черстин Экман</h3>
+                  <p class="author-role">Старейшина шведской прозы, автор «Происшествия у воды» и «Волчьей шкуры» · <span class="tabular">род. 1933</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Катринехольма и Емтланда, соединившая мастерство остросюжетной интриги с глубоким экологическим и нравственным чувством северной природы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-handelser-vid-vatten">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-05.05</span>
+                    <a class="work-link" href="./works/ekman-proisshestvie-u-vody.html">Происшествие у воды («Händelser vid vatten»)</a>
+                    <span class="work-meta">1993 · Психологический роман-детектив</span>
+                  </div>
+                  <p class="work-summary">Двойное убийство туристов в палатке у горного озера в Емтланде в 1973 году связывает судьбы учительницы Анни Рафт, врача Биргера и жителей глухого посёлка на восемнадцать лет.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-goran-tunstrom">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йёран Тунстрём</h3>
+                  <p class="author-role">Мастер поэтической прозы, лауреат премии Северного совета · <span class="tabular">1937–2000</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Сунне в Вермланде, вернувший в шведский роман музыку, юмор и сказочную теплоту в духе Сельмы Лагерлёф.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-juloratoriet">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-05.06</span>
+                    <a class="work-link" href="./works/tunstrem-rozhdestvenskaya-oratoriya.html">Рождественская оратория («Juloratoriet»)</a>
+                    <span class="work-meta">1983 · Музыкальная семейная сага</span>
+                  </div>
+                  <p class="work-summary">Три поколения семьи Норденсон в Сунне собираются исполнить ораторию Баха, чтобы исцелить рану от нелепой гибели матери и найти голос в музыке.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="se-noir-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1991–XXI век</p>
+          <h2 class="section-title">Скандинавский нуар и новейшая шведская литература XXI века</h2>
+          <p class="section-desc">Мировой феномен «Валландера» Хеннинга Манкелля и трилогии «Миллениум» Стига Ларссона, мистический Стокгольм Йона Айвиде Линдквиста, душевный юмор Фредрика Бакмана, проза Кемири и Сем-Сандберга.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-henning-mankell">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хеннинг Манкелль</h3>
+                  <p class="author-role">Создатель мировой волны скандинавского нуара, автор цикла о Курте Валландере · <span class="tabular">1948–2015</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург и романист, живший между Истадом и Мозамбиком, создавший меланхоличный образ сыщика Валландера, остро чувствующего перемены в стране.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mordare-utan-ansikte">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-06.01</span>
+                    <a class="work-link" href="./works/mankel-bezlikie-ubijcy.html">Безликие убийцы («Mördare utan ansikte»)</a>
+                    <span class="work-meta">1991 · Социальный криминальный роман</span>
+                  </div>
+                  <p class="work-summary">Первое дело комиссара Курта Валландера из Истада: жестокое убийство пожилых фермеров в зимнем Сконе обнажает растущие страхи и ксенофобию в современной Швеции.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-stieg-larsson">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стиг Ларссон</h3>
+                  <p class="author-role">Автор глобального бестселлера «Девушка с татуировкой дракона» («Миллениум») · <span class="tabular">1954–2004</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист-расследователь и редактор журнала «Expo», подаривший мировой поп-культуре образ гениальной хакерши Лисбет Саландер.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-man-som-hatar-kvinnor">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-06.02</span>
+                    <a class="work-link" href="./works/larsson-devushka-s-tatuirovkoj-drakona.html">Девушка с татуировкой дракона («Män som hatar kvinnor»)</a>
+                    <span class="work-meta">2005 · Криминальный триллер</span>
+                  </div>
+                  <p class="work-summary">Журналист Микаэль Блумквист и блестящая хакерша Лисбет Саландер расследуют сорокалетнее исчезновение Харриет Вангер на заснеженном острове Хедебю.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-john-ajvide-lindqvist">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йон Айвиде Линдквист</h3>
+                  <p class="author-role">Главный мастер скандинавской психологической мистики и социального хоррора · <span class="tabular">род. 1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выросший в стокгольмском пригороде Блакеберг бывший комик и фокусник, перенёсший древний миф о вампире в панельные дворы 1980-х годов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lat-den-ratte-komma-in">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-06.03</span>
+                    <a class="work-link" href="./works/lindkvist-vpusti-menya.html">Впусти меня («Låt den rätte komma in»)</a>
+                    <span class="work-meta">2004 · Психологический мистический роман</span>
+                  </div>
+                  <p class="work-summary">Трогательная и жуткая история дружбы затравленного двенадцатилетнего Оскара и его загадочной соседки Эли в зимнем пригороде Блакеберга.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-steve-sem-sandberg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стив Сем-Сандберг</h3>
+                  <p class="author-role">Мастер европейского документально-исторического романа, лауреат премии Августа · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и критик из Осло и Стокгольма, создавший потрясающую эпопею о Лодзинском гетто и роман «Избранники».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-de-fattiga-i-lodz">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-06.04</span>
+                    <a class="work-link" href="./works/sem-sandberg-obrechennye.html">Обречённые («De fattiga i Łódź»)</a>
+                    <span class="work-meta">2009 · Исторический роман-хроника</span>
+                  </div>
+                  <p class="work-summary">Опираясь на подлинные хроники Лодзинского гетто, автор воссоздаёт трагический выбор «короля гетто» Хаима Румковского и судьбы тысяч обречённых жителей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fredrik-backman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фредрик Бакман</h3>
+                  <p class="author-role">Самый читаемый в мире современный шведский романист тёплой прозы · <span class="tabular">род. 1981</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший колумнист и блогер из Стокгольма и Хельсингборга, покоривший миллионы читателей светлой человечностью книг об Уве, Бритт-Мари и «Медвежьем угле».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-en-man-som-heter-ove">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-06.05</span>
+                    <a class="work-link" href="./works/bakman-vtoraya-zhizn-uve.html">Вторая жизнь Уве («En man som heter Ove»)</a>
+                    <span class="work-meta">2012 · Трагикомический роман</span>
+                  </div>
+                  <p class="work-summary">Ворчливый пожилой вдовец и ревнитель порядка в посёлке, решивший уйти из жизни, вынужден постоянно откладывать смерть из-за шумных новых соседей и бездомного кота.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jonas-hassen-khemiri">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йонас Хассен Кемири</h3>
+                  <p class="author-role">Ведущий голос нового поколения, лауреат премии Августа (2015) · <span class="tabular">род. 1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Шведско-тунисский писатель и драматург, преобразивший ритм современного шведского языка в романах «На красном глазу», «Монтекор» и «Всё, чего я не помню».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-allt-jag-inte-minns">
+                  <div class="work-row">
+                    <span class="work-code">ШВ-06.06</span>
+                    <a class="work-link" href="./works/kemiri-vse-chego-ya-ne-pomnyu.html">Всё, чего я не помню («Allt jag inte minns»)</a>
+                    <span class="work-meta">2015 · Полифонический роман-расследование</span>
+                  </div>
+                  <p class="work-summary">Писатель пытается реконструировать последний день загадочно погибшего молодого Самуэля через противоречивые свидетельства его близких и любви всей его жизни Лаиды.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание шведской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
