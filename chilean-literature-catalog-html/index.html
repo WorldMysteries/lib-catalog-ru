@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог чилийской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 34 писателей · 36 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог чилийской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от поэмы «Араукана» и прозы Мануэля Рохаса до нобелевской поэзии Габриэлы Мистраль и Пабло Неруды, «антистихов» Никанора Парры, Хосе Доносо, Исабель Альенде и Роберто Боланьо.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#cl-epic-republic">Раздел I: Эпос Араукании, республиканский роман и поколение 1900 года</a>
+        <a href="#cl-great-poets">Раздел II: Великая поэзия Чили: Мистраль, Уидобро и Пабло Неруда</a>
+        <a href="#cl-realist-psychological">Раздел III: Реализм, внутренний мир и поколение 1938 года</a>
+        <a href="#cl-antipoetry-boom">Раздел IV: «Антипоэзия» Парры, поэзия ларов и бум Хосе Доносо</a>
+        <a href="#cl-allende-exile">Раздел V: Память диктатуры, изгнание и мировой успех чилийской прозы</a>
+        <a href="#cl-bolano-contemporary">Раздел VI: Вселенная Роберто Боланьо и чилийская проза XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="cl-epic-republic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVI–XIX века</p>
+          <h2 class="section-title">Эпос Араукании, республиканский роман и поколение 1900 года</h2>
+          <p class="section-desc">От ренессансной поэмы Алонсо де Эрсильи о сопротивлении народа мапуче и классического романа Альберто Блест Ганы к суровому шахтёрскому реализму Лильо, прозе Барриоса и Прадо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-alonso-de-ercilla">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алонсо де Эрсилья-и-Суньига</h3>
+                  <p class="author-role">Создатель великого эпоса о Чили — поэмы «Араукана» · <span class="tabular">1533–1594</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Испанский поэт-солдат, участник Арауканской войны, с глубоким благородством воспевший мужество вождей мапуче — Лаутаро, Кауполикана и Колоколо.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-araucana">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-01.01</span>
+                    <a class="work-link" href="./works/ersilya-araukana.html">Араукана («La Araucana»)</a>
+                    <span class="work-meta">1569–1589 · Героическая поэма в октавах</span>
+                  </div>
+                  <p class="work-summary">Основополагающая книга чилийской словесности: написанная на клочках кожи и бумаги у походных костров эпопея о гордой земле Арауко и непокорном народе мапуче.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alberto-blest-gana">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альберто Блест Гана</h3>
+                  <p class="author-role">«Отец чилийского романа», создатель реалистической школы XIX века · <span class="tabular">1830–1920</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и дипломат, перенёсший уроки Бальзака на почву Сантьяго середины XIX века и создавший живую фреску чилийского общества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-martin-rivas">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-01.02</span>
+                    <a class="work-link" href="./works/blest-gana-martin-rivas.html">Мартин Ривас</a>
+                    <span class="work-meta">1862 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">История бедного, но гордого провинциала с севера Чили, приезжающего в Сантьяго 1850 года и завоевавшего сердце красавицы Леонор вопреки сословным предрассудкам.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-baldomero-lillo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бальдомеро Лильо</h3>
+                  <p class="author-role">Классик социального рассказа, певец угольных шахт юга Чили · <span class="tabular">1867–1923</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Лоты, работавший конторщиком на подземных приисках и показавший мировой литературе трагический труд шахтёров под дном Тихого океана.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sub-terra-sub-sole">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-01.03</span>
+                    <a class="work-link" href="./works/lilo-pod-zemlej.html">Под землёй («Sub terra») и «Под солнцем»</a>
+                    <span class="work-meta">1904 / 1907 · Сборники социальных новелл</span>
+                  </div>
+                  <p class="work-summary">Потрясающие рассказы о детях-откатчиках в душных штольнях под океаном («Шлюз № 12», «Дьяволова падь») и о суровой судьбе тружеников чилийских полей и рудников.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eduardo-barrios">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдуардо Барриос</h3>
+                  <p class="author-role">Мастер чилийского психологического романа начала XX века · <span class="tabular">1884–1963</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из Вальпараисо, сменивший множество профессий по всей Латинской Америке, прежде чем стать крупнейшим аналитиком души в чилийской прозе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hermano-asno-nino-enloquecio">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-01.04</span>
+                    <a class="work-link" href="./works/barrios-brat-osel.html">Брат Осёл и «Мальчик, который сошёл с ума от любви»</a>
+                    <span class="work-meta">1915 / 1922 · Психологический роман и повесть</span>
+                  </div>
+                  <p class="work-summary">Тонкий дневник францисканского монаха брата Ласаро о борьбе плоти и духа в старом монастыре и пронзительная история первой безответной детской страсти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pedro-prado">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Педро Прадо</h3>
+                  <p class="author-role">Архитектор, поэт и философ группы «Десять» («Los Diez») · <span class="tabular">1886–1952</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель поэтических притч и верлибра в Чили, воплотивший вечную тоску человеческого духа по полёту.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-alsino">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-01.05</span>
+                    <a class="work-link" href="./works/prado-alsino.html">Альсино («Alsino»)</a>
+                    <span class="work-meta">1920 · Философская поэма в прозе</span>
+                  </div>
+                  <p class="work-summary">Волшебная история чилийского деревенского мальчика с горбом, из которого однажды вырастают крылья, позволяющие ему парить над полями, Андами и реками до трагического падения.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cl-great-poets">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1914–1973</p>
+          <h2 class="section-title">Великая поэзия Чили: Мистраль, Уидобро и Пабло Неруда</h2>
+          <p class="section-desc">«Страна поэтов»: нобелевская лирика Габриэлы Мистраль и Пабло Неруды, «креационизм» авангардиста Висенте Уидобро, огненный верлибр Пабло де Роки и Диас-Касануэва.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-gabriela-mistral">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Габриэла Мистраль (Лусила Годой Алькаяга)</h3>
+                  <p class="author-role">Первая в Латинской Америке лауреат Нобелевской премии (1945) · <span class="tabular">1889–1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сельская учительница из горной долины Эльки, поднявшая в суровых и нежных стихах голос матерей, детей, индейцев и гор Анда до всемирного звучания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-desolacion-ternura-tala">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-02.01</span>
+                    <a class="work-link" href="./works/mistral-sonety-smerti.html">Отчаяние («Сонеты смерти»), «Нежность» и «Вырубка»</a>
+                    <span class="work-meta">1922–1938 · Философская и любовная лирика</span>
+                  </div>
+                  <p class="work-summary">От огненных, разрывающих сердце «Сонетов смерти» к колыбельным «Нежности» и величественной поэзии материнской земли Америки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vicente-huidobro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Висенте Уидобро</h3>
+                  <p class="author-role">Основоположник «креационизма» и мирового авангарда на двух языках · <span class="tabular">1893–1948</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-провидец из Сантьяго и Парижа, провозгласивший в 1916 году: «Поэт — это маленький бог», призванный не подражать природе, а творить новые миры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-altazor">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-02.02</span>
+                    <a class="work-link" href="./works/uidobro-altasor.html">Альтасор, или Путешествие на парашюте</a>
+                    <span class="work-meta">1931 · Авангардная космическая поэма</span>
+                  </div>
+                  <p class="work-summary">Семь головокружительных песен падения сквозь пространство, звёзды и распад языка — от трагического диалога с мирозданием до чистой музыки вновь рождающихся слогов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pablo-neruda">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пабло Неруда (Рикардо Элиэсер Нефтали Рейес Басоальто)</h3>
+                  <p class="author-role">Лауреат Нобелевской премии (1971), крупнейший поэт Латинской Америки XX века · <span class="tabular">1904–1973</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Выросший под проливными дождями Темуко среди лесов Араукании поэт космической жизненной силы, прошедший путь от любовной лирики до «Всеобщей песни» континента.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-veinte-poemas-residencia">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-02.03</span>
+                    <a class="work-link" href="./works/neruda-dvadcat-poem-o-lyubvi.html">Двадцать поэм о любви и «Местожительство на земле»</a>
+                    <span class="work-meta">1924–1935 · Любовная и сюрреалистическая лирика</span>
+                  </div>
+                  <p class="work-summary">Бессмертная книга юности («Я могу написать в эту ночь самые грустные строки…») и пронзительные, тревожные видения распада и одиночества 1930-х годов.</p>
+                </li>
+                <li class="work-item" id="work-canto-general-odas">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-02.04</span>
+                    <a class="work-link" href="./works/neruda-vseobshhaya-pesn.html">Всеобщая песнь («Высоты Мачу-Пикчу») и «Оды изначальным вещам»</a>
+                    <span class="work-meta">1950–1954 · Эпическая поэма и одическая лирика</span>
+                  </div>
+                  <p class="work-summary">Грандиозный поэтический эпос Америки от её древних рек, камней Мачу-Пикчу и вождей до светлых од простому хлебу, луковице, соли, морю и деревянному дому на Исла-Негра.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pablo-de-rokha">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пабло де Рока (Карлос Диас Лойола)</h3>
+                  <p class="author-role">Титан неистового верлибра, «огненный брат» чилийского авангарда · <span class="tabular">1894–1968</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат Национальной премии Чили, создавший мощную, земную поэзию ярости, крестьянских застолий, народных песен и бунта.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-gemidos-epopeya-comidas">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-02.05</span>
+                    <a class="work-link" href="./works/de-roka-stony-i-epopeya.html">Стоны и «Эпопея народных напитков и блюд Чили»</a>
+                    <span class="work-meta">1922 / 1949 · Авангардная и народно-эпическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Могучий поток образов от бунтарского авангарда 1920-х до раблезианского воспевания чилийских виноградников, кухонь, моря и простых тружеников.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-diaz-casanueva-del-valle">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Умберто Диас-Касануэва и Росамель дель Валье</h3>
+                  <p class="author-role">Мастера чилийской метафизической и сновидческой поэзии («Мандрагора») · <span class="tabular">1901–1992</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэты философской тайны, соединившие немецкий романтизм, орфическую традицию и чилийский сюрреализм.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-requiem-orfeo-negro">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-02.06</span>
+                    <a class="work-link" href="./works/dias-kasanueva-rekviem.html">Реквием и «Чёрный Орфей»</a>
+                    <span class="work-meta">1945–1960 · Метафизическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Глубокий поэтический плач по ушедшей матери («Реквием») и зачарованные снами строки о памяти, музыке и тайне ночи.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cl-realist-psychological">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1925–1965</p>
+          <h2 class="section-title">Реализм, внутренний мир и поколение 1938 года</h2>
+          <p class="section-desc">Поворот к сложной человеческой психологии и глубине чилийской природы: легендарный «Сын вора» Мануэля Рохаса, магическая проза Марии Луисы Бомбаль, Марта Брунет и суровые моря Колоане.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-manuel-rojas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Рохас</h3>
+                  <p class="author-role">Автор лучшего чилийского романа первой половины XX века · <span class="tabular">1896–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бывший портовый грузчик в Вальпараисо, переплётчик и суфлёр бродячих театров, обновивший чилийскую прозу потоком сознания и правдой низов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hijo-de-ladron">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-03.01</span>
+                    <a class="work-link" href="./works/rohas-syn-vora.html">Сын вора («Hijo de ladrón»)</a>
+                    <span class="work-meta">1951 · Психологический роман воспитания</span>
+                  </div>
+                  <p class="work-summary">История юного Анисето Эвии, который после ареста отца-вора остаётся один в жестоком мире, сидит в тюрьме Вальпараисо и открывает на берегу океана хрупкое братство бродяг и надежду.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maria-luisa-bombal">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мария Луиса Бомбаль</h3>
+                  <p class="author-role">Предшественница латиноамериканского магического реализма · <span class="tabular">1910–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Винья-дель-Мар и подруга Борхеса и Неруды, создавшая короткие, гипнотические повести о внутренней свободе женщины, снах и памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-ultima-niebla-amortajada">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-03.02</span>
+                    <a class="work-link" href="./works/bombal-poslednij-tuman.html">Последний туман и «Женщина в саване»</a>
+                    <span class="work-meta">1935 / 1938 · Сюрреалистическо-психологические повести</span>
+                  </div>
+                  <p class="work-summary">История женщины, выдумавшей или встретившей в ночном тумане единственную страстную любовь, и предсмертные воспоминания Аны Марии, слышащей голоса родных у своего гроба.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-marta-brunet">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марта Брунет</h3>
+                  <p class="author-role">Классик чилийского романа и женской прозы · <span class="tabular">1897–1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Чильяна и вторая женщина — лауреат Национальной премии Чили, раскрывшая силу и трагическое одиночество женщин на юге страны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-humo-hacia-el-sur-maria-nadie">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-03.03</span>
+                    <a class="work-link" href="./works/brunet-dym-k-yugu.html">Дым к югу («Humo hacia el sur») и «Мария Надие»</a>
+                    <span class="work-meta">1946 / 1957 · Психологические и социальные романы</span>
+                  </div>
+                  <p class="work-summary">Суровые портреты провинциальных усадеб и маленького городка Кольяуэ, где независимая телефонистка Мария Лопес сталкивается с предрассудками и жестокостью общества.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-edwards-bello-guzman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хоакин Эдвардс Бельо и Никомедес Гусман</h3>
+                  <p class="author-role">Летописцы бедных кварталов Сантьяго и Вальпараисо · <span class="tabular">1887–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Хроникёр нравов столичных низов Эдвардс Бельо и рабочий переплётчик Никомедес Гусман — главный прозаик «Поколения 1938 года».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-roto-la-sangre-y-la-esperanza">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-03.04</span>
+                    <a class="work-link" href="./works/gusman-krov-i-nadezhda.html">Кровь и надежда («La sangre y la esperanza»)</a>
+                    <span class="work-meta">1920 / 1943 · Социальный городской роман</span>
+                  </div>
+                  <p class="work-summary">Жизнь бедняцкого квартала в Сантьяго вокруг улицы Мапочо глазами сына рабочего-трамвайщика Энрике — полная боли, забастовок, дружбы и надежды.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-francisco-coloane">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франсиско Колоане</h3>
+                  <p class="author-role">«Чилийский Джек Лондон», певец Патагонии, Чилоэ и мыса Горн · <span class="tabular">1910–2002</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын китобоя с острова Чилоэ, открывший мировой прозе ледяные проливы Магеллана, Огненную Землю, пастухов и отважных моряков дальнего юга.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cabo-de-hornos-tierra-del-fuego">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-03.05</span>
+                    <a class="work-link" href="./works/koloane-mys-gorn.html">Мыс Горн и «Огненная Земля»</a>
+                    <span class="work-meta">1941 / 1956 · Морские и приключенческие новеллы</span>
+                  </div>
+                  <p class="work-summary">Суровые, полные первозданной стихии истории о штормах Магелланова пролива, маяках на краю света, охотниках на тюленей и одиночестве южных широт.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cl-antipoetry-boom">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1950–1985</p>
+          <h2 class="section-title">«Антипоэзия» Парры, поэзия ларов и бум Хосе Доносо</h2>
+          <p class="section-desc">Радикальное обновление чилийского стиха после Неруды — «антистихи» Никанора Парры, лирика Рохаса, Лина и Тейлье — и сложная проза Хосе Доносо и Хорхе Эдвардса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-nicanor-parra">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Никанор Парра</h3>
+                  <p class="author-role">Создатель «антипоэзии», лауреат премии Сервантеса (2011) · <span class="tabular">1914–2018</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Физик-теоретик и брат великой певицы Виолеты Парры, совершивший революцию в испаноязычном стихе: «Поэты спустились с Олимпа!»</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poemas-y-antipoemas">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-04.01</span>
+                    <a class="work-link" href="./works/parra-stihi-i-antistihi.html">Стихи и антистихи («Poemas y antipoemas») и «Артефакты»</a>
+                    <span class="work-meta">1954–1972 · Антипоэзия и сатирическая лирика</span>
+                  </div>
+                  <p class="work-summary">Язвительные, смешные и трезвые монологи обычного человека посреди абсурда современного города («Американские горки», «Самоубийцы»), навсегда изменившие поэзию Чили.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gonzalo-rojas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гонсало Рохас</h3>
+                  <p class="author-role">Лауреат премии Сервантеса (2003), мастер страстной метафизической лирики · <span class="tabular">1917–2011</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец шахтёрского Лебу, соединивший в звонких, сбивчивых ритмах эротику, страх смерти, дым угольных берегов и древнюю мудрость.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-miseria-del-hombre-contra-la-muerte">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-04.02</span>
+                    <a class="work-link" href="./works/rohas-g-protiv-smerti.html">Нищета человека и «Против смерти»</a>
+                    <span class="work-meta">1948 / 1964 · Экзистенциальная лирика</span>
+                  </div>
+                  <p class="work-summary">Напряжённые стихи о дыхании, любви как единственном ответе на ничто («Уголь») и неустанной борьбе слова против забвения.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-enrique-lihn">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Энрике Лин</h3>
+                  <p class="author-role">Ведущий поэт «Поколения 1950-х», критик и мастер иронии · <span class="tabular">1929–1988</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и прозаик из Сантьяго, чей скептичный, исповедальный стих в прозе и верлибре соединил личную память о детстве с тревожным взглядом на Европу и диктатуру.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-pieza-oscura-diario-de-muerte">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-04.03</span>
+                    <a class="work-link" href="./works/lin-temnaya-komnata.html">Тёмная комната («La pieza oscura») и «Дневник смерти»</a>
+                    <span class="work-meta">1963 / изд. 1989 · Исповедальная и философская поэзия</span>
+                  </div>
+                  <p class="work-summary">Воспоминание о детстве, которое «всегда слишком далеко» («Потому что я писал, я всё ещё жив»), и бесстрашные предсмертные записи в больнице Сантьяго.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jorge-teillier">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хорхе Тейлье</h3>
+                  <p class="author-role">Создатель «поэзии ларов» — лирики южной провинции и памяти детства · <span class="tabular">1935–1996</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Лаутаро в Араукании, воспевший деревянные вокзалы под дождём, телеги, старые яблоки и потерянный рай маленького южного городка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poemas-del-pais-de-nunca-jamas">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-04.04</span>
+                    <a class="work-link" href="./works/tejle-stihi-o-strane-nikogda.html">Стихи о стране никогда и «Мельницы деревни»</a>
+                    <span class="work-meta">1963–1971 · Элегическая лирика («поэзия ларов»)</span>
+                  </div>
+                  <p class="work-summary">Тихая, пронзительная ностальгия по деревянным домам Фронтеры, где поезда уходят в туман, а поэзия остаётся хранительницей домашнего очага.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-donoso">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Доносо</h3>
+                  <p class="author-role">Крупнейший чилийский романист эпохи «латиноамериканского бума» · <span class="tabular">1924–1996</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер мрачного, гипнотического гротеска и психологического распада аристократических усадеб и семейных мифов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-obsceno-pajaro-de-la-noche">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-04.05</span>
+                    <a class="work-link" href="./works/donoso-nepristojnaya-nochnaya-ptica.html">Непристойная ночная птица и «Коронация»</a>
+                    <span class="work-meta">1957 / 1970 · Модернистско-готический роман</span>
+                  </div>
+                  <p class="work-summary">Галлюцинаторный лабиринт заброшенного приюта старых служанок в Сантьяго и чудовищной «вывернутой» усадьбы Ринконады глазами глухонемого Мудито-Умберто Пеньялосы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jorge-edwards">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хорхе Эдвардс</h3>
+                  <p class="author-role">Лауреат премии Сервантеса (1999), романист, эссеист и дипломат · <span class="tabular">1931–2023</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Друг Пабло Неруды и мастер тонкой ироничной прозы о старом Сантьяго, политических иллюзиях и духовной свободе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-persona-non-grata">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-04.06</span>
+                    <a class="work-link" href="./works/edvards-persona-non-grata.html">Персона нон грата и «Мечта о прошлом»</a>
+                    <span class="work-meta">1973 · Документальный роман-хроника</span>
+                  </div>
+                  <p class="work-summary">Сенсационная и предельно честная книга о ста днях чилийского дипломата в Гаване 1971 года и встречах с кубинскими писателями на фоне столкновения идеологии и свободы.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cl-allende-exile">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1975–2000</p>
+          <h2 class="section-title">Память диктатуры, изгнание и мировой успех чилийской прозы</h2>
+          <p class="section-desc">Мировой резонанс чилийской литературы на рубеже эпох: семейная сага Исабель Альенде, нежность Скарметы и Сепульведы, театр Дорфмана, хроники Педро Лемебеля и поэма Суриты.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-isabel-allende">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Исабель Альенде</h3>
+                  <p class="author-role">Самая читаемая в мире испаноязычная писательница современности · <span class="tabular">род. 1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналистка, ушедшая в изгнание после переворота 1973 года и написавшая в Каракасе знаменитое письмо-роман своему умирающему деду.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-casa-de-los-espiritus">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-05.01</span>
+                    <a class="work-link" href="./works/alende-dom-duhov.html">Дом духов («La casa de los espíritus»)</a>
+                    <span class="work-meta">1982 · Магико-реалистическая семейная сага</span>
+                  </div>
+                  <p class="work-summary">Четыре поколения семьи Труэба — от ясновидящей Клары и деспотичного патрона Эстебана до мятежной Альбы — на фоне семидесяти лет бурной истории Чили вплоть до 1973 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-antonio-skarmeta">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антонио Скармета</h3>
+                  <p class="author-role">Классик чилийской прозы, автор «Почтальона» · <span class="tabular">1940–2024</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Антофагасты, соединивший лиризм, юмор и любовь к поэзии, кино и простым людям побережья Чили.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ardiente-paciencia-el-cartero">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-05.02</span>
+                    <a class="work-link" href="./works/skarmeta-pylkoe-terpenie.html">Пылкое терпение («Почтальон Неруды»)</a>
+                    <span class="work-meta">1985 · Лирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Трогательная дружба юного рыбацкого почтальона Марио Хименеса и великого поэта Пабло Неруды на острове Исла-Негра, помогающего парню завоевать сердце Беатрис силой метафор.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-luis-sepulveda">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луис Сепульведа</h3>
+                  <p class="author-role">Мастер светлой экологической и приключенческой притчи · <span class="tabular">1949–2020</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Странник Патагонии, Амазонии и Европы, прославившийся во всём мире поэтическими романами о гармонии человека, книги и дикой природы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-un-viejo-que-leia-novelas-de-amor">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-05.03</span>
+                    <a class="work-link" href="./works/sepulveda-starik-kotoryj-chital.html">Старик, который читал любовные романы</a>
+                    <span class="work-meta">1989 · Экологическая повесть-притча</span>
+                  </div>
+                  <p class="work-summary">На краю амазонской сельвы в Эль-Идильо мудрый отшельник Антонио Хосе Боливар спасается от одиночества, читая с лупой романы о большой любви, прежде чем выйти на след раненой оцелотихи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ariel-dorfman">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ариэль Дорфман</h3>
+                  <p class="author-role">Всемирно известный чилийский драматург, романист и правозащитник · <span class="tabular">род. 1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Двуязычный автор и соратник президента Альенде, чья пьеса о переходном правосудии и памяти после диктатуры обошла сцены всего мира.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-muerte-y-la-doncella">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-05.04</span>
+                    <a class="work-link" href="./works/dorfman-smert-i-deva.html">Смерть и дева («La muerte y la doncella»)</a>
+                    <span class="work-meta">1990 · Психологическая драма</span>
+                  </div>
+                  <p class="work-summary">Ночная встреча Паулины Салас, пережившей пытки под квартет Шуберта «Смерть и дева», со случайным ночным гостем, в голосе которого она узнаёт своего палача.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-diamela-eltit">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Диамела Эльтит</h3>
+                  <p class="author-role">Лидер чилийского литературного авангарда, лауреат премии Фил · <span class="tabular">род. 1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат Национальной премии Чили, создавшая смелую экспериментальную прозу сопротивления на языке телесности, окраин и перформанса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lumperica-el-cuarto-mundo">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-05.05</span>
+                    <a class="work-link" href="./works/eltit-lyumperika.html">Люмперика («Lumpérica») и «Четвёртый мир»</a>
+                    <span class="work-meta">1983 / 1988 · Авангардный экспериментальный роман</span>
+                  </div>
+                  <p class="work-summary">Ночная площадь Сантьяго в годы комендантского часа, свет рекламного неона и голос отчаявшейся женщины Л. Илюминады, превращающей своё тело в знак неповиновения.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pedro-lemebel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Педро Лемебель</h3>
+                  <p class="author-role">Культовый мастер городской хроники и барочного бунта Сантьяго · <span class="tabular">1952–2015</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и художник из рабочих окраин Ла-Легуа, создавший неподражаемый, яростный и нежный язык уличных маргиналов Чили.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tengo-miedo-torero">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-05.06</span>
+                    <a class="work-link" href="./works/lemebel-ya-boyus-torero.html">Я боюсь, тореро («Tengo miedo torero»)</a>
+                    <span class="work-meta">2001 · Лирический городской роман</span>
+                  </div>
+                  <p class="work-summary">Трогательная и горькая история любви стареющей вышивальщицы скатертей к молодому подпольщику Карлосу в Сантьяго 1986 года накануне покушения на диктатора.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-raul-zurita">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рауль Сурита</h3>
+                  <p class="author-role">Крупнейший современный чилийский поэт, лауреат премии королевы Софии · <span class="tabular">род. 1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Узник судна «Майпо» после переворота 1973 года, превративший пустыню Атакама, небо Нью-Йорка и тихоокеанские скалы в пространство поэтической трилогии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-purgatorio-anteparaiso-canto-desaparecido">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-05.07</span>
+                    <a class="work-link" href="./works/surita-chistilishhe.html">Чистилище («Purgatorio») и «Песнь исчезнувшей любви»</a>
+                    <span class="work-meta">1979 / 1985 · Эпическая и перформативная поэзия</span>
+                  </div>
+                  <p class="work-summary">Монументальная поэзия боли, воскрешения природы Чили — от соляных плато Атакамы до ледников — и памяти о «пропавших без вести».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cl-bolano-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1995–2020-е годы</p>
+          <h2 class="section-title">Вселенная Роберто Боланьо и чилийская проза XXI века</h2>
+          <p class="section-desc">Мировое явление Роберто Боланьо и блестящая новая волна современной чилийской прозы — Алехандро Самбра, Нона Фернандес, Лина Меруане, Алия Трабукко Серан и Бенхамин Лабатут.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-roberto-bolano">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Роберто Боланьо</h3>
+                  <p class="author-role">Величайший латиноамериканский романист рубежа XX–XXI веков · <span class="tabular">1953–2003</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Бродячий поэт из Чили, прошедший Мехико, тюрьму Пиночета и бедные городки Каталонии, создавший грандиозную мифологию обречённых поэтов, литературы и бездны зла XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-detectives-salvajes">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-06.01</span>
+                    <a class="work-link" href="./works/bolano-dikie-syshhiki.html">Дикие сыщики («Los detectives salvajes»)</a>
+                    <span class="work-meta">1998 · Полифонический роман-одиссея</span>
+                  </div>
+                  <p class="work-summary">Поиски загадочной мексиканской поэтессы Сесареи Тинахеро молодыми бунтарями Артуро Белано и Улисесом Лимой — двадцатилетнее странствие по дорогам от Мехико и Соноры до Парижа и Никарагуа.</p>
+                </li>
+                <li class="work-item" id="work-2666-nocturno-de-chile">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-06.02</span>
+                    <a class="work-link" href="./works/bolano-2666.html">2666 и «Ночное в Чили»</a>
+                    <span class="work-meta">2000 / изд. 2004 · Роман-эпопея и повесть-исповедь</span>
+                  </div>
+                  <p class="work-summary">Пятичастный роман-магнум-опус, где четверо литературоведов ищут таинственного немецкого писателя Бенно фон Арчимбольди в вымышленной приграничной Санта-Терезе — центре безмолвной тьмы современного мира.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alejandro-zambra">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алехандро Самбра</h3>
+                  <p class="author-role">Лидер чилийского «поколения детей диктатуры», поэт и прозаик · <span class="tabular">род. 1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер кристально ясной, лаконичной и нежной прозы о любви, чтении, садиках бонсай и взрослении в Сантьяго 1980–1990-х годов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bonsai-formas-de-volver-a-casa">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-06.03</span>
+                    <a class="work-link" href="./works/sambra-bonsaj-i-sposoby-vernutsya.html">Бонсай и «Способы вернуться домой»</a>
+                    <span class="work-meta">2006 / 2011 · Лирические мини-романы</span>
+                  </div>
+                  <p class="work-summary">Прозрачная история любви Эмилии и Хулио, читающих Пруста и выращивающих карликовое дерево, и честный взгляд на детство «второстепенных персонажей» эпохи диктатуры.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-nona-fernandez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Нона Фернандес</h3>
+                  <p class="author-role">Ведущая современная писательница и драматург памяти о Чили · <span class="tabular">род. 1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Актриса, сценаристка и романистка из Сантьяго, вплетающая архивы, детские воспоминания и тайные истории диктатуры в завораживающую прозу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-dimension-desconocida-space-invaders">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-06.04</span>
+                    <a class="work-link" href="./works/fernandes-sumerechnaya-zona.html">Сумеречная зона и «Космические захватчики»</a>
+                    <span class="work-meta">2013 / 2016 · Документально-психологическая проза</span>
+                  </div>
+                  <p class="work-summary">Расследование исповеди «человека, который пытал» в 1984 году и сновидения бывших одноклассников о девочке Эстрелье, чей отец исчез в тени режима.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-lina-meruane">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лина Меруане</h3>
+                  <p class="author-role">Яркий мастер острого психологического романа и эссеистики · <span class="tabular">род. 1970</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница чилийско-палестинского происхождения, лауреат премии Сесилии Мейрелес и Сора Хуаны, исследующая телесность, зрение и корни.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sangre-en-el-ojo">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-06.05</span>
+                    <a class="work-link" href="./works/meruane-krov-v-glazu.html">Кровь в глазу («Sangre en el ojo»)</a>
+                    <span class="work-meta">2012 · Психологический автофикшн-роман</span>
+                  </div>
+                  <p class="work-summary">Потерявшая зрение из-за инсульта молодая чилийская писательница в Нью-Йорке возвращается с партнёром Игнасио в Сантьяго, учась видеть мир, любовь и зависимость в полной темноте.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alia-trabucco-zeran">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алия Трабукко Серан</h3>
+                  <p class="author-role">Звезда новейшей чилийской прозы, финалист Международного Букера · <span class="tabular">род. 1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист и романистка, исследующая наследование травм диктатуры, домашний труд и скрытую тревогу современного Сантьяго.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-resta-limpia">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-06.06</span>
+                    <a class="work-link" href="./works/trabukko-ostatok.html">Остаток («La resta») и «Чистая»</a>
+                    <span class="work-meta">2015 / 2022 · Психологический роман-дорога и триллер</span>
+                  </div>
+                  <p class="work-summary">Путешествие троих детей бывших борцов с диктатурой через Анды в Аргентину за застрявшим из-за вулканического пепла гробом матери и напряжённая исповедь домработницы Эстелы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-benjamin-labatut">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бенхамин Лабатут</h3>
+                  <p class="author-role">Мировой феномен интеллектуальной прозы XXI века · <span class="tabular">род. 1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Чилийский писатель, финалист Международного Букера, соединивший в гипнотической прозе историю физики, математики, безумия и границ человеческого разума.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-un-verdor-terrible">
+                  <div class="work-row">
+                    <span class="work-code">ЧЛ-06.07</span>
+                    <a class="work-link" href="./works/labatut-kogda-my-perestali-ponimat-mir.html">Когда мы перестали понимать мир («Ужасная зелень»)</a>
+                    <span class="work-meta">2020 · Документально-философская проза</span>
+                  </div>
+                  <p class="work-summary">Захватывающие полудокументальные новеллы о Шварцшильде в окопах Первой мировой, Гейзенберге на Гельголанде, Шрёдингере и Гротендике на пороге непостижимой бездны науки.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание чилийской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

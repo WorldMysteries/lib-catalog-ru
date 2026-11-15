@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог венесуэльской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 36 писателей · 41 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог венесуэльской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от поэмы Андреса Бельо и «Доньи Барбары» Ромуло Гальегоса до прозы Тересы де ла Парры, Услара Пьетри, Рамоса Сукре, лирики Рафаэля Каденаса, «Переносной родины» и современной прозы Каракаса.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#ve-neoclassic-costumbrismo">Раздел I: Неоклассицизм, эпоха Независимости и костумбризм XIX века</a>
+        <a href="#ve-modernismo-creolismo">Раздел II: Модернизм, креолизм и поколение журнала «Эль Кохо Илустрадо»</a>
+        <a href="#ve-llanos-gallegos">Раздел III: Эпос льяносов, Ромуло Гальегос и голос Тересы де ла Парры</a>
+        <a href="#ve-poetry-xx">Раздел IV: Поэзия XX века: от авангарда до Рафаэля Каденаса и Монтехо</a>
+        <a href="#ve-oil-urban-boom">Раздел V: Нефтяной век, городская проза и бунт второй половины XX века</a>
+        <a href="#ve-contemporary">Раздел VI: Каракас на рубеже веков, память и новейшая венесуэльская литература</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="ve-neoclassic-costumbrismo">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIX век</p>
+          <h2 class="section-title">Неоклассицизм, эпоха Независимости и костумбризм XIX века</h2>
+          <p class="section-desc">От просветительских од Андреса Бельо и героической прозы освободительной войны до романтической лирики Переса Бональде и первого национального креольского романа.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-andres-bello">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Андрес Бельо</h3>
+                  <p class="author-role">Гуманист, филолог и поэт-основоположник испаноамериканской словесности · <span class="tabular">1781–1865</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Каракаса, учитель Симона Боливара, дипломат в Лондоне и ректор Чилийского университета, соединивший классическую форму с американской природой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-silva-agricultura-zona-torrida">
+                  <div class="work-row">
+                    <span class="work-code">ВН-01.01</span>
+                    <a class="work-link" href="./works/belyo-zemledelie-zharkogo-poyasa.html">Земледелие жаркого пояса («Silva a la agricultura de la zona tórrida»)</a>
+                    <span class="work-meta">1826 · Неоклассическая поэма-сильва</span>
+                  </div>
+                  <p class="work-summary">Программная поэма испаноамериканской независимости: вдохновенный гимн плодородию тропиков, мирному труду после освободительных войн и самобытной культуре Нового Света.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fermin-toro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фермин Торо</h3>
+                  <p class="author-role">Писатель, оратор и зачинатель венесуэльского романтического романа · <span class="tabular">1806–1865</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Государственный деятель и эссеист, одним из первых обратившийся к социальному анализу и художественной прозе в молодой республике.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-martires">
+                  <div class="work-row">
+                    <span class="work-code">ВН-01.02</span>
+                    <a class="work-link" href="./works/toro-mucheniki.html">Мученики («Los mártires»)</a>
+                    <span class="work-meta">1842 · Романтический социальный роман</span>
+                  </div>
+                  <p class="work-summary">Одно из первых повествовательных произведений республиканской Венесуэлы, соединяющее критику социального неравенства с возвышенным пафосом романтической прозы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juan-antonio-perez-bonalde">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Антонио Перес Бональде</h3>
+                  <p class="author-role">Предтеча латиноамериканского модернизма, мастер романтической элегии · <span class="tabular">1846–1892</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и блестящий переводчик Гейне и Эдгара По, проведший годы в изгнании в Нью-Йорке и придававший венесуэльскому стиху музыкальную свободу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vuelta-a-la-patria">
+                  <div class="work-row">
+                    <span class="work-code">ВН-01.03</span>
+                    <a class="work-link" href="./works/perez-bonalde-vozvrashchenie.html">Возвращение на родину («Vuelta a la Patria») и «Ниагарская поэма»</a>
+                    <span class="work-meta">1877 / 1880 · Лирические поэмы</span>
+                  </div>
+                  <p class="work-summary">Знаменитые поэмы о тоске по родной долине Каракаса, обретаемой сквозь слёзы на палубе корабля у берегов Ла-Гуайры, и о смятении человеческого духа перед бездной Ниагары.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eduardo-blanco">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдуардо Бланко</h3>
+                  <p class="author-role">Автор главной историко-эпической книги XIX века о Войне за независимость · <span class="tabular">1838–1912</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Адъютант генерала Хосе Антонио Паэса в юности, впоследствии романист и министр, создавший национальный эпос о рождении республики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-venezuela-heroica">
+                  <div class="work-row">
+                    <span class="work-code">ВН-01.04</span>
+                    <a class="work-link" href="./works/blanko-geroicheskaya-venesuela.html">Героическая Венесуэла («Venezuela heroica»)</a>
+                    <span class="work-meta">1881 · Историко-романтический эпос в прозе</span>
+                  </div>
+                  <p class="work-summary">Цикл драматических картин решающих сражений освободительной войны — от Ла-Виктории и Сан-Матео до Кесерас-дель-Медио и поля Карабобо.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-vicente-romero-garcia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Висенте Ромеро Гарсия</h3>
+                  <p class="author-role">Создатель венесуэльского креолистского романа («креолизма») · <span class="tabular">1861–1917</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Солдат, журналист и участник политических смут конца XIX века, открывший в прозе живую речь, нравы и пейзаж венесуэльской провинции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-peonia">
+                  <div class="work-row">
+                    <span class="work-code">ВН-01.05</span>
+                    <a class="work-link" href="./works/romero-garsia-peoniya.html">Пеония («Peonía»)</a>
+                    <span class="work-meta">1890 · Костумбристско-креольский роман</span>
+                  </div>
+                  <p class="work-summary">История молодого столичного инженера Карлоса, возвращающегося на семейную асьенду в долине Туй и сталкивающегося с патриархальным укладом и роковой любовью.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ve-modernismo-creolismo">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1890–1940</p>
+          <h2 class="section-title">Модернизм, креолизм и поколение журнала «Эль Кохо Илустрадо»</h2>
+          <p class="section-desc">Эстетическая изысканность модернизма у Мануэля Диаса Родригеса, яростная сатира Бланко Фомбоны, хроники тюремных застенков Покатерры и нефтяное пробуждение у Диаса Санчеса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-manuel-diaz-rodriguez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Диас Родригес</h3>
+                  <p class="author-role">Крупнейший прозаик венесуэльского модернизма, стилист и эссеист · <span class="tabular">1871–1927</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Врач и дипломат, учившийся в Европе и соединивший утончённую музыкальность модернистской фразы с драмой творческой личности в родной стране.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-idolos-rotos">
+                  <div class="work-row">
+                    <span class="work-code">ВН-02.01</span>
+                    <a class="work-link" href="./works/dias-rodriges-razbitye-idoly.html">Разбитые идолы («Ídolos rotos»)</a>
+                    <span class="work-meta">1901 · Модернистский роман</span>
+                  </div>
+                  <p class="work-summary">Трагедия скульптора Альберто Сориа, вернувшегося из Парижа в Каракас с мечтой о высоком искусстве и увидевшего гибель своих статуй в вихре гражданской междоусобицы.</p>
+                </li>
+                <li class="work-item" id="work-sangre-patricia">
+                  <div class="work-row">
+                    <span class="work-code">ВН-02.02</span>
+                    <a class="work-link" href="./works/dias-rodriges-patricianskaya-krov.html">Патрицианская кровь («Sangre patricia»)</a>
+                    <span class="work-meta">1902 · Психологический роман модернизма</span>
+                  </div>
+                  <p class="work-summary">Роман о последнем отпрыске знатного рода Тулио Аркосе, чья невеста умирает на корабле посреди Атлантики, превращая его жизнь в призрачное паломничество к морю.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rufino-blanco-fombona">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Руфино Бланко Фомбона</h3>
+                  <p class="author-role">Поэт, романист и знаменитый издатель испаноамериканской классики в Мадриде · <span class="tabular">1874–1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бунтарский темперамент, участник литературных дуэлей и политической борьбы, запечатлевший характеры и страсти венесуэльского общества на рубеже веков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-hombre-de-hierro">
+                  <div class="work-row">
+                    <span class="work-code">ВН-02.03</span>
+                    <a class="work-link" href="./works/blanko-fombona-zheleznyj-chelovek.html">Железный человек («El hombre de hierro»)</a>
+                    <span class="work-meta">1907 · Сатирико-реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Едкий портрет каракасского общества эпохи рубежа веков в истории скромного, покорного служащего Криспина Луса, прозванного в насмешку «железным человеком».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-luis-manuel-urbaneja-achelpolh">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луис Мануэль Урбанеха Ачельполь</h3>
+                  <p class="author-role">Классик национального креолизма, автор первого панамерикански премированного романа Венесуэлы · <span class="tabular">1873–1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из ведущих авторов знаменитого журнала «Эль Кохо Илустрадо», посвятивший своё творчество земле, сельскому труду и народным типам.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-en-este-pais">
+                  <div class="work-row">
+                    <span class="work-code">ВН-02.04</span>
+                    <a class="work-link" href="./works/urbanecha-achelpol-v-etoj-strane.html">В этой самой стране!.. («¡En este país!..»)</a>
+                    <span class="work-meta">1920 · Реалистический роман</span>
+                  </div>
+                  <p class="work-summary">История любви дочери аристократов Хосефины и крестьянского сына Пауло Гуарипо, возвышающегося благодаря упорству и военным переменам начала XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-rafael-pocaterra">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Рафаэль Покатерра</h3>
+                  <p class="author-role">Мастер сурового социального рассказа и свидетель эпохи диктатуры Гомеса · <span class="tabular">1889–1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, переживший застенки тюрьмы Ла-Ротунда, чьи новеллы и мемуары отличаются бескомпромиссной правдивостью и лаконичной силой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cuentos-grotescos-memorias">
+                  <div class="work-row">
+                    <span class="work-code">ВН-02.05</span>
+                    <a class="work-link" href="./works/pokaterra-grotesknye-rasskazy.html">Гротескные рассказы и «Воспоминания венесуэльца эпохи упадка»</a>
+                    <span class="work-meta">1922 / 1927 · Новеллистика и тюремная хроника</span>
+                  </div>
+                  <p class="work-summary">Беспощадные картины провинциального мещанства и каракасской бюрократии в новеллах и страшное свидетельство политического узника о казематах Хуана Висенте Гомеса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ramon-diaz-sanchez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рамон Диас Санчес</h3>
+                  <p class="author-role">Писатель, открывший тему «чёрного золота» и афро-венесуэльской культуры · <span class="tabular">1903–1968</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из Пуэрто-Кабельо, журналист и романист, запечатлевший потрясение традиционного уклада в нефтяных посёлках у озера Маракайбо.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mene">
+                  <div class="work-row">
+                    <span class="work-code">ВН-02.06</span>
+                    <a class="work-link" href="./works/dias-sanches-mene.html">Мене («Mene»)</a>
+                    <span class="work-meta">1936 · Социальный «нефтяной» роман</span>
+                  </div>
+                  <p class="work-summary">Первый крупный роман о рождении нефтяной Венесуэлы: тихий рыбацкий берег Сулии за несколько лет превращается в горящий нефтяными вышками и грохочущий стан.</p>
+                </li>
+                <li class="work-item" id="work-cumboto">
+                  <div class="work-row">
+                    <span class="work-code">ВН-02.07</span>
+                    <a class="work-link" href="./works/dias-sanches-kumboto.html">Кумбото («Cumboto»)</a>
+                    <span class="work-meta">1950 · Роман о кокосовой асьенде и культурной памяти</span>
+                  </div>
+                  <p class="work-summary">Повествование старого чернокожего слуги Нативидада о судьбе плантации Кумбото, музыке барабанов, любви и переплетении судеб хозяев и потомков невольников.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ve-llanos-gallegos">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1920–1955</p>
+          <h2 class="section-title">Эпос льяносов, Ромуло Гальегос и голос Тересы де ла Парры</h2>
+          <p class="section-desc">Золотой век классического венесуэльского романа: бескрайние льяносы и сельва Ориноко в прозе Гальегоса, тонкий женский взгляд Тересы де ла Парры, исторический роман Услара Пьетри и поэтика фантастического у Гармендии.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-romulo-gallegos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ромуло Гальегос</h3>
+                  <p class="author-role">Классик мировой латиноамериканской прозы, автор эпопеи «Донья Барбара» · <span class="tabular">1884–1969</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист, педагог и первый свободно избранный президент Венесуэлы, создавший символический образ противостояния человека и первозданной стихии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dona-barbara">
+                  <div class="work-row">
+                    <span class="work-code">ВН-03.01</span>
+                    <a class="work-link" href="./works/gallegos-donya-barbara.html">Донья Барбара («Doña Bárbara»)</a>
+                    <span class="work-meta">1929 · Роман-эпопея льяносов</span>
+                  </div>
+                  <p class="work-summary">Одна из величайших книг Латинской Америки: противостояние образованного юриста Сантоса Лусардо и грозной владычицы саванны Апуре доньи Барбары — драма цивилизации, закона и стихийной власти.</p>
+                </li>
+                <li class="work-item" id="work-canaima">
+                  <div class="work-row">
+                    <span class="work-code">ВН-03.02</span>
+                    <a class="work-link" href="./works/gallegos-kanajma.html">Канайма («Canaima»)</a>
+                    <span class="work-meta">1935 · Роман о сельве Ориноко</span>
+                  </div>
+                  <p class="work-summary">Путь Маркоса Варгаса в глубь гигантских лесов Гайаны и золотых приисков, где человек оказывается один на один с тёмным духом тропического леса — Канаймой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-teresa-de-la-parra">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тереса де ла Парра</h3>
+                  <p class="author-role">Реформатор венесуэльской прозы, тончайший психолог женского внутреннего мира · <span class="tabular">1889–1936</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писательница аристократического круга, сломавшая каноны мужской эпической традиции и создавшая живую, ироничную и лиричную прозу памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ifigenia">
+                  <div class="work-row">
+                    <span class="work-code">ВН-03.03</span>
+                    <a class="work-link" href="./works/de-la-parra-ifigeniya.html">Ифигения («Ifigenia: Diario de una señorita que escribió porque se fastidiaba»)</a>
+                    <span class="work-meta">1924 · Дневниково-эпистолярный роман</span>
+                  </div>
+                  <p class="work-summary">Исповедь вернувшейся из Парижа молодой каракаски Марии Эухении Алонсо, чьи остроумие и жажда свободы приносятся в жертву косным семейным условностям.</p>
+                </li>
+                <li class="work-item" id="work-memorias-de-mama-blanca">
+                  <div class="work-row">
+                    <span class="work-code">ВН-03.04</span>
+                    <a class="work-link" href="./works/de-la-parra-memuary-mamy-blanki.html">Мемуары мамы Бланки («Las memorias de Mamá Blanca»)</a>
+                    <span class="work-meta">1929 · Лирический роман воспоминаний</span>
+                  </div>
+                  <p class="work-summary">Светлые воспоминания о беззаботном детстве шести сестёр на сахарной асьенде Пьедра-Асуль конца XIX века, наполненные теплом, юмором и ароматом старинного дома.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-arturo-uslar-pietri">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Артуро Услар Пьетри</h3>
+                  <p class="author-role">Классик исторического романа и один из первых теоретиков «магического реализма» · <span class="tabular">1906–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат Премии Сервантеса, дипломат и энциклопедист, обновивший венесуэльскую историческую прозу яркой образностью авангарда.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-las-lanzas-coloradas">
+                  <div class="work-row">
+                    <span class="work-code">ВН-03.05</span>
+                    <a class="work-link" href="./works/uslar-petri-alye-kopya.html">Алые копья («Las lanzas coloradas»)</a>
+                    <span class="work-meta">1931 · Историко-авангардный роман</span>
+                  </div>
+                  <p class="work-summary">События 1814 года и жестокая кампания Бовеса показаны не с трибуны генералов, а глазами обитателей сожжённого поместья и восставшего раба Презентасьона Кампоса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-enrique-bernardo-nunez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Энрике Бернардо Нуньес</h3>
+                  <p class="author-role">Мастер поэтико-исторического романа и официальный летописец Каракаса · <span class="tabular">1895–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и эссеист, соединивший пласты доколумбовой мифологии, конкисты и современной эпохи в сжатой, загадочной прозе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cubagua">
+                  <div class="work-row">
+                    <span class="work-code">ВН-03.06</span>
+                    <a class="work-link" href="./works/nunes-kubagua.html">Кубагуа («Cubagua»)</a>
+                    <span class="work-meta">1931 · Мифопоэтический роман</span>
+                  </div>
+                  <p class="work-summary">Инженер Рамон Лейсеага прибывает на пустынный жемчужный остров Кубагуа, где границы времени стираются, и конкиста XVI века переплетается с настоящим.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-julio-garmendia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хулио Гармендия</h3>
+                  <p class="author-role">Первопроходец фантастического и метафизического рассказа в Венесуэле · <span class="tabular">1898–1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дипломат и писатель-одиночка, предвосхитивший в 1920-е годы латиноамериканскую фантастическую прозу мягкой иронией и парадоксом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-tienda-de-munecos">
+                  <div class="work-row">
+                    <span class="work-code">ВН-03.07</span>
+                    <a class="work-link" href="./works/garmendiya-kukolnaya-lavka.html">Кукольная лавка («La tienda de muñecos»)</a>
+                    <span class="work-meta">1927 · Сборник фантастических рассказов</span>
+                  </div>
+                  <p class="work-summary">Восемь изящных новелл о говорящих игрушках, вымышленной стране нереализованных душ и «Повести о выдуманных существах», освободивших рассказ от бытописания.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-guillermo-meneses">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гильермо Менесес</h3>
+                  <p class="author-role">Реформатор повествовательной техники середины XX века · <span class="tabular">1911–1978</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, дипломат и автор «Руки у стены», перенёсший действие в городские портовые кварталы, сознание и игру зеркал.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-falso-cuaderno-de-narciso-espejo">
+                  <div class="work-row">
+                    <span class="work-code">ВН-03.08</span>
+                    <a class="work-link" href="./works/meneses-falshivaya-tetrad.html">Фальшивая тетрадь Нарсисо Эспехо («El falso cuaderno de Narciso Espejo»)</a>
+                    <span class="work-meta">1952 · Интеллектуально-экспериментальный роман</span>
+                  </div>
+                  <p class="work-summary">Роман-расследование о двойниках, подмене воспоминаний и рождении писателя, открывший в Венесуэле дорогу модернистской прозе XX века.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ve-poetry-xx">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1918–1995</p>
+          <h2 class="section-title">Поэзия XX века: от авангарда до Рафаэля Каденаса и Монтехо</h2>
+          <p class="section-desc">Загадочные стихотворения в прозе Хосе Антонио Рамоса Сукре, народная песня Андреса Элоя Бланко, миф об иммигранте у Хербаси, сдержанная глубина Рафаэля Каденаса и «алфавит мира» Эухенио Монтехо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-jose-antonio-ramos-sucre">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Антонио Рамос Сукре</h3>
+                  <p class="author-role">Культовая фигура венесуэльской поэзии, мастер мрачного стихотворения в прозе · <span class="tabular">1890–1930</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Эрудит и полиглот из Куманы, открывший для испаноязычной поэзии XX века плотный, чеканный стих в прозе, полный средневековых, античных и сновидческих видений.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-torre-de-timon">
+                  <div class="work-row">
+                    <span class="work-code">ВН-04.01</span>
+                    <a class="work-link" href="./works/ramos-sukre-bashnya-timona.html">Башня Тимона («La torre de Timón»)</a>
+                    <span class="work-meta">1925 · Стихотворения в прозе</span>
+                  </div>
+                  <p class="work-summary">Книга отточенных миниатюр, в которых отшельник из башни созерцает историю, одиночество, руины империй и тёмную бездну человеческого духа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-andres-eloy-blanco">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Андрес Элой Бланко</h3>
+                  <p class="author-role">Всенародно любимый поэт Венесуэлы, голос поколения 1928 года · <span class="tabular">1896–1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, сатирик и политический трибун, умерший в изгнании в Мексике; его строки («Нарисуй мне ангелочков») стали частью народного фольклора.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-giraluna">
+                  <div class="work-row">
+                    <span class="work-code">ВН-04.02</span>
+                    <a class="work-link" href="./works/eloj-blanko-hiraluna.html">Хиралуна («Giraluna»)</a>
+                    <span class="work-meta">1955 · Сборник лирической поэзии</span>
+                  </div>
+                  <p class="work-summary">Итоговая книга поэта, написанная в изгнании и обращённая к детям, жене и далёкой родине с нежностью, достоинством и прозрачной музыкой испанского романсеро.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vicente-gerbasi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Висенте Хербаси</h3>
+                  <p class="author-role">Один из главных лириков XX века, участник группы «Вьернес» · <span class="tabular">1913–1992</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын итальянского переселенца, выросший в долине Каноабо, создавший магический образ тропической ночи и пути странника-отца.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mi-padre-el-inmigrante">
+                  <div class="work-row">
+                    <span class="work-code">ВН-04.03</span>
+                    <a class="work-link" href="./works/herbasi-moj-otec-emigrant.html">Мой отец, эмигрант («Mi padre, el inmigrante»)</a>
+                    <span class="work-meta">1945 · Лирическая поэма</span>
+                  </div>
+                  <p class="work-summary">Вершина венесуэльской поэзии XX века: тридцать песен-строф о судьбе итальянца, приплывшего к жарким берегам Венесуэлы и растворившегося в её свете и смерти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juan-sanchez-pelaez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Санчес Пелаэс</h3>
+                  <p class="author-role">Мастер сюрреалистической интимной лирики, предтеча поэзии 1960-х · <span class="tabular">1922–2003</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт глубокой внутренней свободы, соединивший сюрреалистическую метафору с ранимостью, нежностью и острой музыкальностью речи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-elena-y-los-elementos">
+                  <div class="work-row">
+                    <span class="work-code">ВН-04.04</span>
+                    <a class="work-link" href="./works/sanches-pelaes-elena-i-stihii.html">Елена и стихии («Elena y los elementos»)</a>
+                    <span class="work-meta">1951 · Сборник лирики</span>
+                  </div>
+                  <p class="work-summary">Дебютная книга, совершившая тихую революцию в венесуэльском стихе: любовь, воздух, вода и детское изумление сплавляются в ослепительные образы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rafael-cadenas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рафаэль Каденас</h3>
+                  <p class="author-role">Классик испаноязычной поэзии и эссеистики, лауреат Премии Сервантеса · <span class="tabular">род. 1930</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт сдержанности, созерцания и точности слова, автор культового стихотворения «Поражение» («Derrota») и хранитель гражданской и духовной ясности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-derrota-intemperie">
+                  <div class="work-row">
+                    <span class="work-code">ВН-04.05</span>
+                    <a class="work-link" href="./works/kadenas-porazhenie-nenaste.html">Поражение («Derrota») и «Ненастье» («Intemperie»)</a>
+                    <span class="work-meta">1963 / 1977 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Исповедальный монолог поколения 1960-х, отказавшегося от пафоса и героической риторики ради трезвого, честного взгляда на себя и на бытие.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eugenio-montejo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эухенио Монтехо</h3>
+                  <p class="author-role">Поэт и мастер гетеронимов, певец земного бытия и света · <span class="tabular">1938–2008</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Каракаса и Валенсии, автор гетеронима Бласа Коль, соединяющий латиноамериканскую природу с философской ясностью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-alfabeto-del-mundo">
+                  <div class="work-row">
+                    <span class="work-code">ВН-04.06</span>
+                    <a class="work-link" href="./works/montejo-alfavit-mira.html">Алфавит мира («Alfabeto del mundo»)</a>
+                    <span class="work-meta">1988 · Сборник стихов</span>
+                  </div>
+                  <p class="work-summary">Итоговая антология лирики о птицах, деревьях, времени и реке, где каждая земная вещь читается как буква вечного мирового алфавита.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hanni-ossott">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ханни Оссот</h3>
+                  <p class="author-role">Крупнейшая поэтесса и эссеистка венесуэльского постмодерна · <span class="tabular">1946–2002</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Переводчица Рильке и Эмили Дикинсон, профессор Центрального университета Венесуэлы, создавшая поэзию на грани света, тела и небытия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hasta-que-llegue-la-muerte">
+                  <div class="work-row">
+                    <span class="work-code">ВН-04.07</span>
+                    <a class="work-link" href="./works/ossot-poka-ne-pridet-smert.html">До тех пор, пока не придёт смерть («Hasta que llegue la muerte»)</a>
+                    <span class="work-meta">1987 · Лирический сборник</span>
+                  </div>
+                  <p class="work-summary">Проникновенная книга о хрупкости плоти, доме как убежище памяти, боли и упрямой преданности поэтическому голосу.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ve-oil-urban-boom">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1949–1995</p>
+          <h2 class="section-title">Нефтяной век, городская проза и бунт второй половины XX века</h2>
+          <p class="section-desc">Превращение тихого Каракаса в бурный мегаполис и драма исторической памяти в романах Мигеля Отеро Сильвы, Сальвадора Гармендии, Адриано Гонсалеса Леона и Хосе Бальсы.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-antonia-palacios">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антония Паласиос</h3>
+                  <p class="author-role">Первая женщина — лауреат Национальной премии Венесуэлы по литературе · <span class="tabular">1904–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка и наставница молодых писателей в знаменитой мастерской «Калико», введшая в венесуэльскую прозу тонкую музыку женского взросления.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ana-isabel-una-nina-decente">
+                  <div class="work-row">
+                    <span class="work-code">ВН-05.01</span>
+                    <a class="work-link" href="./works/palasios-ana-isabel.html">Ана Исабель, порядочная девочка («Ana Isabel, una niña decente»)</a>
+                    <span class="work-meta">1949 · Лирический роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Мир старого Каракаса начала XX века глазами маленькой Аны Исабель, открывающей сословные запреты, дружбу и первые прикосновения взрослой тайны.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-miguel-otero-silva">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мигель Отеро Сильва</h3>
+                  <p class="author-role">Классик социального и исторического романа, поэт и основатель газеты «Эль Насьональ» · <span class="tabular">1908–1985</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Участник студенческого протеста 1928 года, общественный деятель и один из самых переводимых в мире венесуэльских романистов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-casas-muertas">
+                  <div class="work-row">
+                    <span class="work-code">ВН-05.02</span>
+                    <a class="work-link" href="./works/otero-silva-mertvye-doma.html">Мёртвые дома («Casas muertas»)</a>
+                    <span class="work-meta">1955 · Социальный роман</span>
+                  </div>
+                  <p class="work-summary">Реквием по умирающему от малярии и запустения старому городку Ортису: жители бегут к нефтяным вышкам Востока, оставляя тихие стены во власти зарослей.</p>
+                </li>
+                <li class="work-item" id="work-lope-de-aguirre">
+                  <div class="work-row">
+                    <span class="work-code">ВН-05.03</span>
+                    <a class="work-link" href="./works/otero-silva-lope-de-agirre.html">Лопе де Агирре, князь свободы («Lope de Aguirre, Príncipe de la Libertad»)</a>
+                    <span class="work-meta">1979 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Монументальная психологическая эпопея о мятежном конкистадоре XVI века, спустившемся по Амазонке и бросившем вызов испанской короне.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-salvador-garmendia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сальвадор Гармендия</h3>
+                  <p class="author-role">Создатель современной городской прозы Венесуэлы · <span class="tabular">1928–2001</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из лидеров авангардной группы «Сардио», перенёсший фокус литературы с сельвы и льяносов в душные конторы, кафе и бетонные лабиринты Каракаса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-pequenos-seres">
+                  <div class="work-row">
+                    <span class="work-code">ВН-05.04</span>
+                    <a class="work-link" href="./works/garmendiya-malenkie-sushchestva.html">Маленькие существа («Los pequeños seres»)</a>
+                    <span class="work-meta">1959 · Урбанистический роман</span>
+                  </div>
+                  <p class="work-summary">Мелкий служащий Матео Мартан бродит по ночному Каракасу после смерти начальника, теряя почву под ногами в обезличенном водовороте нового мегаполиса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-adriano-gonzalez-leon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Адриано Гонсалес Леон</h3>
+                  <p class="author-role">Звезда «латиноамериканского бума», лауреат Премии Библиотеки Бреве · <span class="tabular">1931–2008</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Анд (Трухильо), участник группы «Эль Течо де ла Бальена», написавший один из главных романов бурных 1960-х годов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pais-portatil">
+                  <div class="work-row">
+                    <span class="work-code">ВН-05.05</span>
+                    <a class="work-link" href="./works/gonsales-leon-perenosnaya-rodina.html">Переносная родина («País portátil»)</a>
+                    <span class="work-meta">1968 · Экспериментальный роман-монтаж</span>
+                  </div>
+                  <p class="work-summary">Поездка молодого подпольщика Андреса Барасарте в каракасском автобусе с чемоданом динамита превращается в стремительный монтаж столетия венесуэльской истории его рода.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-oswaldo-trejo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Освальдо Трехо</h3>
+                  <p class="author-role">Радикальный новатор формы и словесного эксперимента · <span class="tabular">1924–1996</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и дипломат из Мериды, последовательно разрушавший линейный сюжет ради поэтики языка и многоголосия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-anden-lejano">
+                  <div class="work-row">
+                    <span class="work-code">ВН-05.06</span>
+                    <a class="work-link" href="./works/treho-dalekij-perron.html">Далёкий перрон («Andén lejano»)</a>
+                    <span class="work-meta">1968 · Авангардный роман</span>
+                  </div>
+                  <p class="work-summary">Сновидческое путешествие по вокзалам, комнатам детства и внутренним голосам, где сам язык становится главным героем повествования.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-balza">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Бальса</h3>
+                  <p class="author-role">Мастер интеллектуальной прозы, эссеистики и «упражнений повествования» · <span class="tabular">род. 1939</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выходец из дельты Ориноко, совместивший в своих романах память речной глубинки с аналитической музыкой современной культуры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-setecientas-palmeras">
+                  <div class="work-row">
+                    <span class="work-code">ВН-05.07</span>
+                    <a class="work-link" href="./works/balsa-semsot-palm.html">Семьсот пальм, посаженных на одном месте («Setecientas palmeras plantadas en el mismo lugar»)</a>
+                    <span class="work-meta">1974 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Сложная полифония античного мифа, современной жизни Каракаса и воспоминаний о дельте Ориноко через призму скульптурного образа Праксителя.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ve-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1990–XXI век</p>
+          <h2 class="section-title">Каракас на рубеже веков, память и новейшая венесуэльская литература</h2>
+          <p class="section-desc">Семейная история у Аны Тересы Торрес, лирика Иоланды Пантин, современная проза Альберто Барреры Тышки, Хуана Карлоса Мендеса Гедеса и романы новой диаспоры.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ana-teresa-torres">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ана Тереса Торрес</h3>
+                  <p class="author-role">Ведущая романистка и исследовательница национальной исторической памяти · <span class="tabular">род. 1945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Психолог и писательница, член Венесуэльской академии языка, обратившаяся к истории страны сквозь частные архивы и многовековые семейные тяжбы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dona-ines-contra-el-olvido">
+                  <div class="work-row">
+                    <span class="work-code">ВН-06.01</span>
+                    <a class="work-link" href="./works/torres-donya-ines.html">Донья Инес против забвения («Doña Inés contra el olvido»)</a>
+                    <span class="work-meta">1992 · Исторический роман-сага</span>
+                  </div>
+                  <p class="work-summary">Панорама трёх столетий венесуэльской истории через многолетнюю судебную тяжбу аристократки доньи Инес Вильегас за земли в долине Куриепе с освобождённым рабом Хуаном дель Росарио.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-yolanda-pantin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иоланда Пантин</h3>
+                  <p class="author-role">Крупнейшая современная поэтесса Венесуэлы, лауреат Премии Федерико Гарсиа Лорки · <span class="tabular">род. 1954</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Каракаса, основательница независимого издательства «Pequeña Venecia», чья лирика соединяет бытовую деталь с эпическим чувством истории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pais-pantin">
+                  <div class="work-row">
+                    <span class="work-code">ВН-06.02</span>
+                    <a class="work-link" href="./works/pantin-strana.html">Страна («País»)</a>
+                    <span class="work-meta">2007 · Сборник стихотворений</span>
+                  </div>
+                  <p class="work-summary">Поэтическая хроника дома, провинции и распадающейся реальности страны, написанная ясным, выверенным языком без малейшей фальши.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alberto-barrera-tyszka">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альберто Баррера Тышка</h3>
+                  <p class="author-role">Романист, поэт и колумнист, лауреат Премии Эрральде и Премии Тускетс · <span class="tabular">род. 1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и журналист, исследующий кризис частной и общественной жизни Каракаса начала XXI века с тонкой иронией и человеческой болью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-enfermedad">
+                  <div class="work-row">
+                    <span class="work-code">ВН-06.03</span>
+                    <a class="work-link" href="./works/barrera-tyshka-bolezn.html">Болезнь («La enfermedad»)</a>
+                    <span class="work-meta">2006 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Врач-онколог Андрес Миранда узнаёт о смертельном диагнозе своего отца и, пытаясь уберечь его от правды, вступает в мучительный диалог с отчаянием и надеждой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juan-carlos-mendez-guedez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Карлос Мендес Гедес</h3>
+                  <p class="author-role">Один из главных рассказчиков и романистов современной венесуэльской прозы · <span class="tabular">род. 1967</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Баркисимето, живущий в Мадриде, автор романов и новелл о памяти, изгнании, музыке и юморе повседневности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-una-tarde-con-campanas">
+                  <div class="work-row">
+                    <span class="work-code">ВН-06.04</span>
+                    <a class="work-link" href="./works/mendes-gedes-vecher-s-kolokolami.html">Вечер с колоколами («Una tarde con campanas»)</a>
+                    <span class="work-meta">2004 · Роман об эмиграции</span>
+                  </div>
+                  <p class="work-summary">Повествование венесуэльской семьи, переехавшей в Мадрид, о тонком переплетении воспоминаний, утраченных улиц и обретаемого нового голоса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rodrigo-blanco-calderon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Родриго Бланко Кальдерон</h3>
+                  <p class="author-role">Представитель нового поколения, лауреат Премии Марио Варгаса Льосы · <span class="tabular">род. 1981</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик и редактор, создавший многослойный роман о тёмном Каракасе времён блэкаутов и насилия XXI века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-night">
+                  <div class="work-row">
+                    <span class="work-code">ВН-06.05</span>
+                    <a class="work-link" href="./works/blanko-kalderon-noch.html">Ночь («The Night»)</a>
+                    <span class="work-meta">2016 · Детективно-психологический роман</span>
+                  </div>
+                  <p class="work-summary">На фоне веерных отключений электричества в Каракасе 2010 года переплетаются загадочные убийства женщин, палиндромы, психоанализ и хроника города, погружающегося во тьму.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-karina-sainz-borgo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карина Сайнс Борго</h3>
+                  <p class="author-role">Международно признанная романистка и культурный обозреватель · <span class="tabular">род. 1982</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналистка и писательница из Каракаса, чей дебютный роман стал мировым бестселлером, переведённым более чем на двадцать языков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-hija-de-la-espanola">
+                  <div class="work-row">
+                    <span class="work-code">ВН-06.06</span>
+                    <a class="work-link" href="./works/sajns-borgo-doch-ispanki.html">Дочь испанки («La hija de la española»)</a>
+                    <span class="work-meta">2019 · Драматический роман</span>
+                  </div>
+                  <p class="work-summary">После смерти матери молодая Аделаида Фалькон остаётся одна в охваченном хаосом Каракасе и вынуждена принять чужую личность, чтобы выжить и спастись.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-michelle-roche-rodriguez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мишель Рош Родригес</h3>
+                  <p class="author-role">Писательница, литературный критик и автор современной исторической готики · <span class="tabular">род. 1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Исследовательница культуры и прозаик, переосмыслившая историю Каракаса XX века через призму вампирской метафоры нефти и власти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-malasangre">
+                  <div class="work-row">
+                    <span class="work-code">ВН-06.07</span>
+                    <a class="work-link" href="./works/rosh-rodriges-durnaya-krov.html">Дурная кровь («Malasangre»)</a>
+                    <span class="work-meta">2020 · Историко-готический роман</span>
+                  </div>
+                  <p class="work-summary">В Каракасе 1920-х годов, охваченном первой нефтяной лихорадкой, юная Диана Гутьеррес открывает в себе проклятие вампиризма как зеркало хищной эпохи.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание венесуэльской литературы</span>
+    <span>© <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
