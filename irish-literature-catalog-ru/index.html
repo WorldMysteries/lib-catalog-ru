@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог ирландской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 19 писателей · 31 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог ирландской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от сатиры Свифта и эстетизма Уайльда до Ирландского возрождения Йейтса, модернизма Джойса, театра Беккета и лирики Шеймаса Хини.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#ie-enlightenment">Раздел I: Эпоха Просвещения и проза XVIII века</a>
+        <a href="#ie-gothic-aestheticism">Раздел II: Готика, эстетизм и драма конца XIX века</a>
+        <a href="#ie-literary-revival">Раздел III: Ирландское литературное возрождение</a>
+        <a href="#ie-dublin-modernism">Раздел IV: Дублинский модернизм</a>
+        <a href="#ie-absurd-midcentury">Раздел V: Театр абсурда и проза середины XX века</a>
+        <a href="#ie-late-twentieth-century">Раздел VI: Поэзия и роман конца XX — начала XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="ie-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1704–1800 годы</p>
+          <h2 class="section-title">Эпоха Просвещения и проза XVIII века</h2>
+          <p class="section-desc">Острая сатира Джонатана Свифта, комедии дублинской сцены и рождение ирландского регионального романа на рубеже XVIII–XIX столетий.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-swift">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джонатан Свифт</h3>
+                  <p class="author-role">Декан собора Святого Патрика в Дублине, великий сатирик · <span class="tabular">1667–1745</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Дублина и классик мировой сатирической прозы, соединивший беспощадную иронию над человеческой глупостью с защитой угнетённой Ирландии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gullivers-travels">
+                  <div class="work-row">
+                    <span class="work-code">ИР-01.01</span>
+                    <a class="work-link" href="./works/swift-puteshestviya-gullivera.html">Путешествия Гулливера</a>
+                    <span class="work-meta">1726 · Сатирический роман</span>
+                  </div>
+                  <p class="work-summary">Четыре путешествия корабельного врача Лемюэля Гулливера — в Лилипутию, Бробдингнег, Лапуту и страну гуигнгнмов — как зеркало политики и природы человека.</p>
+                </li>
+                <li class="work-item" id="work-tale-of-a-tub">
+                  <div class="work-row">
+                    <span class="work-code">ИР-01.02</span>
+                    <a class="work-link" href="./works/swift-skazka-bochki.html">Сказка бочки</a>
+                    <span class="work-meta">1704 · Сатирическая аллегория</span>
+                  </div>
+                  <p class="work-summary">Аллегория о трёх братьях — Петре, Мартине и Джеке — и отцовском наследстве, высмеивающая религиозный фанатизм и схоластическую учёность.</p>
+                </li>
+                <li class="work-item" id="work-modest-proposal">
+                  <div class="work-row">
+                    <span class="work-code">ИР-01.03</span>
+                    <a class="work-link" href="./works/swift-skromnoe-predlozhenie.html">Скромное предложение</a>
+                    <span class="work-meta">1729 · Сатирический памфлет</span>
+                  </div>
+                  <p class="work-summary">Эталон чёрного политического сарказма: хладнокровная «экономическая» защита бедняков Дублина от равнодушия властей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-goldsmith">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Оливер Голдсмит</h3>
+                  <p class="author-role">Поэт, романист и драматург · <span class="tabular">1728–1774</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Выпускник Тринити-колледжа в Дублине, прославившийся светлым юмором, сочувствием к простым людям и изяществом слога.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-vicar-of-wakefield">
+                  <div class="work-row">
+                    <span class="work-code">ИР-01.04</span>
+                    <a class="work-link" href="./works/goldsmith-vekfildskiy-svyashchennik.html">Векфильдский священник</a>
+                    <span class="work-meta">1766 · Сентиментальный роман</span>
+                  </div>
+                  <p class="work-summary">История добродушного пастора Чарльза Примроза и его семьи, стойко переносящих череду житейских бед и разорений.</p>
+                </li>
+                <li class="work-item" id="work-she-stoops-to-conquer">
+                  <div class="work-row">
+                    <span class="work-code">ИР-01.05</span>
+                    <a class="work-link" href="./works/goldsmith-noch-oshibok.html">Ночь ошибок (Она унизилась, чтобы победить)</a>
+                    <span class="work-meta">1773 · Комедия</span>
+                  </div>
+                  <p class="work-summary">Искромётная комедия путаницы, в которой застенчивый лондонский джентльмен принимает усадьбу невесты за придорожный трактир.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sheridan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ричард Бринсли Шеридан</h3>
+                  <p class="author-role">Блестящий мастер комедии нравов · <span class="tabular">1751–1816</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Дублина, подаривший англоязычной сцене остроумнейшие комедии XVIII века о светском лицемерии и сплетнях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-school-for-scandal">
+                  <div class="work-row">
+                    <span class="work-code">ИР-01.06</span>
+                    <a class="work-link" href="./works/sheridan-shkola-zlosloviya.html">Школа злословия</a>
+                    <span class="work-meta">1777 · Комедия</span>
+                  </div>
+                  <p class="work-summary">Обличение салонного злословия и ханжества на примере двух братьев — повесы Чарльза и лицемера Джозефа Серфеса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-edgeworth">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мария Эджуорт</h3>
+                  <p class="author-role">Создательница ирландского историко-бытового романа · <span class="tabular">1768–1849</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница, вдохновившая Вальтера Скотта и Тургенева живым изображением жизни ирландских поместий и крестьян.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-castle-rackrent">
+                  <div class="work-row">
+                    <span class="work-code">ИР-01.07</span>
+                    <a class="work-link" href="./works/edgeworth-zamok-rekrent.html">Замок Рэкрент</a>
+                    <span class="work-meta">1800 · Сатирическая хроника</span>
+                  </div>
+                  <p class="work-summary">Летопись разорения четырёх поколений ирландских лендлордов глазами лукавого старого слуги Тади Куирка.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ie-gothic-aestheticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1864–1900 годы</p>
+          <h2 class="section-title">Готика, эстетизм и драма конца XIX века</h2>
+          <p class="section-desc">Ирландская готическая традиция Ле Фаню и Брэма Стокера и блистательный дублинский парадокс Оскара Уайльда.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-wilde">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Оскар Уайльд</h3>
+                  <p class="author-role">Классик эстетизма, романист и драматург · <span class="tabular">1854–1900</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Дублина, превративший парадокс, изысканный стиль и спор искусства с моралью в вершину словесности рубежа веков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dorian-gray">
+                  <div class="work-row">
+                    <span class="work-code">ИР-02.01</span>
+                    <a class="work-link" href="./works/wilde-portret-doriana-greya.html">Портрет Дориана Грея</a>
+                    <span class="work-meta">1890 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">История юного красавца Дориана Грея, чей портрет кисти Бэзила Холлуорда берёт на себя бремя его старения и душевного падения.</p>
+                </li>
+                <li class="work-item" id="work-importance-of-being-earnest">
+                  <div class="work-row">
+                    <span class="work-code">ИР-02.02</span>
+                    <a class="work-link" href="./works/wilde-kak-vazhno-byt-seryoznym.html">Как важно быть серьёзным</a>
+                    <span class="work-meta">1895 · Комедия-фарс</span>
+                  </div>
+                  <p class="work-summary">Блестящая комедия о двух лондонских денди, выдумавших несуществующих друзей ради свободы от светских обязательств.</p>
+                </li>
+                <li class="work-item" id="work-canterville-ghost">
+                  <div class="work-row">
+                    <span class="work-code">ИР-02.03</span>
+                    <a class="work-link" href="./works/wilde-kentervilskoe-prividenie.html">Кентервильское привидение</a>
+                    <span class="work-meta">1887 · Новелла</span>
+                  </div>
+                  <p class="work-summary">Ироничная история старинного английского призрака сэра Симона, столкнувшегося с прагматичной американской семьёй Отисов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-stoker">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Брэм Стокер</h3>
+                  <p class="author-role">Создатель классического готического романа · <span class="tabular">1847–1912</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дублинский писатель и театральный антрепренёр, соединивший фольклор, эпистолярную форму и викторианские страхи в легендарном романе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dracula">
+                  <div class="work-row">
+                    <span class="work-code">ИР-02.04</span>
+                    <a class="work-link" href="./works/stoker-drakula.html">Дракула</a>
+                    <span class="work-meta">1897 · Готический роман</span>
+                  </div>
+                  <p class="work-summary">Дневники, письма и хроники борьбы Джонатана Харкера, Мины Мюррей и профессора Ван Хельсинга против древнего графа из Трансильвании.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-le-fanu">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джозеф Шеридан Ле Фаню</h3>
+                  <p class="author-role">Мастер таинственной и мистической новеллы · <span class="tabular">1814–1873</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дублинский прозаик, заложивший психологические основы литературы о призраках, тайнах старинных усадеб и вампиризме.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-carmilla">
+                  <div class="work-row">
+                    <span class="work-code">ИР-02.05</span>
+                    <a class="work-link" href="./works/le-fanu-karmilla.html">Кармилла</a>
+                    <span class="work-meta">1872 · Готическая повесть</span>
+                  </div>
+                  <p class="work-summary">Поэтическая и тревожная повесть о загадочной гостье Кармилле в уединённом штирийском замке.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ie-literary-revival">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1889–1939 годы</p>
+          <h2 class="section-title">Ирландское литературное возрождение</h2>
+          <p class="section-desc">Возвращение кельтских мифов, основание дублинского театра Аббатства и расцвет национальной поэзии и драматургии.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-yeats">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уильям Батлер Йейтс</h3>
+                  <p class="author-role">Величайший поэт Ирландии, лауреат Нобелевской премии · <span class="tabular">1865–1939</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Лидер Ирландского возрождения и первый ирландский Нобелевский лауреат по литературе (1923), прошедший путь от кельтской романтики к суровой символической поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-tower">
+                  <div class="work-row">
+                    <span class="work-code">ИР-03.01</span>
+                    <a class="work-link" href="./works/yeats-bashnya.html">Башня</a>
+                    <span class="work-meta">1928 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Вершина поздней лирики Йейтса («Плавание в Византию», «Леда и лебедь», «Среди школьниц»): размышление о старости, искусстве и истории.</p>
+                </li>
+                <li class="work-item" id="work-wild-swans-at-coole">
+                  <div class="work-row">
+                    <span class="work-code">ИР-03.02</span>
+                    <a class="work-link" href="./works/yeats-dikie-lebedi.html">Дикие лебеди в Куле</a>
+                    <span class="work-meta">1919 · Сборник стихов</span>
+                  </div>
+                  <p class="work-summary">Элегии о быстротечности времени, красоте западной Ирландии и переменах после Пасхального восстания.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-synge">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джон Миллингтон Синг</h3>
+                  <p class="author-role">Драматург театра Аббатства и певец Аранских островов · <span class="tabular">1871–1909</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель поэтического народного театра, перенёсший на сцену живую музыку речи крестьян западной Ирландии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-playboy-of-the-western-world">
+                  <div class="work-row">
+                    <span class="work-code">ИР-03.03</span>
+                    <a class="work-link" href="./works/synge-udaloy-molodec.html">Удалой молодец — гордость Запада</a>
+                    <span class="work-meta">1907 · Комедия в 3 актах</span>
+                  </div>
+                  <p class="work-summary">История застенчивого юноши Кристи Мэхона, который становится героем глухой деревушки в графстве Мейо благодаря легенде о собственном бунте.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-shaw">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джордж Бернард Шоу</h3>
+                  <p class="author-role">Мастер интеллектуальной драмы, лауреат Нобелевской премии · <span class="tabular">1856–1950</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Дублина и крупнейший драматург-сатирик XX века, превративший театр в арену острых идейных споров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pygmalion">
+                  <div class="work-row">
+                    <span class="work-code">ИР-03.04</span>
+                    <a class="work-link" href="./works/shaw-pigmalion.html">Пигмалион</a>
+                    <span class="work-meta">1913 · Пьеса-роман</span>
+                  </div>
+                  <p class="work-summary">Остроумная история о профессоре фонетики Генри Хиггинсе, заключившем пари превратить уличную цветочницу Элизу Дулиттл в светскую леди.</p>
+                </li>
+                <li class="work-item" id="work-heartbreak-house">
+                  <div class="work-row">
+                    <span class="work-code">ИР-03.05</span>
+                    <a class="work-link" href="./works/shaw-dom-serdets.html">Дом, где разбиваются сердца</a>
+                    <span class="work-meta">1919 · Драма</span>
+                  </div>
+                  <p class="work-summary">«Фантазия в русском стиле на английские темы» — притча о праздной европейской элите накануне бури.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ocasey">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шон О’Кейси</h3>
+                  <p class="author-role">Мастер дублинской трагикомедии · <span class="tabular">1880–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Драматург рабочих кварталов Дублина, показавший цену гражданской войны через судьбы обычных семей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-juno-and-the-paycock">
+                  <div class="work-row">
+                    <span class="work-code">ИР-03.06</span>
+                    <a class="work-link" href="./works/ocasey-yunona-i-pavlin.html">Юнона и павлин</a>
+                    <span class="work-meta">1924 · Трагикомедия</span>
+                  </div>
+                  <p class="work-summary">История дублинской семьи Бойлов в 1922 году, где смех и хвастовство «капитана» Бойла соседствуют с трагедией.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ie-dublin-modernism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1914–1939 годы</p>
+          <h2 class="section-title">Дублинский модернизм</h2>
+          <p class="section-desc">Художественная революция XX века: поток сознания и мифология обыденного дня у Джеймса Джойса, метапроза и абсурд Флэнна О’Брайена.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-joyce">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джеймс Джойс</h3>
+                  <p class="author-role">Ключевой реформатор романа XX века · <span class="tabular">1882–1941</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Дублинец, живший в Триесте, Цюрихе и Париже, но посвятивший все свои книги родному городу — от «Дублинцев» до «Улисса».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ulysses">
+                  <div class="work-row">
+                    <span class="work-code">ИР-04.01</span>
+                    <a class="work-link" href="./works/joyce-uliss.html">Улисс</a>
+                    <span class="work-meta">1922 · Модернистский роман</span>
+                  </div>
+                  <p class="work-summary">Один день из жизни Дублина — 16 июня 1904 года: странствия Леопольда Блума, Стивена Дедала и монолог Молли Блум как новая «Одиссея».</p>
+                </li>
+                <li class="work-item" id="work-dubliners">
+                  <div class="work-row">
+                    <span class="work-code">ИР-04.02</span>
+                    <a class="work-link" href="./works/joyce-dublincy.html">Дублинцы</a>
+                    <span class="work-meta">1914 · Цикл из 15 рассказов</span>
+                  </div>
+                  <p class="work-summary">Тончайшие психологические новеллы о застывшей повседневности Дублина и внезапных «эпифаниях» — прозрениях героев, завершающиеся рассказом «Мёртвые».</p>
+                </li>
+                <li class="work-item" id="work-portrait-of-the-artist">
+                  <div class="work-row">
+                    <span class="work-code">ИР-04.03</span>
+                    <a class="work-link" href="./works/joyce-portret-hudozhnika.html">Портрет художника в юности</a>
+                    <span class="work-meta">1916 · Роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Становление молодого поэта Стивена Дедала, его бунт против семьи, церкви и провинциализма ради свободы творчества.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-flann-obrien">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Флэнн О’Брайен (Брайан О’Нолан)</h3>
+                  <p class="author-role">Мастер постмодернистского гротеска и игры · <span class="tabular">1911–1966</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Блистательный дублинский сатирик, написавший «роман в романе», где вымышленные герои восстают против собственного автора.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-at-swim-two-birds">
+                  <div class="work-row">
+                    <span class="work-code">ИР-04.04</span>
+                    <a class="work-link" href="./works/obrien-o-vodoplavayushchih.html">О водоплавающих</a>
+                    <span class="work-meta">1939 · Метароман</span>
+                  </div>
+                  <p class="work-summary">Ленивый дублинский студент сочиняет книгу о писателе Треллисе, чьи персонажи — от ковбоев до древнеирландского героя Финна Маккула — устраивают суд над создателем.</p>
+                </li>
+                <li class="work-item" id="work-the-third-policeman">
+                  <div class="work-row">
+                    <span class="work-code">ИР-04.05</span>
+                    <a class="work-link" href="./works/obrien-tretiy-policeyskiy.html">Третий полицейский</a>
+                    <span class="work-meta">1967 · Абсурдистский роман</span>
+                  </div>
+                  <p class="work-summary">Сюрреалистическое путешествие по ирландской глубинке, полной велосипедов, загадочных полицейских участков и «атомной теории».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ie-absurd-midcentury">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1938–1960 годы</p>
+          <h2 class="section-title">Театр абсурда и проза середины XX века</h2>
+          <p class="section-desc">Мировая драматургия и роман экзистенциального одиночества Сэмюэла Беккета, тонкая психологическая проза Элизабет Боуэн и тюремные мемуары Биэна.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-beckett">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сэмюэл Беккет</h3>
+                  <p class="author-role">Классик театра абсурда, лауреат Нобелевской премии · <span class="tabular">1906–1989</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Дублина и лауреат Нобелевской премии 1969 года, сведший драму и прозу к предельным вопросам человеческого ожидания и речи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-waiting-for-godot">
+                  <div class="work-row">
+                    <span class="work-code">ИР-05.01</span>
+                    <a class="work-link" href="./works/beckett-v-ozhidanii-godo.html">В ожидании Годо</a>
+                    <span class="work-meta">1953 · Трагикомедия в 2 актах</span>
+                  </div>
+                  <p class="work-summary">Двое бродяг, Владимир и Эстрагон, стоят у одинокого дерева на просёлочной дороге, ожидая таинственного Годо, который так и не приходит.</p>
+                </li>
+                <li class="work-item" id="work-molloy">
+                  <div class="work-row">
+                    <span class="work-code">ИР-05.02</span>
+                    <a class="work-link" href="./works/beckett-molloy.html">Моллой</a>
+                    <span class="work-meta">1951 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Первая часть знаменитой трилогии Беккета: два перекликающихся монолога — бродяги Моллоя и сыщика Морана, постепенно теряющего прежнюю определённость.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bowen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Элизабет Боуэн</h3>
+                  <p class="author-role">Мастер психологической прозы англо-ирландской традиции · <span class="tabular">1899–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романистка из Корка и Дублина, запечатлевшая тонкие оттенки чувства, утраты и атмосферы больших домов и военного Лондона.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-death-of-the-heart">
+                  <div class="work-row">
+                    <span class="work-code">ИР-05.03</span>
+                    <a class="work-link" href="./works/bowen-smert-serdca.html">Смерть сердца</a>
+                    <span class="work-meta">1938 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">История шестнадцатилетней сироты Порции, оказавшейся в холодном и ироничном доме своего сводного брата в Риджентс-парке.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-behan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Брендан Биэн</h3>
+                  <p class="author-role">Драматург, поэт и бунтарь дублинской сцены · <span class="tabular">1923–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, соединивший народный юмор, дублинские баллады и суровый опыт политического заключения.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-borstal-boy">
+                  <div class="work-row">
+                    <span class="work-code">ИР-05.04</span>
+                    <a class="work-link" href="./works/behan-paren-iz-borstala.html">Парень из Борстала</a>
+                    <span class="work-meta">1958 · Автобиографический роман</span>
+                  </div>
+                  <p class="work-summary">Живой и человечный рассказ о юности шестнадцатилетнего ирландца в английском исправительном заведении.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="ie-late-twentieth-century">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1966–2009 годы</p>
+          <h2 class="section-title">Поэзия и роман конца XX — начала XXI века</h2>
+          <p class="section-desc">Поэтическая археология земли и памяти у Нобелевского лауреата Шеймаса Хини и утончённая проза Джона Бэнвилла и Колма Тойбина.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-heaney">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шеймас Хини</h3>
+                  <p class="author-role">Поэт земли и памяти, лауреат Нобелевской премии 1995 года · <span class="tabular">1939–2013</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец графства Дерри, воспевший торфяники Северной Ирландии, ремёсла предков и нравственную ответственность поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-north">
+                  <div class="work-row">
+                    <span class="work-code">ИР-06.01</span>
+                    <a class="work-link" href="./works/heaney-sever.html">Север</a>
+                    <span class="work-meta">1975 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Знаменитый сборник «болотных поэм», связывающий древние находки из скандинавских и ирландских торфяников с трагедией Ольстера.</p>
+                </li>
+                <li class="work-item" id="work-death-of-a-naturalist">
+                  <div class="work-row">
+                    <span class="work-code">ИР-06.02</span>
+                    <a class="work-link" href="./works/heaney-smert-naturalista.html">Смерть натуралиста</a>
+                    <span class="work-meta">1966 · Сборник стихов</span>
+                  </div>
+                  <p class="work-summary">Дебютная книга о детстве на ферме в Моссбоне, запахе льна, работе отца с лопатой и открытии поэтического голоса.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-banville">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джон Бэнвилл</h3>
+                  <p class="author-role">Стилист современной ирландской прозы, лауреат Букера · <span class="tabular">род. 1945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист из Уэксфорда, знаменитый ювелирной точностью метафоры, темой памяти, искусства и тайны личности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-sea">
+                  <div class="work-row">
+                    <span class="work-code">ИР-06.03</span>
+                    <a class="work-link" href="./works/banville-more.html">Море</a>
+                    <span class="work-meta">2005 · Роман</span>
+                  </div>
+                  <p class="work-summary">Историк искусства Макс Морден возвращается в приморский городок Баллилесс, чтобы пережить утрату и вспомнить лето своего отрочества.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-toibin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Колм Тойбин</h3>
+                  <p class="author-role">Романист, эссеист и критик · <span class="tabular">род. 1955</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер сдержанной, эмоционально глубокой прозы о судьбах ирландской эмиграции, семье и искусстве.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-brooklyn">
+                  <div class="work-row">
+                    <span class="work-code">ИР-06.04</span>
+                    <a class="work-link" href="./works/toibin-bruklin.html">Бруклин</a>
+                    <span class="work-meta">2009 · Роман</span>
+                  </div>
+                  <p class="work-summary">История юной Эйлиш Лейси, уезжающей в 1950-е годы из маленького Эннискорти в Нью-Йорк и разрывающейся между двумя берегами Атлантики.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание ирландской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

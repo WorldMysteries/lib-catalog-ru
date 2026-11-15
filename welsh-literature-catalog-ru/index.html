@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог уэльской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 26 писателей · 29 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог уэльской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от древних бардов Анейрина, «Мабиногиона» и Давида ап Гвилима до Дэниела Оуэна, Кейт Робертс, Дилана Томаса, Р. С. Томаса, Ричарда Ллевеллина и Оуэна Ширса.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#cy-bards-mabinogion">Раздел I: Древние барды, «Мабиногион» и Давид ап Гвилим</a>
+        <a href="#cy-renaissance-hymns">Раздел II: Ренессанс, духовный гимн и возрождение Эйстедвода</a>
+        <a href="#cy-nineteenth-novel">Раздел III: Мистика, реалистический роман и лирика XIX – начала XX века</a>
+        <a href="#cy-modern-renaissance">Раздел IV: Золотой век валлийского модернизма XX столетия</a>
+        <a href="#cy-anglo-welsh">Раздел V: Англоязычный ренессанс Уэльса: от Дилана Томаса до Р. С. Томаса</a>
+        <a href="#cy-contemporary">Раздел VI: Современная проза и поэзия Уэльса на двух языках</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="cy-bards-mabinogion">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · VI–XIV века</p>
+          <h2 class="section-title">Древние барды, «Мабиногион» и Давид ап Гвилим</h2>
+          <p class="section-desc">Истоки древнейшей кельтской поэзии Британии, мифологический свод «Четыре ветви Мабиноги» и блистательная средневековая лирика Давида ап Гвилима.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-aneirin-taliesin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Анейрин и Талиесин (Древнейшие барды)</h3>
+                  <p class="author-role">Первые известные поэты Уэльса и Британии (Cynfeirdd) · <span class="tabular">VI век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Барды VI века из бриттского «Древнего Севера», чьи героические песни о битве при Катраэте и гимны сохранились в средневековых рукописях.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-y-gododdin-taliesin">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-01.01</span>
+                    <a class="work-link" href="./works/aneirin-taliesin-gododdin.html">Гододдин и «Книга Талиесина»</a>
+                    <span class="work-meta">VI в. (рук. XIII–XIV вв.) · Героическая бардическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Элегии о трёхстах воинах бриттского королевства Гододдин, павших в неравной битве с англами, и мистические песни барда Талиесина о превращениях духа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mabinogion-cycle">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Свод преданий «Мабиногион»</h3>
+                  <p class="author-role">Сокровищница уэльской мифологии и древней прозы · <span class="tabular">XI–XIII века</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Собрание одиннадцати средневековых валлийских повестей из «Белой книги Ридерха» и «Красной книги из Хергеста», включающее ранние артуровские сказания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-four-branches-mabinogi">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-01.02</span>
+                    <a class="work-link" href="./works/mabinogion-chetyre-vetvi.html">Мабиногион («Четыре ветви Мабиноги» и «Килух и Олвен»)</a>
+                    <span class="work-meta">XI–XIII вв. · Мифологический эпос в прозе</span>
+                  </div>
+                  <p class="work-summary">Сказания о правителе Диведа Пуйле, богине Рианнон, великане Бране Благословенном, чародеях Мате и Гвидионе и поиске прекрасной Олвен при дворе короля Артура.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-llywarch-hen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Циклы Лливарха Хена и Хеледд</h3>
+                  <p class="author-role">Классик раннесредневековой уэльской элегии (энглины) · <span class="tabular">IX век</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтические циклы из Поуиса, в суровых трёхстрочных строфах-энглинах оплакивающие разорение древних очагов и гибель сыновей и братьев.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-songs-of-heledd">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-01.03</span>
+                    <a class="work-link" href="./works/heledd-pesni-poeuisa.html">Песни Хеледд («Зал Киндилана во мраке ныне»)</a>
+                    <span class="work-meta">IX век · Лиро-эпические элегии</span>
+                  </div>
+                  <p class="work-summary">Пронзительный плач уцелевшей княжны Хеледд над руинами сожжённого дворца Пенгверн и павшим в бою братом Киндиланом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dafydd-ap-gwilym">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Давид ап Гвилим</h3>
+                  <p class="author-role">Величайший валлийский поэт Средневековья · <span class="tabular">ок. 1315 – ок. 1350</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер виртуозной звукописи «кивида» (cywydd), соединивший куртуазную любовь, иронию Овидия и ослепительный гимн природе Уэльса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cywyddau-dafydd">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-01.04</span>
+                    <a class="work-link" href="./works/dafydd-ap-gwilym-chajka.html">Послания любви и «Чайка» («Cywyddau»)</a>
+                    <span class="work-meta">XIV век · Средневековая лирика</span>
+                  </div>
+                  <p class="work-summary">Блистательные стихи-поручения вестникам любви — белой чайке, жаворонку, лососю и летнему ветру, несущим весть возлюбленной Морвид среди лесов Кередигиона.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cy-renaissance-hymns">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · XVI–XVIII века</p>
+          <h2 class="section-title">Ренессанс, духовный гимн и возрождение Эйстедвода</h2>
+          <p class="section-desc">Сохранение валлийского языка в переводе Библии Уильяма Моргана, метафизическая поэзия Генри Воэна и народный гимн XVIII столетия.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-william-morgan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уильям Морган</h3>
+                  <p class="author-role">Переводчик Библии и спаситель литературного валлийского языка · <span class="tabular">1545–1604</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный и епископ Лландафа, в 1588 году создавший блестящий перевод Священного Писания, ставший нормой валлийской речи на столетия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-welsh-bible-1588">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-02.01</span>
+                    <a class="work-link" href="./works/morgan-vallijskaya-bibliya-1588.html">Валлийская Библия («Y Beibl Cyssegr-Lan»)</a>
+                    <span class="work-meta">1588 · Перевод и памятник классической прозы</span>
+                  </div>
+                  <p class="work-summary">Монументальный перевод, соединивший высокую бардическую культуру слова с понятностью для каждого жителя уэльских долин.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-henry-vaughan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Генри Воэн («Силурист»)</h3>
+                  <p class="author-role">Уэльский поэт-метафизик XVII века · <span class="tabular">1621–1695</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач и мистик из Брекнокшира, воспевший свет вечности, детство души и тихую реку Аск в английских стихах с глубоко уэльской образностью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-silex-scintillans">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-02.02</span>
+                    <a class="work-link" href="./works/vaughan-iskry-iz-kremnya.html">Искры из кремня («Silex Scintillans»)</a>
+                    <span class="work-meta">1650 · Метафизическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Сборник пронзительной духовной лирики («Отступление», «Мир»), где ночное видение кольца вечности возвышается над временем и смертью.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-william-williams-pantycelyn">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уильям Уильямс Пантиселин</h3>
+                  <p class="author-role">Величайший автор уэльских гимнов и поэт-романтик · <span class="tabular">1717–1791</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Странствующий поэт Кармартеншира, написавший свыше 800 гимнов на валлийском и прославивший на весь мир песнь пилигримов «Guide me, O Thou great Redeemer».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pantycelyn-hymns">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-02.03</span>
+                    <a class="work-link" href="./works/pantycelyn-gimn-piligrima.html">Путь по пустыне и «Гимн пилигрима»</a>
+                    <span class="work-meta">1744–1762 · Духовная гимнография и лирика</span>
+                  </div>
+                  <p class="work-summary">Поэзия внутренней бури, жажды света и шествия сквозь пустыню сомнений под звуки уэльского многоголосого пения.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-iolo-morganwg">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иоло Моргануг (Эдвард Уильямс)</h3>
+                  <p class="author-role">Поэт, антиквар и создатель современного Горседа бардов · <span class="tabular">1747–1826</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Удивительный каменщик-самоучка и романтический мистификатор из Гламоргана, возродивший в 1792 году традицию национального фестиваля Эйстедвод.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-gorsedd-and-poems">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-02.04</span>
+                    <a class="work-link" href="./works/iolo-gimny-gorseda.html">Гимны Горседа бардов и лирика Гламоргана</a>
+                    <span class="work-meta">1792 · Романтическая поэзия и ритуальные тексты</span>
+                  </div>
+                  <p class="work-summary">Поэтические призывы к миру и союзу бардов («Правда против всего мира!»), заложившие церемонию современного Национального Эйстедвода Уэльса.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cy-nineteenth-novel">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1800–1920</p>
+          <h2 class="section-title">Мистика, реалистический роман и лирика XIX – начала XX века</h2>
+          <p class="section-desc">От духовных откровений Энн Гриффитс к рождению современного валлийского романа в книгах Дэниела Оуэна и обновлению бардической поэзии на пороге Первой мировой войны.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ann-griffiths">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Энн Гриффитс</h3>
+                  <p class="author-role">Мистическая поэтесса и классик валлийской лирики · <span class="tabular">1776–1805</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь фермера из Поуиса, слагавшая свои пламенные стихи-гимны устно и передававшая их служанке Рут Эванс, которая сохранила их для потомков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hymns-ann-griffiths">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-03.01</span>
+                    <a class="work-link" href="./works/griffiths-duhovnye-gimny.html">Духовные гимны и письма</a>
+                    <span class="work-meta">изд. 1806 · Мистическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Тридцать стихотворений ошеломляющей духовной страсти и смелых библейских метафор, признанных жемчужиной всей валлийской лирики.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-daniel-owen">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дэниел Оуэн</h3>
+                  <p class="author-role">«Валлийский Диккенс», создатель национального романа · <span class="tabular">1836–1895</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Бывший портной из Молда, с тончайшим юмором, психологизмом и состраданием описавший жизнь шахтёрского и часовенного Уэльса XIX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-rhys-lewis">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-03.02</span>
+                    <a class="work-link" href="./works/owen-ris-lyuis.html">Рис Льюис («Rhys Lewis»)</a>
+                    <span class="work-meta">1885 · Роман воспитания</span>
+                  </div>
+                  <p class="work-summary">Автобиографическая история взросления в бедной семье Флинтшира: образ властной, но любящей матери Мари Льюис, брата Роберта и трагикомического Томаса Бартли.</p>
+                </li>
+                <li class="work-item" id="work-enoc-huws">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-03.03</span>
+                    <a class="work-link" href="./works/owen-enoh-hyuz.html">Энох Хьюз («Enoc Huws»)</a>
+                    <span class="work-meta">1891 · Сатирико-социальный роман</span>
+                  </div>
+                  <p class="work-summary">Блестящая сатира на лицемерие и алчность вокруг аферы «Свинцового рудника» и хитрого «капитана Тревора», обманувшего весь приход.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-t-gwynn-jones">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Т. Гвинн Джонс</h3>
+                  <p class="author-role">Реформатор валлийской поэзии XX века · <span class="tabular">1871–1949</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный и поэт, вдохнувший новую жизнь в строгую средневековую технику аллитераций «кинханед» (cynghanedd) и кельтскую мифологию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-departure-of-arthur">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-03.04</span>
+                    <a class="work-link" href="./works/gwynn-jones-uhod-artura.html">Уход Артура и «Тир на нОг»</a>
+                    <span class="work-meta">1902–1916 · Неоромантические поэмы</span>
+                  </div>
+                  <p class="work-summary">Величественные музыкальные поэмы о последнем плавании умирающего короля Артура на Авалон и поисках страны вечной юности.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hedd-wyn">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хедд Вин (Эллис Хамфри Эванс)</h3>
+                  <p class="author-role">Трагический поэт «Чёрного кресла» 1917 года · <span class="tabular">1887–1917</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Пастух из Траусфинида, погибший на фронте во Фландрии за пять недель до того, как его поэма выиграла главную награду Национального Эйстедвода — трон барда накрыли чёрным покрывалом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-yr-arwr-hedd-wyn">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-03.05</span>
+                    <a class="work-link" href="./works/hedd-wyn-geroj.html">Герой («Yr Arwr») и лирика «Война»</a>
+                    <span class="work-meta">1917 · Антивоенная и философская поэма</span>
+                  </div>
+                  <p class="work-summary">Светлая, трагическая поэма о жертвенности и проклятии войны: «Зачем я должен уйти от тихих пастбищ ради железа и грязи окопов?»</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cy-modern-renaissance">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1920–1965</p>
+          <h2 class="section-title">Золотой век валлийского модернизма XX столетия</h2>
+          <p class="section-desc">Художественный расцвет литературы на валлийском языке: новеллистика Кейт Робертс, интеллектуальная драма Сондерса Льюиса, эссе Парри-Уильямса и лирика Уолдо Уильямса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-kate-roberts">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кейт Робертс</h3>
+                  <p class="author-role">«Королева валлийской прозы», мастер романа и новеллы · <span class="tabular">1891–1985</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Дочь рабочего сланцевого карьера, превратившая суровый быт женщин Северного Уэльса в прозу чеховской точности и трагической сдержанности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-feet-in-chains">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-04.01</span>
+                    <a class="work-link" href="./works/roberts-nogi-v-cepyah.html">Ноги в цепях («Traed mewn Cyffion»)</a>
+                    <span class="work-meta">1936 · Реалистический роман</span>
+                  </div>
+                  <p class="work-summary">История стойкой матери Джейн Гриффит и её семьи на каменистом холме над карьерами Карнарвоншира — от тяжёлого труда 1880-х годов до гибели сына в Первой мировой войне.</p>
+                </li>
+                <li class="work-item" id="work-tea-in-heather">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-04.02</span>
+                    <a class="work-link" href="./works/roberts-chaj-v-dome-hezer.html">Чай в доме Хезер («Te yn y Grug»)</a>
+                    <span class="work-meta">1959 · Лирическая повесть о детстве</span>
+                  </div>
+                  <p class="work-summary">Тёплые, поэтичные зарисовки детства девочки Беган среди вересковых пустошей, где каждый скупой праздник становится чудом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-saunders-lewis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сондерс Льюис</h3>
+                  <p class="author-role">Крупнейший драматург, поэт и критик современного Уэльса · <span class="tabular">1893–1985</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Интеллектуал и общественный деятель, соединивший европейский католический модернизм с древними мифами Уэльса в блестящей драматургии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-blodeuwedd-monica">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-04.03</span>
+                    <a class="work-link" href="./works/lewis-blodeuvedd.html">Блодеуведд и «Моника»</a>
+                    <span class="work-meta">1930–1948 · Поэтическая драма и психологический роман</span>
+                  </div>
+                  <p class="work-summary">Переосмысление легенды «Мабиногиона» о женщине, сотворённой из цветов дуба, ракитника и таволги, которая обретает волю, страсть и трагическую вину.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-th-parry-williams">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Т. Х. Парри-Уильямс</h3>
+                  <p class="author-role">Мастер интеллектуального сонета и валлийского эссе · <span class="tabular">1887–1975</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёный и поэт из Рид-Дду у подножия Сноудона, привнёсший в валлийскую лирику ироничный скепсис, разговорную интонацию и тоску по горам.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-essays-and-sonnets">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-04.04</span>
+                    <a class="work-link" href="./works/parry-williams-ocherki-i-sonety.html">Очерки («Ysgrifau») и «Сонеты о Сноудонии»</a>
+                    <span class="work-meta">1928–1949 · Эссеистика и лирика</span>
+                  </div>
+                  <p class="work-summary">Неповторимые короткие эссе («Тоска по родным краям», «Старый дом») и горьковато-ясные сонеты о связи крови с каменистыми склонами Сноудона.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-waldo-williams">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Уолдо Уильямс</h3>
+                  <p class="author-role">Великий поэт-пацифист и визионер братства · <span class="tabular">1904–1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учитель и квакер из Пресели в Пембрукшире, создавший вдохновенную поэзию единения человека с землёй, памятью предков и миром.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-leaves-of-tree">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-04.05</span>
+                    <a class="work-link" href="./works/williams-listya-dereva.html">Листья дерева («Dail Pren»)</a>
+                    <span class="work-meta">1956 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Единственный сборник поэта («Что такое быть человеком?», «Между двух миров»), проникнутый глубочайшей верой в светлое братство всех людей.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cy-anglo-welsh">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1935–1985</p>
+          <h2 class="section-title">Англоязычный ренессанс Уэльса: от Дилана Томаса до Р. С. Томаса</h2>
+          <p class="section-desc">Мировая слава уэльской словесности на английском языке: музыкальная стихия Дилана Томаса, шахтёрский эпос Ричарда Ллевеллина, суровая поэтика Р. С. Томаса и проза Алуна Льюиса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-dylan-thomas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дилан Томас</h3>
+                  <p class="author-role">Один из величайших поэтов XX века, мастер слова из Суонси · <span class="tabular">1914–1953</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт невероятной музыкальной энергии и метафорической смелости, превративший приморский Уэльс, Лларан и Суонси в мифологическое пространство жизни и смерти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-under-milk-wood">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-05.01</span>
+                    <a class="work-link" href="./works/thomas-pod-senyu-molochnogo-lesa.html">Под сенью Молочного леса («Under Milk Wood»)</a>
+                    <span class="work-meta">1954 · Поэтическая пьеса для голосов</span>
+                  </div>
+                  <p class="work-summary">Один весенний день — от сновидений до заката — в маленьком прибрежном уэльском городке Ллареггиб глазами слепого капитана Кэта, булочника, школьницы и десятков чудаковатых жителей.</p>
+                </li>
+                <li class="work-item" id="work-do-not-go-gentle">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-05.02</span>
+                    <a class="work-link" href="./works/thomas-ne-uhodi-smirenno.html">Не уходи смиренно в сумрак вечной тьмы и «Портрет художника в щенячестве»</a>
+                    <span class="work-meta">1940–1952 · Лирика и автобиографические новеллы</span>
+                  </div>
+                  <p class="work-summary">Знаменитая вилланелла о бунте против угасания («Ярись, ярись против заката света!») и полные юмора и нежности рассказы о детстве в Суонси.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-richard-llewellyn">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ричард Ллевеллин</h3>
+                  <p class="author-role">Автор всемирно известной саги о шахтёрских долинах Уэльса · <span class="tabular">1906–1983</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, подаривший мировой литературе один из самых пронзительных романов о семье, песне, угле и утраченном рае детства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-how-green-was-my-valley">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-05.03</span>
+                    <a class="work-link" href="./works/llewellyn-kak-zelena-byla-moya-dolina.html">Как зелена была моя долина</a>
+                    <span class="work-meta">1939 · Семейно-социальный роман</span>
+                  </div>
+                  <p class="work-summary">Воспоминания Хью Моргана, покидающего родной дом в Южном Уэльсе, о счастливой, поющей семье шахтёров Морганов до того, как чёрные терриконы и стачки изменили долину навсегда.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rs-thomas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Р. С. Томас (Рональд Стюарт Томас)</h3>
+                  <p class="author-role">Великий поэт уэльского нагорья, одиночества и поиска Бога · <span class="tabular">1913–2000</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Англиканский священник в отдалённых горных приходах, номинант на Нобелевскую премию; создатель сурового образа пахаря Яго Притерха и поэзии «молчащего Бога».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-song-at-years-turning">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-05.04</span>
+                    <a class="work-link" href="./works/thomas-rs-pesnya-na-perepute.html">Песня на перепутье года и «Лаборатории духа»</a>
+                    <span class="work-meta">1955–1975 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Аскетичные, предельно честные стихи о холодном дожде над каменистыми фермами, древнем языке, исчезающем в горах, и напряжённом молчании пустого сельского храма.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alun-lewis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Алун Льюис</h3>
+                  <p class="author-role">Ведущий поэт и новеллист военного поколения · <span class="tabular">1915–1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец шахтёрского Абердэра, погибший в Бирме в 28 лет; оставил тончайшую поэзию и новеллы о любви, разлуке и тоске по родным долинам.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-raiders-dawn">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-05.05</span>
+                    <a class="work-link" href="./works/lewis-naletchiki-na-zaryu.html">Налётчики на зарю и «Последняя инспекция»</a>
+                    <span class="work-meta">1942–1945 · Поэзия и военные рассказы</span>
+                  </div>
+                  <p class="work-summary">Стихи и рассказы о прощании солдата на пороге уэльского городка, томительных месяцах ожидания и глубокой солидарности с простыми людьми.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-emyr-humphreys">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмир Хамфрис</h3>
+                  <p class="author-role">Патриарх современного англо-уэльского романа · <span class="tabular">1919–2020</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Долгожитель уэльской литературы, посвятивший два десятка романов истории, совести, политике и культуре Уэльса XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-a-toy-epic">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-05.06</span>
+                    <a class="work-link" href="./works/humphreys-igrushechnyj-epos.html">Игрушечный эпос («A Toy Epic»)</a>
+                    <span class="work-meta">1958 · Полифонический роман</span>
+                  </div>
+                  <p class="work-summary">Три переплетающихся детских и юношеских голоса из северного Уэльса 1920–1930-х годов — Майкла, Алара и Иори — в предчувствии бурь XX столетия.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="cy-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1960–2010-е годы</p>
+          <h2 class="section-title">Современная проза и поэзия Уэльса на двух языках</h2>
+          <p class="section-desc">Психологический шедевр Карадога Причарда, лирическое краеведение Ян Моррис, магический реализм Робина Льюэлина и современная проза Оуэна Ширса и Джиллиан Кларк.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-caradog-prichard">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карадог Причард</h3>
+                  <p class="author-role">Автор лучшего валлийского романа XX века · <span class="tabular">1904–1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и поэт из деревни Бетесда (Сноудония), написавший в Лондоне ослепительный, страшный и музыкальный роман о детстве в годы Первой мировой войны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-un-nos-ola-leuad">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-06.01</span>
+                    <a class="work-link" href="./works/prichard-odno-polnolunie.html">Одно лунное полнолуние («Un Nos Ola Leuad»)</a>
+                    <span class="work-meta">1961 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Неповторимое воспоминание мальчика о жизни в сланцевой деревне, о матери, сходящей с ума от нужды и одиночества, о друзьях детства и тени тёмного озера под полной луной.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jan-morris">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ян Моррис</h3>
+                  <p class="author-role">Блистательная писательница-историк и эссеист Уэльса · <span class="tabular">1926–2020</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Всемирно известная автор исторических трилогий и портретов городов, посвятившая главную книгу своей поздней жизни родине — Уэльсу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-matter-of-wales">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-06.02</span>
+                    <a class="work-link" href="./works/morris-suschnost-uelsa.html">Сущность Уэльса («The Matter of Wales»)</a>
+                    <span class="work-meta">1984 · Историко-лирическое эссе-путешествие</span>
+                  </div>
+                  <p class="work-summary">Энциклопедическое и глубоко любовное признание в любви горам Сноудонии, древним замкам, поэтам и непостижимой живучести маленького кельтского народа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gillian-clarke">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джиллиан Кларк</h3>
+                  <p class="author-role">Национальный поэт Уэльса (2008–2016) · <span class="tabular">род. 1937</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэтесса и переводчица древней уэльской поэзии («Гододдин»), чьи стихи соединяют телесную конкретность сельской жизни, природу и историю.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-letter-from-a-far-country">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-06.03</span>
+                    <a class="work-link" href="./works/clarke-pismo-iz-dalekoj-strany.html">Письмо из далёкой страны и «Королевские соты»</a>
+                    <span class="work-meta">1982–1993 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Лирический монолог женщины, оглядывающейся на повседневный труд поколений матерей на уэльской ферме, и стихи о хрупкости экологии и памяти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-robin-llewelyn">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Робин Льюэлин</h3>
+                  <p class="author-role">Мастер современного валлийского магического реализма · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и двукратный обладатель прозаической медали Эйстедвода, прославившийся оригинальной аллегорической и фантастической прозой на валлийском языке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-seren-wen-ar-gefndir-gwyn">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-06.04</span>
+                    <a class="work-link" href="./works/llewelyn-belaya-zvezda.html">Белая звезда на белом фоне</a>
+                    <span class="work-meta">1992 · Аллегорико-фантастический роман</span>
+                  </div>
+                  <p class="work-summary">Антиутопическая притча о полярной стране Ирсис, где запрещены слова любви и цвета, кроме белого, — о борьбе за воображение и живую память.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-owen-sheers">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Оуэн Ширс</h3>
+                  <p class="author-role">Ведущий современный уэльский романист, поэт и драматург · <span class="tabular">род. 1974</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор Суонси, соединивший в своих романах («Сопротивление», «Я видел человека») и стихах поэзию приграничной долины Олчон с острой исторической драмой.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-resistance-sheers">
+                  <div class="work-row">
+                    <span class="work-code">УЛ-06.05</span>
+                    <a class="work-link" href="./works/sheers-soprotivlenie.html">Сопротивление («Resistance»)</a>
+                    <span class="work-meta">2007 · Альтернативно-исторический роман</span>
+                  </div>
+                  <p class="work-summary">Зимой 1944 года в оккупированной Британии мужчины уходят в партизанское подполье из отдалённой уэльской долины Монмутшира, оставляя жён один на один с немецким патрулём и суровой зимой.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание уэльской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

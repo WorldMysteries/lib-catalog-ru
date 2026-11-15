@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог сербской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="https://untoldarchive.com/ru/">Untold Archive</a>
+      <div class="header-stats">6 разделов · 26 писателей · 37 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог сербской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от Косовского эпоса и «Горного венца» Негоша до сатиры Нушича, эпоса Иво Андрича, притч Меши Селимовича и постмодернизма Данило Киша и Милорада Павича.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#sr-medieval-epic">Раздел I: Средневековая книжность, Просвещение и народный эпос</a>
+        <a href="#sr-romanticism">Раздел II: Вукова реформа и сербский романтизм</a>
+        <a href="#sr-realism-moderna">Раздел III: Реализм, сатира и поэзия рубежа веков</a>
+        <a href="#sr-avantgarde-interwar">Раздел IV: Экспрессионизм, авангард и межвоенная проза</a>
+        <a href="#sr-midcentury-epics">Раздел V: Нобелевская вершина и великий эпос XX века</a>
+        <a href="#sr-postmodern-contemporary">Раздел VI: Постмодернизм, магия текста и современная проза</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="sr-medieval-epic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIII–XVIII века</p>
+          <h2 class="section-title">Средневековая книжность, Просвещение и народный эпос</h2>
+          <p class="section-desc">Житийная традиция династии Неманичей, устные юнацкие песни Косовского цикла и рационалистическая проза сербского Просвещения.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-saint-sava">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Святой Савва (Растко Неманич)</h3>
+                  <p class="author-role">Основоположник сербской словесности и автокефальной культуры · <span class="tabular">ок. 1175–1236</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Просветитель, архиепископ и автор первого оригинального сербского жития, заложивший фундамент национальной средневековой прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-life-of-st-simeon">
+                  <div class="work-row">
+                    <span class="work-code">СР-01.01</span>
+                    <a class="work-link" href="./works/savva-zhitie-svyatogo-simeona.html">Житие святого Симеона</a>
+                    <span class="work-meta">ок. 1208 · Агиографическое житие</span>
+                  </div>
+                  <p class="work-summary">Проникновенный рассказ о духовном пути великого жупана Стефана Немани, его отречении от престола и афонских годах на Хиландаре.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-kosovo-epic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Народный юнацкий эпос (Косовский цикл)</h3>
+                  <p class="author-role">Вершина южнославянской устной эпической поэзии · <span class="tabular">XIV–XIX вв.</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Цикл эпических песен гусляров о Косовской битве 1389 года, записанный и систематизированный Вуком Караджичем в XIX веке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-kosovo-cycle-songs">
+                  <div class="work-row">
+                    <span class="work-code">СР-01.02</span>
+                    <a class="work-link" href="./works/epos-kosovskij-cikl.html">Косовский цикл («Царь Лазарь и царица Милица», «Смерть матери Юговичей»)</a>
+                    <span class="work-meta">зап. 1814–1845 · Народный героический эпос</span>
+                  </div>
+                  <p class="work-summary">Десятисложные песни о выборе между земным и небесным царством, верности Милоша Обилича и скорби Косовской девушки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dositej-obradovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Доситей Обрадович</h3>
+                  <p class="author-role">Крупнейший сербский просветитель, философ и реформатор · <span class="tabular">1739–1811</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Монах-скиталец и европейский гуманист, первым провозгласивший необходимость писать на живом народном языке ради просвещения общества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-life-and-adventures">
+                  <div class="work-row">
+                    <span class="work-code">СР-01.03</span>
+                    <a class="work-link" href="./works/obradovic-zhizn-i-priklyucheniya.html">Жизнь и приключения Димитрия Обрадовича</a>
+                    <span class="work-meta">1783–1788 · Автобиография и просветительский трактат</span>
+                  </div>
+                  <p class="work-summary">Исповедальная история бегства из монастыря Хопово ради знания и путешествий по Европе от Афона и Смирны до Лондона и Лейпцига.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sr-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1814–1870-е годы</p>
+          <h2 class="section-title">Вукова реформа и сербский романтизм</h2>
+          <p class="section-desc">Победа народного языка в литературе, космическая и героическая поэма Негоша и бурный расцвет сербской романтической лирики.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-vuk-karadzic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вук Стефанович Караджич</h3>
+                  <p class="author-role">Реформатор сербского языка, фольклорист и лексикограф · <span class="tabular">1787–1864</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель современной фонетической орфографии («пиши как говоришь, читай как написано») и собиратель сербских песен и сказок.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-serbian-dictionary-songs">
+                  <div class="work-row">
+                    <span class="work-code">СР-02.01</span>
+                    <a class="work-link" href="./works/karadzic-pesennica-i-slovar.html">Малая простонародная песенница и Сербский словарь</a>
+                    <span class="work-meta">1814–1818 · Фольклорный свод и лексикография</span>
+                  </div>
+                  <p class="work-summary">Две книги, открывшие сербское народное слово Европе (от Гёте и братьев Гримм до Пушкина) и закрепившие живую речь в печати.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-petar-njegos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Петар II Петрович Негош</h3>
+                  <p class="author-role">Владыка Черногории, величайший поэт и философ сербского романтизма · <span class="tabular">1813–1851</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Правитель свободной Черногории и поэт титанического размаха, соединивший народный эпический стих с шекспировским и библейским драматизмом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-mountain-wreath">
+                  <div class="work-row">
+                    <span class="work-code">СР-02.02</span>
+                    <a class="work-link" href="./works/njegos-gornyj-venec.html">Горный венец</a>
+                    <span class="work-meta">1847 · Драматическая поэма</span>
+                  </div>
+                  <p class="work-summary">Историческая и метафизическая драма о Черногории начала XVIII века, борьбе с отступничеством и трагическом бремени нравственного выбора.</p>
+                </li>
+                <li class="work-item" id="work-ray-of-the-microcosm">
+                  <div class="work-row">
+                    <span class="work-code">СР-02.03</span>
+                    <a class="work-link" href="./works/njegos-luch-mikrokosma.html">Луч микрокосма</a>
+                    <span class="work-meta">1845 · Космогоническая поэма</span>
+                  </div>
+                  <p class="work-summary">Философско-религиозная поэма о падении ангелов, предсуществовании души и поиске божественного света в тёмной юдоли земного бытия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-branko-radicevic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бранко Радичевич</h3>
+                  <p class="author-role">Основоположник новой сербской лирики на народном языке · <span class="tabular">1824–1853</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романтический поэт Сремских Карловцев, вдохнувший в сербский стих музыку веселья, юности и пронзительного предчувствия ранней смерти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-students-farewell">
+                  <div class="work-row">
+                    <span class="work-code">СР-02.04</span>
+                    <a class="work-link" href="./works/radicevic-studencheskoe-proschanie.html">Стихотворения («Студенческое прощание»)</a>
+                    <span class="work-meta">1847 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Песня расставания с молодостью и Дунаем («Дячко растанак»), провозгласившая торжество вуковской речи в высокой лирике.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jovan-jovanovic-zmaj">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йован Йованович Змай</h3>
+                  <p class="author-role">Мастер интимной элегии, сатиры и сербской детской поэзии · <span class="tabular">1833–1904</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач и поэт, чей песенный цикл любви и утраты стал классикой сербского романтизма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-faded-roses">
+                  <div class="work-row">
+                    <span class="work-code">СР-02.05</span>
+                    <a class="work-link" href="./works/zmaj-rozy-i-uvyadshie-rozy.html">Розы и увядшие розы («Джуличи»)</a>
+                    <span class="work-meta">1864–1882 · Лирический цикл</span>
+                  </div>
+                  <p class="work-summary">Две книги стихов — светлый дневник счастливой любви к жене Руже и реквием после гибели всей семьи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-djura-jaksic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джура Якшич</h3>
+                  <p class="author-role">Поэт-романтик, драматург и живописец бунта · <span class="tabular">1832–1878</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Ярчайший темперамент сербского романтизма, выразивший гордый протест одинокой души и патриотическую скорбь.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-midnight-jaksic">
+                  <div class="work-row">
+                    <span class="work-code">СР-02.06</span>
+                    <a class="work-link" href="./works/jaksic-polnoch.html">Полночь (и избранная лирика)</a>
+                    <span class="work-meta">1873 · Романтическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Исповедальный монолог поэта в ночной тишине перед тенью умершей матери, соединяющий отчаяние изгоя и титаническую страсть.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sr-realism-moderna">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1870–1914</p>
+          <h2 class="section-title">Реализм, сатира и поэзия рубежа веков</h2>
+          <p class="section-desc">Бытовой колорит провинциальной Сербии, язвительная политическая сатира, психологическая проза юга и расцвет парнасского и символистского стиха.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-stevan-sremac">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стеван Сремац</h3>
+                  <p class="author-role">Классик сербской юмористической прозы · <span class="tabular">1855–1906</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Летописец воеводинских сёл и старого Ниша, создавший галерею незабываемых бытовых характеров и мягкой иронии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-zona-zamfirova">
+                  <div class="work-row">
+                    <span class="work-code">СР-03.01</span>
+                    <a class="work-link" href="./works/sremac-zona-zamfirova.html">Зона Замфирова</a>
+                    <span class="work-meta">1903 · Роман</span>
+                  </div>
+                  <p class="work-summary">Колоритная история любви дочери богатого чорбаджи Замфира и гордого кузнеца-златара Мане на фоне старого Ниша.</p>
+                </li>
+                <li class="work-item" id="work-priest-cira-spira">
+                  <div class="work-row">
+                    <span class="work-code">СР-03.02</span>
+                    <a class="work-link" href="./works/sremac-pop-chira-i-pop-spira.html">Поп Чира и поп Спира</a>
+                    <span class="work-meta">1898 · Юмористический роман</span>
+                  </div>
+                  <p class="work-summary">Забавная распря двух банатских священников и их жён вокруг выгодного жениха — молодого учителя Петра Петровича.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-radoje-domanovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Радое Доманович</h3>
+                  <p class="author-role">Создатель сербской аллегорической политической сатиры · <span class="tabular">1873–1908</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сатирик сродни Свифту и Салтыкову-Щедрину, в коротких гротескных повестях обнаживший слепоту деспотии и гражданского чинопочитания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-leader-stradija">
+                  <div class="work-row">
+                    <span class="work-code">СР-03.03</span>
+                    <a class="work-link" href="./works/domanovic-vozhd-i-stradiya.html">Вождь и Страдия</a>
+                    <span class="work-meta">1901–1902 · Сатирические повести</span>
+                  </div>
+                  <p class="work-summary">Притчи о толпе, доверившейся немому и слепому поводырю, и о вымышленном государстве «Страдия», где министры и законы доведены до абсурда.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-branislav-nusic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бранислав Нушич</h3>
+                  <p class="author-role">Великий сербский комедиограф, сатирик и фельетонист · <span class="tabular">1864–1938</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Непревзойдённый мастер сценического смеха, чьи комедии о бюрократии, тщеславии и мещанстве остаются в репертуаре столетие спустя.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-mrs-minister">
+                  <div class="work-row">
+                    <span class="work-code">СР-03.04</span>
+                    <a class="work-link" href="./works/nusic-gospozha-ministersha.html">Госпожа министерша</a>
+                    <span class="work-meta">1929 · Сатирическая комедия</span>
+                  </div>
+                  <p class="work-summary">Головокружительный взлёт и крах мещанки Живки Попович, внезапно ставшей женой министра и решившей срочно «облагородить» родню.</p>
+                </li>
+                <li class="work-item" id="work-bereaved-family">
+                  <div class="work-row">
+                    <span class="work-code">СР-03.05</span>
+                    <a class="work-link" href="./works/nusic-opechalennaya-rodnya.html">Опечаленная родня</a>
+                    <span class="work-meta">1934 · Комедия нравов</span>
+                  </div>
+                  <p class="work-summary">Жадные родственники в трауре делят ещё не оглашённое наследство дяди Маты и ссорятся из-за каждой ложки серебра.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-borisav-stankovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Борисав Станкович</h3>
+                  <p class="author-role">Мастер психологического и лирико-драматического реализма · <span class="tabular">1876–1927</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Певец старого патриархального Вранье, раскрывший глубину подавленных страстей, красоты и рокового столкновения сословий.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-impure-blood">
+                  <div class="work-row">
+                    <span class="work-code">СР-03.06</span>
+                    <a class="work-link" href="./works/stankovic-nechistaya-krov.html">Нечистая кровь</a>
+                    <span class="work-meta">1910 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Трагедия красавицы Софки из разорившегося старинного рода, выданной отцом замуж за двенадцатилетнего крестьянского мальчика Томчу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jovan-ducic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Йован Дучич</h3>
+                  <p class="author-role">Классик сербской парнасской и символистской поэзии · <span class="tabular">1871–1943</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт-дипломат из Герцеговины, отточивший сербский стих до мраморного совершенства формы и мелодической изысканности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-imperial-sonnets">
+                  <div class="work-row">
+                    <span class="work-code">СР-03.07</span>
+                    <a class="work-link" href="./works/ducic-imperatorskie-sonety.html">Стихотворения («Императорские сонеты» и «Синие легенды»)</a>
+                    <span class="work-meta">1908 · Поэзия символизма</span>
+                  </div>
+                  <p class="work-summary">Изысканная лирика о Дубровнике, мраморе истории, сумерках чувств и вечной метафизике любви и смерти.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vladislav-petkovic-dis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Владислав Петкович Дис</h3>
+                  <p class="author-role">Поэт-визионер трагического символизма · <span class="tabular">1880–1917</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лирик сновидений, меланхолии и предчувствий гибели, погибший на потопленном в Ионическом море пароходе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-drowned-souls">
+                  <div class="work-row">
+                    <span class="work-code">СР-03.08</span>
+                    <a class="work-link" href="./works/dis-utoplennye-dushi.html">Утопленные души</a>
+                    <span class="work-meta">1911 · Сборник стихотворений</span>
+                  </div>
+                  <p class="work-summary">Провидческий цикл стихов («Нирвана», «Быть может, спит»), погружающий читателя в сумрачный мир утраченной невинности и забытых снов.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sr-avantgarde-interwar">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1918–1945</p>
+          <h2 class="section-title">Экспрессионизм, авангард и межвоенная проза</h2>
+          <p class="section-desc">Травма Первой мировой войны и поэтика «суматраизма» Милоша Црнянского, интеллектуальная эссеистика Исидоры Секулич и эксперименты сербского авангарда.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-milos-crnjanski">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Милош Црнянский</h3>
+                  <p class="author-role">Гений сербского экспрессионизма и романист мирового уровня · <span class="tabular">1893–1977</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Автор «суматраизма» — поэтики космической связи всего сущего — и монументальных романов о скитаниях и бездомности человека в истории.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-diary-of-carnojevic">
+                  <div class="work-row">
+                    <span class="work-code">СР-04.01</span>
+                    <a class="work-link" href="./works/crnjanski-dnevnik-o-charnoeviche.html">Дневник о Чарноевиче</a>
+                    <span class="work-meta">1921 · Лирический экспрессионистский роман</span>
+                  </div>
+                  <p class="work-summary">Разорванная, музыкальная исповедь солдата галицийского фронта, ищущего покой в синем небе, цветущих вишнях и далёких морях.</p>
+                </li>
+                <li class="work-item" id="work-migrations">
+                  <div class="work-row">
+                    <span class="work-code">СР-04.02</span>
+                    <a class="work-link" href="./works/crnjanski-pereseleniya.html">Переселения</a>
+                    <span class="work-meta">1929–1962 · Историко-философская эпопея</span>
+                  </div>
+                  <p class="work-summary">Великая книга о сербском Славонско-Подунайском полке XVIII века, мечте братьев Исаковичей о далёкой России и вечной доле скитальцев.</p>
+                </li>
+                <li class="work-item" id="work-novel-of-london">
+                  <div class="work-row">
+                    <span class="work-code">СР-04.03</span>
+                    <a class="work-link" href="./works/crnjanski-roman-o-londone.html">Роман о Лондоне</a>
+                    <span class="work-meta">1971 · Роман</span>
+                  </div>
+                  <p class="work-summary">Пронзительная книга об одиночестве и гордом бедствии русского эмигранта князя Николая Репнина в послевоенном туманном Лондоне.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-isidora-sekulic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Исидора Секулич</h3>
+                  <p class="author-role">Классик сербской эссеистики и интеллектуальной прозы · <span class="tabular">1877–1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Первая женщина-академик Сербии, эрудит и блестящий стилист, поднявший сербское эссе и новеллу на уровень европейской прозы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-chronicle-provincial-cemetery">
+                  <div class="work-row">
+                    <span class="work-code">СР-04.04</span>
+                    <a class="work-link" href="./works/sekulic-hronika-kladbischa.html">Хроника провинциального кладбища</a>
+                    <span class="work-meta">1940 · Цикл повестей и новелл</span>
+                  </div>
+                  <p class="work-summary">Философское обращение к судьбам безвестных жителей маленького городка на Дунае (история Госпа Нолы и др.) через память их надгробий.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rastko-petrovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Растко Петрович</h3>
+                  <p class="author-role">Авангардист, поэт и автор прозы мифа · <span class="tabular">1898–1949</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых смелых экспериментаторов межвоенного Белграда, соединявший славянскую архаику, африканскую экзотику и психоанализ.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-burlesque-perun">
+                  <div class="work-row">
+                    <span class="work-code">СР-04.05</span>
+                    <a class="work-link" href="./works/petrovic-burlesk-peruna.html">Бурлеск господина Перуна бога грома</a>
+                    <span class="work-meta">1921 · Авангардный роман</span>
+                  </div>
+                  <p class="work-summary">Яркий гротеск, переносящий языческих богов, христианский ад и средневековых еретиков в вихрь языковой игры и плотской витальности.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sr-midcentury-epics">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1945–1975</p>
+          <h2 class="section-title">Нобелевская вершина и великий эпос XX века</h2>
+          <p class="section-desc">Мировое признание Иво Андрича, философские притчи Меши Селимовича о власти и вере, мифопоэтический стих Васко Попы и эпос сопротивления.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-ivo-andric">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Иво Андрич</h3>
+                  <p class="author-role">Лауреат Нобелевской премии по литературе (1961) · <span class="tabular">1892–1975</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Мастер эпической и новеллистической прозы, превративший перекрёсток культур Боснии и Балкан в универсальную притчу о времени, камне и человеке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bridge-on-the-drina">
+                  <div class="work-row">
+                    <span class="work-code">СР-05.01</span>
+                    <a class="work-link" href="./works/andric-most-na-drine.html">Мост на Дрине</a>
+                    <span class="work-meta">1945 · Роман-хроника</span>
+                  </div>
+                  <p class="work-summary">Четыре века жизни городка Вишеград вокруг одиннадцатиарочного каменного моста Мехмед-паши Соколовича — немого свидетеля смены империй и судеб.</p>
+                </li>
+                <li class="work-item" id="work-the-damned-yard">
+                  <div class="work-row">
+                    <span class="work-code">СР-05.02</span>
+                    <a class="work-link" href="./works/andric-proklyatyj-dvor.html">Проклятый двор</a>
+                    <span class="work-meta">1954 · Повесть-притча</span>
+                  </div>
+                  <p class="work-summary">История боснийского монаха фра Петра в стамбульской следственной тюрьме и трагическая судьба несчастного учёного Камила, отождествившего себя с Джемом-султаном.</p>
+                </li>
+                <li class="work-item" id="work-travnik-chronicle">
+                  <div class="work-row">
+                    <span class="work-code">СР-05.03</span>
+                    <a class="work-link" href="./works/andric-travnickaya-hronika.html">Травницкая хроника</a>
+                    <span class="work-meta">1945 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">«Консульские времена» в боснийском Травнике 1807–1814 годов: столкновение французской, австрийской и османской дипломатии в забытой горной долине.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mesa-selimovic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Меша Селимович</h3>
+                  <p class="author-role">Классик философско-психологического романа XX века · <span class="tabular">1910–1982</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель исключительной нравственной силы, создавший на османском историческом материале притчи о совести, догме и власти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-death-and-the-dervish">
+                  <div class="work-row">
+                    <span class="work-code">СР-05.04</span>
+                    <a class="work-link" href="./works/selimovic-dervish-i-smert.html">Дервиш и смерть</a>
+                    <span class="work-meta">1966 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Исповедь шейха Ахмеда Нуруддина, потерявшего казнённого властями брата и вступившего на путь мести, на котором он сам становится частью безжалостной системы.</p>
+                </li>
+                <li class="work-item" id="work-the-fortress">
+                  <div class="work-row">
+                    <span class="work-code">СР-05.05</span>
+                    <a class="work-link" href="./works/selimovic-krepost.html">Крепость</a>
+                    <span class="work-meta">1970 · Роман</span>
+                  </div>
+                  <p class="work-summary">История вернувшегося с Хотинской войны Ахмета Шабо, который в мире страха, доносов и коррупции выбирает любовь к христианке Тияне и человеческую честность.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-vasko-popa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Васко Попа</h3>
+                  <p class="author-role">Поэт-реформатор, классик европейского модернизма · <span class="tabular">1922–1991</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель лаконичной, афористичной поэтики без знаков препинания, сплавившей сербский фольклор и сюрреалистическую образность.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bark-and-unrest-field">
+                  <div class="work-row">
+                    <span class="work-code">СР-05.06</span>
+                    <a class="work-link" href="./works/popa-kora-i-pole-bez-upokoya.html">Кора и Поле без упокоя</a>
+                    <span class="work-meta">1953–1956 · Модернистские поэтические циклы</span>
+                  </div>
+                  <p class="work-summary">Циклы «Игры», «Кость в кости» и «Волчий род», в которых обычные предметы, галька и древние мифы обретают тревожную магическую жизнь.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-mihailo-lalic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Михайло Лалич</h3>
+                  <p class="author-role">Мастер трагической военной прозы и психологического эпоса · <span class="tabular">1914–1992</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выдающийся романист XX века, раскрывший экзистенциальное одиночество человека в горах братоубийственной войны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lelejska-gora">
+                  <div class="work-row">
+                    <span class="work-code">СР-05.07</span>
+                    <a class="work-link" href="./works/lalic-lelejskaya-gora.html">Лелейская гора</a>
+                    <span class="work-meta">1957 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Одинокое скитание партизана Ладо Таёвича среди заснеженных хребтов Черногории, где грань между отчаянием, галлюцинацией и жаждой мести почти стирается.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="sr-postmodern-contemporary">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1965–2010-е годы</p>
+          <h2 class="section-title">Постмодернизм, магия текста и современная проза</h2>
+          <p class="section-desc">Всемирная слава сербского постмодернизма: документальная память Данило Киша, гипертекстовые миры Милорада Павича и историософия Борислава Пекича.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-danilo-kis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Данило Киш</h3>
+                  <p class="author-role">Классик европейской прозы XX века и «энциклопедист памяти» · <span class="tabular">1935–1989</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Мастер виртуозной прозы, соединивший судьбу Центральной Европы, память о Холокосте и гулаговских архивах с безупречным литературным стилем.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-encyclopedia-of-the-dead">
+                  <div class="work-row">
+                    <span class="work-code">СР-06.01</span>
+                    <a class="work-link" href="./works/kis-enciklopediya-mertvyh.html">Энциклопедия мёртвых</a>
+                    <span class="work-meta">1983 · Книга новелл</span>
+                  </div>
+                  <p class="work-summary">Девять блестящих рассказов о смертности и памяти, включая заглавную новеллу о тайной шведской библиотеке, хранящей биографию каждого обычного человека.</p>
+                </li>
+                <li class="work-item" id="work-tomb-for-boris-davidovich">
+                  <div class="work-row">
+                    <span class="work-code">СР-06.02</span>
+                    <a class="work-link" href="./works/kis-grobnica-dlya-borisa-davidovicha.html">Гробница для Бориса Давидовича</a>
+                    <span class="work-meta">1976 · Документально-философская проза</span>
+                  </div>
+                  <p class="work-summary">«Семь глав одной общей повести» о революционерах, заговорщиках и жертвах тоталитарного террора XX столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-milorad-pavic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Милорад Павич</h3>
+                  <p class="author-role">Знаменитый автор нелинейной прозы и сербского постмодернизма · <span class="tabular">1929–2009</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Филолог, поэт и романист, превративший книгу в интерактивный лабиринт-словарь, кроссворд, колоду таро и клепсидру.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dictionary-of-the-khazars">
+                  <div class="work-row">
+                    <span class="work-code">СР-06.03</span>
+                    <a class="work-link" href="./works/pavic-hazarskij-slovar.html">Хазарский словарь (Мужская и женская версии)</a>
+                    <span class="work-meta">1984 · Роман-лексикон</span>
+                  </div>
+                  <p class="work-summary">Мировая сенсация: «лексикон на 100 000 слов» в трёх книгах (христианской, исламской и еврейской), посвящённый загадочному исчезновению Хазарского каганата и охотникам за снами.</p>
+                </li>
+                <li class="work-item" id="work-landscape-painted-with-tea">
+                  <div class="work-row">
+                    <span class="work-code">СР-06.04</span>
+                    <a class="work-link" href="./works/pavic-pejzazh-narisovannyj-chaem.html">Пейзаж, нарисованный чаем</a>
+                    <span class="work-meta">1988 · Роман-кроссворд</span>
+                  </div>
+                  <p class="work-summary">Роман, который можно читать по горизонтали и по вертикали: история белградского архитектора Свилы и таинственного исчезновения его отца на Афоне.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-borislav-pekic">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Борислав Пекич</h3>
+                  <p class="author-role">Мастер интеллектуального и историко-философского романа · <span class="tabular">1930–1992</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых глубоких сербских романистов XX века, соединивший эрудицию историка с иронией и антиутопической прозорливостью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-golden-fleece">
+                  <div class="work-row">
+                    <span class="work-code">СР-06.05</span>
+                    <a class="work-link" href="./works/pekic-zolotoe-runo.html">Золотое руно</a>
+                    <span class="work-meta">1978–1986 · Роман-фантасмагория (в 7 томах)</span>
+                  </div>
+                  <p class="work-summary">Монументальная сага балканского рода Негованов-Ньегованов сквозь века от античных аргонавтов и Византии до Белграда XX века.</p>
+                </li>
+                <li class="work-item" id="work-time-of-miracles">
+                  <div class="work-row">
+                    <span class="work-code">СР-06.06</span>
+                    <a class="work-link" href="./works/pekic-vremya-chudes.html">Время чудес</a>
+                    <span class="work-meta">1965 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Парадоксальное переосмысление евангельских чудес как столкновения живой человеческой природы с неумолимым идеологическим догматом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-aleksandar-tisma">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Тишма</h3>
+                  <p class="author-role">Психологический романист Нови-Сада и трагедии XX века · <span class="tabular">1924–2003</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мастер суровой, точной прозы Воеводины, исследовавший механизмы насилия, выживания и памяти о Холокосте.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-the-use-of-man">
+                  <div class="work-row">
+                    <span class="work-code">СР-06.07</span>
+                    <a class="work-link" href="./works/tisma-upotreblenie-cheloveka.html">Употребление человека</a>
+                    <span class="work-meta">1976 · Роман</span>
+                  </div>
+                  <p class="work-summary">История четырёх друзей из предвоенного Нови-Сада и дневника учительницы Анны Дрентель, растоптанных войной и оккупацией.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-svetislav-basara">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Светислав Басара</h3>
+                  <p class="author-role">Романист-постмодернист, сатирик и деконструктор мифов · <span class="tabular">род. 1953</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых остроумных и провокативных авторов современной Сербии, двукратный лауреат премии НИН.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fama-about-cyclists">
+                  <div class="work-row">
+                    <span class="work-code">СР-06.08</span>
+                    <a class="work-link" href="./works/basara-fama-o-velosipedistah.html">Фама о велосипедистах</a>
+                    <span class="work-meta">1987 · Постмодернистский роман</span>
+                  </div>
+                  <p class="work-summary">Ироническая мистификация об «Ордене евангельских велосипедистов Розы и Креста», тайно направляющем всю мировую историю через сны и архивные письма.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание сербской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
