@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог уругвайской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#">Untold Archive</a>
+      <div class="header-stats">6 разделов · 37 писателей · 39 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог уругвайской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от поэзии гаучо и «Табаре» до модернизма Родо, Дельмиры Агустини и Лотреамона, рассказов Орасио Кироги, «Поколения 45-го» — Онетти, Фелисберто Эрнандеса, Бенедетти и Иды Витале, Эдуардо Галеано, Марио Лебреро и Фернанды Триас.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#uy-gauchesco-romanticism-epic">Раздел I: Поэзия гаучо, романтизм и национальный эпос («Табаре»)</a>
+        <a href="#uy-modernismo-lautreamont-poetesses">Раздел II: Эпоха модернизма: Родо, Эррера-и-Рейсиг, Лотреамон и поэтессы Ла-Платы</a>
+        <a href="#uy-theater-quiroga-creole-prose">Раздел III: Театр Флоренсио Санчеса, Орасио Кирога и креольская проза</a>
+        <a href="#uy-generacion-del-45">Раздел IV: «Поколение 1945 года»: Онетти, Фелисберто Эрнандес, Бенедетти</a>
+        <a href="#uy-galeano-vitale-exile">Раздел V: Эдуардо Галеано, Ида Витале, диктатура и поэзия изгнания</a>
+        <a href="#uy-levrero-contemporary-21c">Раздел VI: Фантастика Монтевидео, Марио Лебреро и литература XXI века</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="uy-gauchesco-romanticism-epic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · конец XVIII – 1880-е годы</p>
+          <h2 class="section-title">Поэзия гаучо, романтизм и национальный эпос («Табаре»)</h2>
+          <p class="section-desc">От зарождения поэзии гаучо в диалогах Бартоломе Идальго и хроник осады Монтевидео к трилогии об истории Восточного берега Эдуардо Асеведо Диаса и великому романтическому эпосу Хуана Соррильи де Сан-Мартина.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-uy-bartolome-hidalgo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Бартоломе Идальго</h3>
+                  <p class="author-role">Уроженец Монтевидео, родоначальник риоплатской поэзии гаучо · <span class="tabular">1788–1822</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участник войн за независимость Восточного берега, превративший народную песню сьелито и живую разговорную речь пампасов в высокую гражданскую литературу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-dialogos-patrioticos">
+                  <div class="work-row">
+                    <span class="work-code">УР-01.01</span>
+                    <a class="work-link" href="./works/urug-idalgo-dialogi.html">Патриотические диалоги и песни-сьелито («Diálogos patrióticos»)</a>
+                    <span class="work-meta">1820–1822 · Поэзия гаучо и стихотворный диалог</span>
+                  </div>
+                  <p class="work-summary">Живые беседы конных пастухов Чано и Контрераса о борьбе за свободу, народной справедливости и суровой доле рядовых участников революции Ла-Платы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-francisco-acuna-de-figueroa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франсиско Акунья де Фигероа</h3>
+                  <p class="author-role">Поэт-хронист старого Монтевидео, автор национального гимна Уругвая · <span class="tabular">1791–1862</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Неоклассик и мастер сатирической эпиграммы, оставивший подробнейшую стихотворную летопись осады Монтевидео и ставший автором национального гимна страны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-diario-historico-sitio">
+                  <div class="work-row">
+                    <span class="work-code">УР-01.02</span>
+                    <a class="work-link" href="./works/urug-figeroa-dnevnik-osady.html">Исторический дневник осады Монтевидео («Diario histórico») и гимн «Ориенталес»</a>
+                    <span class="work-meta">1812–1842 · Стихотворная хроника и гражданская лирика</span>
+                  </div>
+                  <p class="work-summary">Дневник событий 1812–1814 годов в осаждённом городе и знаменитый гимн республики с призывом «Восточные: или отечество, или могила!».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-antonio-lussich">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антонио Луссич</h3>
+                  <p class="author-role">Поэт-гауческо, мореплаватель и прямой предшественник «Мартина Фьерро» · <span class="tabular">1848–1928</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель сочной поэмы о ветеранах уругвайских междоусобиц, вдохновившей Хосе Эрнандеса на создание великого эпоса пампасов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-tres-gauchos-orientales">
+                  <div class="work-row">
+                    <span class="work-code">УР-01.03</span>
+                    <a class="work-link" href="./works/urug-lussich-tri-gaucho.html">Три восточных гаучо («Los tres gauchos orientales»)</a>
+                    <span class="work-meta">1872 · Эпическая поэма-беседа гаучо</span>
+                  </div>
+                  <p class="work-summary">Ночной разговор трёх старых всадников у костра после окончания гражданской войны — о верности данному слову, нищете и тоске по прежней степной вольнице.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-eduardo-acevedo-diaz">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдуардо Асеведо Диас</h3>
+                  <p class="author-role">Основоположник уругвайского исторического романа и национальной прозы · <span class="tabular">1851–1921</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Политик, изгнанник и мастер яркой эпической прозы, воплотивший становление уругвайской нации и драму сельской глубинки XIX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-ismael-grito-de-gloria">
+                  <div class="work-row">
+                    <span class="work-code">УР-01.04</span>
+                    <a class="work-link" href="./works/urug-asevedo-dias-ismael.html">Исмаэль («Ismael») и «Крик славы»</a>
+                    <span class="work-meta">1888 / 1893 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Масштабная тетралогия об эпохе Хосе Артигаса и войне за независимость, а также трагедия сельской страсти и мести в романе «Одиночество» («Soledad»).</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-juan-zorrilla-de-san-martin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Соррилья де Сан-Мартин</h3>
+                  <p class="author-role">Национальный поэт Уругвая, автор великого романтического эпоса о народе чарруа · <span class="tabular">1855–1931</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист, дипломат и оратор из Монтевидео, создавший музыкальную и трагическую поэму о гибели коренного племени чарруа и встрече двух миров.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-tabare-zorrilla">
+                  <div class="work-row">
+                    <span class="work-code">УР-01.05</span>
+                    <a class="work-link" href="./works/urug-sorrilya-tabare.html">Табаре («Tabaré»)</a>
+                    <span class="work-meta">1888 · Романтическая эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Трагическая история метиса с голубыми глазами, сына вождя чарруа и испанской пленницы, разрывающегося между зовом древнего леса и нежной любовью к испанке Бланке.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="uy-modernismo-lautreamont-poetesses">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1870–1920-е годы</p>
+          <h2 class="section-title">Эпоха модернизма: Родо, Эррера-и-Рейсиг, Лотреамон и поэтессы Ла-Платы</h2>
+          <p class="section-desc">Ярчайший интеллектуальный и поэтический всплеск рубежа веков: философский «Ариэль» Хосе Энрике Родо, дерзкий предтеча сюрреализма граф де Лотреамон, магия слова Хулио Эрреры-и-Рейсига и могучая женская лирика Вас Феррейры, Дельмиры Агустини и Хуаны де Ибарбуру.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-uy-comte-de-lautreamont">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Граф де Лотреамон (Изидор Дюкас)</h3>
+                  <p class="author-role">Уроженец Монтевидео, проклятый поэт и духовный отец европейского сюрреализма · <span class="tabular">1846–1870</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сын французского дипломата, выросший в осаждённом Монтевидео у Ла-Платы и создавший в двадцать три года книгу, потрясшую всю поэтику XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-les-chants-de-maldoror">
+                  <div class="work-row">
+                    <span class="work-code">УР-02.01</span>
+                    <a class="work-link" href="./works/urug-lotreamon-pesni-maldorora.html">Песни Мальдорора («Les Chants de Maldoror»)</a>
+                    <span class="work-meta">1869 · Бунтарская поэма в прозе</span>
+                  </div>
+                  <p class="work-summary">Шесть песен мрачного визионерского бунта против творца, буржуазной морали и привычной логики языка, открывших бездну подсознания и поэзию невозможных метаморфоз.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-carlos-reyles">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карлос Рейлес</h3>
+                  <p class="author-role">Крупный романист рубежа веков, соединивший эстетику модернизма с натурализмом · <span class="tabular">1868–1938</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Богатый эстансьеро и интеллектуал, введший в уругвайский роман психологический анализ, ницшеанские мотивы и драму разрушающейся сельской усадьбы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-el-embrujo-de-sevilla-gaucho-florido">
+                  <div class="work-row">
+                    <span class="work-code">УР-02.02</span>
+                    <a class="work-link" href="./works/urug-rejles-rasa-kaina.html">Раса Каина («La raza de Caín») и «Красивый гаучо» («El gaucho florido»)</a>
+                    <span class="work-meta">1900 / 1932 · Психологический и пасторальный роман</span>
+                  </div>
+                  <p class="work-summary">Острая драма зависти и болезненного самоанализа монтевидейской интеллигенции и прощальный ностальгический гимн старой эстансии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-jose-enrique-rodo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Энрике Родо</h3>
+                  <p class="author-role">Главный философ-гуманист и эссеист латиноамериканского модернизма · <span class="tabular">1871–1917</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и учитель молодёжи из Монтевидео, призвавший испаноязычную Америку к духовному идеализму, красоте и культурной самобытности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-ariel-motivos-de-proteo">
+                  <div class="work-row">
+                    <span class="work-code">УР-02.03</span>
+                    <a class="work-link" href="./works/urug-rodo-ariel.html">Ариэль («Ariel») и «Мотивы Протея»</a>
+                    <span class="work-meta">1900 / 1909 · Философское эссе-воззвание</span>
+                  </div>
+                  <p class="work-summary">Знаменитый диалог старого учителя Просперо со студентами об идеале духовной полноты, противостоящем плоскому прагматизму и культу одной лишь выгоды.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-julio-herrera-y-reissig">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хулио Эррера-и-Рейсиг</h3>
+                  <p class="author-role">Гений уругвайского поэтического модернизма и «Башни панорам» · <span class="tabular">1875–1910</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уединившийся на мансарде в Монтевидео поэт-новатор, чьи дерзкие сонеты с неслыханной метафорикой и звукописью предвосхитили латиноамериканский авангард.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-los-peregrinos-de-piedra">
+                  <div class="work-row">
+                    <span class="work-code">УР-02.04</span>
+                    <a class="work-link" href="./works/urug-errera-i-rejsig-palomniki.html">Паломники из камня («Los peregrinos de piedra»)</a>
+                    <span class="work-meta">1909 · Модернистский поэтический сборник</span>
+                  </div>
+                  <p class="work-summary">Изысканные «Деревенские экстазы» и галлюцинаторные «Пурпурные парки» — шедевры барочной звуковой роскоши и утончённой фантазии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-maria-eugenia-vaz-ferreira">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мария Эухения Вас Феррейра</h3>
+                  <p class="author-role">Первая крупная лирическая поэтесса Уругвая начала XX века · <span class="tabular">1875–1924</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учёная-музыкантша и профессор литературы, оставившая сдержанную, глубоко трагическую лирику о ночи, одиночестве и несбывшемся идеале.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-la-isla-de-los-canticos">
+                  <div class="work-row">
+                    <span class="work-code">УР-02.05</span>
+                    <a class="work-link" href="./works/urug-vas-ferrejra-ostrov-pesnopenij.html">Остров песнопений («La isla de los cánticos»)</a>
+                    <span class="work-meta">1924 · Философская и любовная лирика</span>
+                  </div>
+                  <p class="work-summary">Итоговая книга суровой и гордой поэзии («Единственное стихотворение», «Только ты»), где душа предстаёт одиноким островом посреди холодного моря.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-delmira-agustini">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дельмира Агустини</h3>
+                  <p class="author-role">Поэтесса страсти и тайны, изменившая женский голос в поэзии всей Латинской Америки · <span class="tabular">1886–1914</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юная монтевидеанка, чьи смелые эротические и визионерские стихи поразили Рубена Дарио, прежде чем её жизнь оборвалась трагически в двадцать семь лет.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-los-calices-vacios">
+                  <div class="work-row">
+                    <span class="work-code">УР-02.06</span>
+                    <a class="work-link" href="./works/urug-agustini-pustye-chashi.html">Пустые чаши («Los cálices vacíos») и «Ночная»</a>
+                    <span class="work-meta">1913 · Модернистская любовная лирика</span>
+                  </div>
+                  <p class="work-summary">Огненный гимн женскому желанию, мечте, сну и духовной высоте, превращающий страсть в мистическую встречу души с неизвестным богом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-juana-de-ibarbourou">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуана де Ибарбуру</h3>
+                  <p class="author-role">«Хуана де Америка», одна из самых любимых поэтесс испаноязычного мира · <span class="tabular">1892–1979</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Мело на севере Уругвая, воспевшая солнечную радость тела, запахи эвкалиптов, свежесть воды и тихую тревогу уходящего времени.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-las-lenguas-de-diamante">
+                  <div class="work-row">
+                    <span class="work-code">УР-02.07</span>
+                    <a class="work-link" href="./works/urug-ibarburu-brilliantovye-yazyki.html">Бриллиантовые языки («Las lenguas de diamante») и «Дикий корень»</a>
+                    <span class="work-meta">1919 / 1922 · Природная и любовная лирика</span>
+                  </div>
+                  <p class="work-summary">Свежая, чувственная книга о любви, цветущей земле, гордости женщины и «Беспокойной смоковнице» перед лицом старения.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="uy-theater-quiroga-creole-prose">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1900–1940-е годы</p>
+          <h2 class="section-title">Театр Флоренсио Санчеса, Орасио Кирога и креольская проза</h2>
+          <p class="section-desc">От социальных драм Флоренсио Санчеса и горького натурализма Хавьера де Вианы к бессмертным рассказам Орасио Кироги о сельве, «Тяготениям» уроженца Монтевидео Жюля Сюпервьеля и глубоким повестям Моросоли и Эспинолы.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-uy-javier-de-viana">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хавьер де Виана</h3>
+                  <p class="author-role">Мастер суровой реалистической новеллы уругвайской сельской глубинки · <span class="tabular">1868–1926</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бытописатель разоряющейся деревни и бедных гаучо, сменивший романтический миф о степи беспощадным психологизмом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-guri-gaucha-viana">
+                  <div class="work-row">
+                    <span class="work-code">УР-03.01</span>
+                    <a class="work-link" href="./works/urug-viana-guri.html">Гаучо («Gaucha») и сборник «Гури» («Gurí»)</a>
+                    <span class="work-meta">1899 / 1901 · Реалистическая новеллистика</span>
+                  </div>
+                  <p class="work-summary">Трагикомические и суровые рассказы о суевериях, бедности, тихой выносливости и страстях жителей глухих уругвайских ранчо.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-florencio-sanchez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Флоренсио Санчес</h3>
+                  <p class="author-role">Крупнейший драматург Ла-Платы, создатель современного уругвайского театра · <span class="tabular">1875–1910</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и бунтарь из Монтевидео, за восемь лет создавший живой репертуар о конфликте отцов и детей, разорении крестьян и мигрантах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-barranca-abajo-mhijo-el-dotor">
+                  <div class="work-row">
+                    <span class="work-code">УР-03.02</span>
+                    <a class="work-link" href="./works/urug-sanches-pod-otkos.html">Сын-доктор («M’hijo el dotor») и трагедия «Под откос» («Barranca abajo»)</a>
+                    <span class="work-meta">1903 / 1905 · Социально-психологическая драма</span>
+                  </div>
+                  <p class="work-summary">История старого крестьянина дона Соило, теряющего землю и уважение семьи перед лицом судейских махинаций и новой морали.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-horacio-quiroga">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Орасио Кирога</h3>
+                  <p class="author-role">Уроженец Сальто, величайший мастер рассказа Латинской Америки · <span class="tabular">1878–1937</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Создатель «Декалога совершенного новеллиста», ушедший жить в аргентинскую сельву Мисьонес и превративший поединок человека с дикой природой в высокую трагедию.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-cuentos-de-amor-de-locura-y-de-muerte">
+                  <div class="work-row">
+                    <span class="work-code">УР-03.03</span>
+                    <a class="work-link" href="./works/urug-kiroga-rasskazy-o-lyubvi.html">Рассказы о любви, безумии и смерти («Cuentos de amor de locura y de muerte»)</a>
+                    <span class="work-meta">1917 · Классическая психологическая новелла</span>
+                  </div>
+                  <p class="work-summary">Шедевры лаконизма и ужаса («Перьевая подушка», «Обезглавленная курица», «По течению», «Анаконда»), где природа и рок неумолимы к человеческой оплошности.</p>
+                </li>
+                <li class="work-item" id="work-uy-cuentos-de-la-selva">
+                  <div class="work-row">
+                    <span class="work-code">УР-03.04</span>
+                    <a class="work-link" href="./works/urug-kiroga-skazki-selvy.html">Сказки сельвы («Cuentos de la selva»)</a>
+                    <span class="work-meta">1918 · Литературные сказки о природе</span>
+                  </div>
+                  <p class="work-summary">Мудрые и трогательные истории о слепой косуле, старой черепахе, спасшей охотника, фламинго и войне кайманов против парохода на реке Паране.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-jules-supervielle">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жюль Сюпервьель</h3>
+                  <p class="author-role">Уроженец Монтевидео, франко-уругвайский поэт космической нежности и снов · <span class="tabular">1884–1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Родившийся в Монтевидео двуязычный поэт и прозаик, в чьих стихах и притчах бескрайние уругвайские пампы и океан сливаются с небом Европы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-gravitations-lenfant-haute-mer">
+                  <div class="work-row">
+                    <span class="work-code">УР-03.05</span>
+                    <a class="work-link" href="./works/urug-syupervel-tyagoteniya.html">Тяготения («Gravitations») и «Дитя открытого моря»</a>
+                    <span class="work-meta">1925 / 1931 · Космическая лирика и фантастическая новелла</span>
+                  </div>
+                  <p class="work-summary">Прозрачная поэзия о бескрайних пампасах, звёздных пространствах и маленьком призрачном посёлке посреди Атлантического океана, рождённом памятью моряка.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-juan-jose-morosoli">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Хосе Моросоли</h3>
+                  <p class="author-role">Мастер лаконичного сельского рассказа, певец «маленького люда» из Минаса · <span class="tabular">1899–1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Всю жизнь проживший в городке Минас писатель, создавший удивительно тёплую и сдержанную галерею пастухов, дровосеков, лекарей и молчаливых чудаков.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-hombres-muchachos-morosoli">
+                  <div class="work-row">
+                    <span class="work-code">УР-03.06</span>
+                    <a class="work-link" href="./works/urug-morosoli-lyudi.html">Люди («Hombres») и «Мальчишки»</a>
+                    <span class="work-meta">1932 / 1950 · Реалистическая новеллистика</span>
+                  </div>
+                  <p class="work-summary">Чистые, почти чеховские рассказы о скромной жизни, тихом труде и одиночестве людей маленького городка у холмов Лавальехи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-francisco-espinola">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франсиско Эспинола</h3>
+                  <p class="author-role">Уроженец Сан-Хосе, мастер поэтического реализма и устного сказа · <span class="tabular">1901–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Тонкий психолог и народный рассказчик, обновивший сельскую тему через внутренний монолог, сострадание и музыкальную интонацию речи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-sombras-sobre-la-tierra">
+                  <div class="work-row">
+                    <span class="work-code">УР-03.07</span>
+                    <a class="work-link" href="./works/urug-espinola-teni-na-zemle.html">Тени на земле («Sombras sobre la tierra») и «Народные рассказы»</a>
+                    <span class="work-meta">1926 / 1933 · Социально-психологический роман и новеллы</span>
+                  </div>
+                  <p class="work-summary">Взгляд на униженных обитателей провинциального городка и шедевры вроде «Родригеса» о встрече простого крестьянина с самим дьяволом в ночном поле.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="uy-generacion-del-45">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1930–1970-е годы</p>
+          <h2 class="section-title">«Поколение 1945 года»: Онетти, Фелисберто Эрнандес, Бенедетти</h2>
+          <p class="section-desc">Золотая эпоха уругвайского модернизма и «Поколения 1945 года»: сновидческая фантастика Фелисберто Эрнандеса, экзистенциальная мифология Санта-Марии Хуана Карлоса Онетти, проза Марио Бенедетти, Армонии Сомерс и лирика Идеи Вилариньо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-uy-enrique-amorim">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Энрике Аморим</h3>
+                  <p class="author-role">Сальтенский романист, друг Лорки, связавший креольский мир с городским модерном · <span class="tabular">1900–1960</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, новеллист и киносценарист из Сальто, обновивший роман о жизни границы с Бразилией и Аргентиной.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-la-carreta-caballo-y-su-sombra">
+                  <div class="work-row">
+                    <span class="work-code">УР-04.01</span>
+                    <a class="work-link" href="./works/urug-amorim-telega.html">Телега («La carreta») и «Всадник и его тень»</a>
+                    <span class="work-meta">1932 / 1941 · Социальный и модернистский роман</span>
+                  </div>
+                  <p class="work-summary">Странствия бродячего цирка-борделя по глухим дорогам северного Уругвая и драма столкновения феодальной эстансии с призраком европейских мигрантов.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-felisberto-hernandez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фелисберто Эрнандес</h3>
+                  <p class="author-role">Предтеча латиноамериканской фантастики, любимый автор Кортасара и Кальвино · <span class="tabular">1902–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Бродячий пианист немого кино в провинциальных городках Уругвая, населивший прозу оживающими вещами, старыми роялями, восковыми куклами и тайнами памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-nadie-encendia-las-lamparas">
+                  <div class="work-row">
+                    <span class="work-code">УР-04.02</span>
+                    <a class="work-link" href="./works/urug-ernandes-nikto-ne-zazhigal-lamp.html">Никто не зажигал ламп и повесть «Затопленный дом» («La casa inundada»)</a>
+                    <span class="work-meta">1947 / 1960 · Странная психологическая новеллистика</span>
+                  </div>
+                  <p class="work-summary">Неповторимые рассказы о пианистах, вступающих в тайный сговор с вещами и причудливыми хозяйками замкнутых усадеб, и абсурдистская история плавающего дома доньи Маргариты.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-juan-carlos-onetti">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Карлос Онетти</h3>
+                  <p class="author-role">Классик мировой литературы XX века, лауреат премии Сервантеса, создатель города Санта-Мария · <span class="tabular">1909–1994</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Монтевидео, предвосхитивший «латиноамериканский бум» и создавший мрачный, ироничный и безысходно-человечный мир портового вымышленного города Санта-Мария.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-el-pozo-la-vida-breve">
+                  <div class="work-row">
+                    <span class="work-code">УР-04.03</span>
+                    <a class="work-link" href="./works/urug-onetti-korotkaya-zhizn.html">Колодец («El pozo») и роман «Короткая жизнь» («La vida breve»)</a>
+                    <span class="work-meta">1939 / 1950 · Экзистенциальный модернистский роман</span>
+                  </div>
+                  <p class="work-summary">Манифест нового городского романа в Латинской Америке: из душной квартиры в Буэнос-Айресе Хуан Мария Браусен выдумывает вымышленный город Санта-Мария и проживает в нём вторую жизнь.</p>
+                </li>
+                <li class="work-item" id="work-uy-el-astillero-juntacadaveres">
+                  <div class="work-row">
+                    <span class="work-code">УР-04.04</span>
+                    <a class="work-link" href="./works/urug-onetti-verf.html">Верфь («El astillero») и «Собиратель трупов»</a>
+                    <span class="work-meta">1961 / 1964 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Потрясающая притча об абсурде и достоинстве: обанкротившийся авантюрист Ларсен устраивается директором ржавой, мёртвой верфи в Санта-Марии и играет роль спасителя среди обломков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-armonia-somers">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Армония Сомерс</h3>
+                  <p class="author-role">Загадочный голос авангарда «Поколения 45-го», мастер трансгрессии и гротеска · <span class="tabular">1914–1994</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Школьная учительница Этель Россель де Падрин из Пандо, потрясшая консервативный Монтевидео 1950 года смелыми притчами о теле, смерти и бунте женщины.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-la-mujer-desnuda">
+                  <div class="work-row">
+                    <span class="work-code">УР-04.05</span>
+                    <a class="work-link" href="./works/urug-somers-golaya-zhenschina.html">Голая женщина («La mujer desnuda») и «Падение в небо»</a>
+                    <span class="work-meta">1950 / 1963 · Авангардная новелла и роман-притча</span>
+                  </div>
+                  <p class="work-summary">Сюрреалистическая повесть о Ребекке Линк, буквально сбрасывающей с себя голову прошлого и скитающейся по лесам ради освобождения от социальных оков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-mario-benedetti">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марио Бенедетти</h3>
+                  <p class="author-role">Народный романист, новеллист и поэт Монтевидео, любимец читателей всего мира · <span class="tabular">1920–2009</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и критик еженедельника «Марча», показавший внутреннюю поэзию скромных конторских служащих, любовь немолодого человека и драму политического изгнания.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-la-tregua-montevideanos">
+                  <div class="work-row">
+                    <span class="work-code">УР-04.06</span>
+                    <a class="work-link" href="./works/urug-benedetti-peredyshka.html">Передышка («La tregua») и сборник «Монтевидеанцы»</a>
+                    <span class="work-meta">1959 / 1960 · Лирический дневниковый роман</span>
+                  </div>
+                  <p class="work-summary">Дневник вдовца Мартина Сантоме перед самой пенсией: в его серую конторскую жизнь неожиданно входит поздняя и светлая любовь к молодой Авельянеде, даря короткую передышку перед судьбой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-idea-vilarino">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Идеа Вилариньо</h3>
+                  <p class="author-role">Величайшая поэтесса уругвайского XX века, автор песен танго и пронзительной лирики · <span class="tabular">1920–2009</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Переводчица Шекспира и исследовательница милонги и танго, доведшая любовный и трагический стих до обнажённой, безыскусной правды.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-poemas-de-amor-nocturnos">
+                  <div class="work-row">
+                    <span class="work-code">УР-04.07</span>
+                    <a class="work-link" href="./works/urug-vilarino-stihi-o-lyubvi.html">Стихи о любви («Poemas de amor») и «Ноктюрны»</a>
+                    <span class="work-meta">1955 / 1957 · Исповедальная лирика</span>
+                  </div>
+                  <p class="work-summary">Афористичная, лишённая украшений книга о страсти, разлуке и горьком прозрении (вдохновлённая союзом с Хуаном Карлосом Онетти), включая знаменитое стихотворение «Я не люблю тебя больше».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-amanda-berenguer">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аманда Беренгер</h3>
+                  <p class="author-role">Новатор поэтического языка «Поколения 45-го» и автор визуальной поэзии · <span class="tabular">1921–2010</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Монтевидео, соединившая классическую ясность с неоавангардным экспериментом, научными метафорами и женской космологией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-el-rio-la-dama-de-elche">
+                  <div class="work-row">
+                    <span class="work-code">УР-04.08</span>
+                    <a class="work-link" href="./works/urug-berenger-reka.html">Река («El río») и «Дама из Эльче»</a>
+                    <span class="work-meta">1952 / 1987 · Философская и экспериментальная лирика</span>
+                  </div>
+                  <p class="work-summary">Стихи о времени как великой реке и сложные многомерные поэмы зрелого периода о природе материи, света и женской памяти.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="uy-galeano-vitale-exile">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1970–1990-е годы</p>
+          <h2 class="section-title">Эдуардо Галеано, Ида Витале, диктатура и поэзия изгнания</h2>
+          <p class="section-desc">Трагедия военной диктатуры 1973–1985 годов, поэзия Сервантесовского лауреата Иды Витале и Сирсе Майи, сюрреалистический миф Маросы ди Джорджо, тюремные мемуары Маурисио Розенкофа и огненная историческая проза Эдуардо Галеано.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-uy-carlos-martinez-moreno">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карлос Мартинес Морено</h3>
+                  <p class="author-role">Юрист, критик и один из самых проницательных романистов кризиса Уругвая · <span class="tabular">1917–1986</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Адвокат политических заключённых, вынужденный бежать в Мексику и создавший суровый портрет падения «латиноамериканской Швейцарии».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-el-color-que-el-infierno-me-diera">
+                  <div class="work-row">
+                    <span class="work-code">УР-05.01</span>
+                    <a class="work-link" href="./works/urug-martines-moreno-stena.html">Стена («El paredón») и роман «Цвет, который мне дал бы ад»</a>
+                    <span class="work-meta">1962 / 1981 · Политический и документально-художественный роман</span>
+                  </div>
+                  <p class="work-summary">Анализ революционной Кубы глазами уругвайского интеллигента и жёсткое свидетельство о пытках, подполье и сломе гражданских свобод в 1970-е годы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-ida-vitale">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ида Витале</h3>
+                  <p class="author-role">Последняя живая легенда «Поколения 45-го», лауреат премии Сервантеса (2018) · <span class="tabular">род. 1923</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Монтевидео, поэтесса и переводчица, проведшая годы изгнания в Мексике и Техасе и превратившая наблюдение за птицами, камнями и словами в кристальную лирику.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-jardin-de-silice-procura-de-lo-imposible">
+                  <div class="work-row">
+                    <span class="work-code">УР-05.02</span>
+                    <a class="work-link" href="./works/urug-vitale-yasnyj-sad.html">Верный друг и книга стихов «Ясный сад» («Jardín de sílice»)</a>
+                    <span class="work-meta">1980 / 1998 · Интеллектуальная и созерцательная лирика</span>
+                  </div>
+                  <p class="work-summary">Выверенные до атома стихи о языке как убежище от изгнания, ботанике, птицах и тихой радости созерцания мира в любом возрасте.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-circe-maia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сирсе Майя</h3>
+                  <p class="author-role">Поэтесса из Такуарембо, голос тихой стойкости и повседневного света · <span class="tabular">род. 1932</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учительница философии на севере Уругвая, не покинувшая родину в годы диктатуры и создавшая стихи удивительной простоты, глубины и человеческого мужества.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-en-el-tiempo-puente-transparente">
+                  <div class="work-row">
+                    <span class="work-code">УР-05.03</span>
+                    <a class="work-link" href="./works/urug-majya-v-kruge-vremeni.html">В круге времени («En el tiempo») и «Прозрачный мост»</a>
+                    <span class="work-meta">1958 / 2001 · Философская лирика</span>
+                  </div>
+                  <p class="work-summary">Поэзия, открывающая чудо бытия в простых домашних предметах — столе, чашке чая, уличной тени — и в стойкой памяти о тех, кто исчез во времена террора.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-marosa-di-giorgio">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мароса ди Джорджо</h3>
+                  <p class="author-role">Сальтенская поэтесса-визионер, создательница галлюцинаторного эротического мифа · <span class="tabular">1932–2004</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь итальянских фермеров из Сальто, населившая уругвайские сады диковинной ботаникой, мистическими грибами, феями, ангелами и барочной страстью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-los-papeles-salvajes">
+                  <div class="work-row">
+                    <span class="work-code">УР-05.04</span>
+                    <a class="work-link" href="./works/urug-di-dzhordzho-dikie-listy.html">Дикие листы («Los papeles salvajes»)</a>
+                    <span class="work-meta">1971–1991 · Визионерская поэма в прозе</span>
+                  </div>
+                  <p class="work-summary">Многотомная поэтическая вселенная, где ферма в Сальто становится языческим эдемом превращений, запахов, ужасов детства и завораживающей красоты.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-mauricio-rosencof">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Маурисио Розенкоф</h3>
+                  <p class="author-role">Драматург и прозаик, переживший двенадцать лет одиночной тюрьмы при диктатуре · <span class="tabular">род. 1933</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и писатель, сохранивший рассудок в многолетнем одиночном заточении благодаря воображению, стихам на папиросной бумаге и памяти о матери с улиц Монтевидео.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-las-cartas-que-no-llegaron">
+                  <div class="work-row">
+                    <span class="work-code">УР-05.05</span>
+                    <a class="work-link" href="./works/urug-rozenkof-pisma-kotorye-ne-doshli.html">Письма, которые не дошли («Las cartas que no llegaron»)</a>
+                    <span class="work-meta">2000 · Автобиографический роман-исповедь</span>
+                  </div>
+                  <p class="work-summary">Двойной диалог: письма мальчика из еврейского квартала Монтевидео к убитым в Европе родным и беззвучные письма взрослого узника из одиночной камеры к ушедшему отцу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-eduardo-galeano">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдуардо Галеано</h3>
+                  <p class="author-role">Главный исторический публицист, мифотворец и голос Латинской Америки · <span class="tabular">1940–2015</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Монтевидео и редактор знаменитой «Марчи», объединивший журналистику, народную поэзию, хронику континента и блестящую миниатюру.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-venas-abiertas-memoria-del-fuego">
+                  <div class="work-row">
+                    <span class="work-code">УР-05.06</span>
+                    <a class="work-link" href="./works/urug-galeano-otkrytye-veny.html">Открытые вены Латинской Америки и трилогия «Память огня»</a>
+                    <span class="work-meta">1971 / 1982–1986 · Историко-поэтическая хроника и эссеистика</span>
+                  </div>
+                  <p class="work-summary">Страстная книга о разграблении континента и трёхтомная мозаика из полутора тысяч коротких притч, воссоздающая историю Америк от мифов творения до XX века.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="uy-levrero-contemporary-21c">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1990-е – XXI век</p>
+          <h2 class="section-title">Фантастика Монтевидео, Марио Лебреро и литература XXI века</h2>
+          <p class="section-desc">Культовая метафизическая проза Марио Лебреро, феминистский роман Кристины Пери Росси, пересмотр истории у Томаса де Маттоса, поэзия Куртуазье и международное признание прозы Клаудии Аменгуаль и Фернанды Триас.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-uy-mario-levrero">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марио Лебреро (Хорхе Варио)</h3>
+                  <p class="author-role">Культовый уругвайский прозаик конца XX века, мастер метафизической автобиографии · <span class="tabular">1940–2004</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Фотограф, создатель кроссвордов и наставник молодых писателей Монтевидео, превративший бессонницу, ремонт квартиры и поиск вдохновения в завораживающую литературу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-la-novela-luminosa-trilogia">
+                  <div class="work-row">
+                    <span class="work-code">УР-06.01</span>
+                    <a class="work-link" href="./works/urug-lebrero-siyayuschij-roman.html">Сияющий роман («La novela luminosa») и «Париж»</a>
+                    <span class="work-meta">1970–1980 / 2005 · Метафизический роман-дневник</span>
+                  </div>
+                  <p class="work-summary">Знаменитый посмертный роман: гигантский «дневник гранта», в котором автор пытается написать «сияющую книгу» о мистическом опыте, отвлекаясь на птиц, компьютер и монтевидейский быт.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-cristina-peri-rossi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Кристина Пери Росси</h3>
+                  <p class="author-role">Романистка и поэтесса, лауреат премии Сервантеса (2021) · <span class="tabular">род. 1941</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Монтевидео, эмигрировавшая в Барселону в 1972 году и ставшая одной из самых смелых и оригинальных фигур испаноязычной прозы и эротической лирики.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-la-nave-de-los-locos">
+                  <div class="work-row">
+                    <span class="work-code">УР-06.02</span>
+                    <a class="work-link" href="./works/urug-peri-rossi-korabl-durakov.html">Корабль дураков («La nave de los locos»)</a>
+                    <span class="work-meta">1984 · Аллегорический роман об изгнании</span>
+                  </div>
+                  <p class="work-summary">Скитания таинственного изгнанника Экиса по вымышленным островам, европейским вокзалам и снам, размышляющего о средневековом гобелене Сотворения мира, свободе и желании.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-tomas-de-mattos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас де Маттос</h3>
+                  <p class="author-role">Мастер нового уругвайского исторического романа из Такуарембо · <span class="tabular">1947–2016</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист и бывший директор Национальной библиотеки Уругвая, разрушивший официальные национальные мифы романом об истреблении племени чарруа в Сальсипуэдесе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-bernabe-bernabe">
+                  <div class="work-row">
+                    <span class="work-code">УР-06.03</span>
+                    <a class="work-link" href="./works/urug-de-mattos-bernabe.html">Бернабе, Бернабе! («¡Bernabé, Bernabé!»)</a>
+                    <span class="work-meta">1988 · Исторический роман-расследование</span>
+                  </div>
+                  <p class="work-summary">Трагедия 1831 года в урочище Сальсипуэдес, где генерал Бернабе Ривера заманил и уничтожил последних свободных чарруа — книга национального раскаяния и самопознания.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-rafael-courtoisie">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рафаэль Куртуазье</h3>
+                  <p class="author-role">Поэт и прозаик Монтевидео, мастер «микрорассказа» и кинематографической поэзии · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Профессор литературы и сценарист, чьи стихи и короткие притчи переведены на множество языков за отточенность стиля и чёрный риоплатский юмор.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-vida-de-perro-estado-solido">
+                  <div class="work-row">
+                    <span class="work-code">УР-06.04</span>
+                    <a class="work-link" href="./works/urug-kurtuaze-krov-granata.html">Жизнь в замедленной съёмке и роман «Кровь граната»</a>
+                    <span class="work-meta">1997 / 1999 · Экспериментальная поэзия и роман</span>
+                  </div>
+                  <p class="work-summary">Фрагментарная проза о бегстве, насилии и хрупкости тела и лирика, соединяющая визуальные образы современного города с метафизикой боли.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-claudia-amengual">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Клаудия Аменгуаль</h3>
+                  <p class="author-role">Ведущая современная уругвайская романистка, биограф Дельмиры Агустини · <span class="tabular">род. 1969</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Переводчица и журналистка из Монтевидео, исследующая женскую автономию, изнанку буржуазного уюта и драму забытых художниц XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-desde-las-cenizas-el-lugar-inexplorado">
+                  <div class="work-row">
+                    <span class="work-code">УР-06.05</span>
+                    <a class="work-link" href="./works/urug-amengual-iz-pepla.html">Из пепла («Desde las cenizas») и «Неизведанное место»</a>
+                    <span class="work-meta">2005 / 2018 · Психологический и биографический роман</span>
+                  </div>
+                  <p class="work-summary">Интимный портрет монтевидейской женщины, ломающей тесные рамки семейных ожиданий, и яркая романная реконструкция жизни и смерти Дельмиры Агустини.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-uy-fernanda-trias">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фернанда Триас</h3>
+                  <p class="author-role">Главная звезда современной прозы Уругвая, двукратный лауреат премии Со Хуаны Инес де ла Крус · <span class="tabular">род. 1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Монтевидео, живущая в Колумбии и превратившая атмосферу влажного портового города, семейной травмы и экологической тревоги в гипнотическую прозу XXI века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-uy-mugre-rosa-la-azotea">
+                  <div class="work-row">
+                    <span class="work-code">УР-06.06</span>
+                    <a class="work-link" href="./works/urug-trias-rozovaya-sliz.html">Розовая слизь («Mugre rosa») и повесть «Крыша» («La azotea»)</a>
+                    <span class="work-meta">2001 / 2020 · Пост-апокалиптический и психологический роман</span>
+                  </div>
+                  <p class="work-summary">Сюрреалистический триллер о портовом городе, окутанном ядовитым красным туманом и нашествием водорослей, где умирает старый мир, а героиня учится заботе о больном мальчике.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание уругвайской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
