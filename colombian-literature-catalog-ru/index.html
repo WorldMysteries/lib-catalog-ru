@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог колумбийской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#">Untold Archive</a>
+      <div class="header-stats">6 разделов · 38 писателей · 41 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог колумбийской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от хроники Новой Гранады «Баран» и романа «Мария» Хорхе Исаакса до лирики Сильвы, «Пучины» Риверы, Макондо Габриэля Гарсиа Маркеса, странствий Макролла Альваро Мутиса, Лауры Рестрепо и прозы Хуана Габриэля Васкеса.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#co-colonial-romantic">Раздел I: Хроники Новой Гранады, колониальное барокко и романтизм XIX века</a>
+        <a href="#co-modernismo-regions">Раздел II: Модернизм, антиокеньский реализм и голос сельвы рубежа веков</a>
+        <a href="#co-poetry-xx-century">Раздел III: Поэзия XX века: ирония, «Камень и небо», Аурелио Артуро и надизм</a>
+        <a href="#co-violencia-garcia-marquez">Раздел IV: «Виоленсия», «Группа Барранкильи» и век Габриэля Гарсиа Маркеса</a>
+        <a href="#co-urban-late-xx">Раздел V: Городская проза, бунт Кали и Медельина и хроника боли конца XX века</a>
+        <a href="#co-contemporary-xxi">Раздел VI: Поколение XXI века: память, насилие и новая колумбийская проза</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="co-colonial-romantic">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XVII–XIX вв.</p>
+          <h2 class="section-title">Хроники Новой Гранады, колониальное барокко и романтизм XIX века</h2>
+          <p class="section-desc">От сатирической летописи Сантафе-де-Боготы Хуана Родригеса Фрейле, гонгоринского барокко Домингеса Камарго и мистики Мадре Кастильо до костумбризма Эухенио Диаса Кастро, Соледад Акосты де Сампер и романа Хорхе Исаакса «Мария».</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-juan-rodriguez-freyle">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Родригес Фрейле</h3>
+                  <p class="author-role">Колониальный летописец Новой Гранады, предтеча колумбийской прозы · <span class="tabular">1566–ок. 1642</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Сантафе-де-Боготы и ветеран колониальных походов, на склоне лет написавший язвительную и захватывающую хронику тайной жизни вице-королевской столицы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-carnero">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-01.01</span>
+                    <a class="work-link" href="./works/rodriges-frejle-el-karnero.html">Баран («El Carnero»)</a>
+                    <span class="work-meta">1638 (опубл. 1859) · Сатирическая хроника нравов</span>
+                  </div>
+                  <p class="work-summary">Знаменитое повествование о первом столетии Новой Гранады, где официальная история завоевания сменяется скандалами, адюльтерами, колдовством и интригами колониального суда.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hernando-dominguez-camargo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эрнандо Домингес Камарго</h3>
+                  <p class="author-role">Выдающийся поэт латиноамериканского барокко и последователь Гонгоры · <span class="tabular">1606–1659</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Иезуит, священник и поэт из Боготы, работавший в горных приходах Тунхи и создавший шедевр сложной барочной метафоры Нового Света.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poema-heroico-ignacio-loyola">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-01.02</span>
+                    <a class="work-link" href="./works/dominges-kamargo-poema.html">Героическая поэма о святом Игнатии Лойоле («Poema heroico de san Ignacio de Loyola»)</a>
+                    <span class="work-meta">1656 / 1666 · Барочная эпическая поэма</span>
+                  </div>
+                  <p class="work-summary">Грандиозная неоконченная поэма в октавах, преломляющая биографию основателя ордена иезуитов сквозь роскошь тропических и андских образов, воды ручья Чильо и игру светотени.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-madre-castillo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Франсиска Хосефа де Кастильо (Мадре Кастильо)</h3>
+                  <p class="author-role">Крупнейшая мистическая писательница и поэтесса колониальной эпохи · <span class="tabular">1671–1742</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Монахиня-клариссинка из Тунхи, оставившая по поручению духовников вдохновенную духовную автобиографию и лирико-прозаические размышления, сопоставимые с традицией Тересы Авильской.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-afectos-espirituales-vida">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-01.03</span>
+                    <a class="work-link" href="./works/madre-kastilyo-duhovnye-affekty.html">Духовные аффекты и «Жизнь» («Afectos espirituales» / «Su Vida»)</a>
+                    <span class="work-meta">ок. 1690–1724 (опубл. 1817 / 1843) · Мистическая проза и лирика</span>
+                  </div>
+                  <p class="work-summary">Исповедальный дневник монахини из монастыря Санта-Клара в Тунхе о духовных испытаниях, экстазах, одиночестве кельи и глубоком переживании божественной любви.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-eugenio-diaz-castro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эухенио Диас Кастро</h3>
+                  <p class="author-role">Создатель колумбийского костумбристского и социального романа · <span class="tabular">1803–1865</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Сельский житель и публицист из Соачи, писавший среди крестьянского быта, запечатлевший живую речь простых людей и политическое лицемерие середины XIX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-manuela-diaz-castro">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-01.04</span>
+                    <a class="work-link" href="./works/dias-kastro-manuela.html">Мануэла («Manuela»)</a>
+                    <span class="work-meta">1858 · Реалистико-костумбристский роман</span>
+                  </div>
+                  <p class="work-summary">История просвещённого столичного юриста Дона Демостенеса, приехавшего в глухую деревню и встретившего гордую и умную крестьянку Мануэлу, — живая картина нравов молодой республики.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-soledad-acosta-de-samper">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Соледад Акоста де Сампер</h3>
+                  <p class="author-role">Выдающаяся романистка, историк и пионер женской журналистики Латинской Америки · <span class="tabular">1833–1913</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Основательница нескольких периодических изданий в Боготе, автор более двадцати романов и исторических биографий, отстаивавшая право женщин на образование и слово.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dolores-acosta-samper">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-01.05</span>
+                    <a class="work-link" href="./works/akosta-de-samper-dolores.html">Долорес: картины жизни женщины («Dolores») и «Женщина в современном обществе»</a>
+                    <span class="work-meta">1867 / 1895 · Психологический роман и публицистика</span>
+                  </div>
+                  <p class="work-summary">Трогательный эпистолярный роман об изоляции девушки, поражённой тяжёлым недугом, и фундаментальный очерк о роли женщины в культуре и общественной жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jorge-isaacs">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хорхе Исаакс</h3>
+                  <p class="author-role">Классик латиноамериканского романтизма, автор великого романа «Мария» · <span class="tabular">1837–1895</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, исследователь, политик и прозаик из Кали, подаривший всей испаноязычной словесности образцовую идиллию любви на фоне долины Каука.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-maria-isaacs">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-01.06</span>
+                    <a class="work-link" href="./works/isaaks-mariya.html">Мария («María»)</a>
+                    <span class="work-meta">1867 · Романтический роман</span>
+                  </div>
+                  <p class="work-summary">Трагическая и нежная история любви юноши Эфраина и его кузины Марии в семейном поместье «Эль-Параисо» в долине реки Каука, прерванной неизбежной разлукой и болезнью.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="co-modernismo-regions">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1885–1930</p>
+          <h2 class="section-title">Модернизм, антиокеньский реализм и голос сельвы рубежа веков</h2>
+          <p class="section-desc">Поэтическая революция Хосе Асунсьона Сильвы и Гильермо Валенсии, детские сказки Рафаэля Помбо, саги Томаса Карраскильи об Антиокии, философия Фернандо Гонсалеса и эпос сельвы в «Пучине» Риверы.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-rafael-pombo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рафаэль Помбо</h3>
+                  <p class="author-role">Национальный поэт Колумбии, классик романтической лирики и сказочных стихов · <span class="tabular">1833–1912</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Блестящий поэт, баснописец и переводчик из Боготы, чьи озорные стихотворные сказки знают наизусть поколения читателей по всей Латинской Америке.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cuentos-pintados">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-02.01</span>
+                    <a class="work-link" href="./works/pombo-raskrashennye-skazki.html">Раскрашенные сказки («Cuentos pintados») и «Ночь декабря»</a>
+                    <span class="work-meta">1854–1867 · Поэтические сказки и лирика</span>
+                  </div>
+                  <p class="work-summary">Собрание остроумных и музыкальных стихов — от «Бедной старушки» и «Ренакуахо-прогульщика» до глубокой философской лирики зрелых лет.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tomas-carrasquilla">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Карраскилья</h3>
+                  <p class="author-role">Величайший прозаик Антиокии, мастер народной речи и эпического бытописания · <span class="tabular">1858–1940</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Санто-Доминго (Антиокия), создавший живую энциклопедию колумбийской провинции, золотоискателей и старинных креольских усадеб.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-marquesa-de-yolombo">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-02.02</span>
+                    <a class="work-link" href="./works/karraskilya-markiza-de-jolombo.html">Маркиза де Йоломбо («La Marquesa de Yolombó»)</a>
+                    <span class="work-meta">1928 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Яркая фреска позднего XVIII века в золотодобывающем крае Антиокия: история решительной доньи Барбары Кабальеро на пороге Войны за независимость.</p>
+                </li>
+                <li class="work-item" id="work-frutos-de-mi-tierra">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-02.03</span>
+                    <a class="work-link" href="./works/karraskilya-plody-moej-zemli.html">Плоды моей земли («Frutos de mi tierra»)</a>
+                    <span class="work-meta">1896 · Реалистический роман</span>
+                  </div>
+                  <p class="work-summary">Первый крупный роман Карраскильи о страстях, корысти и живом быте медельинских купеческих семей конца XIX столетия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-asuncion-silva">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Асунсьон Сильва</h3>
+                  <p class="author-role">Гениальный зачинатель испаноамериканского модернизма и декаданса · <span class="tabular">1865–1896</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и прозаик из Боготы, чья ранняя трагическая смерть оборвала жизнь одного из самых музыкальных и тонких новаторов испанского стиха XIX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nocturno-de-sobremesa">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-02.04</span>
+                    <a class="work-link" href="./works/silva-noktyurn.html">Ноктюрн («Nocturno III») и роман «После обеда» («De sobremesa»)</a>
+                    <span class="work-meta">1894 / 1925 · Модернистская поэзия и роман-дневник</span>
+                  </div>
+                  <p class="work-summary">Знаменитый «Ноктюрн», обновивший ритмику испаноязычной лирики, и декадентский роман о мечущемся художнике-эстете Хосе Фернандесе в Лондоне, Париже и Женеве.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-guillermo-valencia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гильермо Валенсия</h3>
+                  <p class="author-role">Мастер парнасско-модернистского стиха, оратор и культурный столп Попаяна · <span class="tabular">1873–1943</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и политик из древнего Попаяна, соединивший античную чеканность формы с символизмом и переводами классической и восточной поэзии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ritos-valencia">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-02.05</span>
+                    <a class="work-link" href="./works/valensiya-obryady.html">Обряды («Ritos»)</a>
+                    <span class="work-meta">1899 · Модернистский сборник стихов</span>
+                  </div>
+                  <p class="work-summary">Книга мраморно-стройной поэзии с прославленными стихотворениями «Верблюды» и «Анахарсис», воспевающая искусство, миф и стоическое достоинство.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-eustasio-rivera">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Эустасио Ривера</h3>
+                  <p class="author-role">Автор великого колумбийского романа о каучуковой лихорадке и сельве Амазонии · <span class="tabular">1888–1928</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, адвокат и член пограничной комиссии в Оринокии и Амазонии, лично увидевший ад каучуковых плантаций и превративший увиденное в бессмертный эпос.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-voragine">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-02.06</span>
+                    <a class="work-link" href="./works/rivera-puchina.html">Пучина («La vorágine»)</a>
+                    <span class="work-meta">1924 · Эпический роман о сельве</span>
+                  </div>
+                  <p class="work-summary">Бегство поэта Артуро Ковы и Алисии через бескрайние льяносы в зелёную преисподнюю амазонских джунглей, где каучуковые бароны превратили лес и людей в жертв безумия.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fernando-gonzalez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фернандо Гонсалес</h3>
+                  <p class="author-role">«Философ из Отрапарте», учитель бунтарей XX века и эссеист Антиокии · <span class="tabular">1895–1964</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Независимый мыслитель из Энвигадо, создатель провокационной эссеистики и психологических биографий Боливара и Сантандера, вдохновивший поколение надистов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-viaje-a-pie">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-02.07</span>
+                    <a class="work-link" href="./works/gonsales-peshee-puteshestvie.html">Пешее путешествие («Viaje a pie»)</a>
+                    <span class="work-meta">1929 · Философский роман-путешествие</span>
+                  </div>
+                  <p class="work-summary">Остроумный, дерзкий путевой дневник пешего похода через колумбийские Кордильеры к морю, перерастающий в беспощадную сатиру на ханжество и политическое рабство.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="co-poetry-xx-century">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1910–1985</p>
+          <h2 class="section-title">Поэзия XX века: ирония, «Камень и небо», Аурелио Артуро и надизм</h2>
+          <p class="section-desc">От едкой поэзии Картахены Луиса Карлоса Лопеса и романтической тоски Барба-Хакоба до музыкального мира Леона де Грейффа, «Обители на юге» Аурелио Артуро, манифестов Гонсало Аранго и лирики Марии Мерседес Каррансы.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-luis-carlos-lopez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Луис Карлос Лопес</h3>
+                  <p class="author-role">«Одноглазый из Картахены», мастер гротескного сонета и иронической лирики · <span class="tabular">1879–1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт с Карибского побережья, разрушивший напыщенную риторику эпигонов модернизма живым повседневным словом, юмором и нежной насмешкой над родным городом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hongos-de-la-riba">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-03.01</span>
+                    <a class="work-link" href="./works/lopes-rodnomu-gorodu.html">Родному городу («A mi ciudad nativa») и «Грибы на берегу»</a>
+                    <span class="work-meta">1908 / 1920 · Ироническая поэзия</span>
+                  </div>
+                  <p class="work-summary">Классические стихотворения о Картахене-де-Индиас — городе старых крепостей, сонных улочек и жары, который поэт любит так же просто, как «старые стоптанные башмаки».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-porfirio-barba-jacob">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Порфирио Барба-Хакоб</h3>
+                  <p class="author-role">Странствующий поэт-проклятый, создатель «Песни о глубокой жизни» · <span class="tabular">1883–1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Санта-Роса-де-Осос (Мигель Анхель Осорио), живший и творивший в Мексике, Центральной Америке и на Кубе под чередой литературных масок.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cancion-vida-profunda">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-03.02</span>
+                    <a class="work-link" href="./works/barba-hakob-pesn-glubokoj-zhizni.html">Песнь о глубокой жизни («Canción de la vida profunda»)</a>
+                    <span class="work-meta">1932 · Лирический сборник</span>
+                  </div>
+                  <p class="work-summary">Неистовая и музыкальная поэзия о вечной изменчивости человеческих настроений, жажде наслаждения, бегстве, страдании и ослепительной вспышке жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-leon-de-greiff">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Леон де Грейфф</h3>
+                  <p class="author-role">Полифонический гений колумбийского авангарда, создатель группы «Los Panidas» · <span class="tabular">1895–1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Медельина со скандинавскими и немецкими корнями, музыкант слова, создавший цикл масок — от Лео ле Грис до Гаспара де ла Ноче.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tergiversaciones">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-03.03</span>
+                    <a class="work-link" href="./works/de-grejff-tergiversatsii.html">Тергиверсации («Tergiversaciones»)</a>
+                    <span class="work-meta">1925 · Авангардная поэзия</span>
+                  </div>
+                  <p class="work-summary">Первая книга знаменитого поэта-виртуоза, наполненная архаизмами, неологизмами, джазовыми и классическими ритмами, гротеском и ироническим отчуждением.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-aurelio-arturo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Аурелио Артуро</h3>
+                  <p class="author-role">Поэт южных лесов Нариньо, автор эталонной книги колумбийской лирики XX века · <span class="tabular">1906–1974</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист и судья, всю жизнь шлифовавший единственную небольшую книгу стихов, превратившую пейзажи южного департамента Нариньо в чистую магию языка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-morada-al-sur">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-03.04</span>
+                    <a class="work-link" href="./works/arturo-obitel-na-yuge.html">Обитель на юге («Morada al sur»)</a>
+                    <span class="work-meta">1963 · Лирический цикл</span>
+                  </div>
+                  <p class="work-summary">Музыкальная поэма воспоминаний о зелёных горах юга Колумбии, шуме листьев, реках детства и тихом свете, в котором слово становится почти осязаемой природой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gonzalo-arango">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гонсало Аранго</h3>
+                  <p class="author-role">Основатель «Надизма» (Nadaísmo) — главного контркультурного бунта Колумбии · <span class="tabular">1931–1976</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, прозаик и манифестант из Андеса (Антиокия), в 1958 году поднявший знамя художественного и жизненного бунта против догм и насилия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sexo-y-saxofon">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-03.05</span>
+                    <a class="work-link" href="./works/arango-seks-i-saksofon.html">Секс и саксофон («Sexo y saxofón») и Манифест надизма</a>
+                    <span class="work-meta">1958 / 1963 · Авангардная проза и манифесты</span>
+                  </div>
+                  <p class="work-summary">Дерзкий призыв к освобождению воображения и сборник бунтарских новелл, положивший начало целой эпохе нонконформизма в Медельине, Кали и Боготе.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maria-mercedes-carranza">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мария Мерседес Карранса</h3>
+                  <p class="author-role">Ведущая поэтесса «поколения разочарованных», создательница Дома поэзии Сильвы · <span class="tabular">1945–2003</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Дочь поэта Эдуардо Каррансы, журналистка и защитница культуры, в жёстких, ироничных и пронзительных стихах запечатлевшая драму Колумбии конца XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-hola-soledad">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-03.06</span>
+                    <a class="work-link" href="./works/karransa-privet-odinochestvo.html">Привет, одиночество («Hola, soledad»)</a>
+                    <span class="work-meta">1987 · Лирический сборник</span>
+                  </div>
+                  <p class="work-summary">Аскетичные стихи без прикрас — о женской усталости, повседневной жестокости эпохи, городе и горькой смелости взглянуть правде в глаза.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dario-jaramillo-agudelo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дарио Харамильо Агудело</h3>
+                  <p class="author-role">Классик современной колумбийской любовной лирики и эссеист, лауреат Премии Леона де Грейффа · <span class="tabular">род. 1947</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и прозаик из Санта-Роса-де-Осос, подаривший поколениям читателей разговорную, глубокую и музыкальную поэзию о любви, городе и памяти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-poemas-de-amor-jaramillo">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-03.07</span>
+                    <a class="work-link" href="./works/haramilo-stihi-o-lyubvi.html">Стихи о любви («Poemas de amor») и «Перекрёстные письма»</a>
+                    <span class="work-meta">1986 / 1995 · Лирика и эпистолярный роман</span>
+                  </div>
+                  <p class="work-summary">Тонкий поэтический цикл о тайной нежности повседневности и знаменитый роман в письмах, запечатлевший драму медельинской интеллигенции эпохи перемен.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="co-violencia-garcia-marquez">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1945–1990</p>
+          <h2 class="section-title">«Виоленсия», «Группа Барранкильи» и век Габриэля Гарсиа Маркеса</h2>
+          <p class="section-desc">Трагедия политического насилия в прозе Кабальеро Кальдерона и Мехии Вальехо, карибский прорыв «Большого дома» Сепеды Самудио, афроколумбийский эпос Сапаты Оливельи, странствия Макролла у Альваро Мутиса и Макондо Габриэля Гарсиа Маркеса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-eduardo-caballero-calderon">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эдуардо Кабальеро Кальдерон</h3>
+                  <p class="author-role">Мастер романа эпохи «Виоленсии», публицист и член Колумбийской академии языка · <span class="tabular">1910–1993</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик из Боготы, лауреат премии Надаля, первым показавший без фальши моральный раскол колумбийских деревень в годы гражданского насилия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cristo-de-espaldas">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-04.01</span>
+                    <a class="work-link" href="./works/kabalero-kalderon-hristos.html">Христос в тылу («El Cristo de espaldas»)</a>
+                    <span class="work-meta">1952 · Социально-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Пять дней в далёкой горной деревне, куда приезжает молодой священник и сталкивается с кровавой ненавистью партий, трусостью власти и гибелью невиновного.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-zapata-olivella">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Сапата Оливелья</h3>
+                  <p class="author-role">Величайший выразитель афроколумбийской культуры и антропологии · <span class="tabular">1920–2004</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач, фольклорист и романист из Лорики, посвятивший творчество истории африканской диаспоры в Америках, борьбе за свободу и многоголосию Карибов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-chango-el-gran-putas">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-04.02</span>
+                    <a class="work-link" href="./works/sapata-olivelya-chango.html">Чанго, великий бунтарь («Changó, el gran putas»)</a>
+                    <span class="work-meta">1983 · Эпико-мифологический роман</span>
+                  </div>
+                  <p class="work-summary">Монументальная сага о четырёх столетиях судьбы африканцев в Новом Свете — от невольничьих кораблей и Картахены с Бенкосом Биохо до Гаити, Симона Боливара и борьбы за гражданские права.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alvaro-mutis">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альваро Мутис</h3>
+                  <p class="author-role">Поэт и прозаик мирового масштаба, лауреат Премии Сервантеса, создатель Макролла аль-Гавиеро · <span class="tabular">1923–2013</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Боготы, выросший между кофейной усадьбой в Толиме, Бельгией и Мехико, друг Гарсиа Маркеса, создавший бессмертный образ вечного скитальца Макролла.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-empresas-maqroll-el-gaviero">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-04.03</span>
+                    <a class="work-link" href="./works/mutis-makroll-al-gaviero.html">Подвиги и злоключения Макролла аль-Гавиеро («Empresas y tribulaciones de Maqroll el Gaviero»)</a>
+                    <span class="work-meta">1986–1993 · Цикл повестей и романов</span>
+                  </div>
+                  <p class="work-summary">Семь повестей — от «Снега адмирала» и «Илоны» до «Абдула Башура» — о странствиях загадочного моряка и мечтателя Макролла по тропическим рекам, заброшенным шахтам и портам мира.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-mejia-vallejo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Мехия Вальехо</h3>
+                  <p class="author-role">Лауреат Премии Надаля и Премии Ромуло Гальегоса, летописец народной памяти · <span class="tabular">1923–1998</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик и поэт из Херико (Антиокия), превративший истории маленьких колумбийских городков в притчи о страхе, чести и преодолении ненависти.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-dia-senalado">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-04.04</span>
+                    <a class="work-link" href="./works/mehiya-valeho-naznachennyj-den.html">Назначенный день («El día señalado»)</a>
+                    <span class="work-meta">1964 · Психолого-символический роман</span>
+                  </div>
+                  <p class="work-summary">В застывшем от страха городке Тамбо сходятся загадочный незнакомец с боевым петухом и уставший священник, пока вулкан и память о мести готовят развязку.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-alvaro-cepeda-samudio">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альваро Сепеда Самудио</h3>
+                  <p class="author-role">Новатор авангардной прозы Карибов, ключевая фигура «Группы Барранкильи» · <span class="tabular">1926–1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист, кинорежиссёр и писатель из Барранкильи, открывший колумбийской прозе приёмы Фолкнера и документального монтажа.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-casa-grande">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-04.05</span>
+                    <a class="work-link" href="./works/sepeda-samudio-bolshoj-dom.html">Большой дом («La casa grande»)</a>
+                    <span class="work-meta">1962 · Модернистский роман-коллаж</span>
+                  </div>
+                  <p class="work-summary">Многоголосая мозаика о «банановой резне» 1928 года в Сьенаге и о родовом особняке, где солдаты, сёстры и рабочие говорят сквозь молчание ненависти и времени.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gabriel-garcia-marquez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Габриэль Гарсиа Маркес</h3>
+                  <p class="author-role">Нобелевский лауреат по литературе (1982), один из величайших писателей XX века · <span class="tabular">1927–2014</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Аракатаки, начавший путь журналистом в Картахене и Барранкилье и подаривший мировой культуре вселенную Макондо и вершину магического реализма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cien-anos-de-soledad">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-04.06</span>
+                    <a class="work-link" href="./works/garsia-markes-sto-let-odinochestva.html">Сто лет одиночества («Cien años de soledad»)</a>
+                    <span class="work-meta">1967 · Эпический роман магического реализма</span>
+                  </div>
+                  <p class="work-summary">Семипоколенная сага рода Буэндиа и основанного ими города Макондо, где чудеса, пророчества на санскрите, гражданские войны и любовь сплетаются в вечном круговороте времени.</p>
+                </li>
+                <li class="work-item" id="work-coronel-no-tiene-quien-le-escriba">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-04.07</span>
+                    <a class="work-link" href="./works/garsia-markes-polkovniku-nikto-ne-pishet.html">Полковнику никто не пишет («El coronel no tiene quien le escriba»)</a>
+                    <span class="work-meta">1961 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Скупой на слова шедевр о старом ветеране гражданской войны, который годами каждую пятницу выходит к пристани за письмом о пенсии и бережёт бойцового петуха погибшего сына.</p>
+                </li>
+                <li class="work-item" id="work-amor-en-los-tiempos-del-colera">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-04.08</span>
+                    <a class="work-link" href="./works/garsia-markes-lyubov-vo-vremya-chumy.html">Любовь во время чумы («El amor en los tiempos del cólera»)</a>
+                    <span class="work-meta">1985 · Роман о верности и времени</span>
+                  </div>
+                  <p class="work-summary">История Флорентино Арисы, пронёсшего любовь к Фермине Дасе через пятьдесят один год, девять месяцев и четыре дня разлуки на берегах Карибского залива.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="co-urban-late-xx">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1970–2006</p>
+          <h2 class="section-title">Городская проза, бунт Кали и Медельина и хроника боли конца XX века</h2>
+          <p class="section-desc">Клубная лихорадка Кали у Андреса Кайседо, полифония «Ткачихи венков» Германа Эспиносы, женский голос Альбы Лусии Анхель, ярость Фернандо Вальехо, «Бред» Лауры Рестрепо и книга памяти Эктора Абада Фасиолинсе.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-german-espinosa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Герман Эспиноса</h3>
+                  <p class="author-role">Мастер историко-философского романа и барочной эрудиции Карибского побережья · <span class="tabular">1938–2007</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист и эссеист из Картахены-де-Индиас, создавший один из самых интеллектуально глубоких исторических романов Колумбии XX века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tejedora-de-coronas">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-05.01</span>
+                    <a class="work-link" href="./works/espinosa-tkachiha-venkov.html">Ткачиха венков («La tejedora de coronas»)</a>
+                    <span class="work-meta">1982 · Историко-философский роман</span>
+                  </div>
+                  <p class="work-summary">Грандиозный монолог Геновевы Алькасар о Картахене XVIII столетия, набеге пиратов, путешествии в Европу Просвещения, встречах с Вольтером и суде инквизиции.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-albalucia-angel">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альба Лусия Анхель</h3>
+                  <p class="author-role">Первопроходец феминистского эксперимента и полифонического романа Колумбии · <span class="tabular">род. 1939</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Перейры, связанная с кругами Парижа и Барселоны, впервые сделавшая женскую память, детство и телесность центральным голосом колумбийского романа о «Виоленсии».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pajara-pinta-verde-limon">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-05.02</span>
+                    <a class="work-link" href="./works/anhel-pestraya-ptichka.html">Сидела пёстрая птичка на зелёной ветке лимона («Estaba la pájara pinta sentada en el verde limón»)</a>
+                    <span class="work-meta">1975 · Экспериментальный роман-монтаж</span>
+                  </div>
+                  <p class="work-summary">Взросление девочки Аны сквозь детские считалки, студенческий бунт и хроники «Боготасо» 1948 года, смонтированные из обрывков газет, снов и воспоминаний.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-fernando-vallejo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Фернандо Вальехо</h3>
+                  <p class="author-role">Самый бескомпромиссный стилист и полемист современной колумбийской прозы · <span class="tabular">род. 1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист, кинорежиссёр и эссеист из Медельина, живущий в Мехико, прославившийся беспощадными монологами о насилии 1990-х и виртуозным владением языком.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-virgen-de-los-sicarios">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-05.03</span>
+                    <a class="work-link" href="./works/valeho-bogomater-ubijts.html">Богоматерь убийц («La Virgen de los sicarios»)</a>
+                    <span class="work-meta">1994 · Урбанистический роман-исповедь</span>
+                  </div>
+                  <p class="work-summary">Возвращение стареющего грамматика в охваченный наркотеррором Медельин 1990-х и его роковая связь с юным наёмным убийцей Алексисом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-andres-caicedo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Андрес Кайседо</h3>
+                  <p class="author-role">Культовый голос молодёжи Кали 1970-х, создатель киноклуба и новой городской прозы · <span class="tabular">1951–1977</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, кинокритик и драматург из Кали, проживший всего двадцать пять лет и ставший символом молодёжной контркультуры и сальсы Латинской Америки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-que-viva-la-musica">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-05.04</span>
+                    <a class="work-link" href="./works/kajsedo-da-zdravstvuet-muzyka.html">Да здравствует музыка! («¡Que viva la música!»)</a>
+                    <span class="work-meta">1977 · Молодёжный городской роман</span>
+                  </div>
+                  <p class="work-summary">Стремительный, раскалённый ритмами сальсы и рока монолог бунтарки Марии дель Кармен Уэрта, бросающей благополучную семью ради ночных улиц Кали.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-laura-restrepo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Лаура Рестрепо</h3>
+                  <p class="author-role">Выдающаяся романистка, журналистка и лауреат Премии Альфагуара · <span class="tabular">род. 1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Боготы, объединяющая расследовательскую журналистику и психологический роман, исследующая границы между частным безумием и драмой страны.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-delirio-restrepo">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-05.05</span>
+                    <a class="work-link" href="./works/restrepo-bred.html">Бред («Delirio»)</a>
+                    <span class="work-meta">2004 · Психологический полифонический роман</span>
+                  </div>
+                  <p class="work-summary">Вернувшийся из командировки профессор Агилар обнаруживает свою жену Агустину в состоянии острого умопомешательства и по крупицам восстанавливает семейные тайны Боготы 1980-х.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-hector-abad-faciolince">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эктор Абад Фасиолинсе</h3>
+                  <p class="author-role">Один из главных современных прозаиков и публицистов Медельина · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Романист, переводчик и колумнист, сын врача-правозащитника Эктора Абада Гомеса, создавший самую трогательную книгу новейшей колумбийской прозы о любви к отцу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-olvido-que-seremos">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-05.06</span>
+                    <a class="work-link" href="./works/abad-fasiolinse-zabvenie.html">Забвение, которым мы станем («El olvido que seremos»)</a>
+                    <span class="work-meta">2006 · Документальный роман-мемуар</span>
+                  </div>
+                  <p class="work-summary">Пронзительный портрет врача, учёного и гуманиста Эктора Абада Гомеса, боровшегося с нищетой и террором в Медельине и убитого наёмниками в 1987 году.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="co-contemporary-xxi">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1995–XXI век</p>
+          <h2 class="section-title">Поколение XXI века: память, насилие и новая колумбийская проза</h2>
+          <p class="section-desc">Проза Томаса Гонсалеса, интимный реквием Пьедад Боннет, «Армии» Эвельо Росеро, городской нуар Сантьяго Гамбоа, международные романы Хуана Габриэля Васкеса, Пилар Кинтаны и Маргариты Гарсиа Робайо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-tomas-gonzalez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Томас Гонсалес</h3>
+                  <p class="author-role">Один из самых глубоких стилистов и романистов природы и судьбы в Колумбии · <span class="tabular">род. 1950</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и художник из Медельина, работавший в Нью-Йорке и Антиокии, воспевший трагическую красоту жизни и смертности в прозрачной, напряжённой прозе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-primero-estaba-el-mar">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-06.01</span>
+                    <a class="work-link" href="./works/gonsales-snachala-bylo-more.html">Сначала было море («Primero estaba el mar»)</a>
+                    <span class="work-meta">1983 · Трагический роман</span>
+                  </div>
+                  <p class="work-summary">Попытка молодой пары уйти от городской суеты на уединённое тихоокеанское побережье Колумбии, где красота тропического рая оборачивается неизбежной катастрофой.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-piedad-bonnett">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пьедад Боннет</h3>
+                  <p class="author-role">Поэтесса и романистка, лауреат Премии королевы Софии за ибероамериканскую поэзию · <span class="tabular">род. 1951</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Амальфи (Антиокия), профессор Университета Лос-Андес, автор тонкой лирики и честных книг о скорби, искусстве и хрупкости разума.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lo-que-no-tiene-nombre">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-06.02</span>
+                    <a class="work-link" href="./works/bonnet-to-chto-ne-imeet-imeni.html">То, что не имеет имени («Lo que no tiene nombre»)</a>
+                    <span class="work-meta">2013 · Автобиографическая проза-реквием</span>
+                  </div>
+                  <p class="work-summary">Исповедь матери после трагического ухода её двадцативосьмилетнего сына-художника Даниэля — книга необычайного достоинства о любви, болезни и попытке устоять перед бездной.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-evelio-rosero">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эвельо Росеро</h3>
+                  <p class="author-role">Романист, лауреат Премии Тускетс и Премии иностранной прозы газеты The Independent · <span class="tabular">род. 1958</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из Боготы, автор гротескных и глубоко гуманистических романов, в которых простые жители оказываются заложниками между враждующими вооружёнными отрядами.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-ejercitos">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-06.03</span>
+                    <a class="work-link" href="./works/rosero-armii.html">Армии («Los ejércitos»)</a>
+                    <span class="work-meta">2007 · Антивоенный роман</span>
+                  </div>
+                  <p class="work-summary">Пожилой учитель Исмаэль ищет исчезнувшую жену Отилью среди развалин родного городка Сан-Хосе, когда его по очереди захватывают безымянные вооружённые банды и армейские части.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-santiago-gamboa">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сантьяго Гамбоа</h3>
+                  <p class="author-role">Мастер современного городского нуара, романист и путешественник · <span class="tabular">род. 1965</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Боготы, филолог и бывший дипломат, перенёсший действие детективной интриги в лабиринты современной столицы, коррупции и эмиграции.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-perder-es-cuestion-de-metodo">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-06.04</span>
+                    <a class="work-link" href="./works/gamboa-proigrat-vopros-metoda.html">Проиграть — это вопрос метода («Perder es cuestión de método»)</a>
+                    <span class="work-meta">1997 · Городской нуар-детектив</span>
+                  </div>
+                  <p class="work-summary">Журналист Виктор Сильвана расследует загадочное убийство на берегу горного озера под Боготой, распутывая клубок земельных махинаций и человеческого отчаяния.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pilar-quintana">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пилар Кинтана</h3>
+                  <p class="author-role">Романистка тихоокеанского побережья, лауреат Премии Альфагуара · <span class="tabular">род. 1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница из Кали, соединяющая суровую психологическую драму с дикой стихией влажных тропических лесов Тихоокеанского побережья Колумбии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-perra">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-06.05</span>
+                    <a class="work-link" href="./works/kintana-suka.html">Сука («La perra»)</a>
+                    <span class="work-meta">2017 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Бездетная сорокалетняя Дамарис из бедной рыбацкой деревушки берёт к себе щенка Чирли, превращая материнскую тоску, обиду и ревность в тугую пружину трагедии.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juan-gabriel-vasquez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Габриэль Васкес</h3>
+                  <p class="author-role">Крупнейший колумбийский романист XXI века, лауреат Дублинской премии IMPAC и Премии Альфагуара · <span class="tabular">род. 1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, эссеист и переводчик из Боготы, исследующий в своих романах невидимые шрамы, которые публичная история Колумбии оставляет в частных судьбах.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ruido-de-las-cosas-al-caer">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-06.06</span>
+                    <a class="work-link" href="./works/vaskes-zvuk-padayushchih-veshchej.html">Звук падающих вещей («El ruido de las cosas al caer»)</a>
+                    <span class="work-meta">2011 · Роман о памяти и истории</span>
+                  </div>
+                  <p class="work-summary">Спустя годы после гибели своего приятеля Рикардо Лаверде в центре Боготы, юрист Антонио Яммара пытается понять судьбу поколения, выросшего под тенью нарковойны 1980-х.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-margarita-garcia-robayo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Маргарита Гарсиа Робайо</h3>
+                  <p class="author-role">Звезда новейшей прозы Колумбии, лауреат Премии Дома Америк и Премии Эрральде (2026) · <span class="tabular">род. 1980</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница родом из Картахены, живущая в Буэнос-Айресе, исследующая с острой психологической проницательностью семейное отчуждение, миграцию и женский опыт.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tiempo-muerto">
+                  <div class="work-row">
+                    <span class="work-code">КЛ-06.07</span>
+                    <a class="work-link" href="./works/garsia-robajo-mertvoe-vremya.html">Мёртвое время («Tiempo muerto») и «Первое лицо»</a>
+                    <span class="work-meta">2017 / 2018 · Камерный психологический роман</span>
+                  </div>
+                  <p class="work-summary">Хроника медленного распада брака двух эмигрантов в университетском городке, обнажающая невысказанные претензии, усталость от чужбины и попытку вернуть собственное «я».</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание колумбийской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>

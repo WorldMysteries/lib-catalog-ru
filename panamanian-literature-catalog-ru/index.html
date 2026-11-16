@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог панамской литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#">Untold Archive</a>
+      <div class="header-stats">6 разделов · 36 писателей · 39 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог панамской литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: от трактата Хусто Аросемены, элегии Амелии Денис де Икасы и стихов Рикардо Миро до авангарда Рохелио Синана, «Зелёной луны» Хоакина Беленьо, «Утопленника» Тристана Соларте, Глории Гуардии и новейшей панамской прозы.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#pa-istmian-romanticism">Раздел I: От хроник перешейка и Просвещения к романтизму XIX века</a>
+        <a href="#pa-modernismo-lyric">Раздел II: Модернизм, Рикардо Миро и рождение национального рассказа</a>
+        <a href="#pa-avantgarde-sinan">Раздел III: Авангард 1920–1940-х годов: Рохелио Синан и обновление словесности</a>
+        <a href="#pa-canal-midcentury">Раздел IV: «Роман о Канале», народный эпос и проза середины XX века</a>
+        <a href="#pa-late-xx-generation">Раздел V: Поколение конца XX века: Глория Гуардия, Бриттон и прорыв новой прозы</a>
+        <a href="#pa-contemporary-xxi">Раздел VI: Панама XXI века: память, мегаполис и новейшая литература</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="pa-istmian-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · XIX век</p>
+          <h2 class="section-title">От хроник перешейка и Просвещения к романтизму XIX века</h2>
+          <p class="section-desc">Исторические записки Мариано Аросемены и трактат «Федеративный штат Панама» Хусто Аросемены, первый панамский роман Хиля Колунхе, стихи Амелии Денис де Икасы и сельская проза Саломона Понсе Агилеры.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-mariano-arosemena">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мариано Аросемена</h3>
+                  <p class="author-role">Историк, журналист и зачинатель панамской историографии и печати · <span class="tabular">1794–1868</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Участник движения за независимость Панамы от Испании 1821 года, основатель газеты «La Miscelánea del Istmo», запечатлевший становление гражданского самосознания перешейка.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-apuntamientos-historicos">
+                  <div class="work-row">
+                    <span class="work-code">ПН-01.01</span>
+                    <a class="work-link" href="./works/arosemena-istoricheskie-zametki.html">Исторические заметки (1801–1840) («Apuntamientos históricos»)</a>
+                    <span class="work-meta">опубл. с 1868 · Историческая летопись и мемуары</span>
+                  </div>
+                  <p class="work-summary">Первое связное изложение новой истории Панамы — от последних десятилетий испанской короны и освобождения 1821 года до драмы торгового пути между двумя океанами.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-justo-arosemena">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хусто Аросемена</h3>
+                  <p class="author-role">«Отец панамской государственности», философ права, эссеист и дипломат · <span class="tabular">1817–1896</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Выдающийся мыслитель XIX века, сын Мариано Аросемены, сформулировавший в 1855 году историческую, географическую и культурную самобытность Панамы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-estado-federal-de-panama">
+                  <div class="work-row">
+                    <span class="work-code">ПН-01.02</span>
+                    <a class="work-link" href="./works/husto-arosemena-federativnyj-shtat.html">Федеративный штат Панама («El Estado Federal de Panamá»)</a>
+                    <span class="work-meta">1855 · Политико-философское эссе</span>
+                  </div>
+                  <p class="work-summary">Основополагающий труд панамской словесности и общественной мысли, обосновывающий историческую автономию перешейка в союзе народов Латинской Америки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gil-colunje">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хиль Колунхе</h3>
+                  <p class="author-role">Романтический поэт и автор первого романа в истории Панамы · <span class="tabular">1831–1899</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист, политик и либерал из города Панама, дебютировавший в восемнадцать лет с первым национальным романом и создавший канонические патриотические оды.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-virtud-triunfante">
+                  <div class="work-row">
+                    <span class="work-code">ПН-01.03</span>
+                    <a class="work-link" href="./works/kolunhe-torzhestvuyushchaya-dobrodetel.html">Торжествующая добродетель («La virtud triunfante») и ода «28 ноября»</a>
+                    <span class="work-meta">1849 / 1852 · Романтический роман и гражданская ода</span>
+                  </div>
+                  <p class="work-summary">Первенец панамского романа, проникнутый идеализмом юности, и классическая ода в честь годовщины независимости 28 ноября 1821 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-amelia-denis-de-icaza">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Амелия Денис де Икаса</h3>
+                  <p class="author-role">Первая крупная поэтесса Панамы, голос национального романтизма · <span class="tabular">1836–1911</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Санта-Аны в городе Панама, первая женщина, выступившая со стихами в панамской печати; её поздняя элегия о холме Анкон стала народным символом суверенитета.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-al-cerro-ancon">
+                  <div class="work-row">
+                    <span class="work-code">ПН-01.04</span>
+                    <a class="work-link" href="./works/denis-de-ikasa-k-holmu-ankon.html">К холму Анкон («Al Cerro Ancón»)</a>
+                    <span class="work-meta">1906 · Патриотическая романтическая элегия</span>
+                  </div>
+                  <p class="work-summary">Пронзительное прощание вернувшейся из изгнания поэтессы с родным холмом над столицей, оказавшимся в зоне отчуждения Панамского канала под чужим флагом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-salomon-ponce-aguilera">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Саломон Понсе Агилера</h3>
+                  <p class="author-role">Один из зачинателей панамского рассказа и костумбристской прозы провинции · <span class="tabular">1867–1945</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, юрист и педагог из Антона (Кокле), обратившийся к быту, речи и труду крестьян внутренних областей республики на пороге нового века.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-de-la-gleba">
+                  <div class="work-row">
+                    <span class="work-code">ПН-01.05</span>
+                    <a class="work-link" href="./works/ponse-agilera-ot-pashni.html">От пашни («De la gleba»)</a>
+                    <span class="work-meta">1914 · Костумбристские рассказы и очерки</span>
+                  </div>
+                  <p class="work-summary">Живые зарисовки крестьянской Панамы, сельских праздников, забот земледельца и неразрывной связи человека с землёй центральных провинций.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pa-modernismo-lyric">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1895–1930</p>
+          <h2 class="section-title">Модернизм, Рикардо Миро и рождение национального рассказа</h2>
+          <p class="section-desc">Изысканная новеллистика Дарио Эрреры, вершина лирики Рикардо Миро («Родина»), трагический модернизм Гаспара Октавио Эрнандеса, урбанистика Деметрио Корси и нативизм Игнасио Вальдеса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-dario-herrera">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Дарио Эррера</h3>
+                  <p class="author-role">Ведущий панамский модернист, автор первой книги рассказов в истории страны · <span class="tabular">1870–1914</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист, дипломат и близкий друг Рубена Дарио, проведший жизнь между Панамой, Буэнос-Айресом и Чили, привнёсший в прозу утончённую музыку модернизма.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-horas-lejanas">
+                  <div class="work-row">
+                    <span class="work-code">ПН-02.01</span>
+                    <a class="work-link" href="./works/errera-dalekie-chasy.html">Далёкие часы («Horas lejanas»)</a>
+                    <span class="work-meta">1903 · Сборник модернистских рассказов</span>
+                  </div>
+                  <p class="work-summary">Первая книга новелл панамского автора (вышедшая в Буэнос-Айресе в год провозглашения республики) — утончённые этюды об одиночестве, памяти и сумеречной красоте.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ricardo-miro">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рикардо Миро</h3>
+                  <p class="author-role">Национальный поэт Панамы, имя которого носит главная литературная премия страны · <span class="tabular">1883–1940</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Лирик и романист из города Панама, дипломат в Барселоне и Марселе, подаривший стране неоромантические шедевры о любви, разлуке и родном береге.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-patria-miro">
+                  <div class="work-row">
+                    <span class="work-code">ПН-02.02</span>
+                    <a class="work-link" href="./works/miro-rodina.html">Родина («Patria»)</a>
+                    <span class="work-meta">1909 · Лирическая поэма</span>
+                  </div>
+                  <p class="work-summary">Написанное в Барселоне стихотворение, ставшее главным лирическим гимном панамской ностальгии по тёплому морю, соборам и пальмам отчей земли.</p>
+                </li>
+                <li class="work-item" id="work-flor-de-maria">
+                  <div class="work-row">
+                    <span class="work-code">ПН-02.03</span>
+                    <a class="work-link" href="./works/miro-cvetok-marii.html">Цветок Марии («Flor de María»)</a>
+                    <span class="work-meta">1922 · Лирико-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Повесть о трагической любви, старом квартале Сан-Фелипе и острове Табога, сочетающая поэтическую мягкость стиля с колоритом панамского побережья.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gaspar-octavio-hernandez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гаспар Октавио Эрнандес</h3>
+                  <p class="author-role">«Чернокожий лебедь» панамского модернизма, поэт и журналист · <span class="tabular">1893–1918</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Самоучка и блестящий редактор, ушедший из жизни в двадцать пять лет за рабочим столом; день его кончины в Панаме отмечается как День журналиста.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-copa-de-amatista">
+                  <div class="work-row">
+                    <span class="work-code">ПН-02.04</span>
+                    <a class="work-link" href="./works/ernandes-kubok-ametista.html">Кубок аметиста («La copa de amatista») и «Песнь Знамени»</a>
+                    <span class="work-meta">1918 / 1923 · Модернистская поэзия</span>
+                  </div>
+                  <p class="work-summary">Собрание одухотворённой лирики о преодолении бедности и страдания ради чистой красоты искусства и гражданской преданности республиканскому флагу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-demetrio-korsi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Деметрио Корси</h3>
+                  <p class="author-role">Поэт-урбанист переломной эпохи, певец космополитичной Панамы и Канала · <span class="tabular">1899–1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Неповторимый хроникёр улиц Панамы и Колона, соединивший модернизм с авангардной сатирой, фольклорным ритмом «кумбии» и антиимпериалистической иронией.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cumbia-grillo-sobre-el-canal">
+                  <div class="work-row">
+                    <span class="work-code">ПН-02.05</span>
+                    <a class="work-link" href="./works/korsi-kumbiya.html">Кумбия («Cumbia») и «Сверчок, что пел над Каналом»</a>
+                    <span class="work-meta">1936 / 1937 · Поэтические сборники</span>
+                  </div>
+                  <p class="work-summary">Стихи о контрастах портового мегаполиса, ночных барах, ритме народного танца и столкновении местной культуры с присутствием в Зоне Канала.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ignacio-de-j-valdes">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Игнасио де Х. Вальдес (Начо Вальдес)</h3>
+                  <p class="author-role">Пионер панамского нативизма и мастер короткой новеллы о народе · <span class="tabular">1902–1959</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Журналист, дипломат и рассказчик, открывший в 1920-е годы прозе Панамы сочный креольский быт пригородов и сельских деревень.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cuentos-panamenos-ciudad-campo">
+                  <div class="work-row">
+                    <span class="work-code">ПН-02.06</span>
+                    <a class="work-link" href="./works/valdes-panamskie-rasskazy.html">Панамские рассказы города и деревни («Cuentos panameños de la ciudad y del campo»)</a>
+                    <span class="work-meta">1928 · Нативистские новеллы</span>
+                  </div>
+                  <p class="work-summary">Поворотная книга рассказов, запечатлевшая живую разговорную интонацию, юмор, поверья и повседневные драмы жителей перешейка.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pa-avantgarde-sinan">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1925–1955</p>
+          <h2 class="section-title">Авангард 1920–1940-х годов: Рохелио Синан и обновление словесности</h2>
+          <p class="section-desc">Взрыв авангарда в поэзии и прозе Рохелио Синана, лирика Марии Олимпии де Обальдии и Стеллы Сьерры, островной мир Бокас-дель-Торо у Хосе Марии Санчеса и натурализм Сесара Канданедо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-maria-olimpia-de-obaldia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мария Олимпия де Обальдиа</h3>
+                  <p class="author-role">«Чириканский жаворонок», первая женщина — академик Панамской академии языка · <span class="tabular">1891–1985</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Учительница и поэтесса из провинции Чирики, удостоенная в 1929 году всенародного венчания «Мария Олимпия Панамская» за искренность и музыкальность стиха.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-orquideas-breviario-lirico">
+                  <div class="work-row">
+                    <span class="work-code">ПН-03.01</span>
+                    <a class="work-link" href="./works/de-obaldia-orhidei.html">Орхидеи («Orquídeas») и «Лирический бревиарий»</a>
+                    <span class="work-meta">1926 / 1930 · Лирическая поэзия</span>
+                  </div>
+                  <p class="work-summary">Исповедальная и светлая книга стихов о материнстве, тропической природе западных долин Чирики и духовной нежности женского взгляда.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rogelio-sinan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рохелио Синан</h3>
+                  <p class="author-role">Отец панамского авангарда, сюрреалист, поэт, новеллист и драматург · <span class="tabular">1902–1994</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Бернардо Домингес Альба с острова Табога, учившийся в Риме и принесший в панамскую литературу свободный стих, психологическую глубину, игру воображения и карнавал.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-plenilunio-sinan">
+                  <div class="work-row">
+                    <span class="work-code">ПН-03.02</span>
+                    <a class="work-link" href="./works/sinan-polnolunie.html">Полнолуние («Plenilunio»)</a>
+                    <span class="work-meta">1947 · Авангардный психологический роман</span>
+                  </div>
+                  <p class="work-summary">Шедевр полифонического повествования на острове Табога и в Панаме военных лет: причудливое сплетение реальности, сна, интриги и пиранделловской игры с автором.</p>
+                </li>
+                <li class="work-item" id="work-onda-semana-santa-niebla">
+                  <div class="work-row">
+                    <span class="work-code">ПН-03.03</span>
+                    <a class="work-link" href="./works/sinan-volna.html">Волна («Onda») и «Страстная неделя в тумане»</a>
+                    <span class="work-meta">1929 / 1949 · Авангардная поэзия</span>
+                  </div>
+                  <p class="work-summary">Два главных поэтических манифеста Синана: дебютная книга 1929 года, открывшая дорогу панамскому авангарду, и мистическая поэма о тропическом острове в тумане.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-cesar-candanedo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Сесар Канданедо</h3>
+                  <p class="author-role">Мастер сурового социального реализма и прозы пограничья · <span class="tabular">1905–1993</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и санитарный инспектор, исходивший джунгли Дарьена, Чирики и берега рек, запечатлевший драмы бедняков, индейцев и отверженных.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-los-clandestinos">
+                  <div class="work-row">
+                    <span class="work-code">ПН-03.04</span>
+                    <a class="work-link" href="./works/kandanedo-nelegaly.html">Нелегалы («Los clandestinos»)</a>
+                    <span class="work-meta">1957 · Социальный натуралистический роман</span>
+                  </div>
+                  <p class="work-summary">Острая книга о судьбах беглецов, батраков и коренных жителей в глубине сельвы, противопоставленная официальному глянцу столичной жизни.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-stella-sierra">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стелла Сьерра</h3>
+                  <p class="author-role">Первый лауреат Премии Рикардо Миро (1942), выдающаяся поэтесса и эссеист · <span class="tabular">1917–1997</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Агуадульсе, чья лирика придала авангардной и постмодернистской поэзии Панамы солнечную чистоту чувства, созвучную гармонии моря и детства.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-sinfonia-jubilosa">
+                  <div class="work-row">
+                    <span class="work-code">ПН-03.05</span>
+                    <a class="work-link" href="./works/serra-radostnaya-simfoniya.html">Радостная симфония в двенадцати сонетах («Sinfonía jubilosa en doce sonetos»)</a>
+                    <span class="work-meta">1944 · Цикл сонетов</span>
+                  </div>
+                  <p class="work-summary">Победный цикл первого конкурса имени Рикардо Миро: прославление любви, света, моря и поэтического преображения мира в классической форме сонета.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-maria-sanchez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Мария Санчес</h3>
+                  <p class="author-role">Классик регионального рассказа Карибского побережья Бокас-дель-Торо · <span class="tabular">1918–1973</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и дипломат с острова Соларте (Бокас-дель-Торо), показавший мир банановых плантаций, карибских рыбаков, индейцев нгобе и афроантильской культуры.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-cuentos-bocas-del-toro">
+                  <div class="work-row">
+                    <span class="work-code">ПН-03.06</span>
+                    <a class="work-link" href="./works/sanches-rasskazy-bokas-del-toro.html">Шумио-Ара и «Рассказы Бокас-дель-Торо» («Shumió-Ara» / «Cuentos de Bocas del Toro»)</a>
+                    <span class="work-meta">1948 / 1973 · Сборник региональных рассказов</span>
+                  </div>
+                  <p class="work-summary">Тонкие и драматичные новеллы о столкновении человека с мощью тропического океана, банановых компаний и древних поверий архипелага Бокас-дель-Торо.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pa-canal-midcentury">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1950–1985</p>
+          <h2 class="section-title">«Роман о Канале», народный эпос и проза середины XX века</h2>
+          <p class="section-desc">Трагедия сегрегации и борьбы за суверенитет в романах Хоакина Беленьо, загадка «Утопленника» Тристана Соларте, крестьянский эпос Чангмарина, поэзия Хосе Франко и смелые поиски Хусто Арройо и Пернетта-и-Моралеса.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-joaquin-beleno">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хоакин Беленьо</h3>
+                  <p class="author-role">Создатель классической трилогии «романов о Канале» и мастер социальной прозы · <span class="tabular">1921–1988</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Журналист и романист, работавший в годы Второй мировой войны рабочим в Зоне Панамского канала и описавший унижение «серебряной ведомости» и борьбу панамцев.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-luna-verde-beleno">
+                  <div class="work-row">
+                    <span class="work-code">ПН-04.01</span>
+                    <a class="work-link" href="./works/beleno-zelenaya-luna.html">Зелёная луна («Luna verde»)</a>
+                    <span class="work-meta">1951 · Социальный роман о Зоне Канала</span>
+                  </div>
+                  <p class="work-summary">Дневник панамского рабочего Рамона де Осио, испытавшего расовое неравенство и тяжёлый труд в Зоне Канала и ставшего выразителем национального пробуждения.</p>
+                </li>
+                <li class="work-item" id="work-forzados-de-gamboa">
+                  <div class="work-row">
+                    <span class="work-code">ПН-04.02</span>
+                    <a class="work-link" href="./works/beleno-katorzhniki-gamboa.html">Каторжники Гамбоа («Los forzados de Gamboa»)</a>
+                    <span class="work-meta">1960 · Роман-обличение</span>
+                  </div>
+                  <p class="work-summary">Драма чернокожего юноши Аты на каторжной дороге в Гамбоа — суровый портрет двойного стандарта судов и тюрем Зоны Панамского канала.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carlos-francisco-changmarin">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карлос Франсиско Чангмарин</h3>
+                  <p class="author-role">Поэт-трибун, децимист, художник и романист народного сопротивления из Верагуаса · <span class="tabular">1922–2012</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Творческая личность редкого масштаба: автор народных десим, новелл о деревне и историко-биографического романа о герое крестьянской войны Викториано Лоренсо.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-guerrillero-transparente">
+                  <div class="work-row">
+                    <span class="work-code">ПН-04.03</span>
+                    <a class="work-link" href="./works/changmarin-prozrachnyj-partizan.html">Прозрачный партизан («El guerrillero transparente»)</a>
+                    <span class="work-meta">1985 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Поэтическая летопись жизни и гибели народного вождя Викториано Лоренсо, боровшегося за права горцев Кокле и расстрелянного в 1903 году.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-tristan-solarte">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Тристан Соларте</h3>
+                  <p class="author-role">Классик панамского психологического и мистического романа, поэт и журналист · <span class="tabular">1924–2019</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Гильермо Санчес Бурбон из Бокас-дель-Торо — автор прославленной «Маленькой трагедии утопленника» и выдающийся защитник свободы печати.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-ahogado-solarte">
+                  <div class="work-row">
+                    <span class="work-code">ПН-04.04</span>
+                    <a class="work-link" href="./works/solarte-utoplennik.html">Утопленник («El ahogado»)</a>
+                    <span class="work-meta">1957 · Психологически-мистический роман</span>
+                  </div>
+                  <p class="work-summary">Тайна гибели загадочного молодого поэта Рафаэля на острове Бокас-дель-Торо, раскрывающаяся через противоречивые свидетельства, приметы тропиков и глубины человеческой души.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-de-jesus-martinez">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе де Хесус Мартинес («Чучу»)</h3>
+                  <p class="author-role">Драматург, поэт, философ и математик, мастер панамского интеллектуального театра · <span class="tabular">1929–1991</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Незаурядный мыслитель и профессор университета Панамы, переосмысливший современную драму абсурда, политическую сатиру и диалог с эпохой Торрихоса.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-en-su-propia-trampa">
+                  <div class="work-row">
+                    <span class="work-code">ПН-04.05</span>
+                    <a class="work-link" href="./works/martines-chuchu-dramy.html">По ту сторону («En su propia trampa») и «Мой генерал Торрихос»</a>
+                    <span class="work-meta">1969 / 1987 · Экзистенциальная драма и мемуарное эссе</span>
+                  </div>
+                  <p class="work-summary">Пьесы, отмеченные Национальной премией Рикардо Миро, и проницательная книга-портрет о борьбе Панамы за возвращение суверенитета над Каналом.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-franco">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Франко</h3>
+                  <p class="author-role">Поэт-гражданин, автор знаменитой эпопеи «Защищённая Панама» · <span class="tabular">1936–2022</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Калобре (Верагуас), дипломат и журналист, чья поэма 1958 года стала одним из самых цитируемых патриотических текстов в истории Панамы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-panama-defendida">
+                  <div class="work-row">
+                    <span class="work-code">ПН-04.06</span>
+                    <a class="work-link" href="./works/franko-zashchishchyonnaya-panama.html">Защищённая Панама («Panamá defendida»)</a>
+                    <span class="work-meta">1958 · Гражданская поэма</span>
+                  </div>
+                  <p class="work-summary">Проникновенное поэтическое обращение к земле, рекам, шрамам перешейка и достоинству народа, отстаивающего право быть хозяином своей судьбы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-justo-arroyo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хусто Арройо</h3>
+                  <p class="author-role">Патриарх современной панамской новеллы и романа, многократный лауреат Премии Рикардо Миро · <span class="tabular">род. 1936</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, педагог и дипломат из Колона, с 1960-х годов обновлявший городскую и экзистенциальную прозу Панамы тонким психологизмом и лаконизмом.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-heroes-a-medio-tiempo">
+                  <div class="work-row">
+                    <span class="work-code">ПН-04.07</span>
+                    <a class="work-link" href="./works/arrojo-geroi-na-polstavki.html">Герои на полставки («Héroes a medio tiempo») и «Пальцы»</a>
+                    <span class="work-meta">1970 / 1998 · Социально-психологическая проза</span>
+                  </div>
+                  <p class="work-summary">Исследование моральных компромиссов, отчуждения и будничных драм горожанина Панамы и Колона в череде политических переломов XX века.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rafael-pernett-morales">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рафаэль Пернетт-и-Моралес</h3>
+                  <p class="author-role">Врач и романист, один из самых острых сатириков панамской прозы последней трети XX века · <span class="tabular">1949–2025</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец Колона, прославившийся ещё в двадцать четыре года романом «Раскалённый холм в лучах солнца» о нищете и стойкости окраинных кварталов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-loma-ardiente-vestida-sol">
+                  <div class="work-row">
+                    <span class="work-code">ПН-04.08</span>
+                    <a class="work-link" href="./works/pernett-raskalennyj-holm.html">Раскалённый холм, одетый в солнце («Loma ardiente y vestida de sol»)</a>
+                    <span class="work-meta">1973 · Сатирико-урбанистический роман</span>
+                  </div>
+                  <p class="work-summary">Живая, полная горького юмора хроника трущобного холма на подступах к столице, где бедность и произвол власти сталкиваются с неукротимой волей жителей к жизни.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pa-late-xx-generation">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1970–2005</p>
+          <h2 class="section-title">Поколение конца XX века: Глория Гуардия, Бриттон и прорыв новой прозы</h2>
+          <p class="section-desc">Психологические и исторические романы Росы Марии Бриттон и Глории Гуардии, гражданская поэзия Педро Риверы и Мануэля Орестеса Ньето, лирика Берталисии Перальты, историческая эпопея Хуана Давида Моргана и рассказы Энрике Харамильо Леви.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-rosa-maria-britton">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Роса Мария Бриттон</h3>
+                  <p class="author-role">Самая читаемая панамская романистка и драматург, шестикратный лауреат Премии Рикардо Миро · <span class="tabular">1936–2019</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Врач-онколог и писательница, перенесшая на страницы романов судьбы афроантильских женщин, квартала Чоррильо и историю строительства Канала.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ataud-de-uso">
+                  <div class="work-row">
+                    <span class="work-code">ПН-05.01</span>
+                    <a class="work-link" href="./works/britton-poderzhannyj-grob.html">Подержанный гроб («El ataúd de uso»)</a>
+                    <span class="work-meta">1982 · Историко-семейный роман</span>
+                  </div>
+                  <p class="work-summary">Суровая и поэтичная сага о семье антильских переселенцев и коренных жителей перешейка, их вере, нищете и человеческом достоинстве.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-pedro-rivera">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Педро Ривера</h3>
+                  <p class="author-role">Поэт, новеллист и кинодокументалист, академик Панамской академии языка · <span class="tabular">род. 1939</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Создатель экспериментальной группы «GECU», автор антиимпериалистических рассказов, исторической прозы и поэзии, соединяющей миф и память эпохи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-peccata-minuta-rivera">
+                  <div class="work-row">
+                    <span class="work-code">ПН-05.02</span>
+                    <a class="work-link" href="./works/rivera-malye-grehi.html">Малые грехи («Peccata minuta») и «Следы моих шагов»</a>
+                    <span class="work-meta">1970 / 1993 · Новеллы и поэзия</span>
+                  </div>
+                  <p class="work-summary">Отмеченные премией Рикардо Миро рассказы и поздняя лирика о хрупкости памяти, кинематографе истории и судьбе поколений после 1964 года.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-bertalicia-peralta">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Берталисия Перальта</h3>
+                  <p class="author-role">Ведущая поэтесса и новеллист Панамы второй половины XX века · <span class="tabular">род. 1939</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница и журналистка из города Панама, проложившая современной женской лирике страны путь к ясному, свободному и граждански острому голосу.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-piel-de-tierra">
+                  <div class="work-row">
+                    <span class="work-code">ПН-05.03</span>
+                    <a class="work-link" href="./works/peralta-dom-polnyj-ognya.html">Земная кожа и «Дом, полный огня» («Casa llena»)</a>
+                    <span class="work-meta">1974 / 1994 · Поэзия и короткая проза</span>
+                  </div>
+                  <p class="work-summary">Стихи и новеллы о телесности, материнской силе, тревогах мегаполиса и тихом сопротивлении повседневности.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-gloria-guardia">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Глория Гуардия</h3>
+                  <p class="author-role">Панамско-никарагуанская романистка мирового признания, член Испанской королевской академии · <span class="tabular">1940–2019</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Эссеистка и мастер полифонического исторического романа («Маранде»), соединившая документальную хронологию XX века с глубинной драмой личности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-ultimo-juego">
+                  <div class="work-row">
+                    <span class="work-code">ПН-05.04</span>
+                    <a class="work-link" href="./works/guardiya-poslednyaya-igra.html">Последняя игра («El último juego»)</a>
+                    <span class="work-meta">1976 · Политико-психологический роман</span>
+                  </div>
+                  <p class="work-summary">Лауреат Центральноамериканской премии EDUCA: захват заложников партизанами в особняке панамского переговорщика превращается в безжалостный суд над иллюзиями элиты.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dimas-lidio-pitty">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Димас Лидио Питти</h3>
+                  <p class="author-role">Поэт, романист и прозаик Чирики, летописец долины вулкана Бару · <span class="tabular">1941–2015</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, журналист и редактор, проведший годы в изгнании в Мексике и воспевший горный край Чирики и драмы сельской Панамы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-estacion-de-navegantes">
+                  <div class="work-row">
+                    <span class="work-code">ПН-05.05</span>
+                    <a class="work-link" href="./works/pitti-stanciya-moreplavatelej.html">Станция мореплавателей («Estación de navegantes»)</a>
+                    <span class="work-meta">1975 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Встреча беглых мечтателей и изгнанников на окраине истории, размышляющих о верности, поражении и памяти далёкой чириканской земли.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-juan-david-morgan">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хуан Давид Морган</h3>
+                  <p class="author-role">Крупнейший мастер современного исторического романа Панамы · <span class="tabular">род. 1942</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Юрист, общественный деятель и прозаик из Давида (Чирики), воссоздавший ключевые драмы панамской истории — от Конкисты и строительства железной дороги до 1903 года.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-el-caballo-de-oro">
+                  <div class="work-row">
+                    <span class="work-code">ПН-05.06</span>
+                    <a class="work-link" href="./works/morgan-zolotoj-kon.html">Золотой конь («El caballo de oro»)</a>
+                    <span class="work-meta">1999 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Эпическое повествование о строительстве первой трансконтинентальной железной дороги через джунгли Панамы 1850-х годов во время калифорнийской золотой лихорадки.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-enrique-jaramillo-levi">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Энрике Харамильо Леви</h3>
+                  <p class="author-role">Патриарх современного панамского рассказа, критик и главный культуртрегер страны · <span class="tabular">род. 1944</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Автор более пятидесяти книг прозы, поэзии и эссе, создатель журнала «Maga» и антологий, открывших современной новелле Панамы путь в испаноязычный мир.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-duplicaciones">
+                  <div class="work-row">
+                    <span class="work-code">ПН-05.07</span>
+                    <a class="work-link" href="./works/haramilo-levi-dublirovaniya.html">Дублирования («Duplicaciones»)</a>
+                    <span class="work-meta">1973 · Сборник фантастико-психологических рассказов</span>
+                  </div>
+                  <p class="work-summary">Культовый сборник новелл о двойниках, раздвоении сознания, зыбкости времени и тонкой грани между бытовым и странным.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-manuel-orestes-nieto">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мануэль Орестес Ньето</h3>
+                  <p class="author-role">Лауреат Премии Дома Америк и национальной поэтической традиции Панамы · <span class="tabular">род. 1951</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и дипломат из столицы, в чьих книгах морской простор перешейка, память о суверенитете и голос жителя улицы обретают эпическое дыхание.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-dar-la-cara">
+                  <div class="work-row">
+                    <span class="work-code">ПН-05.08</span>
+                    <a class="work-link" href="./works/neto-smotret-v-litso.html">Смотреть в лицо («Dar la cara»)</a>
+                    <span class="work-meta">1975 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Удостоенный премии «Casa de las Américas» поэтический цикл о достоинстве маленькой страны, памяти предков и живой силе открытого слова.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="pa-contemporary-xxi">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1994–XXI век</p>
+          <h2 class="section-title">Панама XXI века: память, мегаполис и новейшая литература</h2>
+          <p class="section-desc">Поэзия Джованны Бенедетти и Консуэло Томас, политические триллеры Рамона Фонсеки Моры, космополитичная проза Карлоса Ориэля Уинтера Мело, хроники Хосе Луиса Родригеса Питти и новеллы Мелани Тайлор Эрреры.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-giovanna-benedetti">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Джованна Бенедетти</h3>
+                  <p class="author-role">Поэтесса, новеллистка и трижды лауреат Премии Рикардо Миро в разных жанрах · <span class="tabular">род. 1949</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писательница, юрист и скульптор родом из Панамы, живущая в Испании, автор ярких эссе, рассказов и лирической прозы о городе, времени и любви.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-lluvia-sobre-camposanto">
+                  <div class="work-row">
+                    <span class="work-code">ПН-06.01</span>
+                    <a class="work-link" href="./works/benedetti-dozhd-nad-kladbishchem.html">Тогда как бы с высоты неба («Entonces ahora») и «Дождь над кладбищем»</a>
+                    <span class="work-meta">1992 / 1993 · Лирика и рассказы</span>
+                  </div>
+                  <p class="work-summary">Поэтическая и прозаическая медитация о памяти столицы, утраченных кварталах, иронии судьбы и стойкости женского духа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-ramon-fonseca-mora">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Рамон Фонсека Мора</h3>
+                  <p class="author-role">Романист, дважды лауреат Национальной премии Рикардо Миро · <span class="tabular">1952–2024</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель из города Панама, оставивший серию популярных в стране романов о нравственном выборе, власти и преображении человеческого сердца.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-danza-de-las-mariposas">
+                  <div class="work-row">
+                    <span class="work-code">ПН-06.02</span>
+                    <a class="work-link" href="./works/fonseka-mora-tanets-babochek.html">Танец бабочек («La danza de las mariposas») и «Глаза ангела»</a>
+                    <span class="work-meta">1994 / 1999 · Социально-психологические романы</span>
+                  </div>
+                  <p class="work-summary">Роман о политических искушениях новейшей истории Панамы и знаменитая притча «Глаза ангела» о встрече богатого дельца и больной девочки в больничной палате.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-consuelo-tomas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Консуэло Томас</h3>
+                  <p class="author-role">Ведущая поэтесса и романистка современности, лауреат четырёх премий Рикардо Миро · <span class="tabular">род. 1957</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженка Бокас-дель-Торо, чьё творчество охватывает поэзию, короткий рассказ, драматургию и городской роман о боли и надежде современной Панамы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-inauguracion-de-la-fe">
+                  <div class="work-row">
+                    <span class="work-code">ПН-06.03</span>
+                    <a class="work-link" href="./works/tomas-uchrezhdenie-very.html">Учреждение веры («Inauguración de la fe») и «Агония королевы»</a>
+                    <span class="work-meta">1995 · Рассказы и поэзия</span>
+                  </div>
+                  <p class="work-summary">Двойной триумф в конкурсе Рикардо Миро 1995 года: тонкие новеллы и лирика о повседневном мужестве, карибской музыке и поиске смысла среди кризиса эпохи.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-carlos-oriel-wynter-melo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Карлос Ориэль Уинтер Мело</h3>
+                  <p class="author-role">Представитель поколения XXI века, участник престижного списка «Bogotá39» · <span class="tabular">род. 1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Прозаик, издатель и преподаватель из Панамы, перенёсший действие новой литературы в мир вторжения 1989 года, ночных кварталов, кино и острой городской иронии.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-ojos-para-ver-invasion">
+                  <div class="work-row">
+                    <span class="work-code">ПН-06.04</span>
+                    <a class="work-link" href="./works/uinter-melo-glaza-vtorzheniya.html">Глаза, чтобы видеть вторжение («Ojos para ver una invasión»)</a>
+                    <span class="work-meta">2011 · Историко-городской роман</span>
+                  </div>
+                  <p class="work-summary">Острая, полифоническая хроника декабря 1989 года и трансформации современного панамского общества глазами молодого поколения свидетелей.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-jose-luis-rodriguez-pitti">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Хосе Луис Родригес Питти</h3>
+                  <p class="author-role">Новеллист, романист и фотограф, исследователь панамской диаспоры и памяти · <span class="tabular">род. 1971</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Уроженец города Панама, живущий между Панамой и Канадой, автор многожанровой прозы и документальных циклов о переплетении истории страны и частных судеб.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-suenos-urbanos">
+                  <div class="work-row">
+                    <span class="work-code">ПН-06.05</span>
+                    <a class="work-link" href="./works/rodriges-pitti-gorodskie-sny.html">Городские сны («Sueños urbanos»)</a>
+                    <span class="work-meta">2008 · Книга рассказов</span>
+                  </div>
+                  <p class="work-summary">Короткие рассказы и эскизы о современном небоскрёбном мегаполисе Панамы, где стеклянные башни соседствуют со старыми тенями, снами и ностальгией.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-melanie-taylor-herrera">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мелани Тайлор Эррера</h3>
+                  <p class="author-role">Писательница и скрипачка Национального симфонического оркестра Панамы · <span class="tabular">род. 1972</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Лауреат Центральноамериканской премии имени Рафаэлы Контрерас, соединившая в коротких рассказах и микропрозе музыкальный ритм с психологической проницательностью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-camino-a-mariato">
+                  <div class="work-row">
+                    <span class="work-code">ПН-06.06</span>
+                    <a class="work-link" href="./works/tajlor-errera-doroga-v-mariato.html">Дорога в Мариато («Camino a Mariato»)</a>
+                    <span class="work-meta">2009 · Сборник рассказов</span>
+                  </div>
+                  <p class="work-summary">Тонкие истории о путешествии к дикому тихоокеанскому побережью Асуэро, где за внешним покоем провинциальных дорог скрываются скрытые страхи и освобождение.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание панамской литературы</span>
+    <span>&copy; <a href="https://untoldarchive.com/ru/" class="work-link">UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
